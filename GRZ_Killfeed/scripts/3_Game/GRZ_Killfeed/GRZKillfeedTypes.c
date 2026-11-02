@@ -126,10 +126,32 @@ class GRZKillfeedMessage
 {
     string Killer;
     string Victim;
-    string WeaponName;
+    string WeaponJson;
     int Distance;
+    ref GRZKillfeedGunData GunData = new GRZKillfeedGunData;
     ref GRZNameStyle KillerStyle = new GRZNameStyle;
     ref GRZNameStyle VictimStyle = new GRZNameStyle;
+}
+
+class GRZKillfeedGunData
+{
+    ref array<string> Types = new array<string>;
+    ref array<int> Parents = new array<int>;
+    ref array<int> Slots = new array<int>;
+
+    bool IsValid()
+    {
+        if (!Types || !Parents || !Slots || Types.Count() > 32 || Types.Count() != Parents.Count() || Types.Count() != Slots.Count())
+            return false;
+        for (int i = 0; i < Types.Count(); i++)
+        {
+            if (Types[i] == "" || Types[i].Length() > 128)
+                return false;
+            if (i > 0 && (Parents[i] < 0 || Parents[i] >= i))
+                return false;
+        }
+        return true;
+    }
 }
 
 class GRZKillfeedBus

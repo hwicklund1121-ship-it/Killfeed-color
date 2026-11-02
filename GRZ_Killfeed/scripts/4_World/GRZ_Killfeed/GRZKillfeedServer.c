@@ -111,17 +111,14 @@ class GRZKillfeedServer
             return;
         PlayerBase killer = PlayerBase.Cast(source);
         EntityAI entity = EntityAI.Cast(source);
-        string weapon = "Fists";
         if (!killer && entity)
         {
             killer = PlayerBase.Cast(entity.GetHierarchyRootPlayer());
-            weapon = entity.GetDisplayName();
         }
         Transport vehicle = Transport.Cast(source);
         if (vehicle)
         {
             killer = PlayerBase.Cast(vehicle.CrewDriver());
-            weapon = source.GetDisplayName();
         }
         // No guessing from the last player who hit a victim: indirect deaths
         // without a player-owned fatal source do not become fake player kills.
@@ -130,6 +127,21 @@ class GRZKillfeedServer
         int distance = Math.Round(vector.Distance(killer.GetPosition(), victim.GetPosition()));
         GRZNameStyle killerStyle = StyleFor(killer.GetIdentity());
         GRZNameStyle victimStyle = StyleFor(victim.GetIdentity());
+        GRZKillfeedGunData gun = new GRZKillfeedGunData;
+        if (entity && entity.IsWeapon())
+        {
+            array<EntityAI> captured = new array<EntityAI>;
+            CaptureGun(entity, -1, gun, 0, captured);
+            Weapon_Base firearm = Weapon_Base.Cast(entity);
+            if (firearm)
+            {
+                for (int muzzle = 0; muzzle < firearm.GetMuzzleCount(); muzzle++)
+                    CaptureGun(firearm.GetMagazine(muzzle), 0, gun, 1, captured);
+            }
+        }
+        string weaponJson;
+        string jsonError;
+        JsonFileLoader<GRZKillfeedGunData>.MakeData(gun, weaponJson, jsonError, false);
         array<Man> players = new array<Man>;
         g_Game.GetPlayers(players);
         foreach (Man man : players)
@@ -140,11 +152,28 @@ class GRZKillfeedServer
             ScriptRPC rpc = new ScriptRPC;
             rpc.Write(killer.GetIdentity().GetName());
             rpc.Write(victim.GetIdentity().GetName());
-            rpc.Write(weapon);
+            rpc.Write(weaponJson);
             rpc.Write(distance);
             WriteStyle(rpc, killerStyle);
             WriteStyle(rpc, victimStyle);
             rpc.Send(recipient, GRZKillfeedRPC.KILL, true, recipient.GetIdentity());
         }
+    }
+
+    protected static void CaptureGun(EntityAI item, int parent, GRZKillfeedGunData gun, int depth, array<EntityAI> captured)
+    {
+        if (!item || captured.Find(item) >= 0 || gun.Types.Count() >= 32 || depth > 4)
+            return;
+        InventoryLocation location = new InventoryLocation;
+        int slot = -1;
+        if (item.GetInventory().GetCurrentInventoryLocation(location))
+            slot = location.GetSlot();
+        int index = gun.Types.Count();
+        gun.Types.Insert(item.GetType());
+        gun.Parents.Insert(parent);
+        gun.Slots.Insert(slot);
+        captured.Insert(item);
+        for (int i = 0; i < item.GetInventory().AttachmentCount(); i++)
+            CaptureGun(item.GetInventory().GetAttachmentFromIndex(i), index, gun, depth + 1, captured);
     }
 }

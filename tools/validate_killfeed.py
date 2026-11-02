@@ -3,6 +3,7 @@ import hashlib
 import io
 import re
 import struct
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from zipfile import ZipFile
 
@@ -91,6 +92,20 @@ def main():
     for edge in ["BorderTop", "BorderBottom", "BorderLeft", "BorderRight"]:
         assert f"PanelWidgetClass {edge}" in row
     assert "gui/textures/grz_menu_outline_ca.paa" in files
+    inputs = ET.fromstring(files["inputs.xml"])
+    action = inputs.find("./inputs/actions/input")
+    binding = inputs.find("./preset/input")
+    assert action is not None and binding is not None
+    assert action.attrib["name"] == binding.attrib["name"] == "UAGRZKillfeedMenu"
+    assert binding.find("btn").attrib["name"] == "kF7"
+    assert 'inputs = "GRZ_Killfeed/inputs.xml"' in files["config.cpp"].decode()
+    assert "ItemPreviewWidgetClass GunPreview" in row
+    mission = files["scripts/5_Mission/GRZ_Killfeed/GRZKillfeedMission.c"].decode()
+    assert 'detail.SetText(message.Distance.ToString() + " m")' in mission
+    assert "message.WeaponName" not in text
+    assert "GetUpdateQueue(CALL_CATEGORY_GUI).Insert(GRZHandleMenuShortcut)" in mission
+    assert "GetUpdateQueue(CALL_CATEGORY_GUI).Remove(GRZHandleMenuShortcut)" in mission
+    assert "GunWidget.SetItem(null)" in mission and "g_Game.ObjectDelete(PreviewGun)" in mission
     print(f"Verified PBO prefix/checksum and {len(files)} source/asset entries; ZIP payloads match.")
     print("Layout/widget/resource bindings and style wire-field order checked.")
     print("These checks do not compile Enforce Script or test networking, permissions, or DayZ Editor.")

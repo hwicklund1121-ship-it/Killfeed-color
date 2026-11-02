@@ -4,14 +4,88 @@ class GRZKillfeedRow
     TextWidget Killer;
     TextWidget Victim;
     ref GRZKillfeedMessage Message;
+    EntityAI PreviewGun;
+    ItemPreviewWidget GunWidget;
     float Age;
+
+    void CreateGunPreview()
+    {
+        GunWidget = ItemPreviewWidget.Cast(Root.FindAnyWidget("GunPreview"));
+        GRZKillfeedGunData data = Message.GunData;
+        if (!GunWidget || !data || !data.IsValid() || data.Types.Count() == 0)
+        {
+            if (GunWidget)
+                GunWidget.Show(false);
+            return;
+        }
+        if (!g_Game.ConfigIsExisting("CfgWeapons " + data.Types[0]))
+        {
+            GunWidget.Show(false);
+            return;
+        }
+        PreviewGun = EntityAI.Cast(g_Game.CreateObjectEx(data.Types[0], "0 -1000 0", ECE_LOCAL | ECE_NOLIFETIME | ECE_KEEPHEIGHT | ECE_NOSURFACEALIGN | ECE_NOPERSISTENCY_WORLD | ECE_NOPERSISTENCY_CHAR));
+        if (!PreviewGun || !PreviewGun.IsWeapon())
+        {
+            if (PreviewGun)
+                g_Game.ObjectDelete(PreviewGun);
+            PreviewGun = null;
+            GunWidget.Show(false);
+            return;
+        }
+        array<EntityAI> nodes = new array<EntityAI>;
+        nodes.Insert(PreviewGun);
+        for (int i = 1; i < data.Types.Count(); i++)
+        {
+            EntityAI attached = null;
+            EntityAI parent = nodes[data.Parents[i]];
+            if (parent)
+            {
+                if (data.Slots[i] >= 0)
+                    attached = parent.GetInventory().CreateAttachmentEx(data.Types[i], data.Slots[i]);
+                if (!attached)
+                    attached = parent.GetInventory().CreateAttachment(data.Types[i]);
+            }
+            nodes.Insert(attached);
+        }
+        GunWidget.SetItem(PreviewGun);
+        GunWidget.SetFlags(WidgetFlags.SOURCEALPHA | WidgetFlags.BLEND);
+        GunWidget.SetView(PreviewGun.GetViewIndex());
+        GunWidget.SetModelPosition("0 0 1");
+        GunWidget.SetModelOrientation("0 0 0");
+        GunWidget.Show(true);
+    }
+
+    void Dispose()
+    {
+        if (GunWidget)
+            GunWidget.SetItem(null);
+        if (PreviewGun)
+        {
+            g_Game.ObjectDelete(PreviewGun);
+            PreviewGun = null;
+        }
+        if (Root)
+        {
+            Root.Unlink();
+            Root = null;
+        }
+    }
 
     void Update(float timeslice)
     {
         Age += timeslice;
-        Killer.SetColor(Message.KillerStyle.ColorAt(Age));
-        Victim.SetColor(Message.VictimStyle.ColorAt(Age));
-        Root.SetAlpha(Math.Clamp(8.0 - Age, 0, 1));
+        float fade = Math.Clamp(8.0 - Age, 0, 1);
+        int killerColor = Message.KillerStyle.ColorAt(Age);
+        int victimColor = Message.VictimStyle.ColorAt(Age);
+        Killer.SetColor(GRZNameStyle.WithAlpha(killerColor, ((killerColor >> 24) & 255) * fade));
+        Victim.SetColor(GRZNameStyle.WithAlpha(victimColor, ((victimColor >> 24) & 255) * fade));
+        // Never make the transparent root opaque while fading its children.
+        Root.FindAnyWidget("Backing").SetAlpha(0.45 * fade);
+        array<string> names = {"Arrow", "Detail", "BorderTop", "BorderBottom", "BorderLeft", "BorderRight"};
+        foreach (string name : names)
+            Root.FindAnyWidget(name).SetAlpha(fade);
+        if (GunWidget)
+            GunWidget.SetAlpha(fade);
     }
 }
 
@@ -29,16 +103,8 @@ modded class MissionGameplay
     protected Widget m_GRZFeed;
     protected ref array<ref GRZKillfeedRow> m_GRZRows = new array<ref GRZKillfeedRow>;
     protected bool m_GRZListening;
-
-    override void OnKeyPress(int key)
-    {
-        if (key == KeyCode.KC_F7 && !g_Game.IsMultiplayer())
-        {
-            g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZKillfeedClient.RequestMenu, 0, false);
-            return;
-        }
-        super.OnKeyPress(key);
-    }
+    protected bool m_GRZPreviewHeld;
+    protected bool m_GRZAutoPreviewOpened;
 
     override void OnInit()
     {
@@ -47,6 +113,7 @@ modded class MissionGameplay
         {
             GRZKillfeedBus.Kills.Insert(GRZReceiveKill);
             GRZKillfeedBus.Menu.Insert(GRZReceiveMenu);
+            g_Game.GetUpdateQueue(CALL_CATEGORY_GUI).Insert(GRZHandleMenuShortcut);
             m_GRZListening = true;
         }
     }
@@ -56,6 +123,11 @@ modded class MissionGameplay
         GRZKillfeedBus.Kills.Remove(GRZReceiveKill);
         GRZKillfeedBus.Menu.Remove(GRZReceiveMenu);
         m_GRZListening = false;
+        g_Game.GetUpdateQueue(CALL_CATEGORY_GUI).Remove(GRZHandleMenuShortcut);
+        g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(GRZKillfeedClient.OpenLocalPreview);
+        g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(GRZKillfeedClient.RequestMenu);
+        foreach (GRZKillfeedRow row : m_GRZRows)
+            row.Dispose();
         m_GRZRows.Clear();
         if (m_GRZFeed)
         {
@@ -75,7 +147,7 @@ modded class MissionGameplay
             m_GRZRows[i].Update(timeslice);
             if (m_GRZRows[i].Age >= 8.0)
             {
-                m_GRZRows[i].Root.Unlink();
+                m_GRZRows[i].Dispose();
                 m_GRZRows.Remove(i);
             }
         }
@@ -83,6 +155,22 @@ modded class MissionGameplay
         IngameHud hud = IngameHud.Cast(GetHud());
         if (hud)
             m_GRZFeed.Show(!hud.GetHudVisibility().IsContextFlagActive(IngameHudVisibility.HUD_HIDE_FLAGS));
+    }
+
+    protected void GRZHandleMenuShortcut(float timeslice)
+    {
+        // Registered input plus native key-state fallback; neither depends on
+        // Editor forwarding MissionGameplay.OnKeyPress to this mod.
+        bool held = (KeyState(KeyCode.KC_F7) & 0x8000) != 0;
+        bool pressed = g_Game.GetInput().LocalPress("UAGRZKillfeedMenu", false);
+        if (pressed || (held && !m_GRZPreviewHeld))
+            g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZKillfeedClient.RequestMenu, 1, false);
+        m_GRZPreviewHeld = held;
+        if (!m_GRZAutoPreviewOpened && IsCLIParam("GRZKillfeedPreview"))
+        {
+            m_GRZAutoPreviewOpened = true;
+            g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZKillfeedClient.OpenLocalPreview, 1000, false);
+        }
     }
 
     protected bool GRZEnsureFeed()
@@ -136,12 +224,13 @@ modded class MissionGameplay
         GRZFitName(row.Victim, GRZShortName(message.Victim), 170);
         TextWidget.Cast(row.Root.FindAnyWidget("Arrow")).SetTextExactSize(17);
         TextWidget detail = TextWidget.Cast(row.Root.FindAnyWidget("Detail"));
-        detail.SetText(message.WeaponName + "  |  " + message.Distance.ToString() + " m");
+        detail.SetText(message.Distance.ToString() + " m");
         detail.SetTextExactSize(14);
+        row.CreateGunPreview();
         m_GRZRows.InsertAt(row, 0);
         while (m_GRZRows.Count() > 5)
         {
-            m_GRZRows[5].Root.Unlink();
+            m_GRZRows[5].Dispose();
             m_GRZRows.Remove(5);
         }
         row.Update(0);
@@ -158,7 +247,7 @@ modded class MissionGameplay
         hud.GetHudPanelWidget().GetScreenSize(width, height);
         m_GRZFeed.SetScreenPos(x + width - 424, y + 28);
         for (int i = 0; i < m_GRZRows.Count(); i++)
-            m_GRZRows[i].Root.SetPos(0, i * 68);
+            m_GRZRows[i].Root.SetPos(0, i * 96);
     }
 
     protected void GRZReceiveMenu(int status, GRZNameStyle style)

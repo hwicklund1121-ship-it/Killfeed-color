@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modded_inputs>
+    <inputs>
+        <actions>
+            <input name="UAGRZKillfeedMenu" loc="Open GRZ Killfeed menu" />
+        </actions>
+        <sorting>
+            <category name="GRZKillfeed" loc="GRZ Killfeed">
+                <input name="UAGRZKillfeedMenu" />
+            </category>
+        </sorting>
+    </inputs>
+    <preset>
+        <input name="UAGRZKillfeedMenu">
+            <btn name="kF7" />
+        </input>
+    </preset>
+</modded_inputs>

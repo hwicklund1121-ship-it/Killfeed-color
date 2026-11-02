@@ -62,10 +62,14 @@ modded class PlayerBase
             if (rpc_type == GRZKillfeedRPC.KILL)
             {
                 GRZKillfeedMessage message = new GRZKillfeedMessage;
-                if (!ctx.Read(message.Killer) || !ctx.Read(message.Victim) || !ctx.Read(message.WeaponName) || !ctx.Read(message.Distance))
+                if (!ctx.Read(message.Killer) || !ctx.Read(message.Victim) || !ctx.Read(message.WeaponJson) || !ctx.Read(message.Distance))
                     return;
                 if (!GRZReadStyle(ctx, message.KillerStyle) || !GRZReadStyle(ctx, message.VictimStyle))
                     return;
+                string error;
+                GRZKillfeedGunData gun;
+                if (message.WeaponJson.Length() <= 16384 && JsonFileLoader<GRZKillfeedGunData>.LoadData(message.WeaponJson, gun, error) && gun && gun.IsValid())
+                    message.GunData = gun;
                 GRZKillfeedBus.Kills.Invoke(message);
             }
             else

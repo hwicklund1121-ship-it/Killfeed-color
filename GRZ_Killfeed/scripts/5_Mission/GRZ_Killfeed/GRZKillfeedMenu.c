@@ -2,19 +2,27 @@ class GRZKillfeedClient
 {
     static ref GRZNameStyle LocalStyle = new GRZNameStyle;
 
+    static bool CanLocalPreview()
+    {
+        return !g_Game.IsMultiplayer() || (g_Game.IsServer() && !g_Game.IsDedicatedServer()) || IsCLIParam("GRZKillfeedPreview");
+    }
+
+    static void OpenLocalPreview()
+    {
+        UIScriptedMenu parent = g_Game.GetUIManager().GetMenu();
+        if (GRZKillfeedMenu.Cast(parent))
+            return;
+        GRZKillfeedMenu preview = new GRZKillfeedMenu;
+        preview.Chosen = LocalStyle;
+        preview.IsOfflinePreview = true;
+        g_Game.GetUIManager().ShowScriptedMenu(preview, parent);
+    }
+
     static void RequestMenu()
     {
-        if (!g_Game.IsMultiplayer())
+        if (CanLocalPreview())
         {
-            UIScriptedMenu parent = g_Game.GetUIManager().GetMenu();
-            if (GRZKillfeedMenu.Cast(parent))
-                return;
-            GRZKillfeedMenu preview = new GRZKillfeedMenu;
-            preview.Chosen = LocalStyle;
-            preview.IsOfflinePreview = true;
-            // Editor can already own a menu. Open as its child instead of
-            // silently refusing to display the preview.
-            g_Game.GetUIManager().ShowScriptedMenu(preview, parent);
+            OpenLocalPreview();
             return;
         }
         PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
@@ -26,7 +34,7 @@ class GRZKillfeedClient
 
     static void TestOffline()
     {
-        if (g_Game.IsMultiplayer())
+        if (!CanLocalPreview())
         {
             PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
             if (player)
@@ -42,7 +50,9 @@ class GRZKillfeedClient
         GRZKillfeedMessage message = new GRZKillfeedMessage;
         g_Game.GetPlayerName(message.Killer);
         message.Victim = "Target Dummy";
-        message.WeaponName = "M4-A1";
+        message.GunData.Types = {"M4A1", "ACOGOptic", "M4_RISHndgrd", "M4_OEBttstck", "M4_Suppressor", "Mag_STANAG_30Rnd"};
+        message.GunData.Parents = {-1, 0, 0, 0, 0, 0};
+        message.GunData.Slots = {-1, -1, -1, -1, -1, -1};
         message.Distance = 175;
         message.KillerStyle = style;
         GRZKillfeedBus.Kills.Invoke(message);
@@ -98,7 +108,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
         m_Preview.SetText(name);
         RefreshLabels();
         if (IsOfflinePreview)
-            m_Status.SetText("Offline editor preview — no server access or persistence is tested.");
+            m_Status.SetText("Local preview — server access and persistence are not tested.");
         return layoutRoot;
     }
 
