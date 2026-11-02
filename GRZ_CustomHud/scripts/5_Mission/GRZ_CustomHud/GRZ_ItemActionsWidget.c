@@ -1,89 +1,86 @@
 modded class ItemActionsWidget
 {
+    protected Widget m_GRZWeaponPanel;
     protected CanvasWidget m_GRZWeaponWire;
 
     override protected void OnWidgetScriptInit(Widget w)
     {
         super.OnWidgetScriptInit(w);
-        m_GRZWeaponWire = GRZThornFrame.Create(m_Root);
+        m_GRZWeaponPanel = g_Game.GetWorkspace().CreateWidgets("GRZ_CustomHud/gui/layouts/grz_weapon_panel.layout", m_Root);
+        if (m_GRZWeaponPanel)
+            m_GRZWeaponWire = GRZThornFrame.Create(m_GRZWeaponPanel);
     }
 
     override protected void BuildCursor()
     {
         super.BuildCursor();
-        Widget item = m_Root.FindAnyWidget("ia_item");
-        if (!item || !m_GRZWeaponWire)
+        if (!m_GRZWeaponPanel || !m_GRZWeaponWire)
             return;
 
-        bool show = m_EntityInHands != null && item.IsVisible();
-        m_GRZWeaponWire.Show(show);
+        Widget item = m_Root.FindAnyWidget("ia_item");
+        Widget details = m_Root.FindAnyWidget("ia_item_subdesc");
+        // Hide the entire old backing, never recolor its panel widgets.
+        if (item)
+            item.Show(false);
+        if (details)
+            details.Show(false);
+        bool show = m_EntityInHands != null && m_Player && !m_Player.GetItemAccessor().IsItemInHandsHidden();
+        m_GRZWeaponPanel.Show(show);
         if (!show)
             return;
 
-        // Keep native ammo, chamber, jam, fire-mode and reload calculations.
-        // Clear old backing images without tinting the whole parent black.
-        GRZClearBacking(item);
-        Widget details = m_Root.FindAnyWidget("ia_item_subdesc");
-        if (details)
-            GRZClearBacking(details);
-        m_Root.SetColor(0xFFFFFFFF);
-        GRZWhiteText(m_Root);
-
         float x, y, width, height;
-        item.GetScreenPos(x, y);
-        item.GetScreenSize(width, height);
-        float panelWidth = Math.Max(width, 360.0);
-        float panelHeight = 88.0;
-        float panelY = y + height - panelHeight;
-        m_GRZWeaponWire.SetScreenPos(x, panelY);
-        m_GRZWeaponWire.SetScreenSize(panelWidth, panelHeight);
-        GRZThornFrame.Draw(m_GRZWeaponWire, panelWidth, panelHeight);
-
-        // Position the actual vanilla text inside the ornament, not beside it.
-        GRZPlaceText("ia_item_desc", x + 30, panelY + 24, panelWidth - 152, 24);
-        GRZPlaceText("ia_item_quantity_text", x + panelWidth - 112, panelY + 24, 80, 24);
-        GRZPlaceText("ia_item_subdesc_up", x + 30, panelY + 50, 140, 20);
-        GRZPlaceText("ia_item_subdesc_down", x + panelWidth - 112, panelY + 50, 80, 20);
+        if (item)
+        {
+            item.GetScreenPos(x, y);
+            item.GetScreenSize(width, height);
+        }
+        m_GRZWeaponPanel.SetScreenPos(x, y + height - 88);
+        m_GRZWeaponPanel.SetScreenSize(360, 88);
+        m_GRZWeaponWire.SetPos(0, 0);
+        m_GRZWeaponWire.SetScreenSize(360, 88);
+        m_GRZWeaponWire.SetSort(-1);
+        GRZThornFrame.Draw(m_GRZWeaponWire, 360, 88);
     }
 
-    protected void GRZPlaceText(string name, float x, float y, float width, float height)
+    // Route stock data setters into our own transparent layout. Native widgets
+    // are left intact for engine lookups, but never used for visible backing.
+    override protected void SetItemDesc(EntityAI entity, string descText, string itemWidget, string descWidget)
     {
-        TextWidget text = TextWidget.Cast(m_Root.FindAnyWidget(name));
-        if (!text)
+        if (!m_GRZWeaponPanel)
             return;
-        text.SetScreenPos(x, y);
-        text.SetScreenSize(width, height);
-        text.SetColor(0xFFFFFFFF);
-        text.SetOutline(1, 0xFF000000);
+        super.SetItemDesc(entity, descText, "GRZWeaponPanel", "GRZWeaponName");
     }
 
-    protected void GRZClearBacking(Widget widget)
+    override protected void SetWeaponQuantity(int chamber, int mag, string itemWidget, string quantityPBWidget, string quantityTextWidget, bool enabled)
     {
-        widget.SetColor(0xFFFFFFFF);
-        Widget child = widget.GetChildren();
-        while (child)
-        {
-            if (ImageWidget.Cast(child) || ProgressBarWidget.Cast(child))
-                child.Show(false);
-            else
-                GRZClearBacking(child);
-            child = child.GetSibling();
-        }
+        if (!m_GRZWeaponPanel)
+            return;
+        super.SetWeaponQuantity(chamber, mag, "GRZWeaponPanel", "GRZWeaponProgress", "GRZWeaponAmmo", enabled);
     }
 
-    protected void GRZWhiteText(Widget widget)
+    override protected void SetItemQuantity(int type, float current, int min, int max, string itemWidget, string quantityPBWidget, string quantityTextWidget, bool enabled)
     {
-        TextWidget text = TextWidget.Cast(widget);
-        if (text)
-        {
-            text.SetColor(0xFFFFFFFF);
-            text.SetOutline(1, 0xFF000000);
-        }
-        Widget child = widget.GetChildren();
-        while (child)
-        {
-            GRZWhiteText(child);
-            child = child.GetSibling();
-        }
+        if (!m_GRZWeaponPanel)
+            return;
+        super.SetItemQuantity(type, current, min, max, "GRZWeaponPanel", "GRZWeaponProgress", "GRZWeaponAmmo", enabled);
+        // Keep the overlay outline-only, even for liquid/food held items.
+        Widget progress = m_GRZWeaponPanel.FindAnyWidget("GRZWeaponProgress");
+        if (progress)
+            progress.Show(false);
+    }
+
+    override protected void SetWeaponModeAndZeroing(string itemWidget, string upWidget, string downWidget, bool enabled)
+    {
+        if (!m_GRZWeaponPanel)
+            return;
+        super.SetWeaponModeAndZeroing("GRZWeaponDetails", "GRZWeaponMode", "GRZWeaponZeroing", enabled);
+    }
+
+    override protected void SetRadioFrequency(string freq, string itemWidget, string upWidget, string downWidget, bool enabled)
+    {
+        if (!m_GRZWeaponPanel)
+            return;
+        super.SetRadioFrequency(freq, "GRZWeaponDetails", "GRZWeaponMode", "GRZWeaponZeroing", enabled);
     }
 };

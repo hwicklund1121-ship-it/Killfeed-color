@@ -15,6 +15,8 @@ The weapon panel, native bullet count, fire mode, zeroing, reload/action prompts
 
 ## Download the PBO
 
+Version **0.1.3** replaces the visible stock weapon panel with a dedicated transparent frame-and-text layout. The old weapon backing is hidden entirely; no parent panels are tinted white. Vanilla setters populate the new white name/ammo/fire-mode/zeroing text. Health and blood icons/arrows are white inside larger black thorn frames (96-pixel cells, 42-pixel icons at 1080p). There are no background images in the custom weapon layout. In-game verification is still required.
+
 Version **0.1.2** puts the vanilla weapon name, ammo, fire mode and zeroing inside the frame, makes text white, removes backing images, and gives health and blood separate larger frames with centered 38-pixel icons in 80-pixel cells at 1080p. Status sizes scale with display height. Reload prompts remain native. These presentation changes still require in-game verification.
 
 Version **0.1.1** replaces the unavailable `CanvasWidgetTypeID` with a packaged canvas layout for weapon, health and blood frames. Replace the previous PBO; do not load both versions at once. This fixes the reported API reference; client compilation and gameplay validation remain required.

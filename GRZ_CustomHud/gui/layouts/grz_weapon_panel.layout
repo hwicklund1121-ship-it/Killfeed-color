@@ -1,0 +1,101 @@
+FrameWidgetClass GRZWeaponPanel
+{
+ visible 0
+ ignorepointer 1
+ position 0 0
+ size 360 88
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ {
+    TextWidgetClass GRZWeaponName
+    {
+     ignorepointer 1
+     position 30 23
+     size 205 26
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     color 1 1 1 1
+     font "gui/fonts/sdf_MetronBook24"
+     text ""
+    }
+  FrameWidgetClass GRZWeaponQuantity
+  {
+   ignorepointer 1
+   position 244 23
+   size 86 26
+   hexactpos 1
+   vexactpos 1
+   hexactsize 1
+   vexactsize 1
+   {
+    TextWidgetClass GRZWeaponAmmo
+    {
+     ignorepointer 1
+     position 0 0
+     size 86 26
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     color 1 1 1 1
+     font "gui/fonts/sdf_MetronBook24"
+     text ""
+    }
+    ProgressBarWidgetClass GRZWeaponProgress
+    {
+     visible 0
+     position 0 0
+     size 86 20
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+    }
+
+   }
+  }
+  FrameWidgetClass GRZWeaponDetails
+  {
+   ignorepointer 1
+   position 30 51
+   size 300 22
+   hexactpos 1
+   vexactpos 1
+   hexactsize 1
+   vexactsize 1
+   {
+    TextWidgetClass GRZWeaponMode
+    {
+     ignorepointer 1
+     position 0 0
+     size 180 22
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     color 1 1 1 1
+     font "gui/fonts/sdf_MetronBook24"
+     text ""
+    }
+    TextWidgetClass GRZWeaponZeroing
+    {
+     ignorepointer 1
+     position 214 0
+     size 86 22
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     color 1 1 1 1
+     font "gui/fonts/sdf_MetronBook24"
+     text ""
+    }
+
+   }
+  }
+ }
+}

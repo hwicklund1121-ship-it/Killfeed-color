@@ -89,18 +89,18 @@ modded class IngameHud
             return;
 
         float alpha = 1.0;
-        // Black stays black even at critical levels; pulse opacity instead of red.
+        // White status icons pulse opacity at critical levels; the frame stays black.
         if (m_TendencyStatusCritical.Contains(icon))
             alpha = 0.4 + 0.6 * Math.AbsFloat(Math.Sin(m_GRZPulse * 3.0));
-        icon.SetColor(ARGB(alpha * 255, 10, 10, 10));
+        icon.SetColor(ARGB(alpha * 255, 255, 255, 255));
         for (int i = 1; i <= 3; i++)
         {
             Widget up = m_Notifiers.FindAnyWidget(status + "ArrowUp" + i.ToString());
             Widget down = m_Notifiers.FindAnyWidget(status + "ArrowDown" + i.ToString());
             if (up)
-                up.SetColor(0xFF0A0A0A);
+                up.SetColor(0xFFFFFFFF);
             if (down)
-                down.SetColor(0xFF0A0A0A);
+                down.SetColor(0xFFFFFFFF);
         }
 
         // Two deliberately sized, separate cells anchored inside the HUD.
@@ -109,13 +109,13 @@ modded class IngameHud
         m_HudPanelWidget.GetScreenPos(hudX, hudY);
         m_HudPanelWidget.GetScreenSize(hudWidth, hudHeight);
         float scale = Math.Clamp(hudHeight / 1080.0, 0.75, 2.0);
-        float cell = 80 * scale;
+        float cell = 96 * scale;
         float gap = 12 * scale;
         float frameX = hudX + hudWidth - 28 * scale - cell;
         if (status == "Health")
             frameX -= cell + gap;
         float frameY = hudY + hudHeight - 36 * scale - cell;
-        float iconSize = 38 * scale;
+        float iconSize = 42 * scale;
         icon.SetScreenPos(frameX + (cell - iconSize) * 0.5, frameY + (cell - iconSize) * 0.5);
         icon.SetScreenSize(iconSize, iconSize);
         wire.SetScreenPos(frameX, frameY);
@@ -127,15 +127,15 @@ modded class IngameHud
         {
             Widget arrowUp = m_Notifiers.FindAnyWidget(status + "ArrowUp" + arrow.ToString());
             Widget arrowDown = m_Notifiers.FindAnyWidget(status + "ArrowDown" + arrow.ToString());
-            float arrowY = frameY + (22 + (arrow - 1) * 10) * scale;
+            float arrowY = frameY + (30 + (arrow - 1) * 10) * scale;
             if (arrowUp)
             {
-                arrowUp.SetScreenPos(frameX + 59 * scale, arrowY);
+                arrowUp.SetScreenPos(frameX + 72 * scale, arrowY);
                 arrowUp.SetScreenSize(8 * scale, 8 * scale);
             }
             if (arrowDown)
             {
-                arrowDown.SetScreenPos(frameX + 59 * scale, arrowY);
+                arrowDown.SetScreenPos(frameX + 72 * scale, arrowY);
                 arrowDown.SetScreenSize(8 * scale, 8 * scale);
             }
         }
