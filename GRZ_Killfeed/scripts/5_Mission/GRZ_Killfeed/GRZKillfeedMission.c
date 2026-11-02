@@ -220,15 +220,15 @@ modded class MissionGameplay
         row.Message = message;
         row.Killer = TextWidget.Cast(row.Root.FindAnyWidget("Killer"));
         row.Victim = TextWidget.Cast(row.Root.FindAnyWidget("Victim"));
-        row.Killer.SetTextExactSize(20);
-        row.Victim.SetTextExactSize(20);
+        row.Killer.SetTextExactSize(24);
+        row.Victim.SetTextExactSize(24);
         row.Killer.SetOutline(1, 0xFF000000);
         row.Victim.SetOutline(1, 0xFF000000);
-        GRZFitName(row.Killer, GRZShortName(message.Killer), 156);
-        GRZFitName(row.Victim, GRZShortName(message.Victim), 154);
+        GRZFitName(row.Killer, GRZShortName(message.Killer), 172);
+        GRZFitName(row.Victim, GRZShortName(message.Victim), 174);
         TextWidget detail = TextWidget.Cast(row.Root.FindAnyWidget("Detail"));
         detail.SetText(message.Distance.ToString() + " m");
-        detail.SetTextExactSize(14);
+        detail.SetTextExactSize(20);
         row.CreateGunPreview();
         m_GRZRows.InsertAt(row, 0);
         while (m_GRZRows.Count() > 5)
@@ -248,7 +248,7 @@ modded class MissionGameplay
         float x, y, width, height;
         hud.GetHudPanelWidget().GetScreenPos(x, y);
         hud.GetHudPanelWidget().GetScreenSize(width, height);
-        m_GRZFeed.SetScreenPos(x + width - 624, y + 28);
+        m_GRZFeed.SetScreenPos(x + width - 824, y + 28);
         for (int i = 0; i < m_GRZRows.Count(); i++)
             m_GRZRows[i].Root.SetPos(0, i * 64);
     }

@@ -5,7 +5,7 @@ FrameWidgetClass GRZStatusPanel
  ignorepointer 1
  style blank
  position 0 0
- size 208 96
+ size 208 112
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -14,8 +14,8 @@ FrameWidgetClass GRZStatusPanel
   ImageWidgetClass GRZHealthIcon
   {
    ignorepointer 1
-   position 0.0 0
-   size 0.4615384615 1
+   position 0.5384615385 0
+   size 0.4615384615 0.8571428571
    color 1 1 1 1
    mode blend
    stretch 1
@@ -23,11 +23,108 @@ FrameWidgetClass GRZStatusPanel
   ImageWidgetClass GRZBloodIcon
   {
    ignorepointer 1
-   position 0.5384615385 0
-   size 0.4615384615 1
+   position 0.0 0
+   size 0.4615384615 0.8571428571
    color 1 1 1 1
    mode blend
    stretch 1
+  }
+  FrameWidgetClass GRZStaminaBar
+  {
+   ignorepointer 1
+   color 0 0 0 0
+   position 0 0.8928571429
+   size 1 0.0714285714
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+   {
+    PanelWidgetClass GRZStaminaBacking
+    {
+     ignorepointer 1
+     style rover_sim_colorable
+     color 0 0 0 0.8
+     position 0 0
+     size 1 1
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+    }
+    PanelWidgetClass GRZStaminaCapacity
+    {
+     ignorepointer 1
+     style rover_sim_colorable
+     color 0.2 0.2 0.2 1
+     position 0.004807692307692308 0.125
+     size 0.9903846153846154 0.75
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+    }
+    PanelWidgetClass GRZStaminaFill
+    {
+     ignorepointer 1
+     style rover_sim_colorable
+     color 1 1 1 1
+     position 0.004807692307692308 0.125
+     size 0 0.75
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+    }
+    PanelWidgetClass GRZStaminaTop
+    {
+     ignorepointer 1
+     style rover_sim_colorable
+     color 0 0 0 1
+     position 0 0
+     size 1 0.125
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+    }
+    PanelWidgetClass GRZStaminaBottom
+    {
+     ignorepointer 1
+     style rover_sim_colorable
+     color 0 0 0 1
+     position 0 0.875
+     size 1 0.125
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+    }
+    PanelWidgetClass GRZStaminaLeft
+    {
+     ignorepointer 1
+     style rover_sim_colorable
+     color 0 0 0 1
+     position 0 0.125
+     size 0.004807692307692308 0.75
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+    }
+    PanelWidgetClass GRZStaminaRight
+    {
+     ignorepointer 1
+     style rover_sim_colorable
+     color 0 0 0 1
+     position 0.9951923076923077 0.125
+     size 0.004807692307692308 0.75
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+    }
+   }
   }
  }
 }

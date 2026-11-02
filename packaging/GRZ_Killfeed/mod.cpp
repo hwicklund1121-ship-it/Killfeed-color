@@ -1,4 +1,4 @@
 name = "GRZ Killfeed";
 author = "GRZ";
-version = "0.1.9";
+version = "0.1.10";
 overview = "Player killfeed with Steam-ID controlled name colors and animation.";

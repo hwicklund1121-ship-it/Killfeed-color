@@ -43,7 +43,7 @@ def main():
     install_notes = (
         "GRZ Custom Hud - unsigned development build\n\n"
         "Extract @GRZ_CustomHud into your DayZ folder and add it as a local mod in the launcher.\n"
-        "Load with -mod=@GRZ_CustomHud. Includes weapon/ammo panel, reload prompts, stance, health and blood.\n"
+        "Load with -mod=@GRZ_CustomHud. Includes weapon/ammo panel, reload prompts, stance, health, blood and stamina.\n"
         "No DayZ runtime compilation or gameplay testing has been performed.\n"
         "For signature-checking servers, sign the PBO with your own key using DayZ Tools,\n"
         "place the .bisign beside the PBO, and install the public .bikey on the server.\n"

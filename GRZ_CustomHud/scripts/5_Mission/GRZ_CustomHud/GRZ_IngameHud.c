@@ -5,6 +5,10 @@ modded class IngameHud
     protected int m_GRZHealthStatus;
     protected int m_GRZBloodStatus;
     protected float m_GRZPulse;
+    protected Widget m_GRZStaminaFill;
+    protected Widget m_GRZStaminaCapacityBar;
+    protected float m_GRZStaminaFraction;
+    protected float m_GRZStaminaCapacity = 1.0;
 
     override void Init(Widget hud_panel_widget)
     {
@@ -12,6 +16,9 @@ modded class IngameHud
         m_GRZStatusPanel = g_Game.GetWorkspace().CreateWidgets("GRZ_CustomHud/gui/layouts/grz_status.layout", m_HudPanelWidget);
         if (!m_GRZStatusPanel)
             return;
+        m_GRZStaminaFill = m_GRZStatusPanel.FindAnyWidget("GRZStaminaFill");
+        m_GRZStaminaCapacityBar = m_GRZStatusPanel.FindAnyWidget("GRZStaminaCapacity");
+        GRZUpdateStamina();
         ImageWidget health = ImageWidget.Cast(m_GRZStatusPanel.FindAnyWidget("GRZHealthIcon"));
         ImageWidget blood = ImageWidget.Cast(m_GRZStatusPanel.FindAnyWidget("GRZBloodIcon"));
         if (health)
@@ -63,9 +70,41 @@ modded class IngameHud
         m_HudPanelWidget.GetScreenSize(width, height);
         float scale = Math.Clamp(height / 1080.0, 0.75, 2.0);
         m_GRZStatusPanel.SetScreenPos(x + width - 232 * scale, y + height - 132 * scale);
-        m_GRZStatusPanel.SetScreenSize(208 * scale, 96 * scale);
+        m_GRZStatusPanel.SetScreenSize(208 * scale, 112 * scale);
         GRZStatus("Health", m_GRZHealthStatus);
         GRZStatus("Blood", m_GRZBloodStatus);
+        GRZUpdateStamina();
+    }
+
+    override void SetStamina(int value, int range)
+    {
+        super.SetStamina(value, range);
+        float maximum = CfgGameplayHandler.GetStaminaMax();
+        if (maximum <= 0)
+            maximum = Math.Max(range, 1.0);
+        m_GRZStaminaFraction = 0;
+        m_GRZStaminaCapacity = 0;
+        if (maximum > 0)
+        {
+            m_GRZStaminaCapacity = Math.Clamp(range / maximum, 0, 1);
+            m_GRZStaminaFraction = Math.Clamp(value / maximum, 0, m_GRZStaminaCapacity);
+        }
+        GRZUpdateStamina();
+    }
+
+    protected void GRZUpdateStamina()
+    {
+        float innerWidth = 206.0 / 208.0;
+        if (m_GRZStaminaCapacityBar)
+        {
+            m_GRZStaminaCapacityBar.SetSize(innerWidth * m_GRZStaminaCapacity, 0.75);
+            m_GRZStaminaCapacityBar.Show(m_GRZStaminaCapacity > 0);
+        }
+        if (m_GRZStaminaFill)
+        {
+            m_GRZStaminaFill.SetSize(innerWidth * m_GRZStaminaFraction, 0.75);
+            m_GRZStaminaFill.Show(m_GRZStaminaFraction > 0);
+        }
     }
 
     protected void GRZHide(Widget widget)

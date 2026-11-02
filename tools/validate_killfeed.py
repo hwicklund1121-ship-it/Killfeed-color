@@ -90,7 +90,8 @@ def main():
     assert "color 0 0 0 0.45" in row
     for edge in ["BorderTop", "BorderBottom", "BorderLeft", "BorderRight"]:
         assert f"PanelWidgetClass {edge}" in row
-    assert "gui/textures/grz_menu_outline_ca.paa" in files
+    assert "gui/textures/grz_menu_logo_ca.paa" in files
+    assert "gui/textures/grz_menu_outline_ca.paa" not in files
     assert "ItemPreviewWidgetClass GunPreview" in row
     mission = files["scripts/5_Mission/GRZ_Killfeed/GRZKillfeedMission.c"].decode()
     assert 'detail.SetText(message.Distance.ToString() + " m")' in mission
@@ -111,7 +112,7 @@ def main():
     assert "hexactsize 0" in root and "vexactsize 0" in root
     assert "g_Game.GetWorkspace().GetScreenSize(width, height)" in menu
     assert "GRZKillfeedClient.ReleaseMenu();" in mission
-    assert "size 600 60" in row
+    assert "size 800 60" in row
     assert "current.UseLocalPreview();" in mission
     assert "if (!Allowed(identity)" in server
     assert "GunWidget.SetItem(null)" in mission and "g_Game.ObjectDelete(PreviewGun)" in mission
@@ -119,8 +120,8 @@ def main():
         for prefix in ["Swatch", "SwatchFill", "SwatchBorder", "SwatchLabel"]:
             assert prefix + str(index) in declared
     assert "Chosen.ColorA = i;" in menu and "Chosen.ColorB = i;" in menu
-    assert "row.Killer.SetTextExactSize(20)" in mission
-    assert "row.Victim.SetTextExactSize(20)" in mission
+    assert "row.Killer.SetTextExactSize(24)" in mission
+    assert "row.Victim.SetTextExactSize(24)" in mission
     focus = files["scripts/3_Game/GRZ_Killfeed/GRZKillfeedFocus.c"].decode()
     assert "override void OnDeactivateMessage()" in focus
     assert "GRZKillfeedBus.AppDeactivated.Invoke();" in focus
@@ -137,6 +138,10 @@ def main():
     assert closer.index("UnlockControls();") < closer.index("Close();")
     assert "GRZKillfeedBus.AppDeactivated.Remove(CloseSafely);" in closer
     assert "ResetGameFocus" not in menu
+    menu_layout = files["gui/layouts/menu.layout"].decode()
+    assert 'text "GRZ Killfeed"' in menu_layout
+    assert "ImageWidgetClass MenuLogo" in menu_layout
+    assert "MenuOutline" not in menu_layout
     print(f"Verified PBO prefix/checksum and {len(files)} source/asset entries; ZIP payloads match.")
     print("Layout/widget/resource bindings and style wire-field order checked.")
     print("These checks do not compile Enforce Script or test networking, permissions, or DayZ Editor.")

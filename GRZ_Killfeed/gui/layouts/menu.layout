@@ -13,7 +13,7 @@ FrameWidgetClass GRZKillfeedMenuRoot
 PanelWidgetClass MenuPanel
 {
  position 0 0
- size 720 540
+ size 720 500
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -21,69 +21,131 @@ PanelWidgetClass MenuPanel
  color 0 0 0 1
  style rover_sim_colorable
  {
-ImageWidgetClass MenuOutline
+PanelWidgetClass MenuTop
 {
- ignorepointer 1
  position 0 0
- size 1 1
- mode blend
- color 1 1 1 1
- stretch 1
-}
-TextWidgetClass Title
-{
- position 210 80
- size 300 30
- hexactpos 1
- vexactpos 1
- hexactsize 1
- vexactsize 1
- ignorepointer 1
- color 1 1 1 1
- font "gui/fonts/sdf_MetronLight24"
- "exact text" 1
- "text valign" center
- text "GRZ KILLFEED"
- "text halign" center
-}
-TextWidgetClass Hint
-{
- position 126 114
- size 468 20
- hexactpos 1
- vexactpos 1
- hexactsize 1
- vexactsize 1
- ignorepointer 1
- color 1 1 1 1
- font "gui/fonts/sdf_MetronLight16"
- "exact text" 1
- "text valign" center
- text "Choose your colors and name animation."
- "text halign" center
-}
-PanelWidgetClass PreviewCard
-{
- position 126 140
- size 468 48
+ size 720 2
  hexactpos 1
  vexactpos 1
  hexactsize 1
  vexactsize 1
  ignorepointer 1
  style rover_sim_colorable
- color 0.04 0.04 0.04 1
+ color 0.94 0.16 0.18 1
 }
-TextWidgetClass PreviewCaption
+PanelWidgetClass MenuBottom
 {
- position 138 141
- size 444 14
+ position 0 499
+ size 720 1
  hexactpos 1
  vexactpos 1
  hexactsize 1
  vexactsize 1
  ignorepointer 1
+ style rover_sim_colorable
+ color 0.2 0.025 0.025 1
+}
+PanelWidgetClass MenuLeft
+{
+ position 0 2
+ size 1 497
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.2 0.025 0.025 1
+}
+PanelWidgetClass MenuRight
+{
+ position 719 2
+ size 1 497
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.2 0.025 0.025 1
+}
+ImageWidgetClass MenuLogo
+{
+ position 28 8
+ size 300 100
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ mode blend
  color 1 1 1 1
+ stretch 1
+}
+TextWidgetClass Title
+{
+ position 352 24
+ size 340 32
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 0.94 0.16 0.18 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ text "GRZ Killfeed"
+}
+TextWidgetClass Hint
+{
+ position 352 62
+ size 340 20
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 0.8 0.8 0.8 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ text "Personalize your killfeed name."
+}
+PanelWidgetClass HeaderDivider
+{
+ position 28 100
+ size 664 1
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.28 0.04 0.05 1
+}
+PanelWidgetClass PreviewCard
+{
+ position 28 116
+ size 664 64
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.045 0.045 0.045 1
+}
+TextWidgetClass PreviewCaption
+{
+ position 44 122
+ size 632 14
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 0.75 0.75 0.75 1
  font "gui/fonts/sdf_MetronLight16"
  "exact text" 1
  "text valign" center
@@ -92,8 +154,8 @@ TextWidgetClass PreviewCaption
 }
 TextWidgetClass Preview
 {
- position 138 156
- size 444 30
+ position 44 142
+ size 632 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -108,18 +170,30 @@ TextWidgetClass Preview
 }
 ButtonWidgetClass ColorA
 {
- position 126 202
- size 222 36
+ position 28 196
+ size 320 36
  hexactpos 1
  vexactpos 1
  hexactsize 1
  vexactsize 1
  color 0 0 0 0
  {
-PanelWidgetClass ColorAFill
+PanelWidgetClass ColorABorder
 {
  position 0 0
- size 222 36
+ size 320 36
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.18 0.18 0.18 1
+}
+PanelWidgetClass ColorAFill
+{
+ position 1 1
+ size 318 34
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -131,7 +205,7 @@ PanelWidgetClass ColorAFill
 TextWidgetClass ColorALabel
 {
  position 12 0
- size 198 36
+ size 296 36
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -142,23 +216,36 @@ TextWidgetClass ColorALabel
  "exact text" 1
  "text valign" center
  text "Primary: White"
+ "text halign" center
 }
  }
 }
 ButtonWidgetClass ColorB
 {
- position 372 202
- size 222 36
+ position 372 196
+ size 320 36
  hexactpos 1
  vexactpos 1
  hexactsize 1
  vexactsize 1
  color 0 0 0 0
  {
-PanelWidgetClass ColorBFill
+PanelWidgetClass ColorBBorder
 {
  position 0 0
- size 222 36
+ size 320 36
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.18 0.18 0.18 1
+}
+PanelWidgetClass ColorBFill
+{
+ position 1 1
+ size 318 34
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -170,7 +257,7 @@ PanelWidgetClass ColorBFill
 TextWidgetClass ColorBLabel
 {
  position 12 0
- size 198 36
+ size 296 36
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -181,25 +268,26 @@ TextWidgetClass ColorBLabel
  "exact text" 1
  "text valign" center
  text "Secondary: Red"
+ "text halign" center
 }
  }
 }
 PanelWidgetClass PrimaryActive
 {
- position 126 236
- size 222 2
+ position 28 230
+ size 320 2
  hexactpos 1
  vexactpos 1
  hexactsize 1
  vexactsize 1
  ignorepointer 1
  style rover_sim_colorable
- color 1 1 1 1
+ color 0.94 0.16 0.18 1
 }
 PanelWidgetClass SecondaryActive
 {
- position 372 236
- size 222 2
+ position 372 230
+ size 320 2
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -210,8 +298,8 @@ PanelWidgetClass SecondaryActive
 }
 ButtonWidgetClass Swatch0
 {
- position 133 246
- size 64 28
+ position 37 244
+ size 96 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -221,7 +309,7 @@ ButtonWidgetClass Swatch0
 PanelWidgetClass SwatchBorder0
 {
  position 0 0
- size 64 28
+ size 96 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -233,7 +321,7 @@ PanelWidgetClass SwatchBorder0
 PanelWidgetClass SwatchFill0
 {
  position 2 2
- size 60 24
+ size 92 28
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -245,7 +333,7 @@ PanelWidgetClass SwatchFill0
 TextWidgetClass SwatchLabel0
 {
  position 2 2
- size 60 24
+ size 92 28
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -262,8 +350,8 @@ TextWidgetClass SwatchLabel0
 }
 ButtonWidgetClass Swatch1
 {
- position 211 246
- size 64 28
+ position 147 244
+ size 96 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -273,7 +361,7 @@ ButtonWidgetClass Swatch1
 PanelWidgetClass SwatchBorder1
 {
  position 0 0
- size 64 28
+ size 96 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -285,7 +373,7 @@ PanelWidgetClass SwatchBorder1
 PanelWidgetClass SwatchFill1
 {
  position 2 2
- size 60 24
+ size 92 28
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -297,7 +385,7 @@ PanelWidgetClass SwatchFill1
 TextWidgetClass SwatchLabel1
 {
  position 2 2
- size 60 24
+ size 92 28
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -314,8 +402,8 @@ TextWidgetClass SwatchLabel1
 }
 ButtonWidgetClass Swatch2
 {
- position 289 246
- size 64 28
+ position 257 244
+ size 96 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -325,7 +413,7 @@ ButtonWidgetClass Swatch2
 PanelWidgetClass SwatchBorder2
 {
  position 0 0
- size 64 28
+ size 96 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -337,7 +425,7 @@ PanelWidgetClass SwatchBorder2
 PanelWidgetClass SwatchFill2
 {
  position 2 2
- size 60 24
+ size 92 28
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -349,7 +437,7 @@ PanelWidgetClass SwatchFill2
 TextWidgetClass SwatchLabel2
 {
  position 2 2
- size 60 24
+ size 92 28
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -366,8 +454,8 @@ TextWidgetClass SwatchLabel2
 }
 ButtonWidgetClass Swatch3
 {
- position 367 246
- size 64 28
+ position 367 244
+ size 96 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -377,7 +465,7 @@ ButtonWidgetClass Swatch3
 PanelWidgetClass SwatchBorder3
 {
  position 0 0
- size 64 28
+ size 96 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -389,7 +477,7 @@ PanelWidgetClass SwatchBorder3
 PanelWidgetClass SwatchFill3
 {
  position 2 2
- size 60 24
+ size 92 28
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -401,7 +489,7 @@ PanelWidgetClass SwatchFill3
 TextWidgetClass SwatchLabel3
 {
  position 2 2
- size 60 24
+ size 92 28
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -418,8 +506,8 @@ TextWidgetClass SwatchLabel3
 }
 ButtonWidgetClass Swatch4
 {
- position 445 246
- size 64 28
+ position 477 244
+ size 96 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -429,7 +517,7 @@ ButtonWidgetClass Swatch4
 PanelWidgetClass SwatchBorder4
 {
  position 0 0
- size 64 28
+ size 96 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -441,7 +529,7 @@ PanelWidgetClass SwatchBorder4
 PanelWidgetClass SwatchFill4
 {
  position 2 2
- size 60 24
+ size 92 28
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -453,7 +541,7 @@ PanelWidgetClass SwatchFill4
 TextWidgetClass SwatchLabel4
 {
  position 2 2
- size 60 24
+ size 92 28
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -470,8 +558,8 @@ TextWidgetClass SwatchLabel4
 }
 ButtonWidgetClass Swatch5
 {
- position 523 246
- size 64 28
+ position 587 244
+ size 96 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -481,7 +569,7 @@ ButtonWidgetClass Swatch5
 PanelWidgetClass SwatchBorder5
 {
  position 0 0
- size 64 28
+ size 96 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -493,7 +581,7 @@ PanelWidgetClass SwatchBorder5
 PanelWidgetClass SwatchFill5
 {
  position 2 2
- size 60 24
+ size 92 28
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -505,7 +593,7 @@ PanelWidgetClass SwatchFill5
 TextWidgetClass SwatchLabel5
 {
  position 2 2
- size 60 24
+ size 92 28
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -522,8 +610,8 @@ TextWidgetClass SwatchLabel5
 }
 ButtonWidgetClass Swatch6
 {
- position 133 286
- size 64 28
+ position 37 286
+ size 96 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -533,7 +621,7 @@ ButtonWidgetClass Swatch6
 PanelWidgetClass SwatchBorder6
 {
  position 0 0
- size 64 28
+ size 96 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -545,7 +633,7 @@ PanelWidgetClass SwatchBorder6
 PanelWidgetClass SwatchFill6
 {
  position 2 2
- size 60 24
+ size 92 28
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -557,7 +645,7 @@ PanelWidgetClass SwatchFill6
 TextWidgetClass SwatchLabel6
 {
  position 2 2
- size 60 24
+ size 92 28
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -574,8 +662,8 @@ TextWidgetClass SwatchLabel6
 }
 ButtonWidgetClass Swatch7
 {
- position 211 286
- size 64 28
+ position 147 286
+ size 96 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -585,7 +673,7 @@ ButtonWidgetClass Swatch7
 PanelWidgetClass SwatchBorder7
 {
  position 0 0
- size 64 28
+ size 96 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -597,7 +685,7 @@ PanelWidgetClass SwatchBorder7
 PanelWidgetClass SwatchFill7
 {
  position 2 2
- size 60 24
+ size 92 28
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -609,7 +697,7 @@ PanelWidgetClass SwatchFill7
 TextWidgetClass SwatchLabel7
 {
  position 2 2
- size 60 24
+ size 92 28
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -626,8 +714,8 @@ TextWidgetClass SwatchLabel7
 }
 ButtonWidgetClass Swatch8
 {
- position 289 286
- size 64 28
+ position 257 286
+ size 96 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -637,7 +725,7 @@ ButtonWidgetClass Swatch8
 PanelWidgetClass SwatchBorder8
 {
  position 0 0
- size 64 28
+ size 96 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -649,7 +737,7 @@ PanelWidgetClass SwatchBorder8
 PanelWidgetClass SwatchFill8
 {
  position 2 2
- size 60 24
+ size 92 28
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -661,7 +749,7 @@ PanelWidgetClass SwatchFill8
 TextWidgetClass SwatchLabel8
 {
  position 2 2
- size 60 24
+ size 92 28
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -679,7 +767,7 @@ TextWidgetClass SwatchLabel8
 ButtonWidgetClass Swatch9
 {
  position 367 286
- size 64 28
+ size 96 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -689,7 +777,7 @@ ButtonWidgetClass Swatch9
 PanelWidgetClass SwatchBorder9
 {
  position 0 0
- size 64 28
+ size 96 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -701,7 +789,7 @@ PanelWidgetClass SwatchBorder9
 PanelWidgetClass SwatchFill9
 {
  position 2 2
- size 60 24
+ size 92 28
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -713,7 +801,7 @@ PanelWidgetClass SwatchFill9
 TextWidgetClass SwatchLabel9
 {
  position 2 2
- size 60 24
+ size 92 28
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -730,8 +818,8 @@ TextWidgetClass SwatchLabel9
 }
 ButtonWidgetClass Swatch10
 {
- position 445 286
- size 64 28
+ position 477 286
+ size 96 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -741,7 +829,7 @@ ButtonWidgetClass Swatch10
 PanelWidgetClass SwatchBorder10
 {
  position 0 0
- size 64 28
+ size 96 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -753,7 +841,7 @@ PanelWidgetClass SwatchBorder10
 PanelWidgetClass SwatchFill10
 {
  position 2 2
- size 60 24
+ size 92 28
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -765,7 +853,7 @@ PanelWidgetClass SwatchFill10
 TextWidgetClass SwatchLabel10
 {
  position 2 2
- size 60 24
+ size 92 28
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -782,8 +870,8 @@ TextWidgetClass SwatchLabel10
 }
 ButtonWidgetClass Swatch11
 {
- position 523 286
- size 64 28
+ position 587 286
+ size 96 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -793,7 +881,7 @@ ButtonWidgetClass Swatch11
 PanelWidgetClass SwatchBorder11
 {
  position 0 0
- size 64 28
+ size 96 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -805,7 +893,7 @@ PanelWidgetClass SwatchBorder11
 PanelWidgetClass SwatchFill11
 {
  position 2 2
- size 60 24
+ size 92 28
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -817,7 +905,7 @@ PanelWidgetClass SwatchFill11
 TextWidgetClass SwatchLabel11
 {
  position 2 2
- size 60 24
+ size 92 28
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -834,18 +922,30 @@ TextWidgetClass SwatchLabel11
 }
 ButtonWidgetClass Effect
 {
- position 126 326
- size 222 36
+ position 28 336
+ size 320 36
  hexactpos 1
  vexactpos 1
  hexactsize 1
  vexactsize 1
  color 0 0 0 0
  {
-PanelWidgetClass EffectFill
+PanelWidgetClass EffectBorder
 {
  position 0 0
- size 222 36
+ size 320 36
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.18 0.18 0.18 1
+}
+PanelWidgetClass EffectFill
+{
+ position 1 1
+ size 318 34
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -857,7 +957,7 @@ PanelWidgetClass EffectFill
 TextWidgetClass EffectLabel
 {
  position 12 0
- size 198 36
+ size 296 36
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -868,23 +968,36 @@ TextWidgetClass EffectLabel
  "exact text" 1
  "text valign" center
  text "Style: Steady"
+ "text halign" center
 }
  }
 }
 ButtonWidgetClass Speed
 {
- position 372 326
- size 222 36
+ position 372 336
+ size 320 36
  hexactpos 1
  vexactpos 1
  hexactsize 1
  vexactsize 1
  color 0 0 0 0
  {
-PanelWidgetClass SpeedFill
+PanelWidgetClass SpeedBorder
 {
  position 0 0
- size 222 36
+ size 320 36
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.18 0.18 0.18 1
+}
+PanelWidgetClass SpeedFill
+{
+ position 1 1
+ size 318 34
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -896,7 +1009,7 @@ PanelWidgetClass SpeedFill
 TextWidgetClass SpeedLabel
 {
  position 12 0
- size 198 36
+ size 296 36
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -907,19 +1020,20 @@ TextWidgetClass SpeedLabel
  "exact text" 1
  "text valign" center
  text "Speed: Normal"
+ "text halign" center
 }
  }
 }
 TextWidgetClass Status
 {
- position 126 376
- size 468 24
+ position 28 388
+ size 664 20
  hexactpos 1
  vexactpos 1
  hexactsize 1
  vexactsize 1
  ignorepointer 1
- color 1 1 1 1
+ color 0.8 0.8 0.8 1
  font "gui/fonts/sdf_MetronLight16"
  "exact text" 1
  "text valign" center
@@ -928,18 +1042,30 @@ TextWidgetClass Status
 }
 ButtonWidgetClass Test
 {
- position 150 406
- size 128 34
+ position 28 432
+ size 202 36
  hexactpos 1
  vexactpos 1
  hexactsize 1
  vexactsize 1
  color 0 0 0 0
  {
-PanelWidgetClass TestFill
+PanelWidgetClass TestBorder
 {
  position 0 0
- size 128 34
+ size 202 36
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.18 0.18 0.18 1
+}
+PanelWidgetClass TestFill
+{
+ position 1 1
+ size 200 34
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -951,7 +1077,7 @@ PanelWidgetClass TestFill
 TextWidgetClass TestLabel
 {
  position 12 0
- size 104 34
+ size 178 36
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -962,35 +1088,48 @@ TextWidgetClass TestLabel
  "exact text" 1
  "text valign" center
  text "Test feed"
+ "text halign" center
 }
  }
 }
 ButtonWidgetClass Save
 {
- position 296 406
- size 128 34
+ position 258 432
+ size 202 36
  hexactpos 1
  vexactpos 1
  hexactsize 1
  vexactsize 1
  color 0 0 0 0
  {
-PanelWidgetClass SaveFill
+PanelWidgetClass SaveBorder
 {
  position 0 0
- size 128 34
+ size 202 36
  hexactpos 1
  vexactpos 1
  hexactsize 1
  vexactsize 1
  ignorepointer 1
  style rover_sim_colorable
- color 0.055 0.055 0.055 1
+ color 0.94 0.16 0.18 1
+}
+PanelWidgetClass SaveFill
+{
+ position 1 1
+ size 200 34
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.78 0.07 0.09 1
 }
 TextWidgetClass SaveLabel
 {
  position 12 0
- size 104 34
+ size 178 36
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -1001,23 +1140,36 @@ TextWidgetClass SaveLabel
  "exact text" 1
  "text valign" center
  text "Save"
+ "text halign" center
 }
  }
 }
 ButtonWidgetClass Close
 {
- position 442 406
- size 128 34
+ position 488 432
+ size 204 36
  hexactpos 1
  vexactpos 1
  hexactsize 1
  vexactsize 1
  color 0 0 0 0
  {
-PanelWidgetClass CloseFill
+PanelWidgetClass CloseBorder
 {
  position 0 0
- size 128 34
+ size 204 36
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.18 0.18 0.18 1
+}
+PanelWidgetClass CloseFill
+{
+ position 1 1
+ size 202 34
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -1029,7 +1181,7 @@ PanelWidgetClass CloseFill
 TextWidgetClass CloseLabel
 {
  position 12 0
- size 104 34
+ size 180 36
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -1040,6 +1192,7 @@ TextWidgetClass CloseLabel
  "exact text" 1
  "text valign" center
  text "Close"
+ "text halign" center
 }
  }
 }

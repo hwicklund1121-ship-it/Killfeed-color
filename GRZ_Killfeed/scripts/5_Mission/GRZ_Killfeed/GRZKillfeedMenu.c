@@ -24,13 +24,13 @@ class GRZKillfeedClient
         if (!ActiveMenu || !ActiveMenu.GetLayoutRoot())
         {
             ActiveMenu = null;
-            Error("[GRZ Killfeed 0.1.9] Native menu factory did not return an initialized settings menu.");
+            Error("[GRZ Killfeed 0.1.10] Native menu factory did not return an initialized settings menu.");
             g_Game.Chat("GRZ Killfeed: menu creation failed. Check the client script log.", "colorStatusChannel");
             return;
         }
         ActiveMenu.ApplyLocalStyle(LocalStyle);
         ActiveMenu.EnsureVisible();
-        Print("[GRZ Killfeed 0.1.9] Native menu registered and retained.");
+        Print("[GRZ Killfeed 0.1.10] Native menu registered and retained.");
     }
 
     static void ReleaseMenu()
@@ -141,30 +141,32 @@ class GRZKillfeedMenu extends UIScriptedMenu
             Error("GRZ Killfeed: could not create gui/layouts/menu.layout.");
             return null;
         }
-        ImageWidget outline = ImageWidget.Cast(layoutRoot.FindAnyWidget("MenuOutline"));
+        ImageWidget logo = ImageWidget.Cast(layoutRoot.FindAnyWidget("MenuLogo"));
         m_Preview = TextWidget.Cast(layoutRoot.FindAnyWidget("Preview"));
         m_Status = TextWidget.Cast(layoutRoot.FindAnyWidget("Status"));
-        if (!outline || !m_Preview || !m_Status || !layoutRoot.FindAnyWidget("MenuPanel"))
+        if (!logo || !m_Preview || !m_Status || !layoutRoot.FindAnyWidget("MenuPanel"))
         {
             Error("GRZ Killfeed: menu layout is missing required widgets.");
             layoutRoot.Unlink();
             layoutRoot = null;
             return null;
         }
-        outline.SetFlags(WidgetFlags.SOURCEALPHA | WidgetFlags.BLEND | WidgetFlags.STRETCH);
-        outline.LoadImageFile(0, "GRZ_Killfeed/gui/textures/grz_menu_outline_ca.paa");
-        outline.SetSort(100);
+        logo.SetFlags(WidgetFlags.SOURCEALPHA | WidgetFlags.BLEND | WidgetFlags.STRETCH);
+        logo.LoadImageFile(0, "GRZ_Killfeed/gui/textures/grz_menu_logo_ca.paa");
+        logo.SetSort(0);
         string name;
         g_Game.GetPlayerName(name);
         m_Preview.SetText(name);
-        m_Preview.SetTextExactSize(26);
+        m_Preview.SetTextExactSize(28);
         TextWidget.Cast(layoutRoot.FindAnyWidget("PreviewCaption")).SetTextExactSize(11);
         m_Status.SetTextExactSize(13);
+        TextWidget.Cast(layoutRoot.FindAnyWidget("Title")).SetTextExactSize(26);
+        TextWidget.Cast(layoutRoot.FindAnyWidget("Hint")).SetTextExactSize(14);
         RefreshLabels();
         if (IsOfflinePreview)
             m_Status.SetText("Local preview — server access and persistence are not tested.");
         PositionPanel();
-        Print("[GRZ Killfeed 0.1.9] Init: layout created.");
+        Print("[GRZ Killfeed 0.1.10] Init: layout created.");
         return layoutRoot;
     }
 
@@ -213,7 +215,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
             m_LoggedUpdate = true;
             float width, height;
             layoutRoot.GetScreenSize(width, height);
-            Print(string.Format("[GRZ Killfeed 0.1.9] Update: root %1 x %2; visible %3.", width, height, layoutRoot.IsVisibleHierarchy()));
+            Print(string.Format("[GRZ Killfeed 0.1.10] Update: root %1 x %2; visible %3.", width, height, layoutRoot.IsVisibleHierarchy()));
         }
     }
 
@@ -229,14 +231,14 @@ class GRZKillfeedMenu extends UIScriptedMenu
             return;
         }
         EnsureVisible();
-        Print("[GRZ Killfeed 0.1.9] OnShow called.");
+        Print("[GRZ Killfeed 0.1.10] OnShow called.");
     }
 
     override void OnHide()
     {
         m_GRZDismissRequested = true;
         GRZKillfeedBus.AppDeactivated.Remove(CloseSafely);
-        Print("[GRZ Killfeed 0.1.9] OnHide called.");
+        Print("[GRZ Killfeed 0.1.10] OnHide called.");
         super.OnHide();
     }
 
@@ -283,7 +285,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
         layoutRoot.SetScreenSize(width, height);
         Widget panel = layoutRoot.FindAnyWidget("MenuPanel");
         if (panel)
-            panel.SetScreenPos(Math.Max(0, (width - 720) * 0.5), Math.Max(0, (height - 540) * 0.5));
+            panel.SetScreenPos(Math.Max(0, (width - 720) * 0.5), Math.Max(0, (height - 500) * 0.5));
     }
 
     void ApplyLocalStyle(GRZNameStyle style)
@@ -412,9 +414,9 @@ class GRZKillfeedMenu extends UIScriptedMenu
         layoutRoot.FindAnyWidget("PrimaryActive").SetColor(0x00000000);
         layoutRoot.FindAnyWidget("SecondaryActive").SetColor(0x00000000);
         if (m_ColorTarget == 0)
-            layoutRoot.FindAnyWidget("PrimaryActive").SetColor(0xFFFFFFFF);
+            layoutRoot.FindAnyWidget("PrimaryActive").SetColor(0xFFEF3333);
         else
-            layoutRoot.FindAnyWidget("SecondaryActive").SetColor(0xFFFFFFFF);
+            layoutRoot.FindAnyWidget("SecondaryActive").SetColor(0xFFEF3333);
         for (int i = 0; i < GRZNameStyle.PALETTE_COUNT; i++)
         {
             string suffix = i.ToString();
