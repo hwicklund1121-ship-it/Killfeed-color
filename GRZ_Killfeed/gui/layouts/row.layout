@@ -1,0 +1,82 @@
+FrameWidgetClass GRZKillfeedRow
+{
+ color 0 0 0 0
+ ignorepointer 1
+ position 0 0
+ size 480 76
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ {
+ImageWidgetClass Outline
+{
+ ignorepointer 1
+ position 0 0
+ size 1 1
+ mode blend
+ color 1 1 1 1
+ stretch 1
+}
+TextWidgetClass Killer
+{
+ position 108 22
+ size 125 22
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ text ""
+}
+TextWidgetClass Arrow
+{
+ position 237 22
+ size 20 22
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ text ">"
+}
+TextWidgetClass Victim
+{
+ position 263 22
+ size 110 22
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ text ""
+}
+TextWidgetClass Detail
+{
+ position 108 44
+ size 265 14
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ text ""
+}
+ }
+}

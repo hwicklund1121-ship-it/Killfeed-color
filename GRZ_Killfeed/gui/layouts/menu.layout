@@ -1,0 +1,279 @@
+FrameWidgetClass GRZKillfeedMenuRoot
+{
+ color 0 0 0 0
+ position 0 0
+ size 1 1
+ {
+PanelWidgetClass MenuPanel
+{
+ position 0 0
+ size 640 480
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ color 0 0 0 1
+ style DayZDefaultPanel
+ {
+ImageWidgetClass MenuOutline
+{
+ ignorepointer 1
+ position 0 0
+ size 1 1
+ mode blend
+ color 1 1 1 1
+ stretch 1
+}
+TextWidgetClass Title
+{
+ position 160 76
+ size 320 32
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ text "GRZ KILLFEED"
+}
+TextWidgetClass Hint
+{
+ position 112 110
+ size 416 22
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ text "Your name style · visible to everyone in the feed"
+}
+TextWidgetClass Preview
+{
+ position 112 140
+ size 416 40
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ text "Your username"
+}
+ButtonWidgetClass ColorA
+{
+ position 112 194
+ size 196 42
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ color 0.04 0.04 0.04 1
+ {
+TextWidgetClass ColorALabel
+{
+ position 12 0
+ size 172 42
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ text "Color 1"
+}
+ }
+}
+ButtonWidgetClass ColorB
+{
+ position 332 194
+ size 196 42
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ color 0.04 0.04 0.04 1
+ {
+TextWidgetClass ColorBLabel
+{
+ position 12 0
+ size 172 42
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ text "Color 2"
+}
+ }
+}
+ButtonWidgetClass Effect
+{
+ position 112 248
+ size 196 42
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ color 0.04 0.04 0.04 1
+ {
+TextWidgetClass EffectLabel
+{
+ position 12 0
+ size 172 42
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ text "Style"
+}
+ }
+}
+ButtonWidgetClass Speed
+{
+ position 332 248
+ size 196 42
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ color 0.04 0.04 0.04 1
+ {
+TextWidgetClass SpeedLabel
+{
+ position 12 0
+ size 172 42
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ text "Speed"
+}
+ }
+}
+TextWidgetClass Status
+{
+ position 112 304
+ size 416 40
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ text "Click a choice to cycle. Save applies it on the server."
+}
+ButtonWidgetClass Test
+{
+ position 128 354
+ size 112 38
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ color 0.04 0.04 0.04 1
+ {
+TextWidgetClass TestLabel
+{
+ position 8 0
+ size 96 38
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ text "Preview feed"
+}
+ }
+}
+ButtonWidgetClass Save
+{
+ position 264 354
+ size 112 38
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ color 0.04 0.04 0.04 1
+ {
+TextWidgetClass SaveLabel
+{
+ position 8 0
+ size 96 38
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ text "Save"
+}
+ }
+}
+ButtonWidgetClass Close
+{
+ position 400 354
+ size 112 38
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ color 0.04 0.04 0.04 1
+ {
+TextWidgetClass CloseLabel
+{
+ position 8 0
+ size 96 38
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ text "Close"
+}
+ }
+}
+ }
+}
+ }
+}
