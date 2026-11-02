@@ -141,6 +141,7 @@ modded class MissionGameplay
         GRZKillfeedBus.Kills.Remove(GRZReceiveKill);
         GRZKillfeedBus.Menu.Remove(GRZReceiveMenu);
         m_GRZListening = false;
+        GRZKillfeedClient.ReleaseMenu();
         g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(GRZKillfeedClient.OpenLocalPreview);
         g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(GRZKillfeedClient.RequestMenu);
         foreach (GRZKillfeedRow row : m_GRZRows)
@@ -225,7 +226,7 @@ modded class MissionGameplay
         GRZFitName(row.Victim, GRZShortName(message.Victim), 138);
         TextWidget detail = TextWidget.Cast(row.Root.FindAnyWidget("Detail"));
         detail.SetText(message.Distance.ToString() + " m");
-        detail.SetTextExactSize(14);
+        detail.SetTextExactSize(12);
         row.CreateGunPreview();
         m_GRZRows.InsertAt(row, 0);
         while (m_GRZRows.Count() > 5)
@@ -247,7 +248,7 @@ modded class MissionGameplay
         hud.GetHudPanelWidget().GetScreenSize(width, height);
         m_GRZFeed.SetScreenPos(x + width - 524, y + 28);
         for (int i = 0; i < m_GRZRows.Count(); i++)
-            m_GRZRows[i].Root.SetPos(0, i * 74);
+            m_GRZRows[i].Root.SetPos(0, i * 52);
     }
 
     protected void GRZReceiveMenu(int status, GRZNameStyle style)

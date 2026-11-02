@@ -1,6 +1,7 @@
 class GRZKillfeedClient
 {
     static ref GRZNameStyle LocalStyle = new GRZNameStyle;
+    static ref GRZKillfeedMenu ActiveMenu;
 
     static bool CanLocalPreview()
     {
@@ -10,21 +11,31 @@ class GRZKillfeedClient
     static void OpenLocalPreview()
     {
         UIScriptedMenu parent = g_Game.GetUIManager().GetMenu();
-        if (GRZKillfeedMenu.Cast(parent))
-            return;
-        GRZKillfeedMenu preview = new GRZKillfeedMenu;
-        preview.Chosen = LocalStyle;
-        preview.IsOfflinePreview = true;
-        // ShowScriptedMenu displays an already-initialized menu. Unlike the
-        // native menu factory, constructing the script object does not Init it.
-        if (!preview.Init())
+        GRZKillfeedMenu existing = GRZKillfeedMenu.Cast(parent);
+        if (existing)
         {
-            g_Game.Chat("GRZ Killfeed: menu layout failed to load. Check the client script log.", "colorStatusChannel");
+            ActiveMenu = existing;
+            existing.EnsureVisible();
             return;
         }
-        Print("[GRZ Killfeed] Menu layout initialized; showing settings.");
-        if (!g_Game.GetUIManager().ShowScriptedMenu(preview, parent))
-            Error("GRZ Killfeed: initialized menu could not be shown by UIManager.");
+        ActiveMenu = GRZKillfeedMenu.Cast(g_Game.GetUIManager().EnterScriptedMenu(GRZKillfeedMenu.MENU_ID, parent));
+        if (!ActiveMenu || !ActiveMenu.GetLayoutRoot())
+        {
+            ActiveMenu = null;
+            Error("[GRZ Killfeed 0.1.7] Native menu factory did not return an initialized settings menu.");
+            g_Game.Chat("GRZ Killfeed: menu creation failed. Check the client script log.", "colorStatusChannel");
+            return;
+        }
+        ActiveMenu.ApplyLocalStyle(LocalStyle);
+        ActiveMenu.EnsureVisible();
+        Print("[GRZ Killfeed 0.1.7] Native menu registered and retained.");
+    }
+
+    static void ReleaseMenu()
+    {
+        if (ActiveMenu && ActiveMenu.IsVisible())
+            ActiveMenu.Close();
+        ActiveMenu = null;
     }
 
     static void RequestMenu()
@@ -98,11 +109,13 @@ modded class ChatInputMenu
 
 class GRZKillfeedMenu extends UIScriptedMenu
 {
+    static const int MENU_ID = 1647280199;
     ref GRZNameStyle Chosen = new GRZNameStyle;
     bool IsOfflinePreview;
     protected TextWidget m_Preview;
     protected TextWidget m_Status;
     protected float m_Time;
+    protected bool m_LoggedUpdate;
 
     override Widget Init()
     {
@@ -133,6 +146,8 @@ class GRZKillfeedMenu extends UIScriptedMenu
         RefreshLabels();
         if (IsOfflinePreview)
             m_Status.SetText("Local preview — server access and persistence are not tested.");
+        PositionPanel();
+        Print("[GRZ Killfeed 0.1.7] Init: layout created.");
         return layoutRoot;
     }
 
@@ -145,10 +160,58 @@ class GRZKillfeedMenu extends UIScriptedMenu
         m_Time += timeslice;
         if (m_Preview)
             m_Preview.SetColor(Chosen.ColorAt(m_Time));
-        Widget panel = layoutRoot.FindAnyWidget("MenuPanel");
+        PositionPanel();
+        if (!m_LoggedUpdate)
+        {
+            m_LoggedUpdate = true;
+            float width, height;
+            layoutRoot.GetScreenSize(width, height);
+            Print(string.Format("[GRZ Killfeed 0.1.7] Update: root %1 x %2; visible %3.", width, height, layoutRoot.IsVisibleHierarchy()));
+        }
+    }
+
+    override void OnShow()
+    {
+        super.OnShow();
+        EnsureVisible();
+        Print("[GRZ Killfeed 0.1.7] OnShow called.");
+    }
+
+    override void OnHide()
+    {
+        Print("[GRZ Killfeed 0.1.7] OnHide called.");
+        super.OnHide();
+    }
+
+    void EnsureVisible()
+    {
+        if (!layoutRoot)
+            return;
+        PositionPanel();
+        layoutRoot.SetSort(100000);
+        layoutRoot.Show(true);
+        layoutRoot.FindAnyWidget("MenuPanel").Show(true);
+    }
+
+    protected void PositionPanel()
+    {
+        if (!layoutRoot)
+            return;
         float width, height;
-        layoutRoot.GetScreenSize(width, height);
-        panel.SetScreenPos((width - 640) * 0.5, (height - 480) * 0.5);
+        g_Game.GetWorkspace().GetScreenSize(width, height);
+        layoutRoot.SetScreenPos(0, 0);
+        layoutRoot.SetScreenSize(width, height);
+        Widget panel = layoutRoot.FindAnyWidget("MenuPanel");
+        if (panel)
+            panel.SetScreenPos(Math.Max(0, (width - 640) * 0.5), Math.Max(0, (height - 480) * 0.5));
+    }
+
+    void ApplyLocalStyle(GRZNameStyle style)
+    {
+        Chosen = style;
+        IsOfflinePreview = true;
+        RefreshLabels();
+        m_Status.SetText("Local preview — server access and persistence are not tested.");
     }
 
     override bool OnKeyDown(Widget w, int x, int y, int key)

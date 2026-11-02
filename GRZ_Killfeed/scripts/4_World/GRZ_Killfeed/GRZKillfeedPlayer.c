@@ -57,7 +57,7 @@ modded class PlayerBase
         if (rpc_type == GRZKillfeedRPC.KILL || rpc_type == GRZKillfeedRPC.MENU_STATE)
         {
             // Server messages only; clients cannot inject killfeed events.
-            if (g_Game.IsServer() || sender || this != g_Game.GetPlayer())
+            if (g_Game.IsServer() || sender || this != PlayerBase.Cast(g_Game.GetPlayer()))
                 return;
             if (rpc_type == GRZKillfeedRPC.KILL)
             {

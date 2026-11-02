@@ -102,8 +102,16 @@ def main():
     request = menu.split("static void RequestMenu()", 1)[1].split("static void TestOffline()", 1)[0]
     assert request.index("OpenLocalPreview();") < request.index("if (CanLocalPreview())")
     opener = menu.split("static void OpenLocalPreview()", 1)[1].split("static void RequestMenu()", 1)[0]
-    assert opener.index("preview.Init()") < opener.index("ShowScriptedMenu(preview, parent)")
-    assert "size 500 70" in row
+    assert "EnterScriptedMenu(GRZKillfeedMenu.MENU_ID, parent)" in opener
+    assert "static ref GRZKillfeedMenu ActiveMenu;" in menu
+    factory = files["scripts/5_Mission/GRZ_Killfeed/GRZKillfeedMenuFactory.c"].decode()
+    assert "override UIScriptedMenu CreateScriptedMenu(int id)" in factory
+    assert "menu.SetID(id);" in factory
+    root = files["gui/layouts/menu.layout"].decode().split("PanelWidgetClass MenuPanel", 1)[0]
+    assert "hexactsize 0" in root and "vexactsize 0" in root
+    assert "g_Game.GetWorkspace().GetScreenSize(width, height)" in menu
+    assert "GRZKillfeedClient.ReleaseMenu();" in mission
+    assert "size 500 48" in row
     assert "current.UseLocalPreview();" in mission
     assert "if (!Allowed(identity)" in server
     assert "GunWidget.SetItem(null)" in mission and "g_Game.ObjectDelete(PreviewGun)" in mission

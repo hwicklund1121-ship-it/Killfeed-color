@@ -3,7 +3,7 @@ FrameWidgetClass GRZKillfeedRow
  color 0 0 0 0
  ignorepointer 1
  position 0 0
- size 500 70
+ size 500 48
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -13,7 +13,7 @@ PanelWidgetClass Backing
 {
  ignorepointer 1
  position 2 2
- size 496 66
+ size 496 44
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -36,7 +36,7 @@ PanelWidgetClass BorderTop
 PanelWidgetClass BorderBottom
 {
  ignorepointer 1
- position 0 68
+ position 0 46
  size 500 2
  hexactpos 1
  vexactpos 1
@@ -49,7 +49,7 @@ PanelWidgetClass BorderLeft
 {
  ignorepointer 1
  position 0 2
- size 2 66
+ size 2 44
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -61,7 +61,7 @@ PanelWidgetClass BorderRight
 {
  ignorepointer 1
  position 498 2
- size 2 66
+ size 2 44
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -72,8 +72,8 @@ PanelWidgetClass BorderRight
 TextWidgetClass Killer
 {
  "text halign" right
- position 14 16
- size 140 22
+ position 14 8
+ size 140 20
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -87,8 +87,8 @@ TextWidgetClass Killer
 }
 TextWidgetClass Victim
 {
- position 348 16
- size 138 22
+ position 348 8
+ size 138 20
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -104,8 +104,8 @@ ItemPreviewWidgetClass GunPreview
 {
  ignorepointer 1
  mode blend
- position 164 6
- size 172 42
+ position 164 4
+ size 172 26
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -115,8 +115,8 @@ ItemPreviewWidgetClass GunPreview
 TextWidgetClass Detail
 {
  "text halign" center
- position 164 50
- size 172 16
+ position 164 31
+ size 172 13
  hexactpos 1
  vexactpos 1
  hexactsize 1
