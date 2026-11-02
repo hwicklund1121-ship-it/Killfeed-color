@@ -15,6 +15,8 @@ The weapon panel, native bullet count, fire mode, zeroing, reload/action prompts
 
 ## Download the PBO
 
+Version **0.1.2** puts the vanilla weapon name, ammo, fire mode and zeroing inside the frame, makes text white, removes backing images, and gives health and blood separate larger frames with centered 38-pixel icons in 80-pixel cells at 1080p. Status sizes scale with display height. Reload prompts remain native. These presentation changes still require in-game verification.
+
 Version **0.1.1** replaces the unavailable `CanvasWidgetTypeID` with a packaged canvas layout for weapon, health and blood frames. Replace the previous PBO; do not load both versions at once. This fixes the reported API reference; client compilation and gameplay validation remain required.
 
 Download [`GRZ_CustomHud-mod.zip`](downloads/GRZ_CustomHud-mod.zip), extract `@GRZ_CustomHud` into your DayZ directory and add that folder as a local mod in the launcher (or use `-mod=@GRZ_CustomHud`). The ZIP already contains `Addons/GRZ_CustomHud.pbo` and `mod.cpp`.

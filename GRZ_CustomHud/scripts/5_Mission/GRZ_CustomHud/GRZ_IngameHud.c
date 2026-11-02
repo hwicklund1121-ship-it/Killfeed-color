@@ -50,6 +50,7 @@ modded class IngameHud
             child = child.GetSibling();
         }
 
+        GRZClearStatusBacking(m_Notifiers);
         GRZStyleStatus("Health", m_GRZHealthWire);
         GRZStyleStatus("Blood", m_GRZBloodWire);
     }
@@ -64,6 +65,21 @@ modded class IngameHud
     {
         if (widget)
             widget.SetColor(0xFF0A0A0A);
+    }
+
+    protected void GRZClearStatusBacking(Widget widget)
+    {
+        Widget child = widget.GetChildren();
+        while (child)
+        {
+            string name = child.GetName();
+            bool statusImage = name == "IconHealth" || name == "IconBlood";
+            statusImage = statusImage || name.Contains("HealthArrow") || name.Contains("BloodArrow");
+            if (ImageWidget.Cast(child) && !statusImage)
+                child.Show(false);
+            GRZClearStatusBacking(child);
+            child = child.GetSibling();
+        }
     }
 
     protected void GRZStyleStatus(string status, CanvasWidget wire)
@@ -87,14 +103,42 @@ modded class IngameHud
                 down.SetColor(0xFF0A0A0A);
         }
 
-        float x, y, w, h;
-        icon.GetScreenPos(x, y);
-        icon.GetScreenSize(w, h);
-        float padding = h * 0.25;
-        wire.SetScreenPos(x - padding, y - padding);
-        wire.SetScreenSize(w + padding * 2, h + padding * 2);
+        // Two deliberately sized, separate cells anchored inside the HUD.
+        // Recompute from the HUD bounds rather than growing yesterday's size.
+        float hudX, hudY, hudWidth, hudHeight;
+        m_HudPanelWidget.GetScreenPos(hudX, hudY);
+        m_HudPanelWidget.GetScreenSize(hudWidth, hudHeight);
+        float scale = Math.Clamp(hudHeight / 1080.0, 0.75, 2.0);
+        float cell = 80 * scale;
+        float gap = 12 * scale;
+        float frameX = hudX + hudWidth - 28 * scale - cell;
+        if (status == "Health")
+            frameX -= cell + gap;
+        float frameY = hudY + hudHeight - 36 * scale - cell;
+        float iconSize = 38 * scale;
+        icon.SetScreenPos(frameX + (cell - iconSize) * 0.5, frameY + (cell - iconSize) * 0.5);
+        icon.SetScreenSize(iconSize, iconSize);
+        wire.SetScreenPos(frameX, frameY);
+        wire.SetScreenSize(cell, cell);
         wire.Show(icon.IsVisible());
-        GRZThornFrame.Draw(wire, w + padding * 2, h + padding * 2);
+        GRZThornFrame.Draw(wire, cell, cell);
+        // Keep tendency arrows next to the enlarged icon within its own frame.
+        for (int arrow = 1; arrow <= 3; arrow++)
+        {
+            Widget arrowUp = m_Notifiers.FindAnyWidget(status + "ArrowUp" + arrow.ToString());
+            Widget arrowDown = m_Notifiers.FindAnyWidget(status + "ArrowDown" + arrow.ToString());
+            float arrowY = frameY + (22 + (arrow - 1) * 10) * scale;
+            if (arrowUp)
+            {
+                arrowUp.SetScreenPos(frameX + 59 * scale, arrowY);
+                arrowUp.SetScreenSize(8 * scale, 8 * scale);
+            }
+            if (arrowDown)
+            {
+                arrowDown.SetScreenPos(frameX + 59 * scale, arrowY);
+                arrowDown.SetScreenSize(8 * scale, 8 * scale);
+            }
+        }
     }
 };
 
