@@ -1,4 +1,48 @@
-modded class EntityAI
+modded class PlayerBase
+{
+    protected float m_GRZHitmarkerHealthBefore;
+    protected bool m_GRZHitmarkerEligible;
+
+    override bool EEOnDamageCalculated(TotalDamageResult damageResult, int damageType, EntityAI source, int component, string dmgZone, string ammo, vector modelPos, float speedCoef)
+    {
+        bool allowed = super.EEOnDamageCalculated(damageResult, damageType, source, component, dmgZone, ammo, modelPos, speedCoef);
+        if (g_Game.IsServer())
+        {
+            m_GRZHitmarkerEligible = allowed && IsAlive() && GRZHitmarkerServer.IsLivingTarget(this);
+            if (m_GRZHitmarkerEligible)
+                m_GRZHitmarkerHealthBefore = GetHealth("", "Health");
+        }
+        return allowed;
+    }
+
+    override void EEHitBy(TotalDamageResult damageResult, int damageType, EntityAI source, int component, string dmgZone, string ammo, vector modelPos, float speedCoef)
+    {
+        super.EEHitBy(damageResult, damageType, source, component, dmgZone, ammo, modelPos, speedCoef);
+        if (g_Game.IsServer() && m_GRZHitmarkerEligible)
+        {
+            m_GRZHitmarkerEligible = false;
+            GRZHitmarkerServer.Report(this, source, damageResult, dmgZone, m_GRZHitmarkerHealthBefore);
+        }
+    }
+
+    override void OnRPC(PlayerIdentity sender, int rpc_type, ParamsReadContext ctx)
+    {
+        if (rpc_type == GRZHitmarkerBus.HIT_RPC)
+        {
+            if (g_Game.IsServer() || sender || this != PlayerBase.Cast(g_Game.GetPlayer()))
+                return;
+            GRZHitmarkerEvent hit = new GRZHitmarkerEvent;
+            if (ctx.Read(hit.DamageAmount) && ctx.Read(hit.IsHeadHit) && ctx.Read(hit.IsKill) && hit.DamageAmount >= 0 && hit.DamageAmount <= 100000)
+                GRZHitmarkerBus.Hits.Invoke(hit);
+            return;
+        }
+        super.OnRPC(sender, rpc_type, ctx);
+    }
+
+}
+
+
+modded class ZombieBase
 {
     protected float m_GRZHitmarkerHealthBefore;
     protected bool m_GRZHitmarkerEligible;
@@ -25,6 +69,36 @@ modded class EntityAI
         }
     }
 }
+
+
+modded class AnimalBase
+{
+    protected float m_GRZHitmarkerHealthBefore;
+    protected bool m_GRZHitmarkerEligible;
+
+    override bool EEOnDamageCalculated(TotalDamageResult damageResult, int damageType, EntityAI source, int component, string dmgZone, string ammo, vector modelPos, float speedCoef)
+    {
+        bool allowed = super.EEOnDamageCalculated(damageResult, damageType, source, component, dmgZone, ammo, modelPos, speedCoef);
+        if (g_Game.IsServer())
+        {
+            m_GRZHitmarkerEligible = allowed && IsAlive() && GRZHitmarkerServer.IsLivingTarget(this);
+            if (m_GRZHitmarkerEligible)
+                m_GRZHitmarkerHealthBefore = GetHealth("", "Health");
+        }
+        return allowed;
+    }
+
+    override void EEHitBy(TotalDamageResult damageResult, int damageType, EntityAI source, int component, string dmgZone, string ammo, vector modelPos, float speedCoef)
+    {
+        super.EEHitBy(damageResult, damageType, source, component, dmgZone, ammo, modelPos, speedCoef);
+        if (g_Game.IsServer() && m_GRZHitmarkerEligible)
+        {
+            m_GRZHitmarkerEligible = false;
+            GRZHitmarkerServer.Report(this, source, damageResult, dmgZone, m_GRZHitmarkerHealthBefore);
+        }
+    }
+}
+
 
 class GRZHitmarkerServer
 {
@@ -70,22 +144,5 @@ class GRZHitmarkerServer
         rpc.Write(head);
         rpc.Write(killed);
         rpc.Send(attacker, GRZHitmarkerBus.HIT_RPC, true, attacker.GetIdentity());
-    }
-}
-
-modded class PlayerBase
-{
-    override void OnRPC(PlayerIdentity sender, int rpc_type, ParamsReadContext ctx)
-    {
-        if (rpc_type == GRZHitmarkerBus.HIT_RPC)
-        {
-            if (g_Game.IsServer() || sender || this != PlayerBase.Cast(g_Game.GetPlayer()))
-                return;
-            GRZHitmarkerEvent hit = new GRZHitmarkerEvent;
-            if (ctx.Read(hit.DamageAmount) && ctx.Read(hit.IsHeadHit) && ctx.Read(hit.IsKill) && hit.DamageAmount >= 0 && hit.DamageAmount <= 100000)
-                GRZHitmarkerBus.Hits.Invoke(hit);
-            return;
-        }
-        super.OnRPC(sender, rpc_type, ctx);
     }
 }

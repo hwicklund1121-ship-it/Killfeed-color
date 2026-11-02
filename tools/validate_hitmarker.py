@@ -50,6 +50,11 @@ def main():
     assert re.findall(r'rpc.Write\((\w+)\)',server)==['damage','head','killed']
     assert re.findall(r'ctx.Read\(hit\.(\w+)\)',server)==['DamageAmount','IsHeadHit','IsKill']
     assert 'g_Game.IsServer() || sender || this != PlayerBase.Cast(g_Game.GetPlayer())' in server
+    assert 'modded class EntityAI' not in server
+    for target in ['PlayerBase', 'ZombieBase', 'AnimalBase']:
+        assert server.count('modded class ' + target + '\n') == 1
+    assert server.count('override bool EEOnDamageCalculated') == 3
+    assert server.count('override void EEHitBy(') == 3
     assert 'attacker == target' in server
     assert 'allowed && IsAlive() && GRZHitmarkerServer.IsLivingTarget(this)' in server
     assert 'beforeHealth - target.GetHealth("", "Health")' in server
