@@ -15,11 +15,21 @@ class GRZKillfeedClient
         GRZKillfeedMenu preview = new GRZKillfeedMenu;
         preview.Chosen = LocalStyle;
         preview.IsOfflinePreview = true;
-        g_Game.GetUIManager().ShowScriptedMenu(preview, parent);
+        // ShowScriptedMenu displays an already-initialized menu. Unlike the
+        // native menu factory, constructing the script object does not Init it.
+        if (!preview.Init())
+        {
+            g_Game.Chat("GRZ Killfeed: menu layout failed to load. Check the client script log.", "colorStatusChannel");
+            return;
+        }
+        Print("[GRZ Killfeed] Menu layout initialized; showing settings.");
+        if (!g_Game.GetUIManager().ShowScriptedMenu(preview, parent))
+            Error("GRZ Killfeed: initialized menu could not be shown by UIManager.");
     }
 
     static void RequestMenu()
     {
+        Print("[GRZ Killfeed] Menu open requested.");
         // Temporary test behavior: show the menu immediately on every client.
         // Authorization is still required before enabling server-side saves.
         OpenLocalPreview();
@@ -96,13 +106,27 @@ class GRZKillfeedMenu extends UIScriptedMenu
 
     override Widget Init()
     {
+        if (layoutRoot)
+            return layoutRoot;
         layoutRoot = g_Game.GetWorkspace().CreateWidgets("GRZ_Killfeed/gui/layouts/menu.layout");
+        if (!layoutRoot)
+        {
+            Error("GRZ Killfeed: could not create gui/layouts/menu.layout.");
+            return null;
+        }
         ImageWidget outline = ImageWidget.Cast(layoutRoot.FindAnyWidget("MenuOutline"));
+        m_Preview = TextWidget.Cast(layoutRoot.FindAnyWidget("Preview"));
+        m_Status = TextWidget.Cast(layoutRoot.FindAnyWidget("Status"));
+        if (!outline || !m_Preview || !m_Status || !layoutRoot.FindAnyWidget("MenuPanel"))
+        {
+            Error("GRZ Killfeed: menu layout is missing required widgets.");
+            layoutRoot.Unlink();
+            layoutRoot = null;
+            return null;
+        }
         outline.SetFlags(WidgetFlags.SOURCEALPHA | WidgetFlags.BLEND | WidgetFlags.STRETCH);
         outline.LoadImageFile(0, "GRZ_Killfeed/gui/textures/grz_menu_outline_ca.paa");
         outline.SetSort(100);
-        m_Preview = TextWidget.Cast(layoutRoot.FindAnyWidget("Preview"));
-        m_Status = TextWidget.Cast(layoutRoot.FindAnyWidget("Status"));
         string name;
         g_Game.GetPlayerName(name);
         m_Preview.SetText(name);

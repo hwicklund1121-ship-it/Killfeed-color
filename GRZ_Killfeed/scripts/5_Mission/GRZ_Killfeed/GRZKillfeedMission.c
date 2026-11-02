@@ -247,7 +247,7 @@ modded class MissionGameplay
         hud.GetHudPanelWidget().GetScreenSize(width, height);
         m_GRZFeed.SetScreenPos(x + width - 524, y + 28);
         for (int i = 0; i < m_GRZRows.Count(); i++)
-            m_GRZRows[i].Root.SetPos(0, i * 104);
+            m_GRZRows[i].Root.SetPos(0, i * 74);
     }
 
     protected void GRZReceiveMenu(int status, GRZNameStyle style)

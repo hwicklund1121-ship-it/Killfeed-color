@@ -101,6 +101,9 @@ def main():
     menu = files["scripts/5_Mission/GRZ_Killfeed/GRZKillfeedMenu.c"].decode()
     request = menu.split("static void RequestMenu()", 1)[1].split("static void TestOffline()", 1)[0]
     assert request.index("OpenLocalPreview();") < request.index("if (CanLocalPreview())")
+    opener = menu.split("static void OpenLocalPreview()", 1)[1].split("static void RequestMenu()", 1)[0]
+    assert opener.index("preview.Init()") < opener.index("ShowScriptedMenu(preview, parent)")
+    assert "size 500 70" in row
     assert "current.UseLocalPreview();" in mission
     assert "if (!Allowed(identity)" in server
     assert "GunWidget.SetItem(null)" in mission and "g_Game.ObjectDelete(PreviewGun)" in mission

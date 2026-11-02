@@ -1,12 +1,14 @@
 # GRZ Killfeed
 
-Separate **DayZ PC** mod, version **0.1.5**. The finished GRZ Custom Hud is unchanged.
+Separate **DayZ PC** mod, version **0.1.6**. The finished GRZ Custom Hud is unchanged.
 
-Each entry shows **killer name | actual gun model | victim name**, with the **distance centered underneath the gun**. There is no gun-name text or arrow. The model includes the captured weapon attachments. Rows have plain black outlines and a 45%-opaque black background. The newest five entries stay at the top right for eight seconds, fading during their last second.
+Each entry shows **killer name | actual gun model | victim name**, with the **distance centered underneath the gun**. There is no gun-name text or arrow. The model includes the captured weapon attachments. Rows have plain black outlines and a 45%-opaque black background. Rows are 70 pixels tall (30% shorter than the previous 100-pixel layout), with 4-pixel spacing. The newest five entries stay at the top right for eight seconds, fading during their last second.
 
 The custom settings menu has a solid black background, white text and white tribal thorn edges. Players can select two of twelve colors (white, red, orange, yellow, green, blue, indigo, violet, cyan, pink, gray, black), six animation styles (steady, pulse, blink, color fade, color swap, rainbow) and three speeds. A saved style applies to that player's name as both killer and victim for every viewer.
 
 This is an **unsigned development build**. Archive, resource and layout checks pass; DayZ compilation, networking, 3D rendering and Editor behavior have not been executed in this cloud machine.
+
+The direct menu-opening path now explicitly calls `Init()` before `ShowScriptedMenu`, matching DayZ's own directly constructed menus. Layout failure logs a clear client-side error instead of silently showing nothing. Actual Editor behavior still needs checking.
 
 ## Open and test the menu now
 
