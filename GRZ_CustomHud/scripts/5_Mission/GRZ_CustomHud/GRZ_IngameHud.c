@@ -4,8 +4,6 @@ modded class IngameHud
     protected Widget m_GRZStatusPanel;
     protected int m_GRZHealthStatus;
     protected int m_GRZBloodStatus;
-    protected int m_GRZHealthTendency;
-    protected int m_GRZBloodTendency;
     protected float m_GRZPulse;
 
     override void Init(Widget hud_panel_widget)
@@ -34,12 +32,10 @@ modded class IngameHud
         if (key == NTFKEY_HEALTHY)
         {
             m_GRZHealthStatus = status;
-            m_GRZHealthTendency = tendency;
         }
         if (key == NTFKEY_BLOOD)
         {
             m_GRZBloodStatus = status;
-            m_GRZBloodTendency = tendency;
         }
     }
 
@@ -66,10 +62,10 @@ modded class IngameHud
         m_HudPanelWidget.GetScreenPos(x, y);
         m_HudPanelWidget.GetScreenSize(width, height);
         float scale = Math.Clamp(height / 1080.0, 0.75, 2.0);
-        m_GRZStatusPanel.SetScreenPos(x + width - 264 * scale, y + height - 164 * scale);
-        m_GRZStatusPanel.SetScreenSize(240 * scale, 128 * scale);
-        GRZStatus("Health", m_GRZHealthStatus, m_GRZHealthTendency);
-        GRZStatus("Blood", m_GRZBloodStatus, m_GRZBloodTendency);
+        m_GRZStatusPanel.SetScreenPos(x + width - 232 * scale, y + height - 132 * scale);
+        m_GRZStatusPanel.SetScreenSize(208 * scale, 96 * scale);
+        GRZStatus("Health", m_GRZHealthStatus);
+        GRZStatus("Blood", m_GRZBloodStatus);
     }
 
     protected void GRZHide(Widget widget)
@@ -78,10 +74,9 @@ modded class IngameHud
             widget.Show(false);
     }
 
-    protected void GRZStatus(string name, int status, int tendency)
+    protected void GRZStatus(string name, int status)
     {
         ImageWidget icon = ImageWidget.Cast(m_GRZStatusPanel.FindAnyWidget("GRZ" + name + "Icon"));
-        TextWidget label = TextWidget.Cast(m_GRZStatusPanel.FindAnyWidget("GRZ" + name + "State"));
         if (icon)
         {
             float alpha = 1.0;
@@ -89,22 +84,6 @@ modded class IngameHud
                 alpha = 0.4 + 0.6 * Math.AbsFloat(Math.Sin(m_GRZPulse * 3.0));
             icon.SetColor(ARGB(alpha * 255, 255, 255, 255));
         }
-        // Use DayZ's actual replicated notifier stages, never guessed percentages.
-        string state;
-        switch (status)
-        {
-            case 1: state = "HIGH"; break;
-            case 2: state = "GOOD"; break;
-            case 3: state = "LOW"; break;
-            case 4: state = "VERY LOW"; break;
-            case 5: state = "CRITICAL"; break;
-        }
-        if (tendency > 0)
-            state += " +";
-        if (tendency < 0)
-            state += " -";
-        if (label)
-            label.SetText(state);
+
     }
 };
-

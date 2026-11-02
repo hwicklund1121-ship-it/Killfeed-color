@@ -1,6 +1,6 @@
 # GRZ Custom Hud
 
-Development version of a **DayZ PC** HUD mod: white heart and blood-drop artwork with black contour thorns, a white-text weapon/ammo panel with a black thorn outline, reload prompts and a stance indicator. No third-party mod dependencies are required. Status labels use DayZ's replicated notifier stages and tendency; critical states pulse opacity. No guessed numeric health/blood percentages are shown.
+Development version of a **DayZ PC** HUD mod: white heart and blood-drop artwork with black contour thorns, a white-text weapon/ammo panel with a black thorn outline, reload prompts and a stance indicator. No third-party mod dependencies are required. Critical states pulse opacity. Status labels and numeric health/blood percentages are not shown.
 
 The weapon panel, native bullet count, fire mode, zeroing, reload/action prompts and stance/crouch indicator remain available. The quickbar, stamina, noise, other survival badges, radio readout and vehicle panel are hidden. Crosshair, menus and connection warnings remain available. This is cosmetic: hunger, thirst, temperature, bleeding and all other survival mechanics still operate, even though their indicators are hidden. Black has limited contrast against dark scenery.
 
@@ -14,6 +14,8 @@ The weapon panel, native bullet count, fire mode, zeroing, reload/action prompts
 - `tools/package_source.py`: creates a source ZIP outside the checkout without requiring DayZ Tools.
 
 ## Download the PBO
+
+Version **0.1.6** explicitly gives all custom frame containers a transparent color, matching transparent-container conventions in working DayZ Community Framework layouts. Weapon text uses Metron Light at exact 20-pixel primary / 16-pixel secondary sizes. Status cells shrink from 112 to 96 pixels, their labels are removed, and the refined heart artwork hugs the anatomical silhouette. Critical-state opacity pulses remain; lower noncritical stages have no text readout. In-game rendering still needs verification.
 
 Version **0.1.5** removes the weapon canvas entirely and uses a transparent outline-only PAA instead. The decoded center region is verified to have zero alpha. Icon/outline widgets explicitly enable native `SOURCEALPHA` and `BLEND` flags; image layouts use `mode blend`. The obsolete canvas layout/helper is removed. This addresses the reported filled areas, but the actual DayZ render still needs checking.
 

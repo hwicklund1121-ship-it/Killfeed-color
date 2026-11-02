@@ -1,5 +1,6 @@
 FrameWidgetClass GRZWeaponPanel
 {
+ color 0 0 0 0
  style blank
  visible 0
  ignorepointer 1
@@ -29,11 +30,14 @@ FrameWidgetClass GRZWeaponPanel
      hexactsize 1
      vexactsize 1
      color 1 1 1 1
-     font "gui/fonts/sdf_MetronBook24"
+     font "gui/fonts/sdf_MetronLight24"
+     "exact text" 1
+     "text valign" center
      text ""
     }
   FrameWidgetClass GRZWeaponQuantity
   {
+ color 0 0 0 0
  style blank
    ignorepointer 1
    position 244 23
@@ -53,7 +57,9 @@ FrameWidgetClass GRZWeaponPanel
      hexactsize 1
      vexactsize 1
      color 1 1 1 1
-     font "gui/fonts/sdf_MetronBook24"
+     font "gui/fonts/sdf_MetronLight24"
+     "exact text" 1
+     "text valign" center
      text ""
     }
     ProgressBarWidgetClass GRZWeaponProgress
@@ -71,6 +77,7 @@ FrameWidgetClass GRZWeaponPanel
   }
   FrameWidgetClass GRZWeaponDetails
   {
+ color 0 0 0 0
  style blank
    ignorepointer 1
    position 30 51
@@ -90,7 +97,9 @@ FrameWidgetClass GRZWeaponPanel
      hexactsize 1
      vexactsize 1
      color 1 1 1 1
-     font "gui/fonts/sdf_MetronBook24"
+     font "gui/fonts/sdf_MetronLight24"
+     "exact text" 1
+     "text valign" center
      text ""
     }
     TextWidgetClass GRZWeaponZeroing
@@ -103,7 +112,9 @@ FrameWidgetClass GRZWeaponPanel
      hexactsize 1
      vexactsize 1
      color 1 1 1 1
-     font "gui/fonts/sdf_MetronBook24"
+     font "gui/fonts/sdf_MetronLight24"
+     "exact text" 1
+     "text valign" center
      text ""
     }
 

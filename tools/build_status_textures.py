@@ -36,7 +36,8 @@ if __name__ == '__main__':
     sheet = Image.open(ROOT / 'art/status-sheet.png').convert('RGBA')
     for name, box in [('health', (380, 20, 1060, 710)), ('blood', (1290, 0, 1810, 725))]:
         # Preserve the approved artwork; only extract, fit and encode it.
-        asset = ImageOps.contain(sheet.crop(box), (464, 464), Image.Resampling.LANCZOS)
+        source = Image.open(ROOT / 'art/health-refined.png').convert('RGBA') if name == 'health' else sheet.crop(box)
+        asset = ImageOps.contain(source, (464, 464), Image.Resampling.LANCZOS)
         texture = Image.new('RGBA', (512, 512))
         texture.alpha_composite(asset, ((512 - asset.width) // 2, (512 - asset.height) // 2))
         texture.save(ROOT / f'art/{name}-preview.png')

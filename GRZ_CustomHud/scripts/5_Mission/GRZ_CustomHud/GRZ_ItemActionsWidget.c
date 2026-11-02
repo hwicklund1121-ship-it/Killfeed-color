@@ -9,6 +9,10 @@ modded class ItemActionsWidget
         m_GRZWeaponPanel = g_Game.GetWorkspace().CreateWidgets("GRZ_CustomHud/gui/layouts/grz_weapon_panel.layout", m_Root);
         if (m_GRZWeaponPanel)
         {
+            GRZSetTextSize("GRZWeaponName", 20);
+            GRZSetTextSize("GRZWeaponAmmo", 20);
+            GRZSetTextSize("GRZWeaponMode", 16);
+            GRZSetTextSize("GRZWeaponZeroing", 16);
             m_GRZWeaponWire = ImageWidget.Cast(m_GRZWeaponPanel.FindAnyWidget("GRZWeaponOutline"));
             if (m_GRZWeaponWire)
             {
@@ -48,6 +52,13 @@ modded class ItemActionsWidget
         m_GRZWeaponWire.SetScreenSize(360, 88);
         m_GRZWeaponWire.SetSort(-1);
 
+    }
+
+    protected void GRZSetTextSize(string name, int size)
+    {
+        TextWidget text = TextWidget.Cast(m_GRZWeaponPanel.FindAnyWidget(name));
+        if (text)
+            text.SetTextExactSize(size);
     }
 
     // Route stock data setters into our own transparent layout. Native widgets
