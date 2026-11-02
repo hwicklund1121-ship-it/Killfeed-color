@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
+  <defs>
+    <linearGradient id="land" x2="0" y2="1"><stop stop-color="#b0b6ac"/><stop offset="1" stop-color="#65705d"/></linearGradient>
+    <g id="wire" fill="none" stroke="#0a0a0a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 8 L61 9 L61 65 L3 66 Z M3 11 L61 10 M3 63 L61 64"/>
+      <path d="M19 4 l8 8 m-8 0 l8 -8 M38 4 l8 8 m-8 0 l8 -8 M19 60 l8 8 m-8 0 l8 -8 M38 60 l8 8 m-8 0 l8 -8"/>
+    </g>
+  </defs>
+  <rect width="960" height="540" fill="url(#land)"/>
+  <path d="M0 280L170 190 350 300 510 220 710 310 960 220V540H0Z" fill="#505b49" opacity=".28"/>
+  <text x="44" y="61" fill="#101210" font-family="sans-serif" font-size="24" letter-spacing="3">GRZ CUSTOM HUD</text>
+  <text x="44" y="88" fill="#283025" font-family="sans-serif" font-size="13" letter-spacing="2">HEALTH + BLOOD / WEAPON + AMMO / STANCE</text>
+  <g fill="none" stroke="#0a0a0a" stroke-width="1.6" stroke-linecap="round">
+    <path d="M48 418 L342 419 L342 468 L48 469 Z M48 421 L342 420 M48 466 L342 467"/>
+    <path d="M98 414 l9 10 m-9 0 l9 -10 M274 414 l9 10 m-9 0 l9 -10 M98 463 l9 10 m-9 0 l9 -10 M274 463 l9 10 m-9 0 l9 -10"/>
+  </g>
+  <g fill="#0a0a0a" font-family="sans-serif">
+    <text x="66" y="449" font-size="17" letter-spacing="1">M70 TUNDRA</text>
+    <text x="284" y="449" font-size="16">1 (4)</text>
+    <text x="66" y="491" font-size="12">R · RELOAD</text>
+  </g>
+  <g transform="translate(704 428)" stroke="#0a0a0a" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="9" cy="0" r="4" fill="#0a0a0a"/>
+    <path d="M9 9 L3 19 L17 25 L10 38 M5 17 L20 15 M17 25 L27 35"/>
+  </g>
+  <g transform="translate(754 407)">
+    <use href="#wire"/>
+    <path d="M32 48 C7 32 17 19 26 23 L32 29 L38 23 C48 16 61 32 32 48Z" fill="#0a0a0a" transform="translate(-1 1)"/>
+  </g>
+  <g transform="translate(838 407)">
+    <use href="#wire"/>
+    <path d="M32 21 C29 27 19 36 21 43 C23 55 42 55 44 43 C45 36 35 27 32 21Z" fill="#0a0a0a"/>
+  </g>
+  <text x="44" y="506" fill="#1c241b" font-family="sans-serif" font-size="12">Design illustration. In-game icons and placement use DayZ's native HUD.</text>
+</svg>
