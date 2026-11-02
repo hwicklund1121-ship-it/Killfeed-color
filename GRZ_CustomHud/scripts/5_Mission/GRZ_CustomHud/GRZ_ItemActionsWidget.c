@@ -9,8 +9,8 @@ modded class ItemActionsWidget
         m_GRZWeaponPanel = g_Game.GetWorkspace().CreateWidgets("GRZ_CustomHud/gui/layouts/grz_weapon_panel.layout", m_Root);
         if (m_GRZWeaponPanel)
         {
-            GRZSetTextSize("GRZWeaponName", 20);
-            GRZSetTextSize("GRZWeaponAmmo", 20);
+            GRZSetTextSize("GRZWeaponName", 18);
+            GRZSetTextSize("GRZWeaponAmmo", 18);
             GRZSetTextSize("GRZWeaponMode", 16);
             GRZSetTextSize("GRZWeaponZeroing", 16);
             m_GRZWeaponWire = ImageWidget.Cast(m_GRZWeaponPanel.FindAnyWidget("GRZWeaponOutline"));
@@ -49,9 +49,9 @@ modded class ItemActionsWidget
             item.GetScreenSize(width, height);
         }
         m_GRZWeaponPanel.SetScreenPos(x, y + height - 88);
-        m_GRZWeaponPanel.SetScreenSize(360, 88);
+        m_GRZWeaponPanel.SetScreenSize(440, 88);
         m_GRZWeaponWire.SetPos(0, 0);
-        m_GRZWeaponWire.SetScreenSize(360, 88);
+        m_GRZWeaponWire.SetScreenSize(440, 88);
         m_GRZWeaponWire.SetSort(-1);
 
     }

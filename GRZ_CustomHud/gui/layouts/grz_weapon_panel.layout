@@ -5,7 +5,7 @@ FrameWidgetClass GRZWeaponPanel
  visible 0
  ignorepointer 1
  position 0 0
- size 360 88
+ size 440 88
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -23,8 +23,8 @@ FrameWidgetClass GRZWeaponPanel
     TextWidgetClass GRZWeaponName
     {
      ignorepointer 1
-     position 30 23
-     size 205 26
+     position 102 25
+     size 146 20
      hexactpos 1
      vexactpos 1
      hexactsize 1
@@ -40,8 +40,8 @@ FrameWidgetClass GRZWeaponPanel
  color 0 0 0 0
  style blank
    ignorepointer 1
-   position 244 23
-   size 86 26
+   position 260 25
+   size 72 20
    hexactpos 1
    vexactpos 1
    hexactsize 1
@@ -51,7 +51,7 @@ FrameWidgetClass GRZWeaponPanel
     {
      ignorepointer 1
      position 0 0
-     size 86 26
+     size 72 20
      hexactpos 1
      vexactpos 1
      hexactsize 1
@@ -66,7 +66,7 @@ FrameWidgetClass GRZWeaponPanel
     {
      visible 0
      position 0 0
-     size 86 20
+     size 72 20
      hexactpos 1
      vexactpos 1
      hexactsize 1
@@ -80,8 +80,8 @@ FrameWidgetClass GRZWeaponPanel
  color 0 0 0 0
  style blank
    ignorepointer 1
-   position 30 51
-   size 300 22
+   position 102 49
+   size 230 16
    hexactpos 1
    vexactpos 1
    hexactsize 1
@@ -91,7 +91,7 @@ FrameWidgetClass GRZWeaponPanel
     {
      ignorepointer 1
      position 0 0
-     size 180 22
+     size 146 16
      hexactpos 1
      vexactpos 1
      hexactsize 1
@@ -105,8 +105,8 @@ FrameWidgetClass GRZWeaponPanel
     TextWidgetClass GRZWeaponZeroing
     {
      ignorepointer 1
-     position 214 0
-     size 86 22
+     position 158 0
+     size 72 16
      hexactpos 1
      vexactpos 1
      hexactsize 1

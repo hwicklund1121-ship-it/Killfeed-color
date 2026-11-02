@@ -15,6 +15,8 @@ The weapon panel, native bullet count, fire mode, zeroing, reload/action prompts
 
 ## Download the PBO
 
+Version **0.1.9** offsets the heart's floating black thorn contour farther out, with a transparent gap following the anatomical silhouette. Blood artwork and status icon sizing are unchanged. The weapon frame widens to 440 pixels, with text inset into its clear center; primary text is 18 pixels. The four text rectangles have zero outline alpha in the scaled source texture, confirming that the artwork does not cross their bounds. PBO/ZIP integrity passes; final in-game placement still needs checking.
+
 Version **0.1.8** refines only the heart artwork: a smoother close contour with fewer, smaller barbs, matching the cleaner blood-drop treatment. Blood artwork, weapon panel, HUD scripts, sizing and label visibility remain unchanged from 0.1.7. Texture/PBO validation does not establish the final in-game appearance.
 
 Version **0.1.7** clears the native item-actions root's own backing color and hides the stock `m_ItemLeft` and item-only ancestor branches. It stops before containers shared with reload/action prompts or the custom panel. This targets backplates outside `ia_item`, which previous builds left visible. Weapon and anatomical-heart artwork now use bolder opaque black thorns; text remains white. Texture alpha and PBO/ZIP checks pass, but removal of the reported in-game backing is not yet visually verified.
