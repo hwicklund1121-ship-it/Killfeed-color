@@ -1,4 +1,4 @@
 name = "GRZ Local Mod Pack";
 author = "GRZ";
-version = "1.1";
-overview = "Seven GRZ mods bundled for local DayZ testing.";
+version = "1.2";
+overview = "Eight GRZ mods bundled for local DayZ testing.";

@@ -1,3 +1,5 @@
+The separate **GRZ Hitmarker** mod adds configurable markers, damage info and sound under **Options → Game**. See [HITMARKER.md](HITMARKER.md). The exact Rust headshot clip is pending upload; this build labels its temporary sound.
+
 # GRZ Custom Hud
 
 The separate **GRZ Killfeed** mod, `/grzvip` menu, Steam-ID access config and DayZ Editor preview instructions are documented in [KILLFEED.md](KILLFEED.md). Its PBO/ZIP are in `downloads/GRZ_Killfeed*`; the HUD downloads below remain separate.

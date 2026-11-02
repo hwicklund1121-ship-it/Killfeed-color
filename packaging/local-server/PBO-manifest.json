@@ -11,6 +11,10 @@
     "bytes": 1069135,
     "sha256": "0dd21185895a4476881c4ccdce9e3b929c3e34b265d2473a83517e076d2a5e64"
   },
+  "GRZ_Hitmarker.pbo": {
+    "bytes": 54629,
+    "sha256": "098f372055df8390e4c467813364dbf8078839f9ad1a4d4f63dfc053a96b00cf"
+  },
   "GRZ_Killfeed.pbo": {
     "bytes": 590701,
     "sha256": "650529bee67d93a9996409ea41c80b156b9d3d1da8089b4b1b7e2887d239df01"
