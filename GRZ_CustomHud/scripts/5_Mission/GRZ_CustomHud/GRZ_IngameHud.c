@@ -1,28 +1,49 @@
-// Extend the stock HUD: keep DayZ's replicated status images and tendency arrows.
+// Own status layout avoids native spacer clipping and rectangular backplates.
 modded class IngameHud
 {
-    protected CanvasWidget m_GRZHealthWire;
-    protected CanvasWidget m_GRZBloodWire;
+    protected Widget m_GRZStatusPanel;
+    protected int m_GRZHealthStatus;
+    protected int m_GRZBloodStatus;
+    protected int m_GRZHealthTendency;
+    protected int m_GRZBloodTendency;
     protected float m_GRZPulse;
 
     override void Init(Widget hud_panel_widget)
     {
         super.Init(hud_panel_widget);
-        if (!m_Notifiers)
+        m_GRZStatusPanel = g_Game.GetWorkspace().CreateWidgets("GRZ_CustomHud/gui/layouts/grz_status.layout", m_HudPanelWidget);
+        if (!m_GRZStatusPanel)
             return;
+        ImageWidget health = ImageWidget.Cast(m_GRZStatusPanel.FindAnyWidget("GRZHealthIcon"));
+        ImageWidget blood = ImageWidget.Cast(m_GRZStatusPanel.FindAnyWidget("GRZBloodIcon"));
+        if (health)
+            health.LoadImageFile(0, "GRZ_CustomHud/gui/textures/grz_health_ca.paa");
+        if (blood)
+            blood.LoadImageFile(0, "GRZ_CustomHud/gui/textures/grz_blood_ca.paa");
+    }
 
-        m_GRZHealthWire = GRZThornFrame.Create(m_Notifiers);
-        m_GRZBloodWire = GRZThornFrame.Create(m_Notifiers);
+    override void DisplayNotifier(int key, int tendency, int status)
+    {
+        super.DisplayNotifier(key, tendency, status);
+        if (key == NTFKEY_HEALTHY)
+        {
+            m_GRZHealthStatus = status;
+            m_GRZHealthTendency = tendency;
+        }
+        if (key == NTFKEY_BLOOD)
+        {
+            m_GRZBloodStatus = status;
+            m_GRZBloodTendency = tendency;
+        }
     }
 
     override void Update(float timeslice)
     {
         super.Update(timeslice);
-        if (!m_HudPanelWidget || !m_Notifiers)
+        if (!m_HudPanelWidget || !m_GRZStatusPanel)
             return;
-
         m_GRZPulse += timeslice;
-        // Reapply after vanilla visibility updates (inventory, stance and stamina).
+        GRZHide(m_Notifiers);
         GRZHide(m_QuickbarWidget);
         GRZHide(m_Stamina);
         GRZHide(m_StaminaBackground);
@@ -32,27 +53,17 @@ modded class IngameHud
         GRZHide(m_BloodPosType);
         GRZHide(m_VehicleHudPanels);
         GRZHide(m_WalkieTalkie);
-        GRZBlack(m_StanceProne);
-        GRZBlack(m_StanceCrouch);
-        GRZBlack(m_StanceStand);
-        GRZBlack(m_StanceStandWalk);
-        GRZBlack(m_StanceCar);
 
-        // Keep the native hierarchy intact so all stock status updates still work.
-        Widget child = m_Notifiers.GetChildren();
-        while (child)
-        {
-            bool keep = child == m_GRZHealthWire || child == m_GRZBloodWire;
-            keep = keep || child.GetName() == "IconHealth" || child.GetName() == "IconBlood";
-            keep = keep || child.FindAnyWidget("IconHealth") != null || child.FindAnyWidget("IconBlood") != null;
-            if (!keep)
-                child.Show(false);
-            child = child.GetSibling();
-        }
-
-        GRZClearStatusBacking(m_Notifiers);
-        GRZStyleStatus("Health", m_GRZHealthWire);
-        GRZStyleStatus("Blood", m_GRZBloodWire);
+        bool show = !GetHudVisibility().IsContextFlagActive(IngameHudVisibility.HUD_HIDE_FLAGS);
+        m_GRZStatusPanel.Show(show);
+        float x, y, width, height;
+        m_HudPanelWidget.GetScreenPos(x, y);
+        m_HudPanelWidget.GetScreenSize(width, height);
+        float scale = Math.Clamp(height / 1080.0, 0.75, 2.0);
+        m_GRZStatusPanel.SetScreenPos(x + width - 264 * scale, y + height - 164 * scale);
+        m_GRZStatusPanel.SetScreenSize(240 * scale, 128 * scale);
+        GRZStatus("Health", m_GRZHealthStatus, m_GRZHealthTendency);
+        GRZStatus("Blood", m_GRZBloodStatus, m_GRZBloodTendency);
     }
 
     protected void GRZHide(Widget widget)
@@ -61,84 +72,33 @@ modded class IngameHud
             widget.Show(false);
     }
 
-    protected void GRZBlack(Widget widget)
+    protected void GRZStatus(string name, int status, int tendency)
     {
-        if (widget)
-            widget.SetColor(0xFF0A0A0A);
-    }
-
-    protected void GRZClearStatusBacking(Widget widget)
-    {
-        Widget child = widget.GetChildren();
-        while (child)
+        ImageWidget icon = ImageWidget.Cast(m_GRZStatusPanel.FindAnyWidget("GRZ" + name + "Icon"));
+        TextWidget label = TextWidget.Cast(m_GRZStatusPanel.FindAnyWidget("GRZ" + name + "State"));
+        if (icon)
         {
-            string name = child.GetName();
-            bool statusImage = name == "IconHealth" || name == "IconBlood";
-            statusImage = statusImage || name.Contains("HealthArrow") || name.Contains("BloodArrow");
-            if (ImageWidget.Cast(child) && !statusImage)
-                child.Show(false);
-            GRZClearStatusBacking(child);
-            child = child.GetSibling();
+            float alpha = 1.0;
+            if (status >= 5)
+                alpha = 0.4 + 0.6 * Math.AbsFloat(Math.Sin(m_GRZPulse * 3.0));
+            icon.SetColor(ARGB(alpha * 255, 255, 255, 255));
         }
-    }
-
-    protected void GRZStyleStatus(string status, CanvasWidget wire)
-    {
-        ImageWidget icon = ImageWidget.Cast(m_Notifiers.FindAnyWidget("Icon" + status));
-        if (!icon || !wire)
-            return;
-
-        float alpha = 1.0;
-        // White status icons pulse opacity at critical levels; the frame stays black.
-        if (m_TendencyStatusCritical.Contains(icon))
-            alpha = 0.4 + 0.6 * Math.AbsFloat(Math.Sin(m_GRZPulse * 3.0));
-        icon.SetColor(ARGB(alpha * 255, 255, 255, 255));
-        for (int i = 1; i <= 3; i++)
+        // Use DayZ's actual replicated notifier stages, never guessed percentages.
+        string state;
+        switch (status)
         {
-            Widget up = m_Notifiers.FindAnyWidget(status + "ArrowUp" + i.ToString());
-            Widget down = m_Notifiers.FindAnyWidget(status + "ArrowDown" + i.ToString());
-            if (up)
-                up.SetColor(0xFFFFFFFF);
-            if (down)
-                down.SetColor(0xFFFFFFFF);
+            case 1: state = "HIGH"; break;
+            case 2: state = "GOOD"; break;
+            case 3: state = "LOW"; break;
+            case 4: state = "VERY LOW"; break;
+            case 5: state = "CRITICAL"; break;
         }
-
-        // Two deliberately sized, separate cells anchored inside the HUD.
-        // Recompute from the HUD bounds rather than growing yesterday's size.
-        float hudX, hudY, hudWidth, hudHeight;
-        m_HudPanelWidget.GetScreenPos(hudX, hudY);
-        m_HudPanelWidget.GetScreenSize(hudWidth, hudHeight);
-        float scale = Math.Clamp(hudHeight / 1080.0, 0.75, 2.0);
-        float cell = 96 * scale;
-        float gap = 12 * scale;
-        float frameX = hudX + hudWidth - 28 * scale - cell;
-        if (status == "Health")
-            frameX -= cell + gap;
-        float frameY = hudY + hudHeight - 36 * scale - cell;
-        float iconSize = 42 * scale;
-        icon.SetScreenPos(frameX + (cell - iconSize) * 0.5, frameY + (cell - iconSize) * 0.5);
-        icon.SetScreenSize(iconSize, iconSize);
-        wire.SetScreenPos(frameX, frameY);
-        wire.SetScreenSize(cell, cell);
-        wire.Show(icon.IsVisible());
-        GRZThornFrame.Draw(wire, cell, cell);
-        // Keep tendency arrows next to the enlarged icon within its own frame.
-        for (int arrow = 1; arrow <= 3; arrow++)
-        {
-            Widget arrowUp = m_Notifiers.FindAnyWidget(status + "ArrowUp" + arrow.ToString());
-            Widget arrowDown = m_Notifiers.FindAnyWidget(status + "ArrowDown" + arrow.ToString());
-            float arrowY = frameY + (30 + (arrow - 1) * 10) * scale;
-            if (arrowUp)
-            {
-                arrowUp.SetScreenPos(frameX + 72 * scale, arrowY);
-                arrowUp.SetScreenSize(8 * scale, 8 * scale);
-            }
-            if (arrowDown)
-            {
-                arrowDown.SetScreenPos(frameX + 72 * scale, arrowY);
-                arrowDown.SetScreenSize(8 * scale, 8 * scale);
-            }
-        }
+        if (tendency > 0)
+            state += " +";
+        if (tendency < 0)
+            state += " -";
+        if (label)
+            label.SetText(state);
     }
 };
 

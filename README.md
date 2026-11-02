@@ -1,6 +1,6 @@
 # GRZ Custom Hud
 
-First source version of a **DayZ PC** HUD mod: health and blood survival indicators, a weapon/ammo panel, reload prompts and stance indicator, with black styling and thin black tribal-thorn frames. There are no third-party mod dependencies or downloaded textures. Critical health/blood pulses in opacity; vanilla status image levels and arrows still provide the status information.
+Development version of a **DayZ PC** HUD mod: white heart and blood-drop artwork with black contour thorns, a white-text weapon/ammo panel with a black thorn outline, reload prompts and a stance indicator. No third-party mod dependencies are required. Status labels use DayZ's replicated notifier stages and tendency; critical states pulse opacity. No guessed numeric health/blood percentages are shown.
 
 The weapon panel, native bullet count, fire mode, zeroing, reload/action prompts and stance/crouch indicator remain available. The quickbar, stamina, noise, other survival badges, radio readout and vehicle panel are hidden. Crosshair, menus and connection warnings remain available. This is cosmetic: hunger, thirst, temperature, bleeding and all other survival mechanics still operate, even though their indicators are hidden. Black has limited contrast against dark scenery.
 
@@ -14,6 +14,10 @@ The weapon panel, native bullet count, fire mode, zeroing, reload/action prompts
 - `tools/package_source.py`: creates a source ZIP outside the checkout without requiring DayZ Tools.
 
 ## Download the PBO
+
+Version **0.1.4** uses the approved heart/drop artwork as transparent DXT5 PAA textures with complete mip chains. Their thorns follow the icons' silhouettes, replacing the rectangular status canvases. A separate status layout replaces the hidden native notifier panel. Custom weapon frames/canvases explicitly use blank styling and alpha blending. Texture transparency, PAA mip decoding, PBO contents and checksum are checked; actual DayZ rendering is not verified here.
+
+`art/status-sheet.png` retains the approved artwork. `tools/build_status_textures.py` extracts and encodes the two runtime textures (requires Pillow 12.3 or newer); the packaged PAA files do not require Pillow to run. Rebuild them with `python3 tools/build_status_textures.py`, then rebuild the PBO. `art/health-preview.png` and `art/blood-preview.png` show the individual assets.
 
 Version **0.1.3** replaces the visible stock weapon panel with a dedicated transparent frame-and-text layout. The old weapon backing is hidden entirely; no parent panels are tinted white. Vanilla setters populate the new white name/ammo/fire-mode/zeroing text. Health and blood icons/arrows are white inside larger black thorn frames (96-pixel cells, 42-pixel icons at 1080p). There are no background images in the custom weapon layout. In-game verification is still required.
 

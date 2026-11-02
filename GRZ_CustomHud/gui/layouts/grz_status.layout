@@ -1,0 +1,54 @@
+FrameWidgetClass GRZStatusPanel
+{
+ visible 0
+ ignorepointer 1
+ style blank
+ position 0 0
+ size 240 128
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ {
+  ImageWidgetClass GRZHealthIcon
+  {
+   ignorepointer 1
+   position 0.0 0
+   size 0.4666666666666667 0.875
+   color 1 1 1 1
+   sourcealpha 1
+   blend 1
+   stretch 1
+  }
+  TextWidgetClass GRZHealthState
+  {
+   ignorepointer 1
+   position 0.0 0.875
+   size 0.4666666666666667 0.125
+   color 1 1 1 1
+   font "gui/fonts/sdf_MetronBook16"
+   text ""
+   halign center
+  }
+  ImageWidgetClass GRZBloodIcon
+  {
+   ignorepointer 1
+   position 0.5333333333333333 0
+   size 0.4666666666666667 0.875
+   color 1 1 1 1
+   sourcealpha 1
+   blend 1
+   stretch 1
+  }
+  TextWidgetClass GRZBloodState
+  {
+   ignorepointer 1
+   position 0.5333333333333333 0.875
+   size 0.4666666666666667 0.125
+   color 1 1 1 1
+   font "gui/fonts/sdf_MetronBook16"
+   text ""
+   halign center
+  }
+ }
+}

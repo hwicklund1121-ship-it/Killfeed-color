@@ -1,5 +1,6 @@
 FrameWidgetClass GRZWeaponPanel
 {
+ style blank
  visible 0
  ignorepointer 1
  position 0 0
@@ -24,6 +25,7 @@ FrameWidgetClass GRZWeaponPanel
     }
   FrameWidgetClass GRZWeaponQuantity
   {
+ style blank
    ignorepointer 1
    position 244 23
    size 86 26
@@ -60,6 +62,7 @@ FrameWidgetClass GRZWeaponPanel
   }
   FrameWidgetClass GRZWeaponDetails
   {
+ style blank
    ignorepointer 1
    position 30 51
    size 300 22

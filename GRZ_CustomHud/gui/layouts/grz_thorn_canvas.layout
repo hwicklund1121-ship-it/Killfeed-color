@@ -1,5 +1,6 @@
 CanvasWidgetClass GRZThornCanvas
 {
+ style blank
  visible 1
  ignorepointer 1
  position 0 0
@@ -8,5 +9,7 @@ CanvasWidgetClass GRZThornCanvas
  vexactpos 1
  hexactsize 1
  vexactsize 1
+ sourcealpha 1
+ blend 1
  color 1 1 1 1
 }
