@@ -1,0 +1,30 @@
+{
+  "GRZ_ActionStamina.pbo": {
+    "bytes": 2759,
+    "sha256": "a38005389c7392ae3517e85cb42a2b5a042527f641184689ac30198f9641cfdd"
+  },
+  "GRZ_CustomHud.pbo": {
+    "bytes": 1064878,
+    "sha256": "888bc6e557a512fa90e0a55815c731c327f74fd14a53725a97d2381436433429"
+  },
+  "GRZ_Killfeed.pbo": {
+    "bytes": 590701,
+    "sha256": "650529bee67d93a9996409ea41c80b156b9d3d1da8089b4b1b7e2887d239df01"
+  },
+  "GRZ_LUGU_RollStand.pbo": {
+    "bytes": 3377,
+    "sha256": "5a75f985e56ce9cd65ef11cff98dcfda7fd8d2a0f53b1e356445f5c237b40c4a"
+  },
+  "GRZ_Autorun.pbo": {
+    "bytes": 10579,
+    "sha256": "87b57731ae305df7f96e9e28835b12663ad59ceaa6c0dd3de6a8e29cf6df77bf"
+  },
+  "GRZ_Movement.pbo": {
+    "bytes": 43583,
+    "sha256": "1ee1cf8bdbb3e081fab93b91c4e9b9f21b3b0729d4dcd38125cbfe83a20207d8"
+  },
+  "LUGUINSTADROPFIX.pbo": {
+    "bytes": 276061,
+    "sha256": "b7828501469aa310f20700b1e7021c11f8656bc8170f291d85c4249f6417127b"
+  }
+}
