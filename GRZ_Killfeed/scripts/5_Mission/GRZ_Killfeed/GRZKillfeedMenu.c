@@ -6,12 +6,15 @@ class GRZKillfeedClient
     {
         if (!g_Game.IsMultiplayer())
         {
-            if (g_Game.GetUIManager().GetMenu())
+            UIScriptedMenu parent = g_Game.GetUIManager().GetMenu();
+            if (GRZKillfeedMenu.Cast(parent))
                 return;
             GRZKillfeedMenu preview = new GRZKillfeedMenu;
             preview.Chosen = LocalStyle;
             preview.IsOfflinePreview = true;
-            g_Game.GetUIManager().ShowScriptedMenu(preview, null);
+            // Editor can already own a menu. Open as its child instead of
+            // silently refusing to display the preview.
+            g_Game.GetUIManager().ShowScriptedMenu(preview, parent);
             return;
         }
         PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());

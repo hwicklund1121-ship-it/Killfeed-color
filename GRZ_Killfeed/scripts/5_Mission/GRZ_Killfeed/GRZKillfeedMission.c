@@ -30,6 +30,16 @@ modded class MissionGameplay
     protected ref array<ref GRZKillfeedRow> m_GRZRows = new array<ref GRZKillfeedRow>;
     protected bool m_GRZListening;
 
+    override void OnKeyPress(int key)
+    {
+        if (key == KeyCode.KC_F7 && !g_Game.IsMultiplayer())
+        {
+            g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZKillfeedClient.RequestMenu, 0, false);
+            return;
+        }
+        super.OnKeyPress(key);
+    }
+
     override void OnInit()
     {
         super.OnInit();

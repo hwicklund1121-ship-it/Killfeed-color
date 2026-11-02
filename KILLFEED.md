@@ -2,6 +2,8 @@
 
 A separate **DayZ PC** mod. The finished GRZ Custom Hud files remain unchanged.
 
+Version **0.1.2** adds **F7** to open the menu in an offline Editor mission, even when the Editor already has a menu open. Closing the preview returns to its parent menu. Multiplayer access still requires the server's Steam-ID whitelist.
+
 Version **0.1.1** renames the fields `Effect` to `AnimationMode` and `Weapon` to `WeaponName` because the old names collide with DayZ engine types. Replace the old killfeed PBO on both server and clients. RPC field order and the Steam-ID whitelist format are unchanged. This fixes the reported type-name conflict; full DayZ compilation is still not available in this cloud machine.
 
 - Top-right player killfeed: killer > victim, fatal weapon/source name, rounded player-to-player distance in meters.
@@ -45,7 +47,7 @@ Players press the chat key, enter `/killfeed`, and submit. The command is interc
 
 Load both DayZ Editor and `@GRZ_Killfeed` in the DayZ launcher, and start an **offline** editor mission with a player and the normal HUD/chat available:
 
-1. Enter `/killfeed` in chat. In an offline mission this opens a clearly marked local preview menu without needing a Steam whitelist.
+1. Press **F7**, or enter `/killfeed` in chat. In an offline mission this opens a clearly marked local preview menu without needing a Steam whitelist. F7 is reserved for this preview while the mod is loaded offline; it is not intercepted in multiplayer.
 2. Cycle colors, effect and speed. **Save** applies only to that offline preview session; it does not modify server settings.
 3. Choose **Preview in feed** to close the menu and show a local sample entry.
 4. Enter `/killfeed test` to show another local sample using the current preview style. Verify placement, transparency, clipping, five-entry cap and eight-second expiry.
