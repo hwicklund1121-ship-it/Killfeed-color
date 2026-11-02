@@ -85,6 +85,12 @@ def main():
     write_fields = re.findall(r"rpc.Write\(style\.(\w+)\)", server)
     read_fields = re.findall(r"ctx.Read\(style\.(\w+)\)", player)
     assert write_fields == read_fields == ["ColorA", "ColorB", "AnimationMode", "Speed"]
+    row = files["gui/layouts/row.layout"].decode()
+    assert "ImageWidgetClass" not in row, "Killfeed entries should have no thorn image"
+    assert "color 0 0 0 0.45" in row
+    for edge in ["BorderTop", "BorderBottom", "BorderLeft", "BorderRight"]:
+        assert f"PanelWidgetClass {edge}" in row
+    assert "gui/textures/grz_menu_outline_ca.paa" in files
     print(f"Verified PBO prefix/checksum and {len(files)} source/asset entries; ZIP payloads match.")
     print("Layout/widget/resource bindings and style wire-field order checked.")
     print("These checks do not compile Enforce Script or test networking, permissions, or DayZ Editor.")

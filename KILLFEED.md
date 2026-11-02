@@ -2,13 +2,15 @@
 
 A separate **DayZ PC** mod. The finished GRZ Custom Hud files remain unchanged.
 
+Version **0.1.3** replaces the killfeed entries' thorn artwork with a plain black 2-pixel outline and a 45%-opaque black background. Entries are 400×64 pixels with roomier text insets and 4-pixel spacing. The custom settings menu retains its black background, white text and white thorn edges. F7 and offline command previews remain available.
+
 Version **0.1.2** adds **F7** to open the menu in an offline Editor mission, even when the Editor already has a menu open. Closing the preview returns to its parent menu. Multiplayer access still requires the server's Steam-ID whitelist.
 
 Version **0.1.1** renames the fields `Effect` to `AnimationMode` and `Weapon` to `WeaponName` because the old names collide with DayZ engine types. Replace the old killfeed PBO on both server and clients. RPC field order and the Steam-ID whitelist format are unchanged. This fixes the reported type-name conflict; full DayZ compilation is still not available in this cloud machine.
 
 - Top-right player killfeed: killer > victim, fatal weapon/source name, rounded player-to-player distance in meters.
 - Up to five entries, newest first; each lasts eight seconds and fades during its last second.
-- Transparent black thorn border and white default names. No filled feed background.
+- Plain black 2-pixel borders, a 45%-opaque black background, and white default names on each killfeed entry. The settings menu keeps its separate white thorn ornament.
 - `/killfeed` opens personal name styling after the server verifies access.
 - Two colors from twelve choices (white, red, orange, yellow, green, blue, indigo, violet, cyan, pink, gray, black), six effects (steady, pulse, blink, color fade, color swap, rainbow cycle), and three speeds.
 - Custom black settings menu, white labels/buttons, and white tribal thorn edges matching the HUD. The username preview displays its selected animated colors.
