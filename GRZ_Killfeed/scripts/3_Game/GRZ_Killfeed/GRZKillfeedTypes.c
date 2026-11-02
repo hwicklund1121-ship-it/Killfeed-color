@@ -171,6 +171,8 @@ class GRZNameStyle extends GRZAnimationStyle
 {
     int PrefixIcon;
     string PrefixWord;
+    // Retained for compatibility with existing saved styles and RPC fields.
+    // Rendering uses the main name animation for the entire prefix/name group.
     ref GRZAnimationStyle PrefixAnimation = new GRZAnimationStyle;
 
     override bool IsValid()

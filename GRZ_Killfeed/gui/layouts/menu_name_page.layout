@@ -1,0 +1,152 @@
+FrameWidgetClass GRZNamePage
+{
+position 0 0
+size 1036 392
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+
+{
+TextWidgetClass PageTitle
+{
+position 0 0
+size 440 36
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "Name style"
+}
+TextWidgetClass PageDescription
+{
+position 0 48
+size 440 24
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 0.7 0.7 0.7 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "Choose how your player name appears."
+}
+PanelWidgetClass PreviewCard
+{
+position 0 104
+size 440 240
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0.045 0.045 0.045 1
+}
+TextWidgetClass PreviewCaption
+{
+position 16 116
+size 408 18
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 0.65 0.65 0.65 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "LIVE PREVIEW"
+"text halign" center
+}
+ImageWidgetClass PrefixPreviewIcon
+{
+position 16 208
+size 40 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+mode blend
+stretch 1
+}
+TextWidgetClass PrefixPreviewWord
+{
+position 60 210
+size 160 36
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text ""
+}
+TextWidgetClass Preview
+{
+position 224 210
+size 200 36
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "Your username"
+}
+TextWidgetClass PageNote
+{
+position 0 362
+size 440 22
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 0.55 0.55 0.55 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "Name, prefix and icon share the same animation."
+}
+PanelWidgetClass PageDivider
+{
+position 464 0
+size 1 360
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0.16 0.16 0.16 1
+}
+FrameWidgetClass AnimationHost
+{
+position 496 0
+size 540 360
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+
+}
+}
+}

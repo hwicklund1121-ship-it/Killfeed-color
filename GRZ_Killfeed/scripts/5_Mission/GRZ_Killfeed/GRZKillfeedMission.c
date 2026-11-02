@@ -84,8 +84,8 @@ class GRZKillfeedRow
         int victimColor = Message.VictimStyle.ColorAt(Age);
         Killer.SetColor(GRZNameStyle.WithAlpha(killerColor, ((killerColor >> 24) & 255) * fade));
         Victim.SetColor(GRZNameStyle.WithAlpha(victimColor, ((victimColor >> 24) & 255) * fade));
-        int killerPrefixColor = Message.KillerStyle.PrefixAnimation.ColorAt(Age);
-        int victimPrefixColor = Message.VictimStyle.PrefixAnimation.ColorAt(Age);
+        int killerPrefixColor = killerColor;
+        int victimPrefixColor = victimColor;
         killerPrefixColor = GRZAnimationStyle.WithAlpha(killerPrefixColor, ((killerPrefixColor >> 24) & 255) * fade);
         victimPrefixColor = GRZAnimationStyle.WithAlpha(victimPrefixColor, ((victimPrefixColor >> 24) & 255) * fade);
         KillerPrefix.SetColor(killerPrefixColor);
@@ -227,8 +227,8 @@ modded class MissionGameplay
         prefix.SetTextExactSize(16);
         prefix.SetOutline(1, 0xFF000000);
         string word;
-        if (style.PrefixWord != "")
-            word = "[" + style.PrefixWord + "]";
+        if (style.PrefixWord != "" || style.PrefixIcon > 0)
+            word = style.PrefixWord + " |";
         prefix.SetText(word);
         int prefixWidth, prefixHeight;
         prefix.GetTextSize(prefixWidth, prefixHeight);

@@ -81,6 +81,7 @@ def verify_menu_bounds(layout):
         w, h = node["size"]
         pw, ph = parent["size"]
         assert x >= 0 and y >= 0 and x + w <= pw and y + h <= ph, node["name"]
+    return nodes
 
 
 def main():
@@ -187,8 +188,25 @@ def main():
         assert 0 < len(icon["Label"]) <= 32
         assert icon["Texture"].startswith("GRZ_Killfeed/gui/textures/") and ".." not in icon["Texture"]
         assert icon["Texture"].removeprefix("GRZ_Killfeed/") in files
-    assert "KillerStyle.PrefixAnimation.ColorAt(Age)" in mission
-    assert "VictimStyle.PrefixAnimation.ColorAt(Age)" in mission
+    assert "int killerPrefixColor = killerColor;" in mission
+    assert "int victimPrefixColor = victimColor;" in mission
+    assert "PrefixAnimation.ColorAt" not in mission and "PrefixAnimation.ColorAt" not in menu
+    assert 'word = style.PrefixWord + " |";' in mission
+    assert 'prefixText = Chosen.PrefixWord + " |";' in menu
+    current_animation = menu.split("protected GRZAnimationStyle CurrentAnimation()", 1)[1].split("override bool OnChange", 1)[0]
+    assert "return Chosen;" in current_animation and "return Chosen.PrefixAnimation" not in current_animation
+    assert "m_NamePage.Show(!m_PrefixTab);" in menu and "m_PrefixPage.Show(m_PrefixTab);" in menu
+    for page in ["menu_name_page.layout", "menu_prefix_page.layout", "menu_animation.layout"]:
+        verify_menu_bounds(files["gui/layouts/" + page].decode())
+        assert page in menu
+    assert "PrefixWordInput" not in files["gui/layouts/menu_name_page.layout"].decode()
+    assert "PrefixWordInput" in files["gui/layouts/menu_prefix_page.layout"].decode()
+    assert "m_NamePage.FindAnyWidget(\"AnimationHost\")" in menu and "m_PrefixPage.FindAnyWidget(\"AnimationHost\")" in menu
+    # Navigation must move with the black background, not live under the fullscreen root.
+    shell_nodes = verify_menu_bounds(menu_layout)
+    for name in ["NameTab", "PrefixTab", "PageHost"]:
+        node = next(n for n in shell_nodes if n["name"] == name)
+        assert node["parent"]["name"] == "MenuPanel", name
     assert "580 + killerExtra + victimExtra" in mission
     print(f"Verified PBO prefix/checksum and {len(files)} source/asset entries; ZIP payloads match.")
     print("Layout/widget/resource bindings and style wire-field order checked.")

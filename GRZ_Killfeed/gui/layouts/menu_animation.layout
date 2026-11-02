@@ -1,0 +1,899 @@
+FrameWidgetClass AnimationControls
+{
+position 0 0
+size 540 360
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+
+{
+TextWidgetClass AnimationHeading
+{
+position 0 0
+size 540 32
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "COLORS & ANIMATION"
+}
+ButtonWidgetClass ColorA
+{
+position 0 64
+size 258 46
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+{
+PanelWidgetClass ColorABorder
+{
+position 0 0
+size 258 46
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0.22 0.22 0.22 1
+}
+PanelWidgetClass ColorAFill
+{
+position 1 1
+size 256 44
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0.065 0.065 0.065 1
+}
+TextWidgetClass ColorALabel
+{
+position 12 0
+size 234 46
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "Primary: White"
+"text halign" center
+}
+}
+}
+ButtonWidgetClass ColorB
+{
+position 278 64
+size 262 46
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+{
+PanelWidgetClass ColorBBorder
+{
+position 0 0
+size 262 46
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0.22 0.22 0.22 1
+}
+PanelWidgetClass ColorBFill
+{
+position 1 1
+size 260 44
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0.065 0.065 0.065 1
+}
+TextWidgetClass ColorBLabel
+{
+position 12 0
+size 238 46
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "Secondary: Red"
+"text halign" center
+}
+}
+}
+PanelWidgetClass PrimaryActive
+{
+position 0 108
+size 258 2
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0.94 0.16 0.18 1
+}
+PanelWidgetClass SecondaryActive
+{
+position 278 108
+size 262 2
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0 0 0 0
+}
+ButtonWidgetClass Swatch0
+{
+position 0 126
+size 80 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+{
+PanelWidgetClass SwatchBorder0
+{
+position 0 0
+size 80 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0.2 0.2 0.2 1
+}
+PanelWidgetClass SwatchFill0
+{
+position 2 2
+size 76 36
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0 0 0 1
+}
+TextWidgetClass SwatchLabel0
+{
+position 2 2
+size 76 36
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "White"
+"text halign" center
+}
+}
+}
+ButtonWidgetClass Swatch1
+{
+position 92 126
+size 80 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+{
+PanelWidgetClass SwatchBorder1
+{
+position 0 0
+size 80 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0.2 0.2 0.2 1
+}
+PanelWidgetClass SwatchFill1
+{
+position 2 2
+size 76 36
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0 0 0 1
+}
+TextWidgetClass SwatchLabel1
+{
+position 2 2
+size 76 36
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "Red"
+"text halign" center
+}
+}
+}
+ButtonWidgetClass Swatch2
+{
+position 184 126
+size 80 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+{
+PanelWidgetClass SwatchBorder2
+{
+position 0 0
+size 80 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0.2 0.2 0.2 1
+}
+PanelWidgetClass SwatchFill2
+{
+position 2 2
+size 76 36
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0 0 0 1
+}
+TextWidgetClass SwatchLabel2
+{
+position 2 2
+size 76 36
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "Orange"
+"text halign" center
+}
+}
+}
+ButtonWidgetClass Swatch3
+{
+position 276 126
+size 80 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+{
+PanelWidgetClass SwatchBorder3
+{
+position 0 0
+size 80 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0.2 0.2 0.2 1
+}
+PanelWidgetClass SwatchFill3
+{
+position 2 2
+size 76 36
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0 0 0 1
+}
+TextWidgetClass SwatchLabel3
+{
+position 2 2
+size 76 36
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "Yellow"
+"text halign" center
+}
+}
+}
+ButtonWidgetClass Swatch4
+{
+position 368 126
+size 80 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+{
+PanelWidgetClass SwatchBorder4
+{
+position 0 0
+size 80 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0.2 0.2 0.2 1
+}
+PanelWidgetClass SwatchFill4
+{
+position 2 2
+size 76 36
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0 0 0 1
+}
+TextWidgetClass SwatchLabel4
+{
+position 2 2
+size 76 36
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "Green"
+"text halign" center
+}
+}
+}
+ButtonWidgetClass Swatch5
+{
+position 460 126
+size 80 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+{
+PanelWidgetClass SwatchBorder5
+{
+position 0 0
+size 80 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0.2 0.2 0.2 1
+}
+PanelWidgetClass SwatchFill5
+{
+position 2 2
+size 76 36
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0 0 0 1
+}
+TextWidgetClass SwatchLabel5
+{
+position 2 2
+size 76 36
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "Blue"
+"text halign" center
+}
+}
+}
+ButtonWidgetClass Swatch6
+{
+position 0 182
+size 80 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+{
+PanelWidgetClass SwatchBorder6
+{
+position 0 0
+size 80 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0.2 0.2 0.2 1
+}
+PanelWidgetClass SwatchFill6
+{
+position 2 2
+size 76 36
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0 0 0 1
+}
+TextWidgetClass SwatchLabel6
+{
+position 2 2
+size 76 36
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "Indigo"
+"text halign" center
+}
+}
+}
+ButtonWidgetClass Swatch7
+{
+position 92 182
+size 80 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+{
+PanelWidgetClass SwatchBorder7
+{
+position 0 0
+size 80 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0.2 0.2 0.2 1
+}
+PanelWidgetClass SwatchFill7
+{
+position 2 2
+size 76 36
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0 0 0 1
+}
+TextWidgetClass SwatchLabel7
+{
+position 2 2
+size 76 36
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "Violet"
+"text halign" center
+}
+}
+}
+ButtonWidgetClass Swatch8
+{
+position 184 182
+size 80 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+{
+PanelWidgetClass SwatchBorder8
+{
+position 0 0
+size 80 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0.2 0.2 0.2 1
+}
+PanelWidgetClass SwatchFill8
+{
+position 2 2
+size 76 36
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0 0 0 1
+}
+TextWidgetClass SwatchLabel8
+{
+position 2 2
+size 76 36
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "Cyan"
+"text halign" center
+}
+}
+}
+ButtonWidgetClass Swatch9
+{
+position 276 182
+size 80 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+{
+PanelWidgetClass SwatchBorder9
+{
+position 0 0
+size 80 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0.2 0.2 0.2 1
+}
+PanelWidgetClass SwatchFill9
+{
+position 2 2
+size 76 36
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0 0 0 1
+}
+TextWidgetClass SwatchLabel9
+{
+position 2 2
+size 76 36
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "Pink"
+"text halign" center
+}
+}
+}
+ButtonWidgetClass Swatch10
+{
+position 368 182
+size 80 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+{
+PanelWidgetClass SwatchBorder10
+{
+position 0 0
+size 80 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0.2 0.2 0.2 1
+}
+PanelWidgetClass SwatchFill10
+{
+position 2 2
+size 76 36
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0 0 0 1
+}
+TextWidgetClass SwatchLabel10
+{
+position 2 2
+size 76 36
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "Gray"
+"text halign" center
+}
+}
+}
+ButtonWidgetClass Swatch11
+{
+position 460 182
+size 80 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+{
+PanelWidgetClass SwatchBorder11
+{
+position 0 0
+size 80 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0.2 0.2 0.2 1
+}
+PanelWidgetClass SwatchFill11
+{
+position 2 2
+size 76 36
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0 0 0 1
+}
+TextWidgetClass SwatchLabel11
+{
+position 2 2
+size 76 36
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "Black"
+"text halign" center
+}
+}
+}
+ButtonWidgetClass Effect
+{
+position 0 254
+size 258 46
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+{
+PanelWidgetClass EffectBorder
+{
+position 0 0
+size 258 46
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0.22 0.22 0.22 1
+}
+PanelWidgetClass EffectFill
+{
+position 1 1
+size 256 44
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0.065 0.065 0.065 1
+}
+TextWidgetClass EffectLabel
+{
+position 12 0
+size 234 46
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "Style: Steady"
+"text halign" center
+}
+}
+}
+ButtonWidgetClass Speed
+{
+position 278 254
+size 262 46
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+{
+PanelWidgetClass SpeedBorder
+{
+position 0 0
+size 262 46
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0.22 0.22 0.22 1
+}
+PanelWidgetClass SpeedFill
+{
+position 1 1
+size 260 44
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0.065 0.065 0.065 1
+}
+TextWidgetClass SpeedLabel
+{
+position 12 0
+size 238 46
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "Speed: Normal"
+"text halign" center
+}
+}
+}
+TextWidgetClass AnimationNote
+{
+position 0 320
+size 540 24
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 0.6 0.6 0.6 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "Shared by your name, prefix and icon. Save when ready."
+}
+}
+}
