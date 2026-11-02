@@ -24,13 +24,13 @@ class GRZKillfeedClient
         if (!ActiveMenu || !ActiveMenu.GetLayoutRoot())
         {
             ActiveMenu = null;
-            Error("[GRZ Killfeed 0.1.11] Native menu factory did not return an initialized settings menu.");
+            Error("[GRZ Killfeed 0.1.12] Native menu factory did not return an initialized settings menu.");
             g_Game.Chat("GRZ Killfeed: menu creation failed. Check the client script log.", "colorStatusChannel");
             return;
         }
         ActiveMenu.ApplyLocalStyle(LocalStyle);
         ActiveMenu.EnsureVisible();
-        Print("[GRZ Killfeed 0.1.11] Native menu registered and retained.");
+        Print("[GRZ Killfeed 0.1.12] Native menu registered and retained.");
     }
 
     static void ReleaseMenu()
@@ -79,7 +79,7 @@ class GRZKillfeedClient
         message.GunData.Parents = {-1, 0, 0, 0, 0, 0};
         message.GunData.Slots = {-1, -1, -1, -1, -1, -1};
         message.Distance = 175;
-        message.KillerStyle = style;
+        message.KillerStyle = style.Clone();
         GRZKillfeedBus.Kills.Invoke(message);
     }
 }
@@ -116,6 +116,10 @@ class GRZKillfeedMenu extends UIScriptedMenu
     static const int MENU_ID = 1647280199;
     ref GRZNameStyle Chosen = new GRZNameStyle;
     bool IsOfflinePreview;
+    protected bool m_PrefixTab;
+    protected TextWidget m_PrefixPreview;
+    protected ImageWidget m_PrefixPreviewIcon;
+    protected EditBoxWidget m_PrefixInput;
     protected TextWidget m_Preview;
     protected TextWidget m_Status;
     protected float m_Time;
@@ -143,14 +147,18 @@ class GRZKillfeedMenu extends UIScriptedMenu
         }
         ImageWidget logo = ImageWidget.Cast(layoutRoot.FindAnyWidget("MenuLogo"));
         m_Preview = TextWidget.Cast(layoutRoot.FindAnyWidget("Preview"));
+        m_PrefixPreview = TextWidget.Cast(layoutRoot.FindAnyWidget("PrefixPreviewWord"));
+        m_PrefixPreviewIcon = ImageWidget.Cast(layoutRoot.FindAnyWidget("PrefixPreviewIcon"));
+        m_PrefixInput = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("PrefixWordInput"));
         m_Status = TextWidget.Cast(layoutRoot.FindAnyWidget("Status"));
-        if (!logo || !m_Preview || !m_Status || !layoutRoot.FindAnyWidget("MenuPanel"))
+        if (!logo || !m_Preview || !m_Status || !m_PrefixPreview || !m_PrefixPreviewIcon || !m_PrefixInput || !layoutRoot.FindAnyWidget("MenuPanel"))
         {
             Error("GRZ Killfeed: menu layout is missing required widgets.");
             layoutRoot.Unlink();
             layoutRoot = null;
             return null;
         }
+        m_PrefixPreview.SetTextExactSize(24);
         logo.SetFlags(WidgetFlags.SOURCEALPHA | WidgetFlags.BLEND | WidgetFlags.STRETCH);
         logo.LoadImageFile(0, "GRZ_Killfeed/gui/textures/grz_menu_logo_ca.paa");
         logo.SetSort(0);
@@ -166,7 +174,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
         if (IsOfflinePreview)
             m_Status.SetText("Local preview — server access and persistence are not tested.");
         PositionPanel();
-        Print("[GRZ Killfeed 0.1.11] Init: layout created.");
+        Print("[GRZ Killfeed 0.1.12] Init: layout created.");
         return layoutRoot;
     }
 
@@ -209,13 +217,18 @@ class GRZKillfeedMenu extends UIScriptedMenu
         m_Time += timeslice;
         if (m_Preview)
             m_Preview.SetColor(Chosen.ColorAt(m_Time));
+        if (m_PrefixPreview)
+        {
+            m_PrefixPreview.SetColor(Chosen.PrefixAnimation.ColorAt(m_Time));
+            m_PrefixPreviewIcon.SetColor(Chosen.PrefixAnimation.ColorAt(m_Time));
+        }
         PositionPanel();
         if (!m_LoggedUpdate)
         {
             m_LoggedUpdate = true;
             float width, height;
             layoutRoot.GetScreenSize(width, height);
-            Print(string.Format("[GRZ Killfeed 0.1.11] Update: root %1 x %2; visible %3.", width, height, layoutRoot.IsVisibleHierarchy()));
+            Print(string.Format("[GRZ Killfeed 0.1.12] Update: root %1 x %2; visible %3.", width, height, layoutRoot.IsVisibleHierarchy()));
         }
     }
 
@@ -231,14 +244,14 @@ class GRZKillfeedMenu extends UIScriptedMenu
             return;
         }
         EnsureVisible();
-        Print("[GRZ Killfeed 0.1.11] OnShow called.");
+        Print("[GRZ Killfeed 0.1.12] OnShow called.");
     }
 
     override void OnHide()
     {
         m_GRZDismissRequested = true;
         GRZKillfeedBus.AppDeactivated.Remove(CloseSafely);
-        Print("[GRZ Killfeed 0.1.11] OnHide called.");
+        Print("[GRZ Killfeed 0.1.12] OnHide called.");
         super.OnHide();
     }
 
@@ -285,12 +298,13 @@ class GRZKillfeedMenu extends UIScriptedMenu
         layoutRoot.SetScreenSize(width, height);
         Widget panel = layoutRoot.FindAnyWidget("MenuPanel");
         if (panel)
-            panel.SetScreenPos(Math.Max(0, (width - 720) * 0.5), Math.Max(0, (height - 500) * 0.5));
+            panel.SetScreenPos(Math.Max(0, (width - 720) * 0.5), Math.Max(0, (height - 596) * 0.5));
     }
 
     void ApplyLocalStyle(GRZNameStyle style)
     {
-        Chosen = style;
+        Chosen = style.Clone();
+        m_PrefixInput.SetText(Chosen.PrefixWord);
         IsOfflinePreview = true;
         RefreshLabels();
         m_Status.SetText("Local preview — server access and persistence are not tested.");
@@ -311,14 +325,15 @@ class GRZKillfeedMenu extends UIScriptedMenu
         if (m_GRZDismissRequested)
             return true;
         string name = w.GetName();
+        GRZAnimationStyle animation = CurrentAnimation();
         for (int i = 0; i < GRZNameStyle.PALETTE_COUNT; i++)
         {
             if (name == "Swatch" + i.ToString())
             {
                 if (m_ColorTarget == 0)
-                    Chosen.ColorA = i;
+                    animation.ColorA = i;
                 else
-                    Chosen.ColorB = i;
+                    animation.ColorB = i;
                 m_Status.SetText("Preview updated. Save when you're ready.");
                 RefreshLabels();
                 return true;
@@ -326,6 +341,23 @@ class GRZKillfeedMenu extends UIScriptedMenu
         }
         switch (name)
         {
+            case "NameTab":
+                m_PrefixTab = false;
+                m_Status.SetText("Colors, style and speed below edit your name animation.");
+                RefreshLabels();
+                return true;
+            case "PrefixTab":
+                m_PrefixTab = true;
+                m_Status.SetText("Choose an icon and enter up to 12 letters, digits, _ or -. Colors below animate your prefix.");
+                RefreshLabels();
+                return true;
+            case "PrefixIconChoice":
+                if (GRZPrefixIcons.Count() == 0)
+                {
+                    m_Status.SetText("No custom icons installed yet. Your server owner can add artwork to the icon catalog.");
+                    return true;
+                }
+                Chosen.PrefixIcon = (Chosen.PrefixIcon + 1) % (GRZPrefixIcons.Count() + 1); break;
             case "ColorA":
                 m_ColorTarget = 0;
                 m_Status.SetText("Choose a primary color from the swatches.");
@@ -336,8 +368,8 @@ class GRZKillfeedMenu extends UIScriptedMenu
                 m_Status.SetText("Choose a secondary color from the swatches.");
                 RefreshLabels();
                 return true;
-            case "Effect": Chosen.AnimationMode = (Chosen.AnimationMode + 1) % GRZNameStyle.EFFECT_COUNT; break;
-            case "Speed": Chosen.Speed = (Chosen.Speed + 1) % 3; break;
+            case "Effect": animation.AnimationMode = (animation.AnimationMode + 1) % GRZNameStyle.EFFECT_COUNT; break;
+            case "Speed": animation.Speed = (animation.Speed + 1) % 3; break;
             case "Close": CloseSafely(); return true;
             case "Test":
                 GRZKillfeedClient.Demo(Chosen);
@@ -346,7 +378,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
             case "Save":
                 if (IsOfflinePreview)
                 {
-                    GRZKillfeedClient.LocalStyle = Chosen;
+                    GRZKillfeedClient.LocalStyle = Chosen.Clone();
                     m_Status.SetText("Applied to local previews only. Multiplayer settings are server-controlled.");
                     return true;
                 }
@@ -358,6 +390,12 @@ class GRZKillfeedMenu extends UIScriptedMenu
                 rpc.Write(Chosen.ColorB);
                 rpc.Write(Chosen.AnimationMode);
                 rpc.Write(Chosen.Speed);
+                rpc.Write(Chosen.PrefixIcon);
+                rpc.Write(Chosen.PrefixWord);
+                rpc.Write(Chosen.PrefixAnimation.ColorA);
+                rpc.Write(Chosen.PrefixAnimation.ColorB);
+                rpc.Write(Chosen.PrefixAnimation.AnimationMode);
+                rpc.Write(Chosen.PrefixAnimation.Speed);
                 rpc.Send(player, GRZKillfeedRPC.SAVE_STYLE, true, null);
                 m_Status.SetText("Saving on server...");
                 return true;
@@ -370,7 +408,8 @@ class GRZKillfeedMenu extends UIScriptedMenu
 
     void ApplyServerStyle(GRZNameStyle style)
     {
-        Chosen = style;
+        Chosen = style.Clone();
+        m_PrefixInput.SetText(Chosen.PrefixWord);
         IsOfflinePreview = false;
         RefreshLabels();
         m_Status.SetText("Server access confirmed. Save applies your style to the live killfeed.");
@@ -392,15 +431,74 @@ class GRZKillfeedMenu extends UIScriptedMenu
             m_Status.SetText("Could not save. Check access and server profile write permissions.");
     }
 
+    protected GRZAnimationStyle CurrentAnimation()
+    {
+        if (m_PrefixTab)
+            return Chosen.PrefixAnimation;
+        return Chosen;
+    }
+
+    override bool OnChange(Widget w, int x, int y, bool finished)
+    {
+        if (w == m_PrefixInput)
+        {
+            string candidate = m_PrefixInput.GetText();
+            string previous = Chosen.PrefixWord;
+            Chosen.PrefixWord = candidate;
+            if (!Chosen.IsValid())
+            {
+                Chosen.PrefixWord = previous;
+                m_PrefixInput.SetText(previous);
+                m_Status.SetText("Use up to 12 letters, digits, _ or -.");
+            }
+            else
+                m_Status.SetText("Prefix preview updated. Press Save to apply.");
+            RefreshLabels();
+            return true;
+        }
+        return super.OnChange(w, x, y, finished);
+    }
+
     protected void RefreshLabels()
     {
-        TextWidget.Cast(layoutRoot.FindAnyWidget("ColorALabel")).SetText("Primary: " + GRZNameStyle.ColorName(Chosen.ColorA));
-        TextWidget.Cast(layoutRoot.FindAnyWidget("ColorBLabel")).SetText("Secondary: " + GRZNameStyle.ColorName(Chosen.ColorB));
-        TextWidget.Cast(layoutRoot.FindAnyWidget("EffectLabel")).SetText("Style: " + GRZNameStyle.EffectName(Chosen.AnimationMode));
+        GRZAnimationStyle animation = CurrentAnimation();
+        layoutRoot.FindAnyWidget("PrefixControls").Show(m_PrefixTab);
+        layoutRoot.FindAnyWidget("NameTabFill").SetColor(0xFF191919);
+        layoutRoot.FindAnyWidget("PrefixTabFill").SetColor(0xFF191919);
+        if (m_PrefixTab)
+            layoutRoot.FindAnyWidget("PrefixTabFill").SetColor(0xFF981D23);
+        else
+            layoutRoot.FindAnyWidget("NameTabFill").SetColor(0xFF981D23);
+        TextWidget.Cast(layoutRoot.FindAnyWidget("PrefixIconChoiceLabel")).SetText("Icon: " + GRZNameStyle.IconName(Chosen.PrefixIcon) + " >");
+        string prefixText;
+        if (Chosen.PrefixWord != "")
+            prefixText = "[" + Chosen.PrefixWord + "]";
+        m_PrefixPreview.SetText(prefixText);
+        GRZNameStyle.ApplyIcon(m_PrefixPreviewIcon, Chosen.PrefixIcon);
+        int wordWidth, wordHeight;
+        m_PrefixPreview.GetTextSize(wordWidth, wordHeight);
+        int iconWidth;
+        if (Chosen.PrefixIcon > 0)
+            iconWidth = 32;
+        string playerName;
+        g_Game.GetPlayerName(playerName);
+        m_Preview.SetText(playerName);
+        int nameWidth, nameHeight;
+        m_Preview.GetTextSize(nameWidth, nameHeight);
+        float start = Math.Max(44, (720 - iconWidth - wordWidth - nameWidth - 8) * 0.5);
+        m_PrefixPreviewIcon.SetPos(start, 242);
+        m_PrefixPreview.SetPos(start + iconWidth, 238);
+        m_PrefixPreview.SetSize(wordWidth + 4, 32);
+        m_Preview.SetPos(start + iconWidth + wordWidth + 8, 238);
+        m_Preview.SetSize(Math.Max(32, nameWidth + 4), 32);
+
+        TextWidget.Cast(layoutRoot.FindAnyWidget("ColorALabel")).SetText("Primary: " + GRZNameStyle.ColorName(animation.ColorA));
+        TextWidget.Cast(layoutRoot.FindAnyWidget("ColorBLabel")).SetText("Secondary: " + GRZNameStyle.ColorName(animation.ColorB));
+        TextWidget.Cast(layoutRoot.FindAnyWidget("EffectLabel")).SetText("Style: " + GRZNameStyle.EffectName(animation.AnimationMode));
         string speed = "Normal";
-        if (Chosen.Speed == 0)
+        if (animation.Speed == 0)
             speed = "Slow";
-        if (Chosen.Speed == 2)
+        if (animation.Speed == 2)
             speed = "Fast";
         TextWidget.Cast(layoutRoot.FindAnyWidget("SpeedLabel")).SetText("Speed: " + speed);
         RefreshPalette();
@@ -408,9 +506,10 @@ class GRZKillfeedMenu extends UIScriptedMenu
 
     protected void RefreshPalette()
     {
-        int selected = Chosen.ColorA;
+        GRZAnimationStyle animation = CurrentAnimation();
+        int selected = animation.ColorA;
         if (m_ColorTarget == 1)
-            selected = Chosen.ColorB;
+            selected = animation.ColorB;
         layoutRoot.FindAnyWidget("PrimaryActive").SetColor(0x00000000);
         layoutRoot.FindAnyWidget("SecondaryActive").SetColor(0x00000000);
         if (m_ColorTarget == 0)

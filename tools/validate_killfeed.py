@@ -1,6 +1,7 @@
 """Validate packaged files and static UI bindings, not Enforce execution."""
 import hashlib
 import io
+import json
 import re
 import struct
 from pathlib import Path
@@ -52,6 +53,36 @@ def verify_pbo(path):
     return data, files
 
 
+def verify_menu_bounds(layout):
+    # Absolute swatch children must stay local when top-level controls move.
+    stack, nodes = [], []
+    pending = None
+    for line in layout.splitlines():
+        line = line.strip()
+        match = re.match(r"\w+WidgetClass\s+(\w+)$", line)
+        if match:
+            pending = {"name": match[1], "parent": next((n for n in reversed(stack) if n), None)}
+            nodes.append(pending)
+        elif line == "{":
+            stack.append(pending)
+            pending = None
+        elif line == "}":
+            stack.pop()
+        elif stack:
+            node = next((n for n in reversed(stack) if n), None)
+            match = re.match(r"(position|size) ([\d.]+) ([\d.]+)$", line)
+            if node and match:
+                node[match[1]] = tuple(map(float, match.groups()[1:]))
+    for node in nodes:
+        parent = node["parent"]
+        if not parent or parent["name"] == "GRZKillfeedMenuRoot":
+            continue
+        x, y = node["position"]
+        w, h = node["size"]
+        pw, ph = parent["size"]
+        assert x >= 0 and y >= 0 and x + w <= pw and y + h <= ph, node["name"]
+
+
 def main():
     data, files = verify_pbo(ROOT / "downloads/GRZ_Killfeed.pbo")
     with ZipFile(ROOT / "downloads/GRZ_Killfeed-mod.zip") as archive:
@@ -74,7 +105,8 @@ def main():
     referenced = set(re.findall(r'FindAnyWidget\("(\w+)"\)', text)) - {"InputEditBoxWidget"}
     assert not referenced - declared, referenced - declared
     for resource in re.findall(r'"GRZ_Killfeed/(gui/[^"\n]+)"', text):
-        assert resource in files, resource
+        if not resource.endswith("/"):
+            assert resource in files, resource
     types = files["scripts/3_Game/GRZ_Killfeed/GRZKillfeedTypes.c"].decode()
     assert len(set(re.findall(r"= (164728010\d);", types))) == 4
     assert "PALETTE_COUNT = 12" in types and "EFFECT_COUNT = 6" in types
@@ -82,11 +114,11 @@ def main():
     server = files["scripts/4_World/GRZ_Killfeed/GRZKillfeedServer.c"].decode()
     player = files["scripts/4_World/GRZ_Killfeed/GRZKillfeedPlayer.c"].decode()
     # Static wire-format alignment only; not a runtime authorization test.
-    write_fields = re.findall(r"rpc.Write\(style\.(\w+)\)", server)
-    read_fields = re.findall(r"ctx.Read\(style\.(\w+)\)", player)
-    assert write_fields == read_fields == ["ColorA", "ColorB", "AnimationMode", "Speed"]
+    write_fields = re.findall(r"rpc.Write\(style\.([\w.]+)\)", server)
+    read_fields = re.findall(r"ctx.Read\(style\.([\w.]+)\)", player)
+    assert write_fields == read_fields == ["ColorA", "ColorB", "AnimationMode", "Speed", "PrefixIcon", "PrefixWord", "PrefixAnimation.ColorA", "PrefixAnimation.ColorB", "PrefixAnimation.AnimationMode", "PrefixAnimation.Speed"]
     row = files["gui/layouts/row.layout"].decode()
-    assert "ImageWidgetClass" not in row, "Killfeed entries should have no thorn image"
+    assert "Outline" not in row, "Killfeed entries should have no thorn image"
     assert "color 0 0 0 0.45" in row
     for edge in ["BorderTop", "BorderBottom", "BorderLeft", "BorderRight"]:
         assert f"PanelWidgetClass {edge}" in row
@@ -119,7 +151,7 @@ def main():
     for index in range(12):
         for prefix in ["Swatch", "SwatchFill", "SwatchBorder", "SwatchLabel"]:
             assert prefix + str(index) in declared
-    assert "Chosen.ColorA = i;" in menu and "Chosen.ColorB = i;" in menu
+    assert "animation.ColorA = i;" in menu and "animation.ColorB = i;" in menu
     assert "row.Killer.SetTextExactSize(24)" in mission
     assert "row.Victim.SetTextExactSize(24)" in mission
     focus = files["scripts/3_Game/GRZ_Killfeed/GRZKillfeedFocus.c"].decode()
@@ -139,9 +171,25 @@ def main():
     assert "GRZKillfeedBus.AppDeactivated.Remove(CloseSafely);" in closer
     assert "ResetGameFocus" not in menu
     menu_layout = files["gui/layouts/menu.layout"].decode()
+    verify_menu_bounds(menu_layout)
     assert 'text "GRZ Killfeed"' in menu_layout
     assert "ImageWidgetClass MenuLogo" in menu_layout
     assert "MenuOutline" not in menu_layout
+    client_fields = re.findall(r"rpc.Write\(Chosen\.([\w.]+)\)", menu)
+    assert client_fields == write_fields
+    for widget in ["NameTab", "PrefixTab", "PrefixControls", "PrefixWordInput", "PrefixIconChoice", "PrefixPreviewWord", "PrefixPreviewIcon"]:
+        assert widget in declared
+    assert "PrefixWord.Length() > 12" in types
+    assert "!super.IsValid()" in types and "!PrefixAnimation.IsValid()" in types
+    catalog = json.loads(files["gui/prefix_icons.json"])
+    assert len(catalog["Icons"]) <= 64
+    for icon in catalog["Icons"]:
+        assert 0 < len(icon["Label"]) <= 32
+        assert icon["Texture"].startswith("GRZ_Killfeed/gui/textures/") and ".." not in icon["Texture"]
+        assert icon["Texture"].removeprefix("GRZ_Killfeed/") in files
+    assert "KillerStyle.PrefixAnimation.ColorAt(Age)" in mission
+    assert "VictimStyle.PrefixAnimation.ColorAt(Age)" in mission
+    assert "580 + killerExtra + victimExtra" in mission
     print(f"Verified PBO prefix/checksum and {len(files)} source/asset entries; ZIP payloads match.")
     print("Layout/widget/resource bindings and style wire-field order checked.")
     print("These checks do not compile Enforce Script or test networking, permissions, or DayZ Editor.")

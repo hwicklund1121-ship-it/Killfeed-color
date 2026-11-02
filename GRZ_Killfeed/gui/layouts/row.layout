@@ -128,5 +128,61 @@ TextWidgetClass Detail
  "text valign" center
  text ""
 }
+ImageWidgetClass KillerPrefixIcon
+{
+ position 0 19
+ size 22 22
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 1 1 1 1
+ mode blend
+ stretch 1
+}
+TextWidgetClass KillerPrefix
+{
+ position 0 19
+ size 64 22
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ text ""
+}
+ImageWidgetClass VictimPrefixIcon
+{
+ position 0 19
+ size 22 22
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 1 1 1 1
+ mode blend
+ stretch 1
+}
+TextWidgetClass VictimPrefix
+{
+ position 0 19
+ size 64 22
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ text ""
+}
  }
 }

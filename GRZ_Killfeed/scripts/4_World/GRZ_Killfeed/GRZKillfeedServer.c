@@ -103,6 +103,12 @@ class GRZKillfeedServer
         rpc.Write(style.ColorB);
         rpc.Write(style.AnimationMode);
         rpc.Write(style.Speed);
+        rpc.Write(style.PrefixIcon);
+        rpc.Write(style.PrefixWord);
+        rpc.Write(style.PrefixAnimation.ColorA);
+        rpc.Write(style.PrefixAnimation.ColorB);
+        rpc.Write(style.PrefixAnimation.AnimationMode);
+        rpc.Write(style.PrefixAnimation.Speed);
     }
 
     static void PlayerKilled(PlayerBase victim, Object source)

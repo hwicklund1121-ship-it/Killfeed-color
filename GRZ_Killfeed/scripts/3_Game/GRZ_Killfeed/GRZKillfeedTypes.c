@@ -6,7 +6,7 @@ class GRZKillfeedRPC
     static const int KILL = 1647280104;
 }
 
-class GRZNameStyle
+class GRZAnimationStyle
 {
     static const int PALETTE_COUNT = 12;
     static const int EFFECT_COUNT = 6;
@@ -120,6 +120,105 @@ class GRZNameStyle
         int blue = (a & 255) * (1 - amount) + (b & 255) * amount;
         return ARGB(255, r, g, blue);
     }
+}
+
+class GRZPrefixIconEntry
+{
+    string Label;
+    string Texture;
+}
+
+class GRZPrefixIconCatalog
+{
+    ref array<ref GRZPrefixIconEntry> Icons = new array<ref GRZPrefixIconEntry>;
+}
+
+class GRZPrefixIcons
+{
+    protected static ref GRZPrefixIconCatalog s_Catalog;
+
+    static GRZPrefixIconCatalog Catalog()
+    {
+        if (!s_Catalog)
+        {
+            s_Catalog = new GRZPrefixIconCatalog;
+            GRZPrefixIconCatalog loaded;
+            string error;
+            if (JsonFileLoader<GRZPrefixIconCatalog>.LoadFile("GRZ_Killfeed/gui/prefix_icons.json", loaded, error) && loaded && loaded.Icons && loaded.Icons.Count() <= 64)
+            {
+                bool valid = true;
+                foreach (GRZPrefixIconEntry entry : loaded.Icons)
+                {
+                    if (!entry || entry.Label == "" || entry.Label.Length() > 32 || entry.Texture.IndexOf("GRZ_Killfeed/gui/textures/") != 0 || entry.Texture.IndexOf("..") >= 0 || !FileExist(entry.Texture))
+                        valid = false;
+                }
+                if (valid)
+                    s_Catalog = loaded;
+                else
+                    Error("GRZ Killfeed: invalid custom icon catalog. Icon picker disabled.");
+            }
+        }
+        return s_Catalog;
+    }
+
+    static int Count()
+    {
+        return Catalog().Icons.Count();
+    }
+}
+
+class GRZNameStyle extends GRZAnimationStyle
+{
+    int PrefixIcon;
+    string PrefixWord;
+    ref GRZAnimationStyle PrefixAnimation = new GRZAnimationStyle;
+
+    override bool IsValid()
+    {
+        if (!super.IsValid() || !PrefixAnimation || !PrefixAnimation.IsValid() || PrefixIcon < 0 || PrefixIcon > GRZPrefixIcons.Count() || PrefixWord.Length() > 12)
+            return false;
+        string allowed = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-";
+        for (int i = 0; i < PrefixWord.Length(); i++)
+        {
+            if (allowed.IndexOf(PrefixWord.Substring(i, 1)) < 0)
+                return false;
+        }
+        return true;
+    }
+
+    GRZNameStyle Clone()
+    {
+        GRZNameStyle copy = new GRZNameStyle;
+        copy.ColorA = ColorA;
+        copy.ColorB = ColorB;
+        copy.AnimationMode = AnimationMode;
+        copy.Speed = Speed;
+        copy.PrefixIcon = PrefixIcon;
+        copy.PrefixWord = PrefixWord;
+        copy.PrefixAnimation.ColorA = PrefixAnimation.ColorA;
+        copy.PrefixAnimation.ColorB = PrefixAnimation.ColorB;
+        copy.PrefixAnimation.AnimationMode = PrefixAnimation.AnimationMode;
+        copy.PrefixAnimation.Speed = PrefixAnimation.Speed;
+        return copy;
+    }
+
+    static string IconName(int icon)
+    {
+        if (icon > 0 && icon <= GRZPrefixIcons.Count())
+            return GRZPrefixIcons.Catalog().Icons[icon - 1].Label;
+        return "None";
+    }
+
+    static void ApplyIcon(ImageWidget widget, int icon)
+    {
+        widget.Show(icon > 0 && icon <= GRZPrefixIcons.Count());
+        if (icon > 0 && icon <= GRZPrefixIcons.Count())
+        {
+            widget.SetFlags(WidgetFlags.SOURCEALPHA | WidgetFlags.BLEND | WidgetFlags.STRETCH);
+            widget.LoadImageFile(0, GRZPrefixIcons.Catalog().Icons[icon - 1].Texture);
+        }
+    }
+
 }
 
 class GRZKillfeedMessage

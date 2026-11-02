@@ -13,7 +13,7 @@ FrameWidgetClass GRZKillfeedMenuRoot
 PanelWidgetClass MenuPanel
 {
  position 0 0
- size 720 500
+ size 720 596
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -35,7 +35,7 @@ PanelWidgetClass MenuTop
 }
 PanelWidgetClass MenuBottom
 {
- position 0 499
+ position 0 595
  size 720 1
  hexactpos 1
  vexactpos 1
@@ -48,7 +48,7 @@ PanelWidgetClass MenuBottom
 PanelWidgetClass MenuLeft
 {
  position 0 2
- size 1 497
+ size 1 593
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -60,7 +60,7 @@ PanelWidgetClass MenuLeft
 PanelWidgetClass MenuRight
 {
  position 719 2
- size 1 497
+ size 1 593
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -126,7 +126,7 @@ PanelWidgetClass HeaderDivider
 }
 PanelWidgetClass PreviewCard
 {
- position 28 116
+ position 28 212
  size 664 64
  hexactpos 1
  vexactpos 1
@@ -138,7 +138,7 @@ PanelWidgetClass PreviewCard
 }
 TextWidgetClass PreviewCaption
 {
- position 44 122
+ position 44 218
  size 632 14
  hexactpos 1
  vexactpos 1
@@ -154,7 +154,7 @@ TextWidgetClass PreviewCaption
 }
 TextWidgetClass Preview
 {
- position 44 142
+ position 44 238
  size 632 32
  hexactpos 1
  vexactpos 1
@@ -170,7 +170,7 @@ TextWidgetClass Preview
 }
 ButtonWidgetClass ColorA
 {
- position 28 196
+ position 28 292
  size 320 36
  hexactpos 1
  vexactpos 1
@@ -222,7 +222,7 @@ TextWidgetClass ColorALabel
 }
 ButtonWidgetClass ColorB
 {
- position 372 196
+ position 372 292
  size 320 36
  hexactpos 1
  vexactpos 1
@@ -274,7 +274,7 @@ TextWidgetClass ColorBLabel
 }
 PanelWidgetClass PrimaryActive
 {
- position 28 230
+ position 28 326
  size 320 2
  hexactpos 1
  vexactpos 1
@@ -286,7 +286,7 @@ PanelWidgetClass PrimaryActive
 }
 PanelWidgetClass SecondaryActive
 {
- position 372 230
+ position 372 326
  size 320 2
  hexactpos 1
  vexactpos 1
@@ -298,7 +298,7 @@ PanelWidgetClass SecondaryActive
 }
 ButtonWidgetClass Swatch0
 {
- position 37 244
+ position 37 340
  size 96 32
  hexactpos 1
  vexactpos 1
@@ -350,7 +350,7 @@ TextWidgetClass SwatchLabel0
 }
 ButtonWidgetClass Swatch1
 {
- position 147 244
+ position 147 340
  size 96 32
  hexactpos 1
  vexactpos 1
@@ -402,7 +402,7 @@ TextWidgetClass SwatchLabel1
 }
 ButtonWidgetClass Swatch2
 {
- position 257 244
+ position 257 340
  size 96 32
  hexactpos 1
  vexactpos 1
@@ -454,7 +454,7 @@ TextWidgetClass SwatchLabel2
 }
 ButtonWidgetClass Swatch3
 {
- position 367 244
+ position 367 340
  size 96 32
  hexactpos 1
  vexactpos 1
@@ -506,7 +506,7 @@ TextWidgetClass SwatchLabel3
 }
 ButtonWidgetClass Swatch4
 {
- position 477 244
+ position 477 340
  size 96 32
  hexactpos 1
  vexactpos 1
@@ -558,7 +558,7 @@ TextWidgetClass SwatchLabel4
 }
 ButtonWidgetClass Swatch5
 {
- position 587 244
+ position 587 340
  size 96 32
  hexactpos 1
  vexactpos 1
@@ -610,7 +610,7 @@ TextWidgetClass SwatchLabel5
 }
 ButtonWidgetClass Swatch6
 {
- position 37 286
+ position 37 382
  size 96 32
  hexactpos 1
  vexactpos 1
@@ -662,7 +662,7 @@ TextWidgetClass SwatchLabel6
 }
 ButtonWidgetClass Swatch7
 {
- position 147 286
+ position 147 382
  size 96 32
  hexactpos 1
  vexactpos 1
@@ -714,7 +714,7 @@ TextWidgetClass SwatchLabel7
 }
 ButtonWidgetClass Swatch8
 {
- position 257 286
+ position 257 382
  size 96 32
  hexactpos 1
  vexactpos 1
@@ -766,7 +766,7 @@ TextWidgetClass SwatchLabel8
 }
 ButtonWidgetClass Swatch9
 {
- position 367 286
+ position 367 382
  size 96 32
  hexactpos 1
  vexactpos 1
@@ -818,7 +818,7 @@ TextWidgetClass SwatchLabel9
 }
 ButtonWidgetClass Swatch10
 {
- position 477 286
+ position 477 382
  size 96 32
  hexactpos 1
  vexactpos 1
@@ -870,7 +870,7 @@ TextWidgetClass SwatchLabel10
 }
 ButtonWidgetClass Swatch11
 {
- position 587 286
+ position 587 382
  size 96 32
  hexactpos 1
  vexactpos 1
@@ -922,7 +922,7 @@ TextWidgetClass SwatchLabel11
 }
 ButtonWidgetClass Effect
 {
- position 28 336
+ position 28 432
  size 320 36
  hexactpos 1
  vexactpos 1
@@ -974,7 +974,7 @@ TextWidgetClass EffectLabel
 }
 ButtonWidgetClass Speed
 {
- position 372 336
+ position 372 432
  size 320 36
  hexactpos 1
  vexactpos 1
@@ -1026,7 +1026,7 @@ TextWidgetClass SpeedLabel
 }
 TextWidgetClass Status
 {
- position 28 388
+ position 28 484
  size 664 20
  hexactpos 1
  vexactpos 1
@@ -1042,7 +1042,7 @@ TextWidgetClass Status
 }
 ButtonWidgetClass Test
 {
- position 28 432
+ position 28 528
  size 202 36
  hexactpos 1
  vexactpos 1
@@ -1094,7 +1094,7 @@ TextWidgetClass TestLabel
 }
 ButtonWidgetClass Save
 {
- position 258 432
+ position 258 528
  size 202 36
  hexactpos 1
  vexactpos 1
@@ -1146,7 +1146,7 @@ TextWidgetClass SaveLabel
 }
 ButtonWidgetClass Close
 {
- position 488 432
+ position 488 528
  size 204 36
  hexactpos 1
  vexactpos 1
@@ -1197,6 +1197,204 @@ TextWidgetClass CloseLabel
  }
 }
  }
+}
+ButtonWidgetClass NameTab
+{
+ position 28 112
+ size 320 32
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ color 1 1 1 1
+ {
+PanelWidgetClass NameTabFill
+{
+ position 0 0
+ size 320 32
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.15 0.025 0.025 1
+}
+TextWidgetClass NameTabLabel
+{
+ position 8 0
+ size 304 32
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "NAME"
+}
+ }
+}
+ButtonWidgetClass PrefixTab
+{
+ position 372 112
+ size 320 32
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ color 1 1 1 1
+ {
+PanelWidgetClass PrefixTabFill
+{
+ position 0 0
+ size 320 32
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.15 0.025 0.025 1
+}
+TextWidgetClass PrefixTabLabel
+{
+ position 8 0
+ size 304 32
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "PREFIX"
+}
+ }
+}
+FrameWidgetClass PrefixControls
+{
+ visible 0
+ position 28 156
+ size 664 36
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ {
+ButtonWidgetClass PrefixIconChoice
+{
+ position 0 0
+ size 260 32
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ color 1 1 1 1
+ {
+PanelWidgetClass PrefixIconChoiceFill
+{
+ position 0 0
+ size 260 32
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.15 0.025 0.025 1
+}
+TextWidgetClass PrefixIconChoiceLabel
+{
+ position 8 0
+ size 244 32
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "Icon: None"
+}
+ }
+}
+PanelWidgetClass PrefixWordBacking
+{
+ position 280 0
+ size 384 32
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.12 0.12 0.12 1
+}
+TextWidgetClass PrefixWordCaption
+{
+ position 288 0
+ size 90 32
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 0.8 0.8 0.8 1
+ font "gui/fonts/sdf_MetronLight16"
+ "text valign" center
+ text "Word:"
+}
+EditBoxWidgetClass PrefixWordInput
+{
+ position 348 0
+ size 310 32
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ text ""
+}
+ }
+}
+ImageWidgetClass PrefixPreviewIcon
+{
+ position 44 242
+ size 28 28
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 1 1 1 1
+ mode blend
+ stretch 1
+}
+TextWidgetClass PrefixPreviewWord
+{
+ position 76 238
+ size 180 32
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ text ""
 }
  }
 }

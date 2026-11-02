@@ -1,0 +1,32 @@
+{
+  "Icons": [
+    {
+      "Label": "Skull",
+      "Texture": "GRZ_Killfeed/gui/textures/prefix_skull_ca.paa"
+    },
+    {
+      "Label": "Bat",
+      "Texture": "GRZ_Killfeed/gui/textures/prefix_bat_ca.paa"
+    },
+    {
+      "Label": "Cross",
+      "Texture": "GRZ_Killfeed/gui/textures/prefix_cross_ca.paa"
+    },
+    {
+      "Label": "Fangs",
+      "Texture": "GRZ_Killfeed/gui/textures/prefix_fangs_ca.paa"
+    },
+    {
+      "Label": "Fanged Star",
+      "Texture": "GRZ_Killfeed/gui/textures/prefix_fanged_star_ca.paa"
+    },
+    {
+      "Label": "Biohazard",
+      "Texture": "GRZ_Killfeed/gui/textures/prefix_biohazard_ca.paa"
+    },
+    {
+      "Label": "Crown",
+      "Texture": "GRZ_Killfeed/gui/textures/prefix_crown_ca.paa"
+    }
+  ]
+}

@@ -86,6 +86,6 @@ modded class PlayerBase
 
     protected bool GRZReadStyle(ParamsReadContext ctx, GRZNameStyle style)
     {
-        return ctx.Read(style.ColorA) && ctx.Read(style.ColorB) && ctx.Read(style.AnimationMode) && ctx.Read(style.Speed) && style.IsValid();
+        return ctx.Read(style.ColorA) && ctx.Read(style.ColorB) && ctx.Read(style.AnimationMode) && ctx.Read(style.Speed) && ctx.Read(style.PrefixIcon) && ctx.Read(style.PrefixWord) && ctx.Read(style.PrefixAnimation.ColorA) && ctx.Read(style.PrefixAnimation.ColorB) && ctx.Read(style.PrefixAnimation.AnimationMode) && ctx.Read(style.PrefixAnimation.Speed) && style.IsValid();
     }
 }
