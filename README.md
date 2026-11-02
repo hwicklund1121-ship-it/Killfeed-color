@@ -15,6 +15,8 @@ The weapon panel, native bullet count, fire mode, zeroing, reload/action prompts
 
 ## Download the PBO
 
+Version **0.1.10** strengthens the heart's black floating contour to bring its visual weight closer to the existing heavier blood and weapon outlines. The blood asset is retained after comparing the alternatives, which made its perimeter thinner or closed its floating gap. HUD scripts, positions, label visibility and weapon artwork remain unchanged. Final stroke-weight matching needs checking in DayZ.
+
 Version **0.1.9** offsets the heart's floating black thorn contour farther out, with a transparent gap following the anatomical silhouette. Blood artwork and status icon sizing are unchanged. The weapon frame widens to 440 pixels, with text inset into its clear center; primary text is 18 pixels. The four text rectangles have zero outline alpha in the scaled source texture, confirming that the artwork does not cross their bounds. PBO/ZIP integrity passes; final in-game placement still needs checking.
 
 Version **0.1.8** refines only the heart artwork: a smoother close contour with fewer, smaller barbs, matching the cleaner blood-drop treatment. Blood artwork, weapon panel, HUD scripts, sizing and label visibility remain unchanged from 0.1.7. Texture/PBO validation does not establish the final in-game appearance.
