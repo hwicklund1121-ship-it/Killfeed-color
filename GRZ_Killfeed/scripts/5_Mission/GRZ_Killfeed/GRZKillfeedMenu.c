@@ -10,6 +10,8 @@ class GRZKillfeedClient
 
     static void OpenLocalPreview()
     {
+        if (!g_Game.IsAppActive())
+            return;
         UIScriptedMenu parent = g_Game.GetUIManager().GetMenu();
         GRZKillfeedMenu existing = GRZKillfeedMenu.Cast(parent);
         if (existing)
@@ -22,24 +24,26 @@ class GRZKillfeedClient
         if (!ActiveMenu || !ActiveMenu.GetLayoutRoot())
         {
             ActiveMenu = null;
-            Error("[GRZ Killfeed 0.1.8] Native menu factory did not return an initialized settings menu.");
+            Error("[GRZ Killfeed 0.1.9] Native menu factory did not return an initialized settings menu.");
             g_Game.Chat("GRZ Killfeed: menu creation failed. Check the client script log.", "colorStatusChannel");
             return;
         }
         ActiveMenu.ApplyLocalStyle(LocalStyle);
         ActiveMenu.EnsureVisible();
-        Print("[GRZ Killfeed 0.1.8] Native menu registered and retained.");
+        Print("[GRZ Killfeed 0.1.9] Native menu registered and retained.");
     }
 
     static void ReleaseMenu()
     {
         if (ActiveMenu && ActiveMenu.IsVisible())
-            ActiveMenu.Close();
+            ActiveMenu.CloseSafely();
         ActiveMenu = null;
     }
 
     static void RequestMenu()
     {
+        if (!g_Game.IsAppActive())
+            return;
         Print("[GRZ Killfeed] Menu open requested.");
         // Temporary test behavior: show the menu immediately on every client.
         // Authorization is still required before enabling server-side saves.
@@ -117,6 +121,15 @@ class GRZKillfeedMenu extends UIScriptedMenu
     protected float m_Time;
     protected bool m_LoggedUpdate;
     protected int m_ColorTarget;
+    protected bool m_GRZControlsLocked;
+    protected bool m_GRZDismissRequested;
+    protected bool m_GRZCursorWasVisible;
+
+    void GRZKillfeedMenu()
+    {
+        if (g_Game && g_Game.GetUIManager())
+            m_GRZCursorWasVisible = g_Game.GetUIManager().IsCursorVisible();
+    }
 
     override Widget Init()
     {
@@ -151,15 +164,45 @@ class GRZKillfeedMenu extends UIScriptedMenu
         if (IsOfflinePreview)
             m_Status.SetText("Local preview — server access and persistence are not tested.");
         PositionPanel();
-        Print("[GRZ Killfeed 0.1.8] Init: layout created.");
+        Print("[GRZ Killfeed 0.1.9] Init: layout created.");
         return layoutRoot;
     }
 
     override bool UseMouse() { return true; }
     override bool UseKeyboard() { return true; }
 
+    override void LockControls()
+    {
+        if (m_GRZControlsLocked)
+            return;
+        #ifdef FEATURE_CURSOR
+        if (IsCreatedHidden())
+            return;
+        #endif
+        m_GRZControlsLocked = true;
+        super.LockControls();
+    }
+
+    override void UnlockControls()
+    {
+        if (!m_GRZControlsLocked)
+            return;
+        m_GRZControlsLocked = false;
+        super.UnlockControls();
+        // Editor may have its own cursor without a native parent menu.
+        if (m_GRZCursorWasVisible && !GetParentMenu())
+            g_Game.GetUIManager().ShowUICursor(true);
+    }
+
     override void Update(float timeslice)
     {
+        if (m_GRZDismissRequested)
+            return;
+        if (!g_Game.IsAppActive())
+        {
+            CloseSafely();
+            return;
+        }
         super.Update(timeslice);
         m_Time += timeslice;
         if (m_Preview)
@@ -170,26 +213,59 @@ class GRZKillfeedMenu extends UIScriptedMenu
             m_LoggedUpdate = true;
             float width, height;
             layoutRoot.GetScreenSize(width, height);
-            Print(string.Format("[GRZ Killfeed 0.1.8] Update: root %1 x %2; visible %3.", width, height, layoutRoot.IsVisibleHierarchy()));
+            Print(string.Format("[GRZ Killfeed 0.1.9] Update: root %1 x %2; visible %3.", width, height, layoutRoot.IsVisibleHierarchy()));
         }
     }
 
     override void OnShow()
     {
+        m_GRZDismissRequested = false;
         super.OnShow();
+        GRZKillfeedBus.AppDeactivated.Remove(CloseSafely);
+        GRZKillfeedBus.AppDeactivated.Insert(CloseSafely);
+        if (!g_Game.IsAppActive())
+        {
+            CloseSafely();
+            return;
+        }
         EnsureVisible();
-        Print("[GRZ Killfeed 0.1.8] OnShow called.");
+        Print("[GRZ Killfeed 0.1.9] OnShow called.");
     }
 
     override void OnHide()
     {
-        Print("[GRZ Killfeed 0.1.8] OnHide called.");
+        m_GRZDismissRequested = true;
+        GRZKillfeedBus.AppDeactivated.Remove(CloseSafely);
+        Print("[GRZ Killfeed 0.1.9] OnHide called.");
         super.OnHide();
+    }
+
+    override void OnVisibilityChanged(bool isVisible)
+    {
+        super.OnVisibilityChanged(isVisible);
+        if (!isVisible)
+            CloseSafely();
+    }
+
+    void CloseSafely()
+    {
+        if (m_GRZDismissRequested)
+            return;
+        m_GRZDismissRequested = true;
+        GRZKillfeedBus.AppDeactivated.Remove(CloseSafely);
+        g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(GRZKillfeedClient.OpenLocalPreview);
+        g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(GRZKillfeedClient.RequestMenu);
+        if (layoutRoot)
+            layoutRoot.Show(false);
+        // Native Close can finish on a later frame. Unlock now, with the
+        // guard above preventing the later OnHide from decrementing twice.
+        UnlockControls();
+        Close();
     }
 
     void EnsureVisible()
     {
-        if (!layoutRoot)
+        if (!layoutRoot || m_GRZDismissRequested || !g_Game.IsAppActive())
             return;
         PositionPanel();
         layoutRoot.SetSort(100000);
@@ -220,9 +296,9 @@ class GRZKillfeedMenu extends UIScriptedMenu
 
     override bool OnKeyDown(Widget w, int x, int y, int key)
     {
-        if (key == KeyCode.KC_ESCAPE)
+        if (key == KeyCode.KC_ESCAPE || key == KeyCode.KC_TAB)
         {
-            Close();
+            CloseSafely();
             return true;
         }
         return super.OnKeyDown(w, x, y, key);
@@ -230,6 +306,8 @@ class GRZKillfeedMenu extends UIScriptedMenu
 
     override bool OnClick(Widget w, int x, int y, int button)
     {
+        if (m_GRZDismissRequested)
+            return true;
         string name = w.GetName();
         for (int i = 0; i < GRZNameStyle.PALETTE_COUNT; i++)
         {
@@ -258,10 +336,10 @@ class GRZKillfeedMenu extends UIScriptedMenu
                 return true;
             case "Effect": Chosen.AnimationMode = (Chosen.AnimationMode + 1) % GRZNameStyle.EFFECT_COUNT; break;
             case "Speed": Chosen.Speed = (Chosen.Speed + 1) % 3; break;
-            case "Close": Close(); return true;
+            case "Close": CloseSafely(); return true;
             case "Test":
                 GRZKillfeedClient.Demo(Chosen);
-                Close();
+                CloseSafely();
                 return true;
             case "Save":
                 if (IsOfflinePreview)

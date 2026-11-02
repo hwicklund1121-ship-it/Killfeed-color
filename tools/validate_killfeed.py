@@ -121,6 +121,22 @@ def main():
     assert "Chosen.ColorA = i;" in menu and "Chosen.ColorB = i;" in menu
     assert "row.Killer.SetTextExactSize(20)" in mission
     assert "row.Victim.SetTextExactSize(20)" in mission
+    focus = files["scripts/3_Game/GRZ_Killfeed/GRZKillfeedFocus.c"].decode()
+    assert "override void OnDeactivateMessage()" in focus
+    assert "GRZKillfeedBus.AppDeactivated.Invoke();" in focus
+    assert "override void OnVisibilityChanged(bool isVisible)" in menu
+    assert "key == KeyCode.KC_ESCAPE || key == KeyCode.KC_TAB" in menu
+    lock = menu.split("override void LockControls()", 1)[1].split("override void UnlockControls()", 1)[0]
+    unlock = menu.split("override void UnlockControls()", 1)[1].split("override void Update", 1)[0]
+    assert "if (m_GRZControlsLocked)" in lock
+    assert lock.index("m_GRZControlsLocked = true;") < lock.index("super.LockControls();")
+    assert "if (!m_GRZControlsLocked)" in unlock
+    assert unlock.index("m_GRZControlsLocked = false;") < unlock.index("super.UnlockControls();")
+    closer = menu.split("void CloseSafely()", 1)[1].split("void EnsureVisible()", 1)[0]
+    assert "if (m_GRZDismissRequested)" in closer
+    assert closer.index("UnlockControls();") < closer.index("Close();")
+    assert "GRZKillfeedBus.AppDeactivated.Remove(CloseSafely);" in closer
+    assert "ResetGameFocus" not in menu
     print(f"Verified PBO prefix/checksum and {len(files)} source/asset entries; ZIP payloads match.")
     print("Layout/widget/resource bindings and style wire-field order checked.")
     print("These checks do not compile Enforce Script or test networking, permissions, or DayZ Editor.")

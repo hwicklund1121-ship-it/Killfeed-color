@@ -1,6 +1,6 @@
 # GRZ Killfeed
 
-Separate **DayZ PC** mod, version **0.1.8**. The finished GRZ Custom Hud is unchanged.
+Separate **DayZ PC** mod, version **0.1.9**. The finished GRZ Custom Hud is unchanged.
 
 Each entry shows **killer name | actual gun model | victim name**, with the **distance centered underneath the gun**. There is no gun-name text or arrow. The model includes the captured weapon attachments. Rows have plain black outlines and a 45%-opaque black background. Rows are 600×60 pixels with 4-pixel spacing. The gun viewport is 240×36 pixels (previously 172×26), and both names use 20-pixel text with a thin black outline for readability. The newest five entries stay at the top right for eight seconds, fading during their last second.
 
@@ -9,6 +9,12 @@ The custom 720×540 settings menu has a solid black background, white text and w
 This is an **unsigned development build**. Archive, resource and layout checks pass; DayZ compilation, networking, 3D rendering and Editor behavior have not been executed in this cloud machine.
 
 The supplied client log confirms `/killfeed` reaches the mod and its layout initializes, but it was not remaining visible. Version 0.1.7 registers the menu with `MissionBase.CreateScriptedMenu`, opens it through `UIManager.EnterScriptedMenu`, and retains a strong reference until mission cleanup. The menu root has explicit full-screen sizing, a high draw order and placement derived from the workspace. Lifecycle logs identify Init, OnShow, first Update and OnHide. Actual display in Editor still needs verification.
+
+## Closing and Alt-Tab
+
+The settings menu closes when DayZ loses application focus or becomes hidden. Escape, Tab and the Close button use the same safe-close path. Controls are released immediately, even if native menu teardown waits until a later frame; guarded lock/unlock methods prevent the later OnHide from decrementing focus twice. The previous Editor cursor state is restored without resetting other menus' input focus.
+
+Opening callbacks are canceled on dismissal, and inactive-app guards stop a delayed command from reopening the menu in the background. Reopen it with `/killfeed` after returning. Saved settings remain on the server; no automatic save is performed when closing. Alt-Tab behavior still needs testing in DayZ/Editor.
 
 ## Open and test the menu now
 
@@ -64,6 +70,7 @@ Use a private dedicated server with two clients and inspect server/client script
 - Save a style, reconnect and restart; verify persistence. Revoke access and restart; verify default styling returns.
 - Check gun, melee, fist and player-driven vehicle kills on both clients. Verify names, distance, gun models and all visible attachments.
 - Check all colors/effects on killer and victim names, HUD toggle, death/respawn, reconnect and resolutions.
+- Open the menu, Alt-Tab away and return repeatedly. Verify it closes, gameplay controls/cursor recover, and `/killfeed` can reopen it. Check Escape, Tab, Close, a pending command during focus loss, and returning to the Editor's existing cursor/parent menu.
 - Test six quick entries, the five-row limit, expiry and removal of local preview objects. Late joins do not replay historical kills.
 - Test malformed config/settings and unwritable profiles: files must be preserved and failed saves reported.
 
