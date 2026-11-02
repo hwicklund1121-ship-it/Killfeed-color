@@ -24,13 +24,13 @@ class GRZKillfeedClient
         if (!ActiveMenu || !ActiveMenu.GetLayoutRoot())
         {
             ActiveMenu = null;
-            Error("[GRZ Killfeed 0.1.12] Native menu factory did not return an initialized settings menu.");
+            Error("[GRZ Killfeed 0.1.13] Native menu factory did not return an initialized settings menu.");
             g_Game.Chat("GRZ Killfeed: menu creation failed. Check the client script log.", "colorStatusChannel");
             return;
         }
         ActiveMenu.ApplyLocalStyle(LocalStyle);
         ActiveMenu.EnsureVisible();
-        Print("[GRZ Killfeed 0.1.12] Native menu registered and retained.");
+        Print("[GRZ Killfeed 0.1.13] Native menu registered and retained.");
     }
 
     static void ReleaseMenu()
@@ -63,7 +63,7 @@ class GRZKillfeedClient
         {
             PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
             if (player)
-                player.MessageStatus("GRZ Killfeed: /killfeed test is available only in offline editor sessions.");
+                player.MessageStatus("GRZ Killfeed: /grzvip test is available only in offline editor sessions.");
             return;
         }
         Demo(LocalStyle);
@@ -94,13 +94,13 @@ modded class ChatInputMenu
         {
             string command = input.GetText().Trim();
             command.ToLower();
-            if (command == "/killfeed")
+            if (command == "/grzvip")
             {
                 Close();
                 g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZKillfeedClient.RequestMenu, 150, false);
                 return true;
             }
-            if (command == "/killfeed test")
+            if (command == "/grzvip test")
             {
                 Close();
                 g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZKillfeedClient.TestOffline, 150, false);
@@ -174,7 +174,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
         if (IsOfflinePreview)
             m_Status.SetText("Local preview — server access and persistence are not tested.");
         PositionPanel();
-        Print("[GRZ Killfeed 0.1.12] Init: layout created.");
+        Print("[GRZ Killfeed 0.1.13] Init: layout created.");
         return layoutRoot;
     }
 
@@ -228,7 +228,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
             m_LoggedUpdate = true;
             float width, height;
             layoutRoot.GetScreenSize(width, height);
-            Print(string.Format("[GRZ Killfeed 0.1.12] Update: root %1 x %2; visible %3.", width, height, layoutRoot.IsVisibleHierarchy()));
+            Print(string.Format("[GRZ Killfeed 0.1.13] Update: root %1 x %2; visible %3.", width, height, layoutRoot.IsVisibleHierarchy()));
         }
     }
 
@@ -244,14 +244,14 @@ class GRZKillfeedMenu extends UIScriptedMenu
             return;
         }
         EnsureVisible();
-        Print("[GRZ Killfeed 0.1.12] OnShow called.");
+        Print("[GRZ Killfeed 0.1.13] OnShow called.");
     }
 
     override void OnHide()
     {
         m_GRZDismissRequested = true;
         GRZKillfeedBus.AppDeactivated.Remove(CloseSafely);
-        Print("[GRZ Killfeed 0.1.12] OnHide called.");
+        Print("[GRZ Killfeed 0.1.13] OnHide called.");
         super.OnHide();
     }
 

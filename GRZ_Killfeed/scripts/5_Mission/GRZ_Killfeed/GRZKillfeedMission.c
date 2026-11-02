@@ -139,7 +139,7 @@ modded class MissionGameplay
             {
                 string command = chat.param3.Trim();
                 command.ToLower();
-                if (command == "/killfeed")
+                if (command == "/grzvip")
                 {
                     g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZKillfeedClient.RequestMenu, 150, false);
                     return;

@@ -1,6 +1,6 @@
 # GRZ Custom Hud
 
-The separate **GRZ Killfeed** mod, `/killfeed` menu, Steam-ID access config and DayZ Editor preview instructions are documented in [KILLFEED.md](KILLFEED.md). Its PBO/ZIP are in `downloads/GRZ_Killfeed*`; the HUD downloads below remain separate.
+The separate **GRZ Killfeed** mod, `/grzvip` menu, Steam-ID access config and DayZ Editor preview instructions are documented in [KILLFEED.md](KILLFEED.md). Its PBO/ZIP are in `downloads/GRZ_Killfeed*`; the HUD downloads below remain separate.
 
 Development version of a **DayZ PC** HUD mod: white heart and blood-drop artwork with black contour thorns, a white-text weapon/ammo panel with a black thorn outline, reload prompts, a stance indicator and a slim stamina bar beneath the weapon panel. No third-party mod dependencies are required. Critical states pulse opacity. Status labels and numeric health/blood percentages are not shown.
 

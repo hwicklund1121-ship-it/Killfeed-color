@@ -1,6 +1,6 @@
 # GRZ Killfeed
 
-Separate **DayZ PC** mod, version **0.1.12**. The GRZ Custom Hud is packaged separately.
+Separate **DayZ PC** mod, version **0.1.13**. The GRZ Custom Hud is packaged separately.
 
 Each entry shows **killer name | actual gun model | distance | victim name** on one horizontal line. There is no gun-name text or arrow. The model includes the captured weapon attachments. Rows have plain black outlines and a 45%-opaque black background. Rows start at 580×60 pixels with 4-pixel spacing; prefixes add only their measured width, keeping names and gun apart without unused gaps. The gun viewport is 180×56 pixels with a closer model camera, distance text is 20 pixels, and both names use 24-pixel text with a thin black outline for readability. The newest five entries stay at the top right for eight seconds, fading during their last second.
 
@@ -8,24 +8,24 @@ The custom 720×596 settings menu has a clean black background, red accents, the
 
 This is an **unsigned development build**. Archive, resource and layout checks pass; DayZ compilation, networking, 3D rendering and Editor behavior have not been executed in this cloud machine.
 
-The supplied client log confirms `/killfeed` reaches the mod and its layout initializes, but it was not remaining visible. Version 0.1.7 registers the menu with `MissionBase.CreateScriptedMenu`, opens it through `UIManager.EnterScriptedMenu`, and retains a strong reference until mission cleanup. The menu root has explicit full-screen sizing, a high draw order and placement derived from the workspace. Lifecycle logs identify Init, OnShow, first Update and OnHide. Actual display in Editor still needs verification.
+The supplied client log confirms `/grzvip` reaches the mod and its layout initializes, but it was not remaining visible. Version 0.1.7 registers the menu with `MissionBase.CreateScriptedMenu`, opens it through `UIManager.EnterScriptedMenu`, and retains a strong reference until mission cleanup. The menu root has explicit full-screen sizing, a high draw order and placement derived from the workspace. Lifecycle logs identify Init, OnShow, first Update and OnHide. Actual display in Editor still needs verification.
 
 ## Closing and Alt-Tab
 
 The settings menu closes when DayZ loses application focus or becomes hidden. Escape, Tab and the Close button use the same safe-close path. Controls are released immediately, even if native menu teardown waits until a later frame; guarded lock/unlock methods prevent the later OnHide from decrementing focus twice. The previous Editor cursor state is restored without resetting other menus' input focus.
 
-Opening callbacks are canceled on dismissal, and inactive-app guards stop a delayed command from reopening the menu in the background. Reopen it with `/killfeed` after returning. Saved settings remain on the server; no automatic save is performed when closing. Alt-Tab behavior still needs testing in DayZ/Editor.
+Opening callbacks are canceled on dismissal, and inactive-app guards stop a delayed command from reopening the menu in the background. Reopen it with `/grzvip` after returning. Saved settings remain on the server; no automatic save is performed when closing. Alt-Tab behavior still needs testing in DayZ/Editor.
 
 ## Open and test the menu now
 
 1. Install/load this PBO, then restart DayZ and enter your Editor mission or server.
-2. Open chat, type **`/killfeed`**, and press Enter.
+2. Open chat, type **`/grzvip`**, and press Enter.
 3. The menu opens immediately as a local preview. **No Steam-ID whitelist is needed just to open or preview it.** This is the temporary testing behavior requested by the user. F7 has been removed.
 4. Select **Primary** or **Secondary**, click a color swatch, then choose the style and speed. Choose **Preview feed** to close the menu and display a private sample entry: your name, an M4 with optic/handguard/stock/suppressor/magazine, and a dummy victim, with 175 m beside the gun.
 
 In an offline/local-host session, Save applies to local previews only. In normal multiplayer, the menu requests permission from the server after opening: an approved Steam ID enables persistent server saves; a denied request leaves the menu open in preview mode. A private preview is never broadcast as a real kill.
 
-`/killfeed test` creates another local sample in offline/local-host testing. If Editor replaces the normal chat UI, a local chat-event fallback also recognizes `/killfeed`. The optional client launch parameter `-GRZKillfeedPreview` still auto-opens a private preview after the gameplay mission initializes. Remove it for normal play. It cannot grant server permissions.
+`/grzvip test` creates another local sample in offline/local-host testing. If Editor replaces the normal chat UI, a local chat-event fallback also recognizes `/grzvip`. The optional client launch parameter `-GRZKillfeedPreview` still auto-opens a private preview after the gameplay mission initializes. Remove it for normal play. It cannot grant server permissions.
 
 Local preview does **not** validate the slash-command hook in every Editor variant, real kill attribution, server access, networking or persistence. Some Editor modes replace normal gameplay initialization and may need compatibility work.
 
@@ -65,12 +65,12 @@ Only fatal sources with a player identity are credited. Suicides, infected/anima
 
 Use a private dedicated server with two clients and inspect server/client script logs:
 
-- Verify compilation and `/killfeed` opening with an empty whitelist. Preview must work, but live customization must not.
+- Verify compilation and `/grzvip` opening with an empty whitelist. Preview must work, but live customization must not.
 - Add one real SteamID64 and restart. Verify only that player can save live styles, and that another player cannot impersonate it.
 - Save a style, reconnect and restart; verify persistence. Revoke access and restart; verify default styling returns.
 - Check gun, melee, fist and player-driven vehicle kills on both clients. Verify names, distance, gun models and all visible attachments.
 - Check all colors/effects on killer and victim names, HUD toggle, death/respawn, reconnect and resolutions.
-- Open the menu, Alt-Tab away and return repeatedly. Verify it closes, gameplay controls/cursor recover, and `/killfeed` can reopen it. Check Escape, Tab, Close, a pending command during focus loss, and returning to the Editor's existing cursor/parent menu.
+- Open the menu, Alt-Tab away and return repeatedly. Verify it closes, gameplay controls/cursor recover, and `/grzvip` can reopen it. Check Escape, Tab, Close, a pending command during focus loss, and returning to the Editor's existing cursor/parent menu.
 - Test six quick entries, the five-row limit, expiry and removal of local preview objects. Late joins do not replay historical kills.
 - Test malformed config/settings and unwritable profiles: files must be preserved and failed saves reported.
 
@@ -92,7 +92,7 @@ To re-encode the red Gunrunnerz menu logo, install Pillow 12.3 or newer and run 
 
 ### Prefix tab
 
-Open `/killfeed` and select **PREFIX** at the top. Type your own word (up to 12 ASCII letters, digits, `_` or `-`; empty removes it), and cycle **Icon** to choose your custom symbol or None. The icon and `[word]` appear before your name. The selected tab controls which animation you edit: NAME changes your name; PREFIX changes the icon and word together. Both offer all 12 colors, all six effects and all three speeds, with a combined live preview. Save and Preview kill use both settings. Existing Steam-ID access controls still govern live saves; offline Editor previews remain local.
+Open `/grzvip` and select **PREFIX** at the top. Type your own word (up to 12 ASCII letters, digits, `_` or `-`; empty removes it), and cycle **Icon** to choose your custom symbol or None. The icon and `[word]` appear before your name. The selected tab controls which animation you edit: NAME changes your name; PREFIX changes the icon and word together. Both offer all 12 colors, all six effects and all three speeds, with a combined live preview. Save and Preview kill use both settings. Existing Steam-ID access controls still govern live saves; offline Editor previews remain local.
 
 The included custom choices are Skull, Bat, Cross, Fangs, Fanged Star, Biohazard and Crown, plus None. Custom icon artwork is bundled in the mod, with labels and texture paths in `GRZ_Killfeed/gui/prefix_icons.json`. The same updated PBO must be installed on the server and every client because the style RPC now includes prefix fields. Existing styles without prefix fields default to no icon and no word. To add transparent PNG artwork, use `python3 tools/add_prefix_icon.py --label Skull --slug skull --image /path/skull.png`, then rebuild with `python3 tools/build_killfeed.py --output-dir downloads`. White artwork tints cleanly to every animation color. Append catalog entries; keep existing order so saved icon selections stay stable. Up to 64 packaged custom icons are supported; texture paths must reference existing assets inside this mod.
 
