@@ -4,7 +4,8 @@ modded class IngameHud
     protected Widget m_GRZStatusPanel;
     protected int m_GRZHealthStatus;
     protected int m_GRZBloodStatus;
-    protected float m_GRZPulse;
+    protected bool m_GRZHealthMaskReady;
+    protected bool m_GRZBloodMaskReady;
     protected int m_GRZHealthTrend;
     protected int m_GRZBloodTrend;
     protected int m_GRZCuts;
@@ -38,11 +39,17 @@ modded class IngameHud
         {
             health.SetFlags(WidgetFlags.SOURCEALPHA | WidgetFlags.BLEND | WidgetFlags.STRETCH);
             health.LoadImageFile(0, "GRZ_CustomHud/gui/textures/grz_health_ca.paa");
+            m_GRZHealthMaskReady = health.LoadMaskTexture("GRZ_CustomHud/gui/textures/grz_health_fillmask.paa");
+            health.SetMaskTransitionWidth(0.001);
+            health.SetMaskProgress(0.97);
         }
         if (blood)
         {
             blood.SetFlags(WidgetFlags.SOURCEALPHA | WidgetFlags.BLEND | WidgetFlags.STRETCH);
             blood.LoadImageFile(0, "GRZ_CustomHud/gui/textures/grz_blood_ca.paa");
+            m_GRZBloodMaskReady = blood.LoadMaskTexture("GRZ_CustomHud/gui/textures/grz_blood_fillmask.paa");
+            blood.SetMaskTransitionWidth(0.001);
+            blood.SetMaskProgress(0.97);
         }
     }
 
@@ -162,7 +169,6 @@ modded class IngameHud
         super.Update(timeslice);
         if (!m_HudPanelWidget || !m_GRZStatusPanel)
             return;
-        m_GRZPulse += timeslice;
         GRZHide(m_Notifiers);
         GRZHide(m_QuickbarWidget);
         GRZHide(m_Stamina);
@@ -245,16 +251,52 @@ modded class IngameHud
             widget.Show(false);
     }
 
+    protected float GRZFillFraction(string name, int status)
+    {
+        PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
+        if (player)
+        {
+            if (!g_Game.IsMultiplayer() || g_Game.IsServer())
+            {
+                if (name == "Health")
+                    return Math.Clamp(player.GetHealth01("", "Health"), 0, 1);
+                float maximum = player.GetMaxHealth("", "Blood");
+                if (maximum > TransferValues.BLOOD_THRESHOLD_LOW)
+                    return Math.Clamp(Math.InverseLerp(TransferValues.BLOOD_THRESHOLD_LOW, maximum, player.GetHealth("", "Blood")), 0, 1);
+            }
+            TransferValues values = player.GetTransferValues();
+            if (values)
+            {
+                float health = values.GetHealth();
+                float blood = values.GetBlood();
+                // The initial native sync can arrive after the first HUD frame.
+                if (health > 0 || blood > 0 || status >= 5)
+                {
+                    if (name == "Health")
+                        return Math.Clamp(health, 0, 1);
+                    return Math.Clamp(blood, 0, 1);
+                }
+            }
+        }
+        // Temporary native status-band fallback while waiting for first sync.
+        if (status >= 5) return 0.05;
+        if (status == 4) return 0.2;
+        if (status == 3) return 0.45;
+        if (status == 2) return 0.7;
+        return 1;
+    }
+
     protected void GRZStatus(string name, int status)
     {
         ImageWidget icon = ImageWidget.Cast(m_GRZStatusPanel.FindAnyWidget("GRZ" + name + "Icon"));
-        if (icon)
-        {
-            float alpha = 1.0;
-            if (status >= 5)
-                alpha = 0.4 + 0.6 * Math.AbsFloat(Math.Sin(m_GRZPulse * 3.0));
-            icon.SetColor(ARGB(alpha * 255, 255, 255, 255));
-        }
-
+        if (!icon)
+            return;
+        // Keep the black contours opaque even when the interior is empty.
+        icon.SetColor(0xFFFFFFFF);
+        bool ready = m_GRZHealthMaskReady;
+        if (name == "Blood")
+            ready = m_GRZBloodMaskReady;
+        if (ready)
+            icon.SetMaskProgress(0.03 + 0.94 * GRZFillFraction(name, status));
     }
 };

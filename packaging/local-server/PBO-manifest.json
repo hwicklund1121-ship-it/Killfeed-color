@@ -8,12 +8,12 @@
     "sha256": "4691423269a240552aa52cbde4a4c7f7b513cf6deff2b74512b48091b85d353e"
   },
   "GRZ_CustomHud.pbo": {
-    "bytes": 1069135,
-    "sha256": "0dd21185895a4476881c4ccdce9e3b929c3e34b265d2473a83517e076d2a5e64"
+    "bytes": 1770562,
+    "sha256": "bc6daa417243ed688bdc704254d2457621bda7971607ddfa1e61d878203c1b04"
   },
   "GRZ_Hitmarker.pbo": {
-    "bytes": 57192,
-    "sha256": "c61396fddd85f6875abc4eb45e50928f83373fd1a06501415ddaf0c913746cf8"
+    "bytes": 59229,
+    "sha256": "c76d00c7f330d1bf5777f28adb0f4b2c87f3812c397361a98b1e3a0fe0202983"
   },
   "GRZ_Killfeed.pbo": {
     "bytes": 590701,

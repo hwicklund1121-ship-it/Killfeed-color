@@ -1,6 +1,6 @@
 # GRZ Hitmarker
 
-Separate DayZ PC mod, development version 0.1.2. Install on the server and every client. Settings live in **Options > Game > GRZ HITMARKER**, appended to the existing game settings list, using native left/right option selectors. The existing General, Gunrunnerz FOV, HUD and Chat sections remain intact. No slash command or VIP access is needed.
+Separate DayZ PC mod, development version 0.1.3. Install on the server and every client. Settings live in **Options > Game > GRZ HITMARKER**, appended to the existing game settings list, using native left/right option selectors. The existing General, Gunrunnerz FOV, HUD and Chat sections remain intact. No slash command or VIP access is needed.
 
 Controls: show hitmarkers, show damage info, hitmarker sound, highlight kills, normal-hit color, headshot color, size (25–150%, default 50%) and volume (0–100%, default 100%). Colors include white, red, orange, yellow, green, blue, indigo, violet, cyan, pink, grey and black. Compact rows use a 45%-opaque black background. A boxed, marker-only live preview sits at the bottom right; all test buttons are removed. Changing body or head color shows that color in the preview. The marker consists of exactly four short diagonal line segments, drawn on a canvas with a fine outline and a clear center. Press the normal Options Apply button to save; Cancel/Revert restores saved selections and Defaults restores the hitmarker defaults. Client preferences are saved in `$profile:GRZ_Hitmarker/settings.json`.
 
@@ -8,7 +8,7 @@ The centered X briefly appears only for confirmed hits against players, infected
 
 ## Sound
 
-Body and head hits use local 2D playback, without distance falloff or world occlusion. Volume is adjustable with a 100% default, and still respects DayZ's effects/master volume. The bundled short body sound and **temporary headshot sound are original generated sounds, not Rust assets**. The Options section labels the missing Rust clip. Head sound has its own explicit sound set, constant shader gain and 2D playback; playback setup failures are logged to the client script log. The exact Rust headshot audio is pending the user's WAV/OGG upload.
+Body and head hits use local 2D playback, without distance falloff or world occlusion. Volume is adjustable with a 100% default, and still respects DayZ's audio volume. The bundled short body sound and **temporary headshot sound are original generated sounds, not Rust assets**. The Options section labels the missing Rust clip. Head sound has its own explicit sound set, constant shader gain and local 2D UI playback. Each voice waits for the native wave header before requesting playback, applies volume when playback starts, and unregisters callbacks on release. Playback setup/timeouts and the first body/head hit settings are logged to the client script log. The exact Rust headshot audio is pending the user's WAV/OGG upload.
 
 To install the supplied clip, use `python3 tools/build_hitmarker_audio.py --headshot /path/clip.wav` (ffmpeg required). It converts to mono 48 kHz PCM WAV, controls loudness/peaks, and marks the clip installed. It does not fetch game assets. Rebuild afterward. Running the audio script with no arguments restores the original temporary sounds.
 

@@ -29,8 +29,9 @@ LUGUINSTADROPFIX.pbo
 GRZ_Hitmarker.pbo
 
 GRZ_Autorun.pbo is replaced with the user's v0.11 LB Screens TEST update.
-GRZ_CustomHud.pbo is updated to v0.1.14: arrows below health/blood and a cut
-indicator/count beside blood. GRZ_Hitmarker.pbo adds hitmarker settings under Options > Game. It currently
+GRZ_CustomHud.pbo is updated to v0.1.15: white health/blood interiors drain
+transparently while black outlines remain visible; trend arrows and cut count remain. GRZ_Hitmarker.pbo v0.1.3 adds settings under Options > Game and uses header-ready
+local 2D UI audio playback. It currently
 uses an explicitly labeled temporary headshot sound, pending the Rust audio clip.
 Other uploaded PBOs are preserved unchanged.
 Internal PBO prefixes are preserved. PBO-manifest.json has sizes and SHA-256 hashes.

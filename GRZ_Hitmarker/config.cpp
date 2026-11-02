@@ -15,7 +15,7 @@ class CfgMods
         dir = "GRZ_Hitmarker";
         name = "GRZ Hitmarker";
         author = "GRZ";
-        version = "0.1.2";
+        version = "0.1.3";
         type = "mod";
         dependencies[] = {"Game", "World", "Mission"};
         class defs

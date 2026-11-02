@@ -62,7 +62,13 @@ def main():
     visual=files['scripts/5_Mission/GRZ_Hitmarker/GRZHitmarkerVisual.c'].decode()
     assert '.Play2D(' in visual and '.Play3D(' not in visual
     assert 'SetVolumeRelative' in visual and 'Wave.Play();' in visual
-    assert 's_Voices.Count() >= 12' in visual and '.Wave.Stop()' in visual
+    assert 's_Voices.Count() >= 12' in visual and 'Wave.Stop()' in visual
+    assert 'WaveKind.WAVEUI' in visual
+    assert 'Event_OnSoundWaveHeaderLoaded.Insert(Begin)' in visual
+    assert 'if (!Wave || Requested || !Wave.IsHeaderLoaded())' in visual
+    assert 'Event_OnSoundWaveStarted.Insert(OnStarted)' in visual
+    assert 'Event_OnSoundWaveHeaderLoaded.Remove(Begin)' in visual
+    assert 'Event_OnSoundWaveStarted.Remove(OnStarted)' in visual
     assert 'HUD_HIDE_FLAGS' in visual and 'GRZHitmarkerBus.Hits.Remove' in visual
     assert "CanvasWidget" in visual and visual.count("DrawSegment(") == 5
     assert "SetRotation" not in visual

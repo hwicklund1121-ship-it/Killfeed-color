@@ -4,7 +4,7 @@ The separate **GRZ Hitmarker** mod adds configurable markers, damage info and so
 
 The separate **GRZ Killfeed** mod, `/grzvip` menu, Steam-ID access config and DayZ Editor preview instructions are documented in [KILLFEED.md](KILLFEED.md). Its PBO/ZIP are in `downloads/GRZ_Killfeed*`; the HUD downloads below remain separate.
 
-Development version of a **DayZ PC** HUD mod: white heart and blood-drop artwork with black contour thorns, a white-text weapon/ammo panel with a black thorn outline, reload prompts, a stance indicator, health/blood trend arrows, a bleeding cut count and a slim stamina bar beneath the weapon panel. No third-party mod dependencies are required. Critical states pulse opacity. Status labels and numeric health/blood percentages are not shown.
+Development version of a **DayZ PC** HUD mod: white heart and blood-drop artwork with black contour thorns, a white-text weapon/ammo panel with a black thorn outline, reload prompts, a stance indicator, health/blood trend arrows, a bleeding cut count and a slim stamina bar beneath the weapon panel. No third-party mod dependencies are required. Status labels and numeric health/blood percentages are not shown.
 
 The weapon panel, native bullet count, fire mode, zeroing, reload/action prompts and stance/crouch indicator remain available. The quickbar, noise, other survival badges, radio readout and vehicle panel are hidden. Crosshair, menus and connection warnings remain available. This is cosmetic: hunger, thirst, temperature, bleeding and all other survival mechanics still operate, even though their indicators are hidden. Black has limited contrast against dark scenery.
 
@@ -19,7 +19,7 @@ The weapon panel, native bullet count, fire mode, zeroing, reload/action prompts
 
 ## Download the PBO
 
-Version **0.1.14** adds native tendency arrows below blood and health: down when decreasing, up when recovering, one to three according to the game's trend, hidden when stable. A white bleeding badge and cut count appear immediately left of blood while cuts are active and disappear when bandaged. They use native `DisplayNotifier`/`DisplayBadge` updates and the game's already-loaded arrow/bleeding widgets. Blood stays left and heart right in their approved positions; the stamina bar stays below the weapon panel. Approved icon textures are unchanged. Critical status still pulses; the white artwork does not drain. Runtime behavior still needs in-game testing.
+Version **0.1.15** drains only the white interiors of the health/blood icons from top to bottom, leaving emptied areas transparent and keeping the black outline and thorns visible at every level. Technical alpha-progress masks preserve the approved artwork. Fill values use DayZ's native TransferValues sync (normally checked every five seconds, with a one-percent change threshold); blood uses the native warning range from 3000 to the configured maximum. Offline previews read the same normalized range directly. Full/half/empty mask checks confirm white fill changes while black contours remain. Icons no longer fade their black outlines at critical status. Native trend arrows below the icons and bleeding badge/count beside blood remain; the stamina bar stays below the weapon panel. Runtime appearance still needs in-game testing.
 
 Version **0.1.11** increases the outer black artwork on both status icons. At a 96-pixel diagnostic render, opaque dark coverage increases from 676 to 843 pixels for health and 647 to 868 for blood. Texture preparation preserves the previous white glyph heights (309 and 245 pixels in the 512-pixel textures). Weapon artwork, HUD positions, labels and scripts are unchanged. Transparency, texture decoding and archive checks pass; actual DayZ rendering is not verified here.
 
@@ -75,7 +75,7 @@ This Linux cloud machine has no DayZ runtime, Enforce Script compiler or Windows
 - Compile/build using the installed game's scripts; inspect the client script log for errors.
 - Join a multiplayer server. Check full, reduced and critical health/blood against vanilla status changes. No client-side health RPC or guessed blood percentage is used.
 - Confirm only health/blood survival icons remain, including after inventory changes, sprinting, vehicle entry and respawn. Check the weapon panel, bullet count, reload prompts and standing/crouching/prone indicator remain visible and update correctly.
-- Check arrows and critical opacity pulsing, HUD toggle, menus, unconsciousness, reconnect, 1080p/1440p/ultrawide and HUD scaling.
+- Check arrows and full/half/empty icon fill with retained outlines, HUD toggle, menus, unconsciousness, reconnect, 1080p/1440p/ultrawide and HUD scaling.
 - Check door/pickup prompts and network warnings remain usable. Test without other HUD mods first; other overrides of these classes may conflict.
 
 The integration was checked against Bohemia Interactive's public `DayZ-Script-Diff` `IngameHud`, `ItemActionsWidget` and native widget API. Compatibility with your installed DayZ version still needs the checks above.

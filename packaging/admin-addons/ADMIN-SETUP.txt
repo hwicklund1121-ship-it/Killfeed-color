@@ -1,0 +1,27 @@
+VPP ADMIN TOOLS + COMMUNITY FRAMEWORK + GRZ
+
+Extract this pack beside DayZServer_x64.exe. StartServer.bat loads:
+    -mod=@CF;@VPPAdminTools;@GRZ_Local
+
+In the DayZ client launcher, enable these same three local mod folders.
+Do not also enable separate copies of the same mods.
+
+The first launch asks for your 17-digit SteamID64 on your own PC. The setup
+stores it locally in admin-owner.local.txt and adds it to:
+    profiles/VPPAdminTools/Permissions/SuperAdmins/SuperAdmins.txt
+Existing admin entries are preserved. Your ID is not included in this download.
+
+VPP also generates:
+    profiles/VPPAdminTools/Permissions/credentials.txt
+Follow the instructions inside to set your VPP admin password. Existing profiles
+and admin permission files are not overwritten by this pack.
+
+Restart the server, join, and use VPP's default admin bindings (normally End for
+permission login and Home for its menu; check Options > Controls for your bindings).
+The killfeed/VIP Steam-ID list is separate: profiles/GRZ_Killfeed/config.json.
+
+Only local unsigned development configuration is supplied. Public server signing
+keys/bisign files were not uploaded. Original PBO contents and prefixes are preserved.
+
+Official setup reference:
+https://github.com/VanillaPlusPlus/VPP-Admin-Tools/wiki/Installation-&-Configuration

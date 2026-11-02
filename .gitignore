@@ -1,2 +1,5 @@
 __pycache__/
 *.pyc
+
+# Local admin identifiers are never published.
+**/admin-owner.local.txt
