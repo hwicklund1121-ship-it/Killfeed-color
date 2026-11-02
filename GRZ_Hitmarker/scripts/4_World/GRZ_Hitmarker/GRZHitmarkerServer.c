@@ -21,7 +21,7 @@ modded class PlayerBase
         if (g_Game.IsServer() && m_GRZHitmarkerEligible)
         {
             m_GRZHitmarkerEligible = false;
-            GRZHitmarkerServer.Report(this, source, damageResult, dmgZone, m_GRZHitmarkerHealthBefore);
+            GRZHitmarkerServer.Report(this, source, damageResult, dmgZone, m_GRZHitmarkerHealthBefore, component);
         }
     }
 
@@ -65,7 +65,7 @@ modded class ZombieBase
         if (g_Game.IsServer() && m_GRZHitmarkerEligible)
         {
             m_GRZHitmarkerEligible = false;
-            GRZHitmarkerServer.Report(this, source, damageResult, dmgZone, m_GRZHitmarkerHealthBefore);
+            GRZHitmarkerServer.Report(this, source, damageResult, dmgZone, m_GRZHitmarkerHealthBefore, component);
         }
     }
 }
@@ -94,7 +94,7 @@ modded class AnimalBase
         if (g_Game.IsServer() && m_GRZHitmarkerEligible)
         {
             m_GRZHitmarkerEligible = false;
-            GRZHitmarkerServer.Report(this, source, damageResult, dmgZone, m_GRZHitmarkerHealthBefore);
+            GRZHitmarkerServer.Report(this, source, damageResult, dmgZone, m_GRZHitmarkerHealthBefore, component);
         }
     }
 }
@@ -107,7 +107,7 @@ class GRZHitmarkerServer
         return target && (target.IsInherited(PlayerBase) || target.IsInherited(ZombieBase) || target.IsInherited(AnimalBase));
     }
 
-    static void Report(EntityAI target, EntityAI source, TotalDamageResult result, string zone, float beforeHealth)
+    static void Report(EntityAI target, EntityAI source, TotalDamageResult result, string zone, float beforeHealth, int component)
     {
         if (!g_Game.IsServer() || !target || !source || !result)
             return;
@@ -122,6 +122,10 @@ class GRZHitmarkerServer
             return;
         // Global health loss is displayed, not the ammo's nominal damage.
         string lowered = zone;
+        // Some callbacks supply a generic/empty zone; resolve the struck
+        // component as well so head hits still select head color and audio.
+        if (component >= 0)
+            lowered += " " + target.GetDamageZoneNameByComponentIndex(component);
         lowered.ToLower();
         bool head = lowered.IndexOf("head") >= 0 || lowered.IndexOf("brain") >= 0;
         bool killed = !target.IsAlive() || target.GetHealth("", "Health") <= 0;

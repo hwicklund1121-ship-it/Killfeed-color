@@ -1,17 +1,29 @@
 FrameWidgetClass GRZHitmarkerOptions
 {
 position 0 0
-size 1 505
+size 1 386
 hexactpos 0
 vexactpos 1
 hexactsize 0
 vexactsize 1
 color 0 0 0 0
 {
+PanelWidgetClass SettingsBacking
+{
+position 0 0
+size 1 386
+hexactpos 0
+vexactpos 1
+hexactsize 0
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0 0 0 0.45
+}
 PanelWidgetClass Header
 {
 position 0 0
-size 1 36
+size 1 30
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -23,7 +35,7 @@ color 0 0 0 1
 TextWidgetClass Heading
 {
 position 0 0
-size 1 36
+size 1 30
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -37,8 +49,8 @@ text "GRZ HITMARKER"
 }
 FrameWidgetClass ShowRow
 {
-position 0 40
-size 1 32
+position 0 32
+size 1 25
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -48,7 +60,7 @@ color 0 0 0 0
 TextWidgetClass ShowLabel
 {
 position 0.01 0
-size 0.51 32
+size 0.51 25
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -63,7 +75,7 @@ text "SHOW HITMARKERS"
 FrameWidgetClass ShowValue
 {
 position 0.53 0
-size 0.47 32
+size 0.47 25
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -74,8 +86,8 @@ color 0 0 0 0
 }
 FrameWidgetClass DamageRow
 {
-position 0 74
-size 1 32
+position 0 58
+size 1 25
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -85,7 +97,7 @@ color 0 0 0 0
 TextWidgetClass DamageLabel
 {
 position 0.01 0
-size 0.51 32
+size 0.51 25
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -100,7 +112,7 @@ text "SHOW DAMAGE INFO"
 FrameWidgetClass DamageValue
 {
 position 0.53 0
-size 0.47 32
+size 0.47 25
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -111,8 +123,8 @@ color 0 0 0 0
 }
 FrameWidgetClass SoundRow
 {
-position 0 108
-size 1 32
+position 0 84
+size 1 25
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -122,7 +134,7 @@ color 0 0 0 0
 TextWidgetClass SoundLabel
 {
 position 0.01 0
-size 0.51 32
+size 0.51 25
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -137,7 +149,7 @@ text "HITMARKER SOUND"
 FrameWidgetClass SoundValue
 {
 position 0.53 0
-size 0.47 32
+size 0.47 25
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -148,8 +160,8 @@ color 0 0 0 0
 }
 FrameWidgetClass KillsRow
 {
-position 0 142
-size 1 32
+position 0 110
+size 1 25
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -159,7 +171,7 @@ color 0 0 0 0
 TextWidgetClass KillsLabel
 {
 position 0.01 0
-size 0.51 32
+size 0.51 25
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -174,7 +186,7 @@ text "HIGHLIGHT KILLS"
 FrameWidgetClass KillsValue
 {
 position 0.53 0
-size 0.47 32
+size 0.47 25
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -185,8 +197,8 @@ color 0 0 0 0
 }
 FrameWidgetClass BodyColorRow
 {
-position 0 176
-size 1 32
+position 0 136
+size 1 25
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -196,7 +208,7 @@ color 0 0 0 0
 TextWidgetClass BodyColorLabel
 {
 position 0.01 0
-size 0.51 32
+size 0.51 25
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -211,7 +223,7 @@ text "HITMARKER COLOR"
 FrameWidgetClass BodyColorValue
 {
 position 0.53 0
-size 0.47 32
+size 0.47 25
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -222,8 +234,8 @@ color 0 0 0 0
 }
 FrameWidgetClass HeadColorRow
 {
-position 0 210
-size 1 32
+position 0 162
+size 1 25
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -233,7 +245,7 @@ color 0 0 0 0
 TextWidgetClass HeadColorLabel
 {
 position 0.01 0
-size 0.51 32
+size 0.51 25
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -248,7 +260,7 @@ text "HEADSHOT COLOR"
 FrameWidgetClass HeadColorValue
 {
 position 0.53 0
-size 0.47 32
+size 0.47 25
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -259,8 +271,8 @@ color 0 0 0 0
 }
 FrameWidgetClass SizeRow
 {
-position 0 244
-size 1 32
+position 0 188
+size 1 25
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -270,7 +282,7 @@ color 0 0 0 0
 TextWidgetClass SizeLabel
 {
 position 0.01 0
-size 0.51 32
+size 0.51 25
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -285,7 +297,7 @@ text "HITMARKER SIZE"
 FrameWidgetClass SizeValue
 {
 position 0.53 0
-size 0.47 32
+size 0.47 25
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -296,8 +308,8 @@ color 0 0 0 0
 }
 FrameWidgetClass VolumeRow
 {
-position 0 278
-size 1 32
+position 0 214
+size 1 25
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -307,7 +319,7 @@ color 0 0 0 0
 TextWidgetClass VolumeLabel
 {
 position 0.01 0
-size 0.51 32
+size 0.51 25
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -322,7 +334,7 @@ text "HITMARKER VOLUME"
 FrameWidgetClass VolumeValue
 {
 position 0.53 0
-size 0.47 32
+size 0.47 25
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -331,91 +343,10 @@ color 0 0 0 0
 }
 }
 }
-ButtonWidgetClass TestBody
-{
-position 0 322
-size 0.31 34
-hexactpos 0
-vexactpos 1
-hexactsize 0
-vexactsize 1
-color 1 1 1 1
-{
-TextWidgetClass TestBodyLabel
-{
-position 0 0
-size 1 34
-hexactpos 0
-vexactpos 1
-hexactsize 0
-vexactsize 1
-ignorepointer 1
-color 1 1 1 1
-font "gui/fonts/sdf_MetronLight16"
-"text valign" center
-text "TEST HIT"
-"text halign" center
-}
-}
-}
-ButtonWidgetClass TestHead
-{
-position 0.345 322
-size 0.31 34
-hexactpos 0
-vexactpos 1
-hexactsize 0
-vexactsize 1
-color 1 1 1 1
-{
-TextWidgetClass TestHeadLabel
-{
-position 0 0
-size 1 34
-hexactpos 0
-vexactpos 1
-hexactsize 0
-vexactsize 1
-ignorepointer 1
-color 1 1 1 1
-font "gui/fonts/sdf_MetronLight16"
-"text valign" center
-text "TEST HEADSHOT"
-"text halign" center
-}
-}
-}
-ButtonWidgetClass TestKill
-{
-position 0.69 322
-size 0.31 34
-hexactpos 0
-vexactpos 1
-hexactsize 0
-vexactsize 1
-color 1 1 1 1
-{
-TextWidgetClass TestKillLabel
-{
-position 0 0
-size 1 34
-hexactpos 0
-vexactpos 1
-hexactsize 0
-vexactsize 1
-ignorepointer 1
-color 1 1 1 1
-font "gui/fonts/sdf_MetronLight16"
-"text valign" center
-text "PREVIEW KILL"
-"text halign" center
-}
-}
-}
 TextWidgetClass PreviewLabel
 {
-position 0.01 370
-size 0.25 28
+position 0.27 250
+size 0.21 24
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -424,13 +355,73 @@ ignorepointer 1
 color 1 1 1 1
 font "gui/fonts/sdf_MetronLight16"
 "text valign" center
-text "PREVIEW"
-
+text "PREVIEW:"
+"text halign" right
+}
+PanelWidgetClass PreviewTop
+{
+position 0.5 250
+size 0.5 1
+hexactpos 0
+vexactpos 1
+hexactsize 0
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0 0 0 0.9
+}
+PanelWidgetClass PreviewBottom
+{
+position 0.5 359
+size 0.5 1
+hexactpos 0
+vexactpos 1
+hexactsize 0
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0 0 0 0.9
+}
+PanelWidgetClass PreviewLeft
+{
+position 0.5 250
+size 0.003 110
+hexactpos 0
+vexactpos 1
+hexactsize 0
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0 0 0 0.9
+}
+PanelWidgetClass PreviewRight
+{
+position 0.997 250
+size 0.003 110
+hexactpos 0
+vexactpos 1
+hexactsize 0
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0 0 0 0.9
+}
+PanelWidgetClass PreviewBacking
+{
+position 0.503 251
+size 0.494 108
+hexactpos 0
+vexactpos 1
+hexactsize 0
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0 0 0 0.25
 }
 FrameWidgetClass PreviewHost
 {
-position 0.28 365
-size 0.72 92
+position 0.51 256
+size 0.48 98
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -439,8 +430,8 @@ color 0 0 0 0
 }
 TextWidgetClass AudioStatus
 {
-position 0.01 465
-size 0.99 26
+position 0.01 362
+size 0.98 24
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -449,7 +440,7 @@ ignorepointer 1
 color 1 1 1 1
 font "gui/fonts/sdf_MetronLight16"
 "text valign" center
-text "Headshot: standard sound (Rust clip not installed yet)."
+text "Headshot: temporary sound; Rust clip pending upload."
 
 }
 }

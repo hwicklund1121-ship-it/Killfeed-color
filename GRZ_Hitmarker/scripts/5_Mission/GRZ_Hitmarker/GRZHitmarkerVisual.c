@@ -2,6 +2,9 @@ class GRZHitmarkerVisual
 {
     Widget Root;
     protected TextWidget m_DamageLabel;
+    protected CanvasWidget m_Lines;
+    protected float m_LineSize = -1;
+    protected int m_LineColor;
 
     void GRZHitmarkerVisual(Widget parent)
     {
@@ -9,12 +12,7 @@ class GRZHitmarkerVisual
         if (!Root)
             return;
         m_DamageLabel = TextWidget.Cast(Root.FindAnyWidget("Damage"));
-        array<float> angles = {45, -45, -45, 45};
-        for (int i = 0; i < 4; i++)
-        {
-            Root.FindAnyWidget("Stroke" + i.ToString()).SetRotation(0, 0, angles[i]);
-            Root.FindAnyWidget("Edge" + i.ToString()).SetRotation(0, 0, angles[i]);
-        }
+        m_Lines = CanvasWidget.Cast(Root.FindAnyWidget("MarkerLines"));
         Root.Show(false);
     }
 
@@ -37,19 +35,27 @@ class GRZHitmarkerVisual
         Root.SetScreenPos(centerX - size * 0.5, centerY - size * 0.5);
         Root.SetAlpha(alpha);
         Root.Show(preview || settings.ShowHitmarkers || settings.ShowDamage || highlight);
-        for (int i = 0; i < 4; i++)
+        if (m_Lines)
         {
-            Widget stroke = Root.FindAnyWidget("Stroke" + i.ToString());
-            Widget edge = Root.FindAnyWidget("Edge" + i.ToString());
-            stroke.SetColor(color);
-            edge.SetColor(outline);
-            stroke.Show(settings.ShowHitmarkers || preview);
-            edge.Show(settings.ShowHitmarkers || preview);
+            m_Lines.Show(settings.ShowHitmarkers || preview);
+            if (m_LineSize != size || m_LineColor != color)
+            {
+                m_LineSize = size;
+                m_LineColor = color;
+                m_Lines.Clear();
+                float outer = size * 0.18;
+                float inner = size * 0.32;
+                float lineWidth = Math.Max(1, size / 32.0);
+                DrawSegment(outer, outer, inner, inner, lineWidth, color, outline);
+                DrawSegment(size - outer, outer, size - inner, inner, lineWidth, color, outline);
+                DrawSegment(outer, size - outer, inner, size - inner, lineWidth, color, outline);
+                DrawSegment(size - outer, size - outer, size - inner, size - inner, lineWidth, color, outline);
+            }
         }
         string detail;
-        if (highlight)
+        if (highlight && !preview)
             detail = "KILL";
-        if (settings.ShowDamage)
+        if (settings.ShowDamage && !preview)
         {
             if (detail != "")
                 detail += " | ";
@@ -59,6 +65,12 @@ class GRZHitmarkerVisual
         m_DamageLabel.SetTextExactSize(18);
         m_DamageLabel.SetOutline(1, 0xFF000000);
         m_DamageLabel.Show(detail != "");
+    }
+
+    protected void DrawSegment(float x1, float y1, float x2, float y2, float lineWidth, int color, int outline)
+    {
+        m_Lines.DrawLine(x1, y1, x2, y2, lineWidth + 1.5, outline);
+        m_Lines.DrawLine(x1, y1, x2, y2, lineWidth, color);
     }
 
     void Dispose()
@@ -95,18 +107,28 @@ class GRZHitmarkerAudio
         GRZHitmarkerSoundVoice voice = new GRZHitmarkerSoundVoice;
         voice.Params = new SoundParams(soundSet);
         if (!voice.Params.IsValid())
+        {
+            Error("GRZ Hitmarker: invalid sound set " + soundSet);
             return;
+        }
         voice.Builder = new SoundObjectBuilder(voice.Params);
         voice.Sound = voice.Builder.BuildSoundObject();
         if (!voice.Sound)
+        {
+            Error("GRZ Hitmarker: could not build sound " + soundSet);
             return;
+        }
         voice.Sound.SetKind(WaveKind.WAVEEFFECTEX);
         voice.Wave = g_Game.GetSoundScene().Play2D(voice.Sound, voice.Builder);
         if (!voice.Wave)
+        {
+            Error("GRZ Hitmarker: 2D playback failed for " + soundSet);
             return;
+        }
         voice.Wave.Loop(false);
         voice.Wave.SetVolumeRelative(Math.Clamp(volume / 100.0, 0, 1));
         voice.Wave.Play();
+        voice.Wave.SetVolumeRelative(Math.Clamp(volume / 100.0, 0, 1));
         if (s_Voices.Count() >= 12)
         {
             if (s_Voices[0].Wave)

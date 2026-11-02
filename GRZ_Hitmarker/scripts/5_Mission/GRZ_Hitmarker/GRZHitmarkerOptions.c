@@ -5,7 +5,6 @@ class GRZHitmarkerOptions extends ScriptedWidgetEventHandler
     protected ref array<ref OptionSelectorMultistate> m_Selectors = new array<ref OptionSelectorMultistate>;
     protected ref GRZHitmarkerVisual m_Preview;
     protected bool m_PreviewHead;
-    protected bool m_PreviewKill;
 
     void GRZHitmarkerOptions(Widget section, OptionsMenu optionsMenu)
     {
@@ -30,9 +29,11 @@ class GRZHitmarkerOptions extends ScriptedWidgetEventHandler
         AddSelector("HeadColorValue", settings.HeadColor, colors);
         AddSelector("SizeValue", (settings.SizePercent - 25) / 5, sizes);
         AddSelector("VolumeValue", settings.VolumePercent / 5, volumes);
+        TextWidget.Cast(section.FindAnyWidget("Heading")).SetTextExactSize(20);
         TextWidget status = TextWidget.Cast(section.FindAnyWidget("AudioStatus"));
+        status.SetTextExactSize(13);
         if (GRZHitmarkerAudioStatus.RUST_HEADSHOT_INSTALLED)
-            status.SetText("Headshot sound: Rust. Use Test Headshot to check volume.");
+            status.SetText("Headshot sound: Rust. Volume uses the setting above.");
         m_Preview = new GRZHitmarkerVisual(section.FindAnyWidget("PreviewHost"));
         section.SetHandler(this);
         g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(RefreshPreview, 50, false);
@@ -49,8 +50,25 @@ class GRZHitmarkerOptions extends ScriptedWidgetEventHandler
     protected void AddSelector(string widgetName, int current, array<string> values)
     {
         OptionSelectorMultistate selector = new OptionSelectorMultistate(m_Section.FindAnyWidget(widgetName), current, this, false, values);
-        selector.m_OptionChanged.Insert(OptionChanged);
+        if (widgetName == "HeadColorValue")
+            selector.m_OptionChanged.Insert(HeadColorChanged);
+        else if (widgetName == "BodyColorValue")
+            selector.m_OptionChanged.Insert(BodyColorChanged);
+        else
+            selector.m_OptionChanged.Insert(OptionChanged);
         m_Selectors.Insert(selector);
+    }
+
+    protected void HeadColorChanged(int index)
+    {
+        m_PreviewHead = true;
+        OptionChanged(index);
+    }
+
+    protected void BodyColorChanged(int index)
+    {
+        m_PreviewHead = false;
+        OptionChanged(index);
     }
 
     protected void OptionChanged(int index)
@@ -95,7 +113,7 @@ class GRZHitmarkerOptions extends ScriptedWidgetEventHandler
         float x, y, width, height;
         host.GetScreenPos(x, y);
         host.GetScreenSize(width, height);
-        m_Preview.Draw(Draft(), m_PreviewHead, m_PreviewKill, 35, x + width * 0.5, y + height * 0.4, 1, true);
+        m_Preview.Draw(Draft(), m_PreviewHead, false, 0, x + width * 0.5, y + height * 0.5, 1, true);
     }
 
     bool IsChanged()
@@ -119,21 +137,6 @@ class GRZHitmarkerOptions extends ScriptedWidgetEventHandler
         SetValues(new GRZHitmarkerSettings);
     }
 
-    override bool OnClick(Widget w, int x, int y, int button)
-    {
-        string name = w.GetName();
-        if (name == "TestBody" || name == "TestHead" || name == "TestKill")
-        {
-            m_PreviewHead = name == "TestHead";
-            m_PreviewKill = name == "TestKill";
-            GRZHitmarkerSettings settings = Draft();
-            if (settings.PlaySound)
-                GRZHitmarkerAudio.Play(m_PreviewHead, settings.VolumePercent);
-            RefreshPreview();
-            return true;
-        }
-        return super.OnClick(w, x, y, button);
-    }
 }
 
 modded class OptionsMenuGame

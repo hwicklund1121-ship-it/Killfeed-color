@@ -64,6 +64,17 @@ def main():
     assert 'SetVolumeRelative' in visual and 'Wave.Play();' in visual
     assert 's_Voices.Count() >= 12' in visual and '.Wave.Stop()' in visual
     assert 'HUD_HIDE_FLAGS' in visual and 'GRZHitmarkerBus.Hits.Remove' in visual
+    assert "CanvasWidget" in visual and visual.count("DrawSegment(") == 5
+    assert "SetRotation" not in visual
+    options_layout = files['gui/layouts/options.layout'].decode()
+    for removed in ['TestBody','TestHead','TestKill']:
+        assert removed not in options_layout and removed not in options
+    assert 'color 0 0 0 0.45' in options_layout
+    assert 'PanelWidgetClass PreviewBacking' in options_layout
+    assert 'position 0.51 256' in options_layout
+    assert 'settings.ShowDamage && !preview' in visual
+    assert 'GetDamageZoneNameByComponentIndex(component)' in server
+    assert server.count('m_GRZHitmarkerHealthBefore, component);') == 3
     for name in ['body_hit','headshot']:
         with wave.open(io.BytesIO(files[f'sounds/{name}.wav'])) as audio:
             assert (audio.getnchannels(),audio.getsampwidth(),audio.getframerate()) == (1,2,48000)

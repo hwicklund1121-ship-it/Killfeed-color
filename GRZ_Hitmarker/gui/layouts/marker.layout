@@ -7,104 +7,20 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
+style blank
 clipchildren 0
 visible 0
 color 0 0 0 0
 {
-PanelWidgetClass Edge0
+CanvasWidgetClass MarkerLines
 {
-position 0.15500000000000003 0.23750000000000002
-size 0.25 0.085
+position 0 0
+size 1 1
 hexactpos 0
 vexactpos 0
 hexactsize 0
 vexactsize 0
 ignorepointer 1
-style rover_sim_colorable
-color 1 1 1 1
-}
-PanelWidgetClass Stroke0
-{
-position 0.18000000000000002 0.2625
-size 0.2 0.035
-hexactpos 0
-vexactpos 0
-hexactsize 0
-vexactsize 0
-ignorepointer 1
-style rover_sim_colorable
-color 1 1 1 1
-}
-PanelWidgetClass Edge1
-{
-position 0.595 0.23750000000000002
-size 0.25 0.085
-hexactpos 0
-vexactpos 0
-hexactsize 0
-vexactsize 0
-ignorepointer 1
-style rover_sim_colorable
-color 1 1 1 1
-}
-PanelWidgetClass Stroke1
-{
-position 0.62 0.2625
-size 0.2 0.035
-hexactpos 0
-vexactpos 0
-hexactsize 0
-vexactsize 0
-ignorepointer 1
-style rover_sim_colorable
-color 1 1 1 1
-}
-PanelWidgetClass Edge2
-{
-position 0.15500000000000003 0.6775
-size 0.25 0.085
-hexactpos 0
-vexactpos 0
-hexactsize 0
-vexactsize 0
-ignorepointer 1
-style rover_sim_colorable
-color 1 1 1 1
-}
-PanelWidgetClass Stroke2
-{
-position 0.18000000000000002 0.7025
-size 0.2 0.035
-hexactpos 0
-vexactpos 0
-hexactsize 0
-vexactsize 0
-ignorepointer 1
-style rover_sim_colorable
-color 1 1 1 1
-}
-PanelWidgetClass Edge3
-{
-position 0.595 0.6775
-size 0.25 0.085
-hexactpos 0
-vexactpos 0
-hexactsize 0
-vexactsize 0
-ignorepointer 1
-style rover_sim_colorable
-color 1 1 1 1
-}
-PanelWidgetClass Stroke3
-{
-position 0.62 0.7025
-size 0.2 0.035
-hexactpos 0
-vexactpos 0
-hexactsize 0
-vexactsize 0
-ignorepointer 1
-style rover_sim_colorable
 color 1 1 1 1
 }
 TextWidgetClass Damage
