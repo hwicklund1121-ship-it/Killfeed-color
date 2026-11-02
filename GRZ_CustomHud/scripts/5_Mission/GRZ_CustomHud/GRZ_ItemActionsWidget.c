@@ -1,14 +1,21 @@
 modded class ItemActionsWidget
 {
     protected Widget m_GRZWeaponPanel;
-    protected CanvasWidget m_GRZWeaponWire;
+    protected ImageWidget m_GRZWeaponWire;
 
     override protected void OnWidgetScriptInit(Widget w)
     {
         super.OnWidgetScriptInit(w);
         m_GRZWeaponPanel = g_Game.GetWorkspace().CreateWidgets("GRZ_CustomHud/gui/layouts/grz_weapon_panel.layout", m_Root);
         if (m_GRZWeaponPanel)
-            m_GRZWeaponWire = GRZThornFrame.Create(m_GRZWeaponPanel);
+        {
+            m_GRZWeaponWire = ImageWidget.Cast(m_GRZWeaponPanel.FindAnyWidget("GRZWeaponOutline"));
+            if (m_GRZWeaponWire)
+            {
+                m_GRZWeaponWire.SetFlags(WidgetFlags.SOURCEALPHA | WidgetFlags.BLEND | WidgetFlags.STRETCH);
+                m_GRZWeaponWire.LoadImageFile(0, "GRZ_CustomHud/gui/textures/grz_weapon_outline_ca.paa");
+            }
+        }
     }
 
     override protected void BuildCursor()
@@ -40,7 +47,7 @@ modded class ItemActionsWidget
         m_GRZWeaponWire.SetPos(0, 0);
         m_GRZWeaponWire.SetScreenSize(360, 88);
         m_GRZWeaponWire.SetSort(-1);
-        GRZThornFrame.Draw(m_GRZWeaponWire, 360, 88);
+
     }
 
     // Route stock data setters into our own transparent layout. Native widgets

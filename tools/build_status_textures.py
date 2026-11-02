@@ -43,3 +43,10 @@ if __name__ == '__main__':
         target = ROOT / f'GRZ_CustomHud/gui/textures/grz_{name}_ca.paa'
         target.write_bytes(encode_paa(texture))
         print(target.name)
+
+    # Convert the approved transparent weapon outline; no painted panel fill.
+    outline = Image.open(ROOT / 'art/weapon-outline.png').convert('RGBA')
+    outline = outline.resize((1024, 256), Image.Resampling.LANCZOS)
+    assert outline.getpixel((512, 128))[3] == 0
+    (ROOT / 'GRZ_CustomHud/gui/textures/grz_weapon_outline_ca.paa').write_bytes(encode_paa(outline))
+    print('grz_weapon_outline_ca.paa')

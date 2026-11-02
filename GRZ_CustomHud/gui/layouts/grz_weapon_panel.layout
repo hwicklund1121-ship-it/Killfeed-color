@@ -10,6 +10,15 @@ FrameWidgetClass GRZWeaponPanel
  hexactsize 1
  vexactsize 1
  {
+  ImageWidgetClass GRZWeaponOutline
+  {
+   ignorepointer 1
+   position 0 0
+   size 1 1
+   mode blend
+   color 1 1 1 1
+   stretch 1
+  }
     TextWidgetClass GRZWeaponName
     {
      ignorepointer 1

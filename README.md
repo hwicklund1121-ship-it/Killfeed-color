@@ -15,6 +15,8 @@ The weapon panel, native bullet count, fire mode, zeroing, reload/action prompts
 
 ## Download the PBO
 
+Version **0.1.5** removes the weapon canvas entirely and uses a transparent outline-only PAA instead. The decoded center region is verified to have zero alpha. Icon/outline widgets explicitly enable native `SOURCEALPHA` and `BLEND` flags; image layouts use `mode blend`. The obsolete canvas layout/helper is removed. This addresses the reported filled areas, but the actual DayZ render still needs checking.
+
 Version **0.1.4** uses the approved heart/drop artwork as transparent DXT5 PAA textures with complete mip chains. Their thorns follow the icons' silhouettes, replacing the rectangular status canvases. A separate status layout replaces the hidden native notifier panel. Custom weapon frames/canvases explicitly use blank styling and alpha blending. Texture transparency, PAA mip decoding, PBO contents and checksum are checked; actual DayZ rendering is not verified here.
 
 `art/status-sheet.png` retains the approved artwork. `tools/build_status_textures.py` extracts and encodes the two runtime textures (requires Pillow 12.3 or newer); the packaged PAA files do not require Pillow to run. Rebuild them with `python3 tools/build_status_textures.py`, then rebuild the PBO. `art/health-preview.png` and `art/blood-preview.png` show the individual assets.

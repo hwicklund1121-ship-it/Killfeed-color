@@ -16,8 +16,7 @@ FrameWidgetClass GRZStatusPanel
    position 0.0 0
    size 0.4666666666666667 0.875
    color 1 1 1 1
-   sourcealpha 1
-   blend 1
+   mode blend
    stretch 1
   }
   TextWidgetClass GRZHealthState
@@ -36,8 +35,7 @@ FrameWidgetClass GRZStatusPanel
    position 0.5333333333333333 0
    size 0.4666666666666667 0.875
    color 1 1 1 1
-   sourcealpha 1
-   blend 1
+   mode blend
    stretch 1
   }
   TextWidgetClass GRZBloodState
