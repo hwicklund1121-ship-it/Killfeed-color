@@ -5,8 +5,7 @@ modded class ItemActionsWidget
     override protected void OnWidgetScriptInit(Widget w)
     {
         super.OnWidgetScriptInit(w);
-        int flags = WidgetFlags.VISIBLE | WidgetFlags.IGNOREPOINTER | WidgetFlags.EXACTPOS | WidgetFlags.EXACTSIZE | WidgetFlags.BLEND;
-        m_GRZWeaponWire = CanvasWidget.Cast(g_Game.GetWorkspace().CreateWidget(CanvasWidgetTypeID, 0, 0, 1, 1, flags, 0xFFFFFFFF, 0, m_Root));
+        m_GRZWeaponWire = GRZThornFrame.Create(m_Root);
     }
 
     override protected void BuildCursor()

@@ -11,9 +11,8 @@ modded class IngameHud
         if (!m_Notifiers)
             return;
 
-        int flags = WidgetFlags.VISIBLE | WidgetFlags.IGNOREPOINTER | WidgetFlags.EXACTPOS | WidgetFlags.EXACTSIZE | WidgetFlags.BLEND;
-        m_GRZHealthWire = CanvasWidget.Cast(g_Game.GetWorkspace().CreateWidget(CanvasWidgetTypeID, 0, 0, 1, 1, flags, 0xFFFFFFFF, 0, m_Notifiers));
-        m_GRZBloodWire = CanvasWidget.Cast(g_Game.GetWorkspace().CreateWidget(CanvasWidgetTypeID, 0, 0, 1, 1, flags, 0xFFFFFFFF, 0, m_Notifiers));
+        m_GRZHealthWire = GRZThornFrame.Create(m_Notifiers);
+        m_GRZBloodWire = GRZThornFrame.Create(m_Notifiers);
     }
 
     override void Update(float timeslice)
@@ -102,6 +101,17 @@ modded class IngameHud
 // Native vector ornament: no external texture conversion is required.
 class GRZThornFrame
 {
+    static CanvasWidget Create(Widget parent)
+    {
+        // CanvasWidget has no script-visible type ID. Create it from a layout,
+        // matching the layout-based canvas creation used by DayZ itself.
+        Widget root = g_Game.GetWorkspace().CreateWidgets("GRZ_CustomHud/gui/layouts/grz_thorn_canvas.layout", parent);
+        CanvasWidget canvas = CanvasWidget.Cast(root);
+        if (!canvas)
+            Error("GRZ Custom Hud: could not load the thorn canvas layout");
+        return canvas;
+    }
+
     static void Draw(CanvasWidget canvas, float width, float height)
     {
         canvas.Clear();
