@@ -1,8 +1,8 @@
 # GRZ Killfeed
 
-Separate **DayZ PC** mod, version **0.1.10**. The GRZ Custom Hud is packaged separately.
+Separate **DayZ PC** mod, version **0.1.11**. The GRZ Custom Hud is packaged separately.
 
-Each entry shows **killer name | actual gun model | distance | victim name** on one horizontal line. There is no gun-name text or arrow. The model includes the captured weapon attachments. Rows have plain black outlines and a 45%-opaque black background. Rows are 800×60 pixels with 4-pixel spacing. The gun viewport is 320×48 pixels (one-third larger in each dimension than 240×36), distance text is 20 pixels, and both names use 24-pixel text with a thin black outline for readability. The newest five entries stay at the top right for eight seconds, fading during their last second.
+Each entry shows **killer name | actual gun model | distance | victim name** on one horizontal line. There is no gun-name text or arrow. The model includes the captured weapon attachments. Rows have plain black outlines and a 45%-opaque black background. Rows are 580×60 pixels with 4-pixel spacing. The gun viewport is 180×56 pixels with a closer model camera, distance text is 20 pixels, and both names use 24-pixel text with a thin black outline for readability. The newest five entries stay at the top right for eight seconds, fading during their last second.
 
 The custom 720×500 settings menu has a clean black background, red accents, the Gunrunnerz wordmark and a red GRZ Killfeed title. There are no thorn edges. Controls use white labels, and Save is highlighted in red. A live-preview card sits above the controls. Select Primary or Secondary, then click one of twelve labeled color swatches; the active bank has a red underline and the selected swatch a white border. Style/speed controls and the Test feed/Save/Close actions are aligned beneath the palette. Players can select two of twelve colors (white, red, orange, yellow, green, blue, indigo, violet, cyan, pink, gray, black), six animation styles (steady, pulse, blink, color fade, color swap, rainbow) and three speeds. A saved style applies to that player's name as both killer and victim for every viewer.
 
