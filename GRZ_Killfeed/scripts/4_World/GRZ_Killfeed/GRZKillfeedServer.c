@@ -101,7 +101,7 @@ class GRZKillfeedServer
     {
         rpc.Write(style.ColorA);
         rpc.Write(style.ColorB);
-        rpc.Write(style.Effect);
+        rpc.Write(style.AnimationMode);
         rpc.Write(style.Speed);
     }
 

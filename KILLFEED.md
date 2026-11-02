@@ -2,6 +2,8 @@
 
 A separate **DayZ PC** mod. The finished GRZ Custom Hud files remain unchanged.
 
+Version **0.1.1** renames the fields `Effect` to `AnimationMode` and `Weapon` to `WeaponName` because the old names collide with DayZ engine types. Replace the old killfeed PBO on both server and clients. RPC field order and the Steam-ID whitelist format are unchanged. This fixes the reported type-name conflict; full DayZ compilation is still not available in this cloud machine.
+
 - Top-right player killfeed: killer > victim, fatal weapon/source name, rounded player-to-player distance in meters.
 - Up to five entries, newest first; each lasts eight seconds and fades during its last second.
 - Transparent black thorn border and white default names. No filled feed background.

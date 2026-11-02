@@ -126,7 +126,7 @@ modded class MissionGameplay
         GRZFitName(row.Victim, GRZShortName(message.Victim), 110);
         TextWidget.Cast(row.Root.FindAnyWidget("Arrow")).SetTextExactSize(17);
         TextWidget detail = TextWidget.Cast(row.Root.FindAnyWidget("Detail"));
-        detail.SetText(message.Weapon + "  |  " + message.Distance.ToString() + " m");
+        detail.SetText(message.WeaponName + "  |  " + message.Distance.ToString() + " m");
         detail.SetTextExactSize(14);
         ImageWidget outline = ImageWidget.Cast(row.Root.FindAnyWidget("Outline"));
         outline.SetFlags(WidgetFlags.SOURCEALPHA | WidgetFlags.BLEND | WidgetFlags.STRETCH);

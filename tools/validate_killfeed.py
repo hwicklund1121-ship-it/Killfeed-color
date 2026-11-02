@@ -78,12 +78,13 @@ def main():
     types = files["scripts/3_Game/GRZ_Killfeed/GRZKillfeedTypes.c"].decode()
     assert len(set(re.findall(r"= (164728010\d);", types))) == 4
     assert "PALETTE_COUNT = 12" in types and "EFFECT_COUNT = 6" in types
+    assert not re.search(r"\b(?:int|float|bool|string)\s+(?:Effect|Weapon)\s*[;=]", text), "Engine type used as variable name"
     server = files["scripts/4_World/GRZ_Killfeed/GRZKillfeedServer.c"].decode()
     player = files["scripts/4_World/GRZ_Killfeed/GRZKillfeedPlayer.c"].decode()
     # Static wire-format alignment only; not a runtime authorization test.
     write_fields = re.findall(r"rpc.Write\(style\.(\w+)\)", server)
     read_fields = re.findall(r"ctx.Read\(style\.(\w+)\)", player)
-    assert write_fields == read_fields == ["ColorA", "ColorB", "Effect", "Speed"]
+    assert write_fields == read_fields == ["ColorA", "ColorB", "AnimationMode", "Speed"]
     print(f"Verified PBO prefix/checksum and {len(files)} source/asset entries; ZIP payloads match.")
     print("Layout/widget/resource bindings and style wire-field order checked.")
     print("These checks do not compile Enforce Script or test networking, permissions, or DayZ Editor.")

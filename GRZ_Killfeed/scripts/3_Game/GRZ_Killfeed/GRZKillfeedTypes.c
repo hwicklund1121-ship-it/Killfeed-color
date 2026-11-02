@@ -12,12 +12,12 @@ class GRZNameStyle
     static const int EFFECT_COUNT = 6;
     int ColorA;
     int ColorB = 1;
-    int Effect;
+    int AnimationMode;
     int Speed = 1;
 
     bool IsValid()
     {
-        return ColorA >= 0 && ColorA < PALETTE_COUNT && ColorB >= 0 && ColorB < PALETTE_COUNT && Effect >= 0 && Effect < EFFECT_COUNT && Speed >= 0 && Speed < 3;
+        return ColorA >= 0 && ColorA < PALETTE_COUNT && ColorB >= 0 && ColorB < PALETTE_COUNT && AnimationMode >= 0 && AnimationMode < EFFECT_COUNT && Speed >= 0 && Speed < 3;
     }
 
     int ColorAt(float seconds)
@@ -30,23 +30,23 @@ class GRZNameStyle
         float wave = (Math.Sin(seconds * frequency * Math.PI2) + 1.0) * 0.5;
         int a = Palette(ColorA);
         int b = Palette(ColorB);
-        if (Effect == 1) // Opacity pulse.
+        if (AnimationMode == 1) // Opacity pulse.
             return WithAlpha(a, 90 + wave * 165);
-        if (Effect == 2) // Blink without hiding the name entirely.
+        if (AnimationMode == 2) // Blink without hiding the name entirely.
         {
             if (wave < 0.5)
                 return WithAlpha(a, 65);
             return a;
         }
-        if (Effect == 3) // Smooth two-color flash.
+        if (AnimationMode == 3) // Smooth two-color flash.
             return Mix(a, b, wave);
-        if (Effect == 4) // Alternating colors.
+        if (AnimationMode == 4) // Alternating colors.
         {
             if (wave < 0.5)
                 return a;
             return b;
         }
-        if (Effect == 5)
+        if (AnimationMode == 5)
         {
             float position = seconds * frequency;
             int step = Math.Floor(position);
@@ -126,7 +126,7 @@ class GRZKillfeedMessage
 {
     string Killer;
     string Victim;
-    string Weapon;
+    string WeaponName;
     int Distance;
     ref GRZNameStyle KillerStyle = new GRZNameStyle;
     ref GRZNameStyle VictimStyle = new GRZNameStyle;

@@ -62,7 +62,7 @@ modded class PlayerBase
             if (rpc_type == GRZKillfeedRPC.KILL)
             {
                 GRZKillfeedMessage message = new GRZKillfeedMessage;
-                if (!ctx.Read(message.Killer) || !ctx.Read(message.Victim) || !ctx.Read(message.Weapon) || !ctx.Read(message.Distance))
+                if (!ctx.Read(message.Killer) || !ctx.Read(message.Victim) || !ctx.Read(message.WeaponName) || !ctx.Read(message.Distance))
                     return;
                 if (!GRZReadStyle(ctx, message.KillerStyle) || !GRZReadStyle(ctx, message.VictimStyle))
                     return;
@@ -82,6 +82,6 @@ modded class PlayerBase
 
     protected bool GRZReadStyle(ParamsReadContext ctx, GRZNameStyle style)
     {
-        return ctx.Read(style.ColorA) && ctx.Read(style.ColorB) && ctx.Read(style.Effect) && ctx.Read(style.Speed) && style.IsValid();
+        return ctx.Read(style.ColorA) && ctx.Read(style.ColorB) && ctx.Read(style.AnimationMode) && ctx.Read(style.Speed) && style.IsValid();
     }
 }

@@ -39,7 +39,7 @@ class GRZKillfeedClient
         GRZKillfeedMessage message = new GRZKillfeedMessage;
         g_Game.GetPlayerName(message.Killer);
         message.Victim = "Target Dummy";
-        message.Weapon = "M4-A1";
+        message.WeaponName = "M4-A1";
         message.Distance = 175;
         message.KillerStyle = style;
         GRZKillfeedBus.Kills.Invoke(message);
@@ -131,7 +131,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
         {
             case "ColorA": Chosen.ColorA = (Chosen.ColorA + 1) % GRZNameStyle.PALETTE_COUNT; break;
             case "ColorB": Chosen.ColorB = (Chosen.ColorB + 1) % GRZNameStyle.PALETTE_COUNT; break;
-            case "Effect": Chosen.Effect = (Chosen.Effect + 1) % GRZNameStyle.EFFECT_COUNT; break;
+            case "Effect": Chosen.AnimationMode = (Chosen.AnimationMode + 1) % GRZNameStyle.EFFECT_COUNT; break;
             case "Speed": Chosen.Speed = (Chosen.Speed + 1) % 3; break;
             case "Close": Close(); return true;
             case "Test":
@@ -151,7 +151,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
                 ScriptRPC rpc = new ScriptRPC;
                 rpc.Write(Chosen.ColorA);
                 rpc.Write(Chosen.ColorB);
-                rpc.Write(Chosen.Effect);
+                rpc.Write(Chosen.AnimationMode);
                 rpc.Write(Chosen.Speed);
                 rpc.Send(player, GRZKillfeedRPC.SAVE_STYLE, true, null);
                 m_Status.SetText("Saving on server...");
@@ -177,7 +177,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
     {
         TextWidget.Cast(layoutRoot.FindAnyWidget("ColorALabel")).SetText("Color 1: " + GRZNameStyle.ColorName(Chosen.ColorA));
         TextWidget.Cast(layoutRoot.FindAnyWidget("ColorBLabel")).SetText("Color 2: " + GRZNameStyle.ColorName(Chosen.ColorB));
-        TextWidget.Cast(layoutRoot.FindAnyWidget("EffectLabel")).SetText("Style: " + GRZNameStyle.EffectName(Chosen.Effect));
+        TextWidget.Cast(layoutRoot.FindAnyWidget("EffectLabel")).SetText("Style: " + GRZNameStyle.EffectName(Chosen.AnimationMode));
         string speed = "Normal";
         if (Chosen.Speed == 0)
             speed = "Slow";
