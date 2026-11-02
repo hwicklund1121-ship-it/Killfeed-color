@@ -6,10 +6,26 @@ The weapon panel, native bullet count, fire mode, zeroing, reload/action prompts
 
 ## Files
 
+- `downloads/GRZ_CustomHud-mod.zip`: installable folder containing an unsigned development PBO, launcher metadata and install notes.
+- `downloads/GRZ_CustomHud.pbo`: standalone unsigned PBO.
 - `GRZ_CustomHud/`: addon source; this directory is the PBO source root.
 - `mod.cpp`: launcher metadata, placed beside `Addons` in the installed mod.
 - `previews/health-blood.svg`: design illustration, not an in-game screenshot.
 - `tools/package_source.py`: creates a source ZIP outside the checkout without requiring DayZ Tools.
+
+## Download the PBO
+
+Download [`GRZ_CustomHud-mod.zip`](downloads/GRZ_CustomHud-mod.zip), extract `@GRZ_CustomHud` into your DayZ directory and add that folder as a local mod in the launcher (or use `-mod=@GRZ_CustomHud`). The ZIP already contains `Addons/GRZ_CustomHud.pbo` and `mod.cpp`.
+
+This is an **unsigned, untested development build**. Its archive structure, prefix, source contents and checksum have been checked, but DayZ has not compiled or run the scripts here. Signature-checking servers require you to sign it with your own DayZ Tools key and install the matching public key; this download does not include a signing key or signature.
+
+Rebuild the source-script PBO on any machine with Python 3:
+
+```sh
+python3 tools/build_pbo.py --output-dir downloads
+```
+
+The packer writes a standard uncompressed PBO with a prefix extension and SHA-1 trailer. It leaves `config.cpp` and scripts as source. It does not replace the in-game validation below.
 
 ## Build on Windows
 
