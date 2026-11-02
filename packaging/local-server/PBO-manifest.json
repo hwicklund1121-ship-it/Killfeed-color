@@ -3,9 +3,13 @@
     "bytes": 2759,
     "sha256": "a38005389c7392ae3517e85cb42a2b5a042527f641184689ac30198f9641cfdd"
   },
+  "GRZ_Autorun.pbo": {
+    "bytes": 17189,
+    "sha256": "4691423269a240552aa52cbde4a4c7f7b513cf6deff2b74512b48091b85d353e"
+  },
   "GRZ_CustomHud.pbo": {
-    "bytes": 1064878,
-    "sha256": "888bc6e557a512fa90e0a55815c731c327f74fd14a53725a97d2381436433429"
+    "bytes": 1069135,
+    "sha256": "0dd21185895a4476881c4ccdce9e3b929c3e34b265d2473a83517e076d2a5e64"
   },
   "GRZ_Killfeed.pbo": {
     "bytes": 590701,
@@ -14,10 +18,6 @@
   "GRZ_LUGU_RollStand.pbo": {
     "bytes": 3377,
     "sha256": "5a75f985e56ce9cd65ef11cff98dcfda7fd8d2a0f53b1e356445f5c237b40c4a"
-  },
-  "GRZ_Autorun.pbo": {
-    "bytes": 10579,
-    "sha256": "87b57731ae305df7f96e9e28835b12663ad59ceaa6c0dd3de6a8e29cf6df77bf"
   },
   "GRZ_Movement.pbo": {
     "bytes": 43583,

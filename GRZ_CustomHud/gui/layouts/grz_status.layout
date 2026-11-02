@@ -5,7 +5,7 @@ FrameWidgetClass GRZStatusPanel
  ignorepointer 1
  style blank
  position 0 0
- size 208 96
+ size 256 120
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -14,8 +14,8 @@ FrameWidgetClass GRZStatusPanel
   ImageWidgetClass GRZHealthIcon
   {
    ignorepointer 1
-   position 0.5384615385 0
-   size 0.4615384615 1
+   position 0.625 0
+   size 0.375 0.8
    color 1 1 1 1
    mode blend
    stretch 1
@@ -23,8 +23,8 @@ FrameWidgetClass GRZStatusPanel
   ImageWidgetClass GRZBloodIcon
   {
    ignorepointer 1
-   position 0.0 0
-   size 0.4615384615 1
+   position 0.1875 0
+   size 0.375 0.8
    color 1 1 1 1
    mode blend
    stretch 1

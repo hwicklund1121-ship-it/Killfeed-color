@@ -16,7 +16,7 @@ class CfgMods
         dir = "GRZ_CustomHud";
         name = "GRZ Custom Hud";
         author = "GRZ";
-        version = "0.1.13";
+        version = "0.1.14";
         type = "mod";
         dependencies[] = {"Mission"};
         class defs

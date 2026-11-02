@@ -18,7 +18,7 @@ After the first server launch, stop it. Edit profiles/GRZ_Killfeed/config.json:
 Restart the server. The menu can preview without access; saving live VIP settings
 requires your SteamID64. Existing profile files are not included in this ZIP.
 
-INCLUDED - EXACT UPLOADED FILES
+INCLUDED MODS
 GRZ_ActionStamina.pbo
 GRZ_CustomHud.pbo
 GRZ_Killfeed.pbo
@@ -27,9 +27,12 @@ GRZ_Autorun.pbo
 GRZ_Movement.pbo
 LUGUINSTADROPFIX.pbo
 
-The original PBO bytes and internal prefixes are preserved. PBO-manifest.json
-contains sizes and SHA-256 hashes. This bundle uses the uploaded killfeed PBO;
-it is not replaced with another build.
+GRZ_Autorun.pbo is replaced with the user's v0.11 LB Screens TEST update.
+GRZ_CustomHud.pbo is updated to v0.1.14: arrows below health/blood and a cut
+indicator/count beside blood. Other uploaded PBOs are preserved unchanged.
+Internal PBO prefixes are preserved. PBO-manifest.json has sizes and SHA-256 hashes.
+Update the pack on the server and client before joining; do not enable the old
+autorun separately alongside this pack.
 
 Requires the Steam DayZ Server installation, standard Chernarus mission and a
 DayZ client with the bundled mod enabled. Game/server executables and map files

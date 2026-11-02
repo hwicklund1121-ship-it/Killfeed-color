@@ -2,7 +2,7 @@
 
 The separate **GRZ Killfeed** mod, `/grzvip` menu, Steam-ID access config and DayZ Editor preview instructions are documented in [KILLFEED.md](KILLFEED.md). Its PBO/ZIP are in `downloads/GRZ_Killfeed*`; the HUD downloads below remain separate.
 
-Development version of a **DayZ PC** HUD mod: white heart and blood-drop artwork with black contour thorns, a white-text weapon/ammo panel with a black thorn outline, reload prompts, a stance indicator and a slim stamina bar beneath the weapon panel. No third-party mod dependencies are required. Critical states pulse opacity. Status labels and numeric health/blood percentages are not shown.
+Development version of a **DayZ PC** HUD mod: white heart and blood-drop artwork with black contour thorns, a white-text weapon/ammo panel with a black thorn outline, reload prompts, a stance indicator, health/blood trend arrows, a bleeding cut count and a slim stamina bar beneath the weapon panel. No third-party mod dependencies are required. Critical states pulse opacity. Status labels and numeric health/blood percentages are not shown.
 
 The weapon panel, native bullet count, fire mode, zeroing, reload/action prompts and stance/crouch indicator remain available. The quickbar, noise, other survival badges, radio readout and vehicle panel are hidden. Crosshair, menus and connection warnings remain available. This is cosmetic: hunger, thirst, temperature, bleeding and all other survival mechanics still operate, even though their indicators are hidden. Black has limited contrast against dark scenery.
 
@@ -17,7 +17,7 @@ The weapon panel, native bullet count, fire mode, zeroing, reload/action prompts
 
 ## Download the PBO
 
-Version **0.1.13** places the 300 × 8 stamina bar beneath the weapon panel, inset 80 pixels from its left edge with a 12-pixel gap. Blood stays on the left and heart on the right. The bar uses the native `SetStamina(value, range)` updates and gameplay maximum; its gray capacity portion reflects the weight-related stamina cap. Icon artwork is unchanged. Runtime behavior still needs in-game testing.
+Version **0.1.14** adds native tendency arrows below blood and health: down when decreasing, up when recovering, one to three according to the game's trend, hidden when stable. A white bleeding badge and cut count appear immediately left of blood while cuts are active and disappear when bandaged. They use native `DisplayNotifier`/`DisplayBadge` updates and the game's already-loaded arrow/bleeding widgets. Blood stays left and heart right in their approved positions; the stamina bar stays below the weapon panel. Approved icon textures are unchanged. Critical status still pulses; the white artwork does not drain. Runtime behavior still needs in-game testing.
 
 Version **0.1.11** increases the outer black artwork on both status icons. At a 96-pixel diagnostic render, opaque dark coverage increases from 676 to 843 pixels for health and 647 to 868 for blood. Texture preparation preserves the previous white glyph heights (309 and 245 pixels in the 512-pixel textures). Weapon artwork, HUD positions, labels and scripts are unchanged. Transparency, texture decoding and archive checks pass; actual DayZ rendering is not verified here.
 
