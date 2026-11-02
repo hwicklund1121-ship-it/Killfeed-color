@@ -1,6 +1,6 @@
 # GRZ Custom Hud
 
-First source version of a **DayZ PC** HUD mod: health and blood survival indicators, a weapon/ammo panel, reload prompts and stance indicator, with black styling and thin black barbed-wire frames. There are no third-party mod dependencies or downloaded textures. Critical health/blood pulses in opacity; vanilla status image levels and arrows still provide the status information.
+First source version of a **DayZ PC** HUD mod: health and blood survival indicators, a weapon/ammo panel, reload prompts and stance indicator, with black styling and thin black tribal-thorn frames. There are no third-party mod dependencies or downloaded textures. Critical health/blood pulses in opacity; vanilla status image levels and arrows still provide the status information.
 
 The weapon panel, native bullet count, fire mode, zeroing, reload/action prompts and stance/crouch indicator remain available. The quickbar, stamina, noise, other survival badges, radio readout and vehicle panel are hidden. Crosshair, menus and connection warnings remain available. This is cosmetic: hunger, thirst, temperature, bleeding and all other survival mechanics still operate, even though their indicators are hidden. Black has limited contrast against dark scenery.
 

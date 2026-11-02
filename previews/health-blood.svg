@@ -1,9 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
   <defs>
     <linearGradient id="land" x2="0" y2="1"><stop stop-color="#b0b6ac"/><stop offset="1" stop-color="#65705d"/></linearGradient>
-    <g id="wire" fill="none" stroke="#0a0a0a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M3 8 L61 9 L61 65 L3 66 Z M3 11 L61 10 M3 63 L61 64"/>
-      <path d="M19 4 l8 8 m-8 0 l8 -8 M38 4 l8 8 m-8 0 l8 -8 M19 60 l8 8 m-8 0 l8 -8 M38 60 l8 8 m-8 0 l8 -8"/>
+    <g id="wire" fill="none" stroke="#0a0a0a" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 8H43 M21 66H43 M3 26V48 M61 26V48" stroke-width="1.3"/>
+      <g id="corner" stroke-width="2">
+        <path d="M21 8C8 8 2 7 3 26 M7 8C9 22 22 18 18 12 M3 12C16 16 13 30 6 25 M14 8C12 1 24 1 29 4 M3 20C-2 18 -2 30 0 35"/>
+      </g>
+      <use href="#corner" transform="translate(64 0) scale(-1 1)"/>
+      <use href="#corner" transform="translate(0 74) scale(1 -1)"/>
+      <use href="#corner" transform="translate(64 74) scale(-1 -1)"/>
     </g>
   </defs>
   <rect width="960" height="540" fill="url(#land)"/>
@@ -12,7 +17,7 @@
   <text x="44" y="88" fill="#283025" font-family="sans-serif" font-size="13" letter-spacing="2">HEALTH + BLOOD / WEAPON + AMMO / STANCE</text>
   <g fill="none" stroke="#0a0a0a" stroke-width="1.6" stroke-linecap="round">
     <path d="M48 418 L342 419 L342 468 L48 469 Z M48 421 L342 420 M48 466 L342 467"/>
-    <path d="M98 414 l9 10 m-9 0 l9 -10 M274 414 l9 10 m-9 0 l9 -10 M98 463 l9 10 m-9 0 l9 -10 M274 463 l9 10 m-9 0 l9 -10"/>
+    <path stroke-width="3" d="M48 418C60 447 89 439 77 426 M48 421C75 431 65 463 54 451 M342 418C330 447 301 439 313 426 M342 421C315 431 325 463 336 451 M48 469C60 445 88 453 77 462 M342 469C330 445 302 453 313 462"/>
   </g>
   <g fill="#0a0a0a" font-family="sans-serif">
     <text x="66" y="449" font-size="17" letter-spacing="1">M70 TUNDRA</text>

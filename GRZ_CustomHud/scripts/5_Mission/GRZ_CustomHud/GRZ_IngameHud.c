@@ -95,37 +95,58 @@ modded class IngameHud
         wire.SetScreenPos(x - padding, y - padding);
         wire.SetScreenSize(w + padding * 2, h + padding * 2);
         wire.Show(icon.IsVisible());
-        GRZWireFrame.Draw(wire, w + padding * 2, h + padding * 2);
+        GRZThornFrame.Draw(wire, w + padding * 2, h + padding * 2);
     }
 };
 
-class GRZWireFrame
+// Native vector ornament: no external texture conversion is required.
+class GRZThornFrame
 {
     static void Draw(CanvasWidget canvas, float width, float height)
     {
         canvas.Clear();
         float inset = height * 0.12;
-        float left = inset;
-        float top = inset;
+        float span = Math.Min(width * 0.28, height * 0.60);
+        float stroke = Math.Max(1.0, height * 0.022);
         float right = width - inset;
         float bottom = height - inset;
-        float stroke = Math.Max(1.0, height * 0.025);
         int black = 0xFF0A0A0A;
-        // Two restrained strands, with four small opposed barbs per indicator.
-        canvas.DrawLine(left, top, right, top + 1, stroke, black);
-        canvas.DrawLine(left, top + 3, right, top + 2, stroke, black);
-        canvas.DrawLine(left, bottom, right, bottom - 1, stroke, black);
-        canvas.DrawLine(left, bottom - 3, right, bottom - 2, stroke, black);
-        canvas.DrawLine(left, top, left, bottom, stroke, black);
-        canvas.DrawLine(right, top, right, bottom, stroke, black);
-        float barb = height * 0.07;
-        for (int i = 1; i <= 2; i++)
+        // Fine connecting rails leave the center transparent and readable.
+        canvas.DrawLine(inset + span, inset, right - span, inset, stroke, black);
+        canvas.DrawLine(inset + span, bottom, right - span, bottom, stroke, black);
+        canvas.DrawLine(inset, inset + span, inset, bottom - span, stroke, black);
+        canvas.DrawLine(right, inset + span, right, bottom - span, stroke, black);
+        Corner(canvas, inset, inset, 1, 1, span, inset, stroke);
+        Corner(canvas, right, inset, -1, 1, span, inset, stroke);
+        Corner(canvas, inset, bottom, 1, -1, span, inset, stroke);
+        Corner(canvas, right, bottom, -1, -1, span, inset, stroke);
+    }
+
+    protected static void Corner(CanvasWidget canvas, float x, float y, float sx, float sy, float span, float inset, float stroke)
+    {
+        Curve(canvas, x, y, sx, sy, span, 0, span * 0.3, 0, 0, -inset * 0.2, 0, span, stroke * 2.5);
+        // Curved, tapered hooks replace the old crossed fence-wire barbs.
+        Curve(canvas, x, y, sx, sy, span * 0.16, 0, span * 0.25, span * 0.55, span * 0.7, span * 0.35, span * 0.58, span * 0.12, stroke * 3.4);
+        Curve(canvas, x, y, sx, sy, 0, span * 0.18, span * 0.5, span * 0.3, span * 0.38, span * 0.8, span * 0.12, span * 0.65, stroke * 3.4);
+        Curve(canvas, x, y, sx, sy, span * 0.46, 0, span * 0.4, -inset * 0.85, span * 0.85, -inset * 0.85, span, -inset * 0.5, stroke * 2.3);
+        Curve(canvas, x, y, sx, sy, 0, span * 0.5, -inset * 0.85, span * 0.45, -inset * 0.85, span * 0.85, -inset * 0.5, span, stroke * 2.3);
+    }
+
+    protected static void Curve(CanvasWidget canvas, float ox, float oy, float sx, float sy, float ax, float ay, float bx, float by, float cx, float cy, float dx, float dy, float thickness)
+    {
+        float previousX = ox + sx * ax;
+        float previousY = oy + sy * ay;
+        for (int i = 1; i <= 16; i++)
         {
-            float bx = left + (right - left) * i / 3;
-            canvas.DrawLine(bx - barb, top - barb, bx + barb, top + barb, stroke, black);
-            canvas.DrawLine(bx - barb, top + barb, bx + barb, top - barb, stroke, black);
-            canvas.DrawLine(bx - barb, bottom - barb, bx + barb, bottom + barb, stroke, black);
-            canvas.DrawLine(bx - barb, bottom + barb, bx + barb, bottom - barb, stroke, black);
+            float t = i / 16.0;
+            float u = 1.0 - t;
+            float px = u * u * u * ax + 3 * u * u * t * bx + 3 * u * t * t * cx + t * t * t * dx;
+            float py = u * u * u * ay + 3 * u * u * t * by + 3 * u * t * t * cy + t * t * t * dy;
+            float nextX = ox + sx * px;
+            float nextY = oy + sy * py;
+            canvas.DrawLine(previousX, previousY, nextX, nextY, Math.Max(0.65, thickness * (1.0 - t)), 0xFF0A0A0A);
+            previousX = nextX;
+            previousY = nextY;
         }
     }
 };

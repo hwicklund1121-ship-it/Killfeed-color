@@ -30,7 +30,7 @@ modded class ItemActionsWidget
         float padding = height * 0.25;
         m_GRZWeaponWire.SetScreenPos(x - padding, y - padding);
         m_GRZWeaponWire.SetScreenSize(width + padding * 2, height + padding * 2);
-        GRZWireFrame.Draw(m_GRZWeaponWire, width + padding * 2, height + padding * 2);
+        GRZThornFrame.Draw(m_GRZWeaponWire, width + padding * 2, height + padding * 2);
     }
 
     protected void GRZTintTree(Widget widget)
