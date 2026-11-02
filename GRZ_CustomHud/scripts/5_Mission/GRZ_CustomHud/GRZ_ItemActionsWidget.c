@@ -30,11 +30,13 @@ modded class ItemActionsWidget
 
         Widget item = m_Root.FindAnyWidget("ia_item");
         Widget details = m_Root.FindAnyWidget("ia_item_subdesc");
-        // Hide the entire old backing, never recolor its panel widgets.
-        if (item)
-            item.Show(false);
-        if (details)
-            details.Show(false);
+        // The stock parent can draw a backing outside ia_item itself. Clear
+        // its own color and hide item-only wrapper branches, keeping actions.
+        m_Root.SetColor(0x00000000);
+        GRZHideStockBranch(item);
+        GRZHideStockBranch(details);
+        if (m_ItemLeft)
+            m_ItemLeft.Show(false);
         bool show = m_EntityInHands != null && m_Player && !m_Player.GetItemAccessor().IsItemInHandsHidden();
         m_GRZWeaponPanel.Show(show);
         if (!show)
@@ -59,6 +61,23 @@ modded class ItemActionsWidget
         TextWidget text = TextWidget.Cast(m_GRZWeaponPanel.FindAnyWidget(name));
         if (text)
             text.SetTextExactSize(size);
+    }
+
+    protected void GRZHideStockBranch(Widget widget)
+    {
+        if (!widget)
+            return;
+        Widget branch = widget;
+        Widget parent = branch.GetParent();
+        while (parent && parent != m_Root)
+        {
+            // Stop before a shared container: reload and action prompts stay.
+            if (parent.FindAnyWidget("ia_interact") || parent.FindAnyWidget("ia_continuous_interact") || parent.FindAnyWidget("ia_single") || parent.FindAnyWidget("ia_continuous") || parent.FindAnyWidget("GRZWeaponPanel"))
+                break;
+            branch = parent;
+            parent = branch.GetParent();
+        }
+        branch.Show(false);
     }
 
     // Route stock data setters into our own transparent layout. Native widgets

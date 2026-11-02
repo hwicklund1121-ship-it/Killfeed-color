@@ -1,4 +1,4 @@
 name = "GRZ Custom Hud";
 author = "GRZ";
-version = "0.1.6";
+version = "0.1.7";
 overview = "Minimal black health and blood indicators with clean tribal-thorn frames.";
