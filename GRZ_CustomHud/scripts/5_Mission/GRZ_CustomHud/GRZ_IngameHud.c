@@ -5,6 +5,7 @@ modded class IngameHud
     protected int m_GRZHealthStatus;
     protected int m_GRZBloodStatus;
     protected float m_GRZPulse;
+    protected Widget m_GRZStaminaPanel;
     protected Widget m_GRZStaminaFill;
     protected Widget m_GRZStaminaCapacityBar;
     protected float m_GRZStaminaFraction;
@@ -16,8 +17,12 @@ modded class IngameHud
         m_GRZStatusPanel = g_Game.GetWorkspace().CreateWidgets("GRZ_CustomHud/gui/layouts/grz_status.layout", m_HudPanelWidget);
         if (!m_GRZStatusPanel)
             return;
-        m_GRZStaminaFill = m_GRZStatusPanel.FindAnyWidget("GRZStaminaFill");
-        m_GRZStaminaCapacityBar = m_GRZStatusPanel.FindAnyWidget("GRZStaminaCapacity");
+        m_GRZStaminaPanel = g_Game.GetWorkspace().CreateWidgets("GRZ_CustomHud/gui/layouts/grz_stamina.layout", m_HudPanelWidget);
+        if (m_GRZStaminaPanel)
+        {
+            m_GRZStaminaFill = m_GRZStaminaPanel.FindAnyWidget("GRZStaminaFill");
+            m_GRZStaminaCapacityBar = m_GRZStaminaPanel.FindAnyWidget("GRZStaminaCapacity");
+        }
         GRZUpdateStamina();
         ImageWidget health = ImageWidget.Cast(m_GRZStatusPanel.FindAnyWidget("GRZHealthIcon"));
         ImageWidget blood = ImageWidget.Cast(m_GRZStatusPanel.FindAnyWidget("GRZBloodIcon"));
@@ -70,7 +75,23 @@ modded class IngameHud
         m_HudPanelWidget.GetScreenSize(width, height);
         float scale = Math.Clamp(height / 1080.0, 0.75, 2.0);
         m_GRZStatusPanel.SetScreenPos(x + width - 232 * scale, y + height - 132 * scale);
-        m_GRZStatusPanel.SetScreenSize(208 * scale, 112 * scale);
+        m_GRZStatusPanel.SetScreenSize(208 * scale, 96 * scale);
+        if (m_GRZStaminaPanel)
+        {
+            m_GRZStaminaPanel.Show(show);
+            Widget weaponPanel = m_HudPanelWidget.FindAnyWidget("GRZWeaponPanel");
+            float barX = x + 104;
+            float barY = y + height - 32;
+            if (weaponPanel && weaponPanel.IsVisible())
+            {
+                float weaponX, weaponY;
+                weaponPanel.GetScreenPos(weaponX, weaponY);
+                barX = weaponX + 80;
+                barY = weaponY + 100;
+            }
+            m_GRZStaminaPanel.SetScreenPos(barX, barY);
+            m_GRZStaminaPanel.SetScreenSize(300, 8);
+        }
         GRZStatus("Health", m_GRZHealthStatus);
         GRZStatus("Blood", m_GRZBloodStatus);
         GRZUpdateStamina();
@@ -94,7 +115,7 @@ modded class IngameHud
 
     protected void GRZUpdateStamina()
     {
-        float innerWidth = 206.0 / 208.0;
+        float innerWidth = 298.0 / 300.0;
         if (m_GRZStaminaCapacityBar)
         {
             m_GRZStaminaCapacityBar.SetSize(innerWidth * m_GRZStaminaCapacity, 0.75);
