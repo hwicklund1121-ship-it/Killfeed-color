@@ -33,13 +33,20 @@ def encode_paa(image):
     return output.getvalue()
 
 if __name__ == '__main__':
-    sheet = Image.open(ROOT / 'art/status-sheet.png').convert('RGBA')
-    for name, box in [('health', (380, 20, 1060, 710)), ('blood', (1290, 0, 1810, 725))]:
-        # Preserve the approved artwork; only extract, fit and encode it.
-        source = Image.open(ROOT / 'art/health-refined.png').convert('RGBA') if name == 'health' else sheet.crop(box)
-        asset = ImageOps.contain(source, (464, 464), Image.Resampling.LANCZOS)
+    for name, white_height in [('health', 309), ('blood', 245)]:
+        source = Image.open(ROOT / f'art/{name}-refined.png').convert('RGBA')
+        # Encode at the prior white-glyph size: only the outer outline grows.
+        white = Image.new('L', source.size)
+        white.putdata([255 if a > 128 and min(r, g, b) > 200 else 0 for r, g, b, a in source.get_flattened_data()])
+        bounds = white.getbbox()
+        if not bounds:
+            raise ValueError(f'No white glyph found in {name}')
+        factor = white_height / (bounds[3] - bounds[1])
+        asset = source.resize((round(source.width * factor), round(source.height * factor)), Image.Resampling.LANCZOS)
+        center_x = (bounds[0] + bounds[2]) * factor / 2
+        center_y = (bounds[1] + bounds[3]) * factor / 2
         texture = Image.new('RGBA', (512, 512))
-        texture.alpha_composite(asset, ((512 - asset.width) // 2, (512 - asset.height) // 2))
+        texture.alpha_composite(asset, (round(256 - center_x), round(266 - center_y)))
         texture.save(ROOT / f'art/{name}-preview.png')
         target = ROOT / f'GRZ_CustomHud/gui/textures/grz_{name}_ca.paa'
         target.write_bytes(encode_paa(texture))
