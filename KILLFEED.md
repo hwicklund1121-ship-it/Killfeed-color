@@ -1,10 +1,10 @@
 # GRZ Killfeed
 
-Separate **DayZ PC** mod, version **0.1.7**. The finished GRZ Custom Hud is unchanged.
+Separate **DayZ PC** mod, version **0.1.8**. The finished GRZ Custom Hud is unchanged.
 
-Each entry shows **killer name | actual gun model | victim name**, with the **distance centered underneath the gun**. There is no gun-name text or arrow. The model includes the captured weapon attachments. Rows have plain black outlines and a 45%-opaque black background. Rows are 48 pixels tall, matching the compact reference layout, with 4-pixel spacing. The newest five entries stay at the top right for eight seconds, fading during their last second.
+Each entry shows **killer name | actual gun model | victim name**, with the **distance centered underneath the gun**. There is no gun-name text or arrow. The model includes the captured weapon attachments. Rows have plain black outlines and a 45%-opaque black background. Rows are 600×60 pixels with 4-pixel spacing. The gun viewport is 240×36 pixels (previously 172×26), and both names use 20-pixel text with a thin black outline for readability. The newest five entries stay at the top right for eight seconds, fading during their last second.
 
-The custom settings menu has a solid black background, white text and white tribal thorn edges. Players can select two of twelve colors (white, red, orange, yellow, green, blue, indigo, violet, cyan, pink, gray, black), six animation styles (steady, pulse, blink, color fade, color swap, rainbow) and three speeds. A saved style applies to that player's name as both killer and victim for every viewer.
+The custom 720×540 settings menu has a solid black background, white text and white tribal thorn edges. A live-preview card sits above the controls. Select Primary or Secondary, then click one of twelve labeled color swatches; the active bank has a white underline and the selected swatch a white border. Style/speed controls and the Test feed/Save/Close actions are aligned beneath the palette. Players can select two of twelve colors (white, red, orange, yellow, green, blue, indigo, violet, cyan, pink, gray, black), six animation styles (steady, pulse, blink, color fade, color swap, rainbow) and three speeds. A saved style applies to that player's name as both killer and victim for every viewer.
 
 This is an **unsigned development build**. Archive, resource and layout checks pass; DayZ compilation, networking, 3D rendering and Editor behavior have not been executed in this cloud machine.
 
@@ -15,7 +15,7 @@ The supplied client log confirms `/killfeed` reaches the mod and its layout init
 1. Install/load this PBO, then restart DayZ and enter your Editor mission or server.
 2. Open chat, type **`/killfeed`**, and press Enter.
 3. The menu opens immediately as a local preview. **No Steam-ID whitelist is needed just to open or preview it.** This is the temporary testing behavior requested by the user. F7 has been removed.
-4. Change colors and flashing style. Choose **Preview feed** to close the menu and display a private sample entry: your name, an M4 with optic/handguard/stock/suppressor/magazine, and a dummy victim, with 175 m underneath the gun.
+4. Select **Primary** or **Secondary**, click a color swatch, then choose the style and speed. Choose **Preview feed** to close the menu and display a private sample entry: your name, an M4 with optic/handguard/stock/suppressor/magazine, and a dummy victim, with 175 m underneath the gun.
 
 In an offline/local-host session, Save applies to local previews only. In normal multiplayer, the menu requests permission from the server after opening: an approved Steam ID enables persistent server saves; a denied request leaves the menu open in preview mode. A private preview is never broadcast as a real kill.
 

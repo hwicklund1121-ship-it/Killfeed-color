@@ -22,13 +22,13 @@ class GRZKillfeedClient
         if (!ActiveMenu || !ActiveMenu.GetLayoutRoot())
         {
             ActiveMenu = null;
-            Error("[GRZ Killfeed 0.1.7] Native menu factory did not return an initialized settings menu.");
+            Error("[GRZ Killfeed 0.1.8] Native menu factory did not return an initialized settings menu.");
             g_Game.Chat("GRZ Killfeed: menu creation failed. Check the client script log.", "colorStatusChannel");
             return;
         }
         ActiveMenu.ApplyLocalStyle(LocalStyle);
         ActiveMenu.EnsureVisible();
-        Print("[GRZ Killfeed 0.1.7] Native menu registered and retained.");
+        Print("[GRZ Killfeed 0.1.8] Native menu registered and retained.");
     }
 
     static void ReleaseMenu()
@@ -116,6 +116,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
     protected TextWidget m_Status;
     protected float m_Time;
     protected bool m_LoggedUpdate;
+    protected int m_ColorTarget;
 
     override Widget Init()
     {
@@ -143,11 +144,14 @@ class GRZKillfeedMenu extends UIScriptedMenu
         string name;
         g_Game.GetPlayerName(name);
         m_Preview.SetText(name);
+        m_Preview.SetTextExactSize(26);
+        TextWidget.Cast(layoutRoot.FindAnyWidget("PreviewCaption")).SetTextExactSize(11);
+        m_Status.SetTextExactSize(13);
         RefreshLabels();
         if (IsOfflinePreview)
             m_Status.SetText("Local preview — server access and persistence are not tested.");
         PositionPanel();
-        Print("[GRZ Killfeed 0.1.7] Init: layout created.");
+        Print("[GRZ Killfeed 0.1.8] Init: layout created.");
         return layoutRoot;
     }
 
@@ -166,7 +170,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
             m_LoggedUpdate = true;
             float width, height;
             layoutRoot.GetScreenSize(width, height);
-            Print(string.Format("[GRZ Killfeed 0.1.7] Update: root %1 x %2; visible %3.", width, height, layoutRoot.IsVisibleHierarchy()));
+            Print(string.Format("[GRZ Killfeed 0.1.8] Update: root %1 x %2; visible %3.", width, height, layoutRoot.IsVisibleHierarchy()));
         }
     }
 
@@ -174,12 +178,12 @@ class GRZKillfeedMenu extends UIScriptedMenu
     {
         super.OnShow();
         EnsureVisible();
-        Print("[GRZ Killfeed 0.1.7] OnShow called.");
+        Print("[GRZ Killfeed 0.1.8] OnShow called.");
     }
 
     override void OnHide()
     {
-        Print("[GRZ Killfeed 0.1.7] OnHide called.");
+        Print("[GRZ Killfeed 0.1.8] OnHide called.");
         super.OnHide();
     }
 
@@ -203,7 +207,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
         layoutRoot.SetScreenSize(width, height);
         Widget panel = layoutRoot.FindAnyWidget("MenuPanel");
         if (panel)
-            panel.SetScreenPos(Math.Max(0, (width - 640) * 0.5), Math.Max(0, (height - 480) * 0.5));
+            panel.SetScreenPos(Math.Max(0, (width - 720) * 0.5), Math.Max(0, (height - 540) * 0.5));
     }
 
     void ApplyLocalStyle(GRZNameStyle style)
@@ -227,10 +231,31 @@ class GRZKillfeedMenu extends UIScriptedMenu
     override bool OnClick(Widget w, int x, int y, int button)
     {
         string name = w.GetName();
+        for (int i = 0; i < GRZNameStyle.PALETTE_COUNT; i++)
+        {
+            if (name == "Swatch" + i.ToString())
+            {
+                if (m_ColorTarget == 0)
+                    Chosen.ColorA = i;
+                else
+                    Chosen.ColorB = i;
+                m_Status.SetText("Preview updated. Save when you're ready.");
+                RefreshLabels();
+                return true;
+            }
+        }
         switch (name)
         {
-            case "ColorA": Chosen.ColorA = (Chosen.ColorA + 1) % GRZNameStyle.PALETTE_COUNT; break;
-            case "ColorB": Chosen.ColorB = (Chosen.ColorB + 1) % GRZNameStyle.PALETTE_COUNT; break;
+            case "ColorA":
+                m_ColorTarget = 0;
+                m_Status.SetText("Choose a primary color from the swatches.");
+                RefreshLabels();
+                return true;
+            case "ColorB":
+                m_ColorTarget = 1;
+                m_Status.SetText("Choose a secondary color from the swatches.");
+                RefreshLabels();
+                return true;
             case "Effect": Chosen.AnimationMode = (Chosen.AnimationMode + 1) % GRZNameStyle.EFFECT_COUNT; break;
             case "Speed": Chosen.Speed = (Chosen.Speed + 1) % 3; break;
             case "Close": Close(); return true;
@@ -289,8 +314,8 @@ class GRZKillfeedMenu extends UIScriptedMenu
 
     protected void RefreshLabels()
     {
-        TextWidget.Cast(layoutRoot.FindAnyWidget("ColorALabel")).SetText("Color 1: " + GRZNameStyle.ColorName(Chosen.ColorA));
-        TextWidget.Cast(layoutRoot.FindAnyWidget("ColorBLabel")).SetText("Color 2: " + GRZNameStyle.ColorName(Chosen.ColorB));
+        TextWidget.Cast(layoutRoot.FindAnyWidget("ColorALabel")).SetText("Primary: " + GRZNameStyle.ColorName(Chosen.ColorA));
+        TextWidget.Cast(layoutRoot.FindAnyWidget("ColorBLabel")).SetText("Secondary: " + GRZNameStyle.ColorName(Chosen.ColorB));
         TextWidget.Cast(layoutRoot.FindAnyWidget("EffectLabel")).SetText("Style: " + GRZNameStyle.EffectName(Chosen.AnimationMode));
         string speed = "Normal";
         if (Chosen.Speed == 0)
@@ -298,5 +323,31 @@ class GRZKillfeedMenu extends UIScriptedMenu
         if (Chosen.Speed == 2)
             speed = "Fast";
         TextWidget.Cast(layoutRoot.FindAnyWidget("SpeedLabel")).SetText("Speed: " + speed);
+        RefreshPalette();
+    }
+
+    protected void RefreshPalette()
+    {
+        int selected = Chosen.ColorA;
+        if (m_ColorTarget == 1)
+            selected = Chosen.ColorB;
+        layoutRoot.FindAnyWidget("PrimaryActive").SetColor(0x00000000);
+        layoutRoot.FindAnyWidget("SecondaryActive").SetColor(0x00000000);
+        if (m_ColorTarget == 0)
+            layoutRoot.FindAnyWidget("PrimaryActive").SetColor(0xFFFFFFFF);
+        else
+            layoutRoot.FindAnyWidget("SecondaryActive").SetColor(0xFFFFFFFF);
+        for (int i = 0; i < GRZNameStyle.PALETTE_COUNT; i++)
+        {
+            string suffix = i.ToString();
+            layoutRoot.FindAnyWidget("SwatchFill" + suffix).SetColor(GRZNameStyle.Palette(i));
+            int border = 0xFF333333;
+            if (i == selected)
+                border = 0xFFFFFFFF;
+            layoutRoot.FindAnyWidget("SwatchBorder" + suffix).SetColor(border);
+            TextWidget label = TextWidget.Cast(layoutRoot.FindAnyWidget("SwatchLabel" + suffix));
+            label.SetTextExactSize(12);
+            label.SetOutline(1, 0xFF000000);
+        }
     }
 }
