@@ -9,6 +9,8 @@ SOURCE = ROOT / 'packaging/local-server'
 
 
 def main():
+    config = (SOURCE / 'serverDZ.cfg').read_text()
+    assert 'instanceId = 1;' in config
     manifest = json.loads((SOURCE / 'PBO-manifest.json').read_text())
     pbos = list((SOURCE / '@GRZ_Local/Addons').glob('*.pbo'))
     assert len(pbos) == len(manifest) == 7
