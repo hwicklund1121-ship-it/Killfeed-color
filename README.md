@@ -15,6 +15,8 @@ The weapon panel, native bullet count, fire mode, zeroing, reload/action prompts
 
 ## Download the PBO
 
+Version **0.1.8** refines only the heart artwork: a smoother close contour with fewer, smaller barbs, matching the cleaner blood-drop treatment. Blood artwork, weapon panel, HUD scripts, sizing and label visibility remain unchanged from 0.1.7. Texture/PBO validation does not establish the final in-game appearance.
+
 Version **0.1.7** clears the native item-actions root's own backing color and hides the stock `m_ItemLeft` and item-only ancestor branches. It stops before containers shared with reload/action prompts or the custom panel. This targets backplates outside `ia_item`, which previous builds left visible. Weapon and anatomical-heart artwork now use bolder opaque black thorns; text remains white. Texture alpha and PBO/ZIP checks pass, but removal of the reported in-game backing is not yet visually verified.
 
 Version **0.1.6** explicitly gives all custom frame containers a transparent color, matching transparent-container conventions in working DayZ Community Framework layouts. Weapon text uses Metron Light at exact 20-pixel primary / 16-pixel secondary sizes. Status cells shrink from 112 to 96 pixels, their labels are removed, and the refined heart artwork hugs the anatomical silhouette. Critical-state opacity pulses remain; lower noncritical stages have no text readout. In-game rendering still needs verification.
