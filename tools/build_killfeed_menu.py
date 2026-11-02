@@ -90,7 +90,7 @@ def main():
     prefix += frame('PrefixControls', 0, 82, 440, 130, editor)
     prefix += preview(232, 112)
     prefix += text('PageNote', 'Up to 12 letters, digits, _ or -. Leave empty to remove.', 0, 362, 440, 22, '0.55 0.55 0.55 1')
-    (OUT/'menu_prefix_page.layout').write_text(frame('GRZPrefixPage', 0, 0, 1036, 392, prefix+common, 'visible 0'))
+    (OUT/'menu_prefix_page.layout').write_text(frame('GRZPrefixPage', 0, 0, 1036, 392, frame('PrefixSetup', 298, 0, 440, 392, prefix), 'visible 0'))
 
     animation = text('AnimationHeading', 'COLORS & ANIMATION', 0, 0, 540, 32)
     animation += button('ColorA', 'Primary: White', 0, 64, 258)

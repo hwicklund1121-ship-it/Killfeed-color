@@ -24,13 +24,13 @@ class GRZKillfeedClient
         if (!ActiveMenu || !ActiveMenu.GetLayoutRoot())
         {
             ActiveMenu = null;
-            Error("[GRZ Killfeed 0.1.14] Native menu factory did not return an initialized settings menu.");
+            Error("[GRZ Killfeed 0.1.15] Native menu factory did not return an initialized settings menu.");
             g_Game.Chat("GRZ Killfeed: menu creation failed. Check the client script log.", "colorStatusChannel");
             return;
         }
         ActiveMenu.ApplyLocalStyle(LocalStyle);
         ActiveMenu.EnsureVisible();
-        Print("[GRZ Killfeed 0.1.14] Native menu registered and retained.");
+        Print("[GRZ Killfeed 0.1.15] Native menu registered and retained.");
     }
 
     static void ReleaseMenu()
@@ -174,11 +174,10 @@ class GRZKillfeedMenu extends UIScriptedMenu
             return null;
         }
         Widget nameControls = g_Game.GetWorkspace().CreateWidgets("GRZ_Killfeed/gui/layouts/menu_animation.layout", m_NamePage.FindAnyWidget("AnimationHost"));
-        Widget prefixControls = g_Game.GetWorkspace().CreateWidgets("GRZ_Killfeed/gui/layouts/menu_animation.layout", m_PrefixPage.FindAnyWidget("AnimationHost"));
         ImageWidget logo = ImageWidget.Cast(layoutRoot.FindAnyWidget("MenuLogo"));
         m_PrefixInput = EditBoxWidget.Cast(m_PrefixPage.FindAnyWidget("PrefixWordInput"));
         m_Status = TextWidget.Cast(layoutRoot.FindAnyWidget("Status"));
-        if (!logo || !m_Status || !m_PrefixInput || !nameControls || !prefixControls)
+        if (!logo || !m_Status || !m_PrefixInput || !nameControls)
         {
             Error("GRZ Killfeed: menu layout is missing required widgets.");
             layoutRoot.Unlink();
@@ -193,7 +192,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
         if (IsOfflinePreview)
             m_Status.SetText("Local preview — server access and persistence are not tested.");
         PositionPanel();
-        Print("[GRZ Killfeed 0.1.14] Init: layout created.");
+        Print("[GRZ Killfeed 0.1.15] Init: layout created.");
         return layoutRoot;
     }
 
@@ -248,7 +247,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
             m_LoggedUpdate = true;
             float width, height;
             layoutRoot.GetScreenSize(width, height);
-            Print(string.Format("[GRZ Killfeed 0.1.14] Update: root %1 x %2; visible %3.", width, height, layoutRoot.IsVisibleHierarchy()));
+            Print(string.Format("[GRZ Killfeed 0.1.15] Update: root %1 x %2; visible %3.", width, height, layoutRoot.IsVisibleHierarchy()));
         }
     }
 
@@ -264,14 +263,14 @@ class GRZKillfeedMenu extends UIScriptedMenu
             return;
         }
         EnsureVisible();
-        Print("[GRZ Killfeed 0.1.14] OnShow called.");
+        Print("[GRZ Killfeed 0.1.15] OnShow called.");
     }
 
     override void OnHide()
     {
         m_GRZDismissRequested = true;
         GRZKillfeedBus.AppDeactivated.Remove(CloseSafely);
-        Print("[GRZ Killfeed 0.1.14] OnHide called.");
+        Print("[GRZ Killfeed 0.1.15] OnHide called.");
         super.OnHide();
     }
 
@@ -419,7 +418,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
                 return true;
             case "PrefixTab":
                 m_PrefixTab = true;
-                m_Status.SetText("Choose an icon and type your prefix. Colors and animation stay synced with your name.");
+                m_Status.SetText("Choose an icon and type your prefix. It uses the colors and animation from the Name page.");
                 RefreshLabels();
                 return true;
             case "PrefixIconChoice":
@@ -590,21 +589,21 @@ class GRZKillfeedMenu extends UIScriptedMenu
         TextWidget.Cast(m_PrefixPage.FindAnyWidget("PrefixIconChoiceLabel")).SetText("Icon: " + GRZNameStyle.IconName(Chosen.PrefixIcon) + " >");
         GRZNameStyle.ApplyIcon(ImageWidget.Cast(m_PrefixPage.FindAnyWidget("PrefixChoicePreview")), Chosen.PrefixIcon);
         RefreshPreview();
-        TextWidget.Cast(page.FindAnyWidget("ColorALabel")).SetText("Primary: " + GRZNameStyle.ColorName(animation.ColorA));
-        TextWidget.Cast(page.FindAnyWidget("ColorBLabel")).SetText("Secondary: " + GRZNameStyle.ColorName(animation.ColorB));
-        TextWidget.Cast(page.FindAnyWidget("EffectLabel")).SetText("Style: " + GRZNameStyle.EffectName(animation.AnimationMode));
+        TextWidget.Cast(m_NamePage.FindAnyWidget("ColorALabel")).SetText("Primary: " + GRZNameStyle.ColorName(animation.ColorA));
+        TextWidget.Cast(m_NamePage.FindAnyWidget("ColorBLabel")).SetText("Secondary: " + GRZNameStyle.ColorName(animation.ColorB));
+        TextWidget.Cast(m_NamePage.FindAnyWidget("EffectLabel")).SetText("Style: " + GRZNameStyle.EffectName(animation.AnimationMode));
         string speed = "Normal";
         if (animation.Speed == 0)
             speed = "Slow";
         if (animation.Speed == 2)
             speed = "Fast";
-        TextWidget.Cast(page.FindAnyWidget("SpeedLabel")).SetText("Speed: " + speed);
+        TextWidget.Cast(m_NamePage.FindAnyWidget("SpeedLabel")).SetText("Speed: " + speed);
         RefreshPalette();
     }
 
     protected void RefreshPalette()
     {
-        Widget page = ActivePage();
+        Widget page = m_NamePage;
         GRZAnimationStyle animation = CurrentAnimation();
         int selected = animation.ColorA;
         if (m_ColorTarget == 1)

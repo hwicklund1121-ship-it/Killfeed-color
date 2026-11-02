@@ -201,7 +201,10 @@ def main():
         assert page in menu
     assert "PrefixWordInput" not in files["gui/layouts/menu_name_page.layout"].decode()
     assert "PrefixWordInput" in files["gui/layouts/menu_prefix_page.layout"].decode()
-    assert "m_NamePage.FindAnyWidget(\"AnimationHost\")" in menu and "m_PrefixPage.FindAnyWidget(\"AnimationHost\")" in menu
+    assert "m_NamePage.FindAnyWidget(\"AnimationHost\")" in menu
+    assert "m_PrefixPage.FindAnyWidget(\"AnimationHost\")" not in menu
+    assert "AnimationHost" not in files["gui/layouts/menu_prefix_page.layout"].decode()
+    assert "Widget page = m_NamePage;" in menu
     # Navigation must move with the black background, not live under the fullscreen root.
     shell_nodes = verify_menu_bounds(menu_layout)
     for name in ["NameTab", "PrefixTab", "PageHost"]:
