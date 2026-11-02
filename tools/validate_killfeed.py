@@ -3,7 +3,6 @@ import hashlib
 import io
 import re
 import struct
-import xml.etree.ElementTree as ET
 from pathlib import Path
 from zipfile import ZipFile
 
@@ -92,19 +91,18 @@ def main():
     for edge in ["BorderTop", "BorderBottom", "BorderLeft", "BorderRight"]:
         assert f"PanelWidgetClass {edge}" in row
     assert "gui/textures/grz_menu_outline_ca.paa" in files
-    inputs = ET.fromstring(files["inputs.xml"])
-    action = inputs.find("./inputs/actions/input")
-    binding = inputs.find("./preset/input")
-    assert action is not None and binding is not None
-    assert action.attrib["name"] == binding.attrib["name"] == "UAGRZKillfeedMenu"
-    assert binding.find("btn").attrib["name"] == "kF7"
-    assert 'inputs = "GRZ_Killfeed/inputs.xml"' in files["config.cpp"].decode()
     assert "ItemPreviewWidgetClass GunPreview" in row
     mission = files["scripts/5_Mission/GRZ_Killfeed/GRZKillfeedMission.c"].decode()
     assert 'detail.SetText(message.Distance.ToString() + " m")' in mission
     assert "message.WeaponName" not in text
-    assert "GetUpdateQueue(CALL_CATEGORY_GUI).Insert(GRZHandleMenuShortcut)" in mission
-    assert "GetUpdateQueue(CALL_CATEGORY_GUI).Remove(GRZHandleMenuShortcut)" in mission
+    assert "KC_F7" not in mission and "inputs.xml" not in files
+    assert "TextWidgetClass Arrow" not in row
+    assert '"text halign" center' in row
+    menu = files["scripts/5_Mission/GRZ_Killfeed/GRZKillfeedMenu.c"].decode()
+    request = menu.split("static void RequestMenu()", 1)[1].split("static void TestOffline()", 1)[0]
+    assert request.index("OpenLocalPreview();") < request.index("if (CanLocalPreview())")
+    assert "current.UseLocalPreview();" in mission
+    assert "if (!Allowed(identity)" in server
     assert "GunWidget.SetItem(null)" in mission and "g_Game.ObjectDelete(PreviewGun)" in mission
     print(f"Verified PBO prefix/checksum and {len(files)} source/asset entries; ZIP payloads match.")
     print("Layout/widget/resource bindings and style wire-field order checked.")

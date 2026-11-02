@@ -20,11 +20,11 @@ class GRZKillfeedClient
 
     static void RequestMenu()
     {
+        // Temporary test behavior: show the menu immediately on every client.
+        // Authorization is still required before enabling server-side saves.
+        OpenLocalPreview();
         if (CanLocalPreview())
-        {
-            OpenLocalPreview();
             return;
-        }
         PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
         if (!player)
             return;
@@ -174,6 +174,20 @@ class GRZKillfeedMenu extends UIScriptedMenu
         m_Status.SetText("Preview only — press Save to apply.");
         RefreshLabels();
         return true;
+    }
+
+    void ApplyServerStyle(GRZNameStyle style)
+    {
+        Chosen = style;
+        IsOfflinePreview = false;
+        RefreshLabels();
+        m_Status.SetText("Server access confirmed. Save applies your style to the live killfeed.");
+    }
+
+    void UseLocalPreview()
+    {
+        IsOfflinePreview = true;
+        m_Status.SetText("Local preview only. Server customization requires Steam-ID access.");
     }
 
     void SetResult(int status)

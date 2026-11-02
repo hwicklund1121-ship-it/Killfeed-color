@@ -1,37 +1,37 @@
 # GRZ Killfeed
 
-A separate **DayZ PC** mod. The finished GRZ Custom Hud files remain unchanged.
+Separate **DayZ PC** mod, version **0.1.5**. The finished GRZ Custom Hud is unchanged.
 
-Version **0.1.4** replaces weapon-name text with a 3D inventory preview of the fatal gun and its attachment snapshot, plus distance. It also registers a remappable F7 action and checks it in the GUI update queue, with a native key-state fallback. For an Editor session that still blocks the shortcut, the client launch parameter `-GRZKillfeedPreview` automatically opens a **local-only preview**; it never grants server customization access or broadcasts fake kills. Update both server and clients because the kill-message format changed.
+Each entry shows **killer name | actual gun model | victim name**, with the **distance centered underneath the gun**. There is no gun-name text or arrow. The model includes the captured weapon attachments. Rows have plain black outlines and a 45%-opaque black background. The newest five entries stay at the top right for eight seconds, fading during their last second.
 
-Version **0.1.3** replaces the killfeed entries' thorn artwork with a plain black 2-pixel outline and a 45%-opaque black background. Entries are 400×64 pixels with roomier text insets and 4-pixel spacing. The custom settings menu retains its black background, white text and white thorn edges. F7 and offline command previews remain available.
+The custom settings menu has a solid black background, white text and white tribal thorn edges. Players can select two of twelve colors (white, red, orange, yellow, green, blue, indigo, violet, cyan, pink, gray, black), six animation styles (steady, pulse, blink, color fade, color swap, rainbow) and three speeds. A saved style applies to that player's name as both killer and victim for every viewer.
 
-Version **0.1.2** adds **F7** to open the menu in an offline Editor mission, even when the Editor already has a menu open. Closing the preview returns to its parent menu. Multiplayer access still requires the server's Steam-ID whitelist.
+This is an **unsigned development build**. Archive, resource and layout checks pass; DayZ compilation, networking, 3D rendering and Editor behavior have not been executed in this cloud machine.
 
-Version **0.1.1** renames the fields `Effect` to `AnimationMode` and `Weapon` to `WeaponName` because the old names collide with DayZ engine types. Replace the old killfeed PBO on both server and clients. RPC field order and the Steam-ID whitelist format are unchanged. This fixes the reported type-name conflict; full DayZ compilation is still not available in this cloud machine.
+## Open and test the menu now
 
-- Top-right player killfeed: killer > victim, a gun image including its captured attachments, and rounded player-to-player distance in meters. No gun name is displayed.
-- Up to five entries, newest first; each lasts eight seconds and fades during its last second.
-- Plain black 2-pixel borders, a 45%-opaque black background, and white default names on each killfeed entry. The settings menu keeps its separate white thorn ornament.
-- `/killfeed` opens personal name styling after the server verifies access.
-- Two colors from twelve choices (white, red, orange, yellow, green, blue, indigo, violet, cyan, pink, gray, black), six effects (steady, pulse, blink, color fade, color swap, rainbow cycle), and three speeds.
-- Custom black settings menu, white labels/buttons, and white tribal thorn edges matching the HUD. The username preview displays its selected animated colors.
-- A name's chosen style appears for everyone, whether that player is killer or victim.
-- Only server-approved Steam IDs can save styles. Other players still see the killfeed.
+1. Install/load this PBO, then restart DayZ and enter your Editor mission or server.
+2. Open chat, type **`/killfeed`**, and press Enter.
+3. The menu opens immediately as a local preview. **No Steam-ID whitelist is needed just to open or preview it.** This is the temporary testing behavior requested by the user. F7 has been removed.
+4. Change colors and flashing style. Choose **Preview feed** to close the menu and display a private sample entry: your name, an M4 with optic/handguard/stock/suppressor/magazine, and a dummy victim, with 175 m underneath the gun.
 
-This is an **unsigned development PBO**, not a DayZ-tested release. Archive/layout/API checks have been performed; this cloud machine cannot compile or execute Enforce Script or run DayZ Editor.
+In an offline/local-host session, Save applies to local previews only. In normal multiplayer, the menu requests permission from the server after opening: an approved Steam ID enables persistent server saves; a denied request leaves the menu open in preview mode. A private preview is never broadcast as a real kill.
 
-## Install on the server and clients
+`/killfeed test` creates another local sample in offline/local-host testing. If Editor replaces the normal chat UI, a local chat-event fallback also recognizes `/killfeed`. The optional client launch parameter `-GRZKillfeedPreview` still auto-opens a private preview after the gameplay mission initializes. Remove it for normal play. It cannot grant server permissions.
 
-1. Extract `GRZ_Killfeed-mod.zip`. Place `@GRZ_Killfeed` beside your other mods.
-2. Load it on the **server and every client** using `-mod=@GRZ_Killfeed`. Do not use only `-serverMod`, since the UI is client-side.
-3. To run with the HUD: `-mod=@GRZ_CustomHud;@GRZ_Killfeed` (quote the full argument if your launcher/shell requires it).
-4. Signature-checking servers require you to sign the PBO using your own DayZ Tools key, distribute the `.bisign` beside it, and install the public `.bikey` on the server. No signing keys are bundled.
-5. Start the server once. It creates `GRZ_Killfeed/config.json` under the server's active **profiles** directory (`-profiles`), not inside the mod folder.
+Local preview does **not** validate the slash-command hook in every Editor variant, real kill attribution, server access, networking or persistence. Some Editor modes replace normal gameplay initialization and may need compatibility work.
 
-## Give players access
+## Install on server and clients
 
-Stop the server and edit its profiles file `GRZ_Killfeed/config.json`:
+1. Extract `GRZ_Killfeed-mod.zip` and place `@GRZ_Killfeed` beside your other mods.
+2. Load it on the **server and every client** with `-mod=@GRZ_Killfeed`. Do not use only `-serverMod`: the feed and menu run on clients.
+3. With the HUD, use `-mod=@GRZ_CustomHud;@GRZ_Killfeed` (quote the full argument if your launcher/shell requires it).
+4. Replace older versions on both sides. The weapon-snapshot RPC format requires matching server/client versions.
+5. Signature-checking servers require you to sign the PBO with your own DayZ Tools key, distribute the `.bisign` beside it, and install the public `.bikey` on the server. No signing keys are bundled.
+
+## Grant live customization access
+
+Start the server once. It creates `GRZ_Killfeed/config.json` inside the active server **profiles** directory (`-profiles`), not the mod folder. Stop the server and edit:
 
 ```json
 {
@@ -39,49 +39,35 @@ Stop the server and edit its profiles file `GRZ_Killfeed/config.json`:
 }
 ```
 
-Put each approved player's **17-digit SteamID64 in quotes** inside that array, separated by commas, then restart the server. The shipped empty list grants customization to nobody. The example file inside the mod ZIP is only a template; changing it does not grant access.
+Place each approved player's **17-digit SteamID64 in quotes** inside that array, separated by commas, then restart. The empty list grants server-side customization to nobody. The example file in the ZIP is only a template; editing it does not grant access.
 
-The config is read on server startup. Removing an ID and restarting disables that player's special styling, including previously saved preferences. Malformed config denies customization and is preserved for repair.
+The whitelist is checked when loading and saving styles. Removing an ID and restarting reverts that player's live styling to default white, even if preferences were previously saved. Malformed config denies live customization and is preserved for repair.
 
-Styles are stored by Steam ID in `GRZ_Killfeed/styles.json` in the same server profiles directory. Saving retains a backup of the previous file. Invalid stored data disables saves until repaired and the server is restarted. No Steam ID is accepted from the client as a settings target: the server uses the authenticated sender's own identity and validates every option.
+Preferences are stored by Steam ID in `GRZ_Killfeed/styles.json` in the same server profiles directory, with a previous-file backup on save. Malformed stored data disables saving until repaired and the server is restarted. Every save is validated against the authenticated sender's own identity and the server whitelist; the client never supplies a Steam ID as a settings target.
 
-Players press the chat key, enter `/killfeed`, and submit. The command is intercepted locally rather than sent as a normal chat message. Approved players get a live preview; **Save** persists on the server, and **Preview in feed** shows a local sample without sending a fake kill to anyone else. Unapproved players get an access-denied message.
+## Gun images
 
-## Test with DayZ Editor
+The server captures the fatal gun's item types, attachment slots and nested parent relationships. A client builds a local inventory-preview model with that snapshot. Up to 32 items across four attachment levels are captured, including magazines. Local preview objects are nonpersistent and deleted on expiry, overflow and mission finish.
 
-Load both DayZ Editor and `@GRZ_Killfeed` in the DayZ launcher, and start an **offline** editor mission with a player and the normal HUD/chat available:
+Required gun/attachment mods must be loaded on every client. Missing/unbuildable models leave player names and distance visible. Non-gun kills show no fake firearm. Wear, runtime material overrides, moving parts and ammunition state are not reproduced. Actual attachment reconstruction, framing and cleanup require in-game testing.
 
-1. Press **F7**, or enter `/killfeed` in chat. In an offline/local-host mission this opens a clearly marked local preview menu without needing a Steam whitelist. The action appears in DayZ's controls under **GRZ Killfeed** and can be rebound. In normal multiplayer F7 requests server-authorized access, just like the command.
-2. Cycle colors, effect and speed. **Save** applies only to that offline preview session; it does not modify server settings.
-3. Choose **Preview in feed** to close the menu and show a local sample entry.
-4. Enter `/killfeed test` to show another local sample using the current preview style. The sample uses an M4 with an optic, handguard, stock, suppressor and magazine. Verify placement, transparency, clipping, five-entry cap and eight-second expiry.
+Only fatal sources with a player identity are credited. Suicides, infected/animal kills and environmental deaths are excluded. Delayed bleeding, disconnected attackers and detached explosives/traps without a player-owned fatal source may not appear; no killer is guessed from stale damage history. Distance is measured between player positions at death, not projectile travel distance.
 
-If F7 still does nothing, add **`-GRZKillfeedPreview`** in the launcher's additional parameters and restart the Editor session. The menu is scheduled to open automatically after the gameplay mission initializes. This flag forces a private preview even when the session reports itself as multiplayer; saving changes only the local test style. Remove the parameter for normal play. This does not test the slash-command interception or server permissions.
-
-Local previews **do not validate real kill attribution, networking, server authorization or persistence**. `/killfeed test` is disabled in ordinary remote multiplayer sessions without the explicit preview flag. The authorized menu's preview button can still show a private local sample on a multiplayer server.
-
-Editor launch modes differ: if your editor session reports itself as multiplayer, it uses the normal server-controlled path. A mode that replaces the standard chat menu may intercept commands first. Test in an offline mission with standard chat, or use the multiplayer procedure below.
-
-## Required multiplayer validation
+## Required multiplayer checks
 
 Use a private dedicated server with two clients and inspect server/client script logs:
 
-- Confirm the PBO compiles and the config appears under the active profiles directory.
-- With an empty whitelist, confirm menu access is denied while ordinary killfeed entries still display.
-- Add one actual SteamID64 and restart. Confirm only that player gets the menu; another player cannot change its style or impersonate its identity.
-- Save a style, reconnect and restart the server; confirm the preference persists. Remove access and restart; confirm it reverts to plain white names.
-- Check gun, melee, fist and player-driven vehicle kills on both clients, with correct player names and plausible distance. Gun kills should show the actual model with optic, suppressor, stock, handguard, magazine and nested attachments. Non-gun kills show distance without a fake gun. Confirm suicides, infected/animal kills and environmental deaths are excluded.
-- Check all effects on killer and victim names, death/respawn, reconnect, HUD toggle, resolution changes and compatibility with the HUD mod.
-- Test six quick kills, expiry and late joins; entries are live events, not history replay.
-- Test malformed config/settings and unwritable profiles: config is preserved, access fails closed, and failed saves are reported.
+- Verify compilation and `/killfeed` opening with an empty whitelist. Preview must work, but live customization must not.
+- Add one real SteamID64 and restart. Verify only that player can save live styles, and that another player cannot impersonate it.
+- Save a style, reconnect and restart; verify persistence. Revoke access and restart; verify default styling returns.
+- Check gun, melee, fist and player-driven vehicle kills on both clients. Verify names, distance, gun models and all visible attachments.
+- Check all colors/effects on killer and victim names, HUD toggle, death/respawn, reconnect and resolutions.
+- Test six quick entries, the five-row limit, expiry and removal of local preview objects. Late joins do not replay historical kills.
+- Test malformed config/settings and unwritable profiles: files must be preserved and failed saves reported.
 
-Only fatal sources with a player identity are credited. Delayed bleeding, disconnected attackers and detached explosives/traps without a player-owned fatal source may not appear; the mod does not guess a killer from stale damage history. Distance is between player positions at death, not projectile travel distance.
+Other chat-menu/gameplay overrides can need compatibility work. RPC IDs `1647280101`–`1647280104` must not conflict with another installed mod.
 
-Gun snapshots contain up to 32 item types and attachment-slot relationships across four nested attachment levels. Clients create local, nonpersistent preview objects below the world, not networked gameplay weapons, and delete them when entries expire, overflow or the mission finishes. Required gun/attachment mods must be loaded on every client. If a model cannot be created, the names and distance still display. Wear, runtime material overrides, moving parts and ammunition state are not reproduced. Actual attachment reconstruction and resource cleanup need in-game verification.
-
-Native kill handling follows DayZ's `EEKilled` source ownership, not client-supplied events. RPC IDs `1647280101`–`1647280104` must not conflict with another installed mod. Other chat-menu overrides may require compatibility work.
-
-## Build
+## Build and package checks
 
 From the repository root, with Python 3:
 
@@ -90,6 +76,6 @@ python3 tools/build_killfeed.py --output-dir downloads
 python3 tools/validate_killfeed.py
 ```
 
-Outputs `downloads/GRZ_Killfeed.pbo` and `downloads/GRZ_Killfeed-mod.zip`. The PBO has prefix `GRZ_Killfeed` and contains source scripts/config plus the transparent texture. Building the PBO does not compile Enforce Script or sign it. No extra runtime mod dependency is required.
+Outputs `downloads/GRZ_Killfeed.pbo` and `downloads/GRZ_Killfeed-mod.zip`. The PBO prefix is `GRZ_Killfeed`; it contains source scripts/config, layouts and the transparent menu texture. Packaging does not compile Enforce Script or sign the addon.
 
-To re-encode the generated white menu-border artwork, install Pillow 12.3 or newer and run `python3 tools/build_killfeed_art.py` before packaging. The menu's text/control rectangles were checked against the scaled border alpha to avoid overlapping thorns. The validator checks the actual PBO/ZIP, layout bindings, resources and style wire-field order; it does not test server authorization or Enforce compilation.
+To re-encode the generated white menu ornament, install Pillow 12.3 or newer and run `python3 tools/build_killfeed_art.py` before packaging. The static validator checks PBO/ZIP payloads, resource and widget bindings, style wire-field order, and selected UI contracts. It does not execute DayZ permissions, RPCs, object creation or Editor controls.

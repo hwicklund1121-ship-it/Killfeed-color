@@ -3,7 +3,7 @@ FrameWidgetClass GRZKillfeedRow
  color 0 0 0 0
  ignorepointer 1
  position 0 0
- size 400 92
+ size 500 100
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -13,7 +13,7 @@ PanelWidgetClass Backing
 {
  ignorepointer 1
  position 2 2
- size 396 88
+ size 496 96
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -25,7 +25,7 @@ PanelWidgetClass BorderTop
 {
  ignorepointer 1
  position 0 0
- size 400 2
+ size 500 2
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -36,8 +36,8 @@ PanelWidgetClass BorderTop
 PanelWidgetClass BorderBottom
 {
  ignorepointer 1
- position 0 90
- size 400 2
+ position 0 98
+ size 500 2
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -49,7 +49,7 @@ PanelWidgetClass BorderLeft
 {
  ignorepointer 1
  position 0 2
- size 2 88
+ size 2 96
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -60,8 +60,8 @@ PanelWidgetClass BorderLeft
 PanelWidgetClass BorderRight
 {
  ignorepointer 1
- position 398 2
- size 2 88
+ position 498 2
+ size 2 96
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -71,8 +71,9 @@ PanelWidgetClass BorderRight
 }
 TextWidgetClass Killer
 {
- position 14 10
- size 160 22
+ "text halign" right
+ position 14 28
+ size 140 24
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -84,25 +85,10 @@ TextWidgetClass Killer
  "text valign" center
  text ""
 }
-TextWidgetClass Arrow
-{
- position 184 10
- size 20 22
- hexactpos 1
- vexactpos 1
- hexactsize 1
- vexactsize 1
- ignorepointer 1
- color 1 1 1 1
- font "gui/fonts/sdf_MetronLight24"
- "exact text" 1
- "text valign" center
- text ">"
-}
 TextWidgetClass Victim
 {
- position 216 10
- size 170 22
+ position 348 28
+ size 138 24
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -118,8 +104,8 @@ ItemPreviewWidgetClass GunPreview
 {
  ignorepointer 1
  mode blend
- position 148 34
- size 238 50
+ position 164 8
+ size 172 64
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -128,8 +114,9 @@ ItemPreviewWidgetClass GunPreview
 }
 TextWidgetClass Detail
 {
- position 14 48
- size 120 20
+ "text halign" center
+ position 164 78
+ size 172 18
  hexactpos 1
  vexactpos 1
  hexactsize 1

@@ -81,7 +81,7 @@ class GRZKillfeedRow
         Victim.SetColor(GRZNameStyle.WithAlpha(victimColor, ((victimColor >> 24) & 255) * fade));
         // Never make the transparent root opaque while fading its children.
         Root.FindAnyWidget("Backing").SetAlpha(0.45 * fade);
-        array<string> names = {"Arrow", "Detail", "BorderTop", "BorderBottom", "BorderLeft", "BorderRight"};
+        array<string> names = {"Detail", "BorderTop", "BorderBottom", "BorderLeft", "BorderRight"};
         foreach (string name : names)
             Root.FindAnyWidget(name).SetAlpha(fade);
         if (GunWidget)
@@ -103,8 +103,6 @@ modded class MissionGameplay
     protected Widget m_GRZFeed;
     protected ref array<ref GRZKillfeedRow> m_GRZRows = new array<ref GRZKillfeedRow>;
     protected bool m_GRZListening;
-    protected bool m_GRZPreviewHeld;
-    protected bool m_GRZAutoPreviewOpened;
 
     override void OnInit()
     {
@@ -113,9 +111,29 @@ modded class MissionGameplay
         {
             GRZKillfeedBus.Kills.Insert(GRZReceiveKill);
             GRZKillfeedBus.Menu.Insert(GRZReceiveMenu);
-            g_Game.GetUpdateQueue(CALL_CATEGORY_GUI).Insert(GRZHandleMenuShortcut);
+            if (IsCLIParam("GRZKillfeedPreview"))
+                g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZKillfeedClient.OpenLocalPreview, 1000, false);
             m_GRZListening = true;
         }
+    }
+
+    override void OnEvent(EventType eventTypeId, Param params)
+    {
+        if (eventTypeId == ChatMessageEventTypeID && GRZKillfeedClient.CanLocalPreview())
+        {
+            ChatMessageEventParams chat = ChatMessageEventParams.Cast(params);
+            if (chat)
+            {
+                string command = chat.param3.Trim();
+                command.ToLower();
+                if (command == "/killfeed")
+                {
+                    g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZKillfeedClient.RequestMenu, 150, false);
+                    return;
+                }
+            }
+        }
+        super.OnEvent(eventTypeId, params);
     }
 
     override void OnMissionFinish()
@@ -123,7 +141,6 @@ modded class MissionGameplay
         GRZKillfeedBus.Kills.Remove(GRZReceiveKill);
         GRZKillfeedBus.Menu.Remove(GRZReceiveMenu);
         m_GRZListening = false;
-        g_Game.GetUpdateQueue(CALL_CATEGORY_GUI).Remove(GRZHandleMenuShortcut);
         g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(GRZKillfeedClient.OpenLocalPreview);
         g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(GRZKillfeedClient.RequestMenu);
         foreach (GRZKillfeedRow row : m_GRZRows)
@@ -155,22 +172,6 @@ modded class MissionGameplay
         IngameHud hud = IngameHud.Cast(GetHud());
         if (hud)
             m_GRZFeed.Show(!hud.GetHudVisibility().IsContextFlagActive(IngameHudVisibility.HUD_HIDE_FLAGS));
-    }
-
-    protected void GRZHandleMenuShortcut(float timeslice)
-    {
-        // Registered input plus native key-state fallback; neither depends on
-        // Editor forwarding MissionGameplay.OnKeyPress to this mod.
-        bool held = (KeyState(KeyCode.KC_F7) & 0x8000) != 0;
-        bool pressed = g_Game.GetInput().LocalPress("UAGRZKillfeedMenu", false);
-        if (pressed || (held && !m_GRZPreviewHeld))
-            g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZKillfeedClient.RequestMenu, 1, false);
-        m_GRZPreviewHeld = held;
-        if (!m_GRZAutoPreviewOpened && IsCLIParam("GRZKillfeedPreview"))
-        {
-            m_GRZAutoPreviewOpened = true;
-            g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZKillfeedClient.OpenLocalPreview, 1000, false);
-        }
     }
 
     protected bool GRZEnsureFeed()
@@ -220,9 +221,8 @@ modded class MissionGameplay
         row.Victim = TextWidget.Cast(row.Root.FindAnyWidget("Victim"));
         row.Killer.SetTextExactSize(17);
         row.Victim.SetTextExactSize(17);
-        GRZFitName(row.Killer, GRZShortName(message.Killer), 160);
-        GRZFitName(row.Victim, GRZShortName(message.Victim), 170);
-        TextWidget.Cast(row.Root.FindAnyWidget("Arrow")).SetTextExactSize(17);
+        GRZFitName(row.Killer, GRZShortName(message.Killer), 140);
+        GRZFitName(row.Victim, GRZShortName(message.Victim), 138);
         TextWidget detail = TextWidget.Cast(row.Root.FindAnyWidget("Detail"));
         detail.SetText(message.Distance.ToString() + " m");
         detail.SetTextExactSize(14);
@@ -245,32 +245,21 @@ modded class MissionGameplay
         float x, y, width, height;
         hud.GetHudPanelWidget().GetScreenPos(x, y);
         hud.GetHudPanelWidget().GetScreenSize(width, height);
-        m_GRZFeed.SetScreenPos(x + width - 424, y + 28);
+        m_GRZFeed.SetScreenPos(x + width - 524, y + 28);
         for (int i = 0; i < m_GRZRows.Count(); i++)
-            m_GRZRows[i].Root.SetPos(0, i * 96);
+            m_GRZRows[i].Root.SetPos(0, i * 104);
     }
 
     protected void GRZReceiveMenu(int status, GRZNameStyle style)
     {
         GRZKillfeedMenu current = GRZKillfeedMenu.Cast(g_Game.GetUIManager().GetMenu());
-        if (status == 0)
-        {
-            if (current)
-                current.Close();
-            PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
-            if (player)
-                player.MessageStatus("GRZ Killfeed: customization is not enabled for your Steam ID.");
+        if (!current)
             return;
-        }
-        if (status == 1)
-        {
-            if (g_Game.GetUIManager().GetMenu())
-                return;
-            GRZKillfeedMenu menu = new GRZKillfeedMenu;
-            menu.Chosen = style;
-            g_Game.GetUIManager().ShowScriptedMenu(menu, null);
-        }
-        else if (current)
+        if (status == 0)
+            current.UseLocalPreview();
+        else if (status == 1)
+            current.ApplyServerStyle(style);
+        else
             current.SetResult(status);
     }
-}
+};
