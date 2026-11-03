@@ -8,8 +8,8 @@
     "sha256": "1d34f5d7404571277b8722f663fb068013efd35a13ea4f714faaabb2bb54c0a8"
   },
   "GRZ_CustomHud.pbo": {
-    "bytes": 2647966,
-    "sha256": "b17834c618894162eadf4c0a3b151647969254947e5c9a6d6131c4721fd8026c"
+    "bytes": 2472060,
+    "sha256": "b35dd281e7e67ad3cb8301e3f89afcef9d2fcd3b4db4ed45899a108644254783"
   },
   "GRZ_Hitmarker.pbo": {
     "bytes": 69922,
@@ -34,5 +34,9 @@
   "GRZ_Survival.pbo": {
     "bytes": 3523,
     "sha256": "fb57cb3e61f6c07658873ac002ae48956aae5583738bada5c78f22bd20ef2dd8"
+  },
+  "GRZ_NoGrass.pbo": {
+    "bytes": 497,
+    "sha256": "7714ba9e83ce4b3bca2330c9cc7bad55a0cdd5222eaae9280226aee407feebb0"
   }
 }
