@@ -9,7 +9,8 @@ Do not also enable separate copies of the same mods.
 The first launch asks for your 17-digit SteamID64 on your own PC. The setup
 stores it locally in admin-owner.local.txt and adds it to:
     profiles/VPPAdminTools/Permissions/SuperAdmins/SuperAdmins.txt
-Existing admin entries are preserved. Your ID is not included in this download.
+Existing valid admin entries are preserved. Blank lines/BOM are removed because
+VPP stops reading the list at its first empty line. Your ID stays local.
 
 VPP also generates:
     profiles/VPPAdminTools/Permissions/credentials.txt
