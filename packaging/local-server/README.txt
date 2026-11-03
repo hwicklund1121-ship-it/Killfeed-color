@@ -65,3 +65,7 @@ Earmuffs stay active in inventory, chat and Esc; typing in menus does not trigge
 Environment: fixed noon, static clouds, no rain/fog/snow/wind/storms.
 Dynamic PO-X gas artillery is suppressed; static gas zones remain.
 Staff-related VIP prefix words are blocked by server validation.
+
+Visibility: client terrain/object distance is 1400m; server and client fog are disabled.
+If keeping your own serverDZ.cfg, add/update networkRangeFar = 1400; and restart.
+Changing only the PBO will not increase the server replication range.
