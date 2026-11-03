@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modded_inputs>
+    <inputs>
+        <actions>
+            <input name="UAGRZEarmuffsToggle" loc="STR_GRZ_EARMUFFS_TOGGLE" />
+            <input name="UAGRZEarmuffsLower" loc="STR_GRZ_EARMUFFS_LOWER" />
+            <input name="UAGRZEarmuffsHigher" loc="STR_GRZ_EARMUFFS_HIGHER" />
+        </actions>
+        <sorting name="GRZEarmuffs" loc="STR_GRZ_EARMUFFS_GROUP">
+            <input name="UAGRZEarmuffsToggle" />
+            <input name="UAGRZEarmuffsLower" />
+            <input name="UAGRZEarmuffsHigher" />
+        </sorting>
+    </inputs>
+    <preset>
+        <input name="UAGRZEarmuffsToggle"><btn name="kN" /></input>
+        <input name="UAGRZEarmuffsLower"><btn name="kMinus" /><btn name="kSubtract" /></input>
+        <input name="UAGRZEarmuffsHigher"><btn name="kEquals" /><btn name="kAdd" /></input>
+    </preset>
+</modded_inputs>
