@@ -4,8 +4,6 @@ modded class IngameHud
     protected Widget m_GRZStatusPanel;
     protected int m_GRZHealthStatus;
     protected int m_GRZBloodStatus;
-    protected bool m_GRZHealthMaskReady;
-    protected bool m_GRZBloodMaskReady;
     protected int m_GRZHealthTrend;
     protected int m_GRZBloodTrend;
     protected int m_GRZCuts;
@@ -33,23 +31,28 @@ modded class IngameHud
         }
         GRZUpdateStamina();
         GRZBindStatusWidgets();
-        ImageWidget health = ImageWidget.Cast(m_GRZStatusPanel.FindAnyWidget("GRZHealthIcon"));
-        ImageWidget blood = ImageWidget.Cast(m_GRZStatusPanel.FindAnyWidget("GRZBloodIcon"));
-        if (health)
+        GRZLoadStatusLayers("Health");
+        GRZLoadStatusLayers("Blood");
+    }
+
+    protected void GRZLoadStatusLayers(string name)
+    {
+        ImageWidget outline = ImageWidget.Cast(m_GRZStatusPanel.FindAnyWidget("GRZ" + name + "Icon"));
+        ImageWidget fill = ImageWidget.Cast(m_GRZStatusPanel.FindAnyWidget("GRZ" + name + "Fill"));
+        string asset = "health";
+        if (name == "Blood")
+            asset = "blood";
+        if (outline)
         {
-            health.SetFlags(WidgetFlags.SOURCEALPHA | WidgetFlags.BLEND | WidgetFlags.STRETCH);
-            health.LoadImageFile(0, "GRZ_CustomHud/gui/textures/grz_health_ca.paa");
-            m_GRZHealthMaskReady = health.LoadMaskTexture("GRZ_CustomHud/gui/textures/grz_health_fillmask.paa");
-            health.SetMaskTransitionWidth(0.001);
-            health.SetMaskProgress(0.97);
+            outline.SetFlags(WidgetFlags.SOURCEALPHA | WidgetFlags.BLEND | WidgetFlags.STRETCH);
+            outline.LoadImageFile(0, "GRZ_CustomHud/gui/textures/grz_" + asset + "_outline_ca.paa");
+            outline.SetSort(10);
+            outline.Show(true);
         }
-        if (blood)
+        if (fill)
         {
-            blood.SetFlags(WidgetFlags.SOURCEALPHA | WidgetFlags.BLEND | WidgetFlags.STRETCH);
-            blood.LoadImageFile(0, "GRZ_CustomHud/gui/textures/grz_blood_ca.paa");
-            m_GRZBloodMaskReady = blood.LoadMaskTexture("GRZ_CustomHud/gui/textures/grz_blood_fillmask.paa");
-            blood.SetMaskTransitionWidth(0.001);
-            blood.SetMaskProgress(0.97);
+            fill.SetFlags(WidgetFlags.SOURCEALPHA | WidgetFlags.BLEND | WidgetFlags.STRETCH);
+            fill.LoadImageFile(0, "GRZ_CustomHud/gui/textures/grz_" + asset + "_fill_ca.paa");
         }
     }
 
@@ -288,15 +291,34 @@ modded class IngameHud
 
     protected void GRZStatus(string name, int status)
     {
-        ImageWidget icon = ImageWidget.Cast(m_GRZStatusPanel.FindAnyWidget("GRZ" + name + "Icon"));
-        if (!icon)
+        ImageWidget outline = ImageWidget.Cast(m_GRZStatusPanel.FindAnyWidget("GRZ" + name + "Icon"));
+        ImageWidget fill = ImageWidget.Cast(m_GRZStatusPanel.FindAnyWidget("GRZ" + name + "Fill"));
+        Widget clip = m_GRZStatusPanel.FindAnyWidget("GRZ" + name + "FillClip");
+        if (!outline || !fill || !clip)
             return;
-        // Keep the black contours opaque even when the interior is empty.
-        icon.SetColor(0xFFFFFFFF);
-        bool ready = m_GRZHealthMaskReady;
+        outline.SetColor(0xFFFFFFFF);
+        outline.Show(true);
+        float fraction = GRZFillFraction(name, status);
+        clip.Show(fraction > 0);
+        if (fraction <= 0)
+            return;
+        // Clip the white image without stretching or masking the black outline.
+        float top = 0.21875;
+        float bottom = 0.822265625;
         if (name == "Blood")
-            ready = m_GRZBloodMaskReady;
-        if (ready)
-            icon.SetMaskProgress(0.03 + 0.94 * GRZFillFraction(name, status));
+        {
+            top = 0.28125;
+            bottom = 0.7578125;
+        }
+        float cutoff;
+        if (fraction < 0.999)
+            cutoff = bottom - fraction * (bottom - top);
+        float visibleHeight = Math.Max(0.001, 1 - cutoff);
+        clip.SetPos(0, cutoff);
+        clip.SetSize(1, visibleHeight);
+        fill.SetPos(0, -cutoff / visibleHeight);
+        fill.SetSize(1, 1 / visibleHeight);
+        fill.SetColor(0xFFFFFFFF);
+        fill.Show(true);
     }
 };

@@ -28,9 +28,10 @@ GRZ_Movement.pbo
 LUGUINSTADROPFIX.pbo
 GRZ_Hitmarker.pbo
 
-GRZ_Autorun.pbo is replaced with the user's v0.11 LB Screens TEST update.
-GRZ_CustomHud.pbo is updated to v0.1.15: white health/blood interiors drain
-transparently while black outlines remain visible; trend arrows and cut count remain. GRZ_Hitmarker.pbo v0.1.4 adds settings under Options > Game and uses native EffectSound
+GRZ_Autorun.pbo v0.12 adds Alt/remapped freelook while keeping the supplied
+v0.11 LB-screen support and existing autorun binding.
+GRZ_CustomHud.pbo v0.1.16 replaces the faulty fill-mask shader with clipped
+white-fill layers and independent black outlines; arrows and cut count remain. GRZ_Hitmarker.pbo v0.1.4 adds settings under Options > Game and uses native EffectSound
 non-spatial playback with OGG audio; the failed direct Play2D path is removed. It currently
 uses an explicitly labeled temporary headshot sound, pending the Rust audio clip.
 Other uploaded PBOs are preserved unchanged.

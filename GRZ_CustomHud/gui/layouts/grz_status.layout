@@ -11,23 +11,115 @@ FrameWidgetClass GRZStatusPanel
  hexactsize 1
  vexactsize 1
  {
-  ImageWidgetClass GRZHealthIcon
+  FrameWidgetClass GRZHealthCell
   {
-   ignorepointer 1
    position 0.625 0
    size 0.375 0.8
-   color 1 1 1 1
-   mode blend
-   stretch 1
-  }
-  ImageWidgetClass GRZBloodIcon
-  {
+   color 0 0 0 0
+   style blank
    ignorepointer 1
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+   {
+    FrameWidgetClass GRZHealthFillClip
+    {
+     position 0 0
+     size 1 1
+     color 0 0 0 0
+     style blank
+     clipchildren 1
+     ignorepointer 1
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+     {
+      ImageWidgetClass GRZHealthFill
+      {
+       position 0 0
+       size 1 1
+       color 1 1 1 1
+       ignorepointer 1
+       mode blend
+       stretch 1
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+      }
+     }
+    }
+    ImageWidgetClass GRZHealthIcon
+    {
+     position 0 0
+     size 1 1
+     color 1 1 1 1
+     ignorepointer 1
+     mode blend
+     stretch 1
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+    }
+   }
+  }
+  FrameWidgetClass GRZBloodCell
+  {
    position 0.1875 0
    size 0.375 0.8
-   color 1 1 1 1
-   mode blend
-   stretch 1
+   color 0 0 0 0
+   style blank
+   ignorepointer 1
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+   {
+    FrameWidgetClass GRZBloodFillClip
+    {
+     position 0 0
+     size 1 1
+     color 0 0 0 0
+     style blank
+     clipchildren 1
+     ignorepointer 1
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+     {
+      ImageWidgetClass GRZBloodFill
+      {
+       position 0 0
+       size 1 1
+       color 1 1 1 1
+       ignorepointer 1
+       mode blend
+       stretch 1
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+      }
+     }
+    }
+    ImageWidgetClass GRZBloodIcon
+    {
+     position 0 0
+     size 1 1
+     color 1 1 1 1
+     ignorepointer 1
+     mode blend
+     stretch 1
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+    }
+   }
   }
  }
 }
