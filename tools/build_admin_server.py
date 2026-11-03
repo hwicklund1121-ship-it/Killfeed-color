@@ -5,6 +5,7 @@ No replacement Workshop files are fetched. All addon bytes are preserved.
 """
 import hashlib
 import json
+import shutil
 from pathlib import Path
 from zipfile import ZipFile, ZIP_DEFLATED
 
@@ -18,6 +19,15 @@ EXPECTED = {
 
 
 def main():
+    main_pbo = SOURCE/'@VPPAdminTools/Addons/VPPAdminTools.pbo'
+    supplied_zip = SOURCE/'VPPAdminTools-upload.zip'
+    if not main_pbo.exists() and supplied_zip.exists():
+        with ZipFile(supplied_zip) as supplied:
+            entry = supplied.getinfo('New folder/VPPAdminTools.pbo')
+            assert entry.file_size < 128*1024*1024
+            main_pbo.parent.mkdir(parents=True,exist_ok=True)
+            with supplied.open(entry) as incoming, main_pbo.open('wb') as output:
+                shutil.copyfileobj(incoming,output)
     available = {p.relative_to(SOURCE).as_posix() for p in SOURCE.rglob('*.pbo')}
     missing = EXPECTED-available
     if missing:
@@ -33,6 +43,13 @@ def main():
                 payload=base.read(name).replace(b'"-mod=@GRZ_Local"', b'"-mod=@CF;@VPPAdminTools;@GRZ_Local"')
                 payload=payload.replace(b'DayZServer_x64.exe -config',bootstrap+b'DayZServer_x64.exe -config',1)
                 output.writestr(name,payload)
+            elif name == 'README.txt':
+                intro = ('CF + VPP ADMIN + GRZ COMPLETE LOCAL SERVER PACK\n\n'
+                         'Extract all contents beside DayZServer_x64.exe, including the new StartServer.bat.\n'
+                         'Enable @CF, @VPPAdminTools and @GRZ_Local in your client launcher.\n'
+                         'StartServer.bat asks for your SteamID64 locally on first launch and preserves other admins.\n'
+                         'See ADMIN-SETUP.txt for VPP password/login instructions.\n\n')
+                output.writestr(name,intro+base.read(name).decode())
             else:
                 output.writestr(name,base.read(name))
         manifest={}

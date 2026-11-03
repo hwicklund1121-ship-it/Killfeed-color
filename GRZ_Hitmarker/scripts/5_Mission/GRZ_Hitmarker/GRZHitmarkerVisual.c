@@ -85,45 +85,19 @@ class GRZHitmarkerVisual
 
 class GRZHitmarkerSoundVoice
 {
-    ref SoundParams Params;
-    ref SoundObjectBuilder Builder;
-    ref SoundObject Sound;
-    AbstractWave Wave;
+    EffectSound Handle;
     string SoundKey;
     float Age;
     float RelativeVolume = 1;
-    bool Requested;
     bool Began;
     bool Finished;
-
-    void Prepare(int volume)
-    {
-        RelativeVolume = Math.Clamp(volume / 100.0, 0, 1);
-        AbstractWaveEvents events = Wave.GetEvents();
-        events.Event_OnSoundWaveHeaderLoaded.Insert(Begin);
-        events.Event_OnSoundWaveStarted.Insert(OnStarted);
-        events.Event_OnSoundWaveEnded.Insert(OnEnded);
-        if (Wave.IsHeaderLoaded())
-            Begin();
-    }
-
-    void Begin()
-    {
-        if (!Wave || Requested || !Wave.IsHeaderLoaded())
-            return;
-        Requested = true;
-        Wave.GetEvents().Event_OnSoundWaveHeaderLoaded.Remove(Begin);
-        Wave.Loop(false);
-        Wave.SetVolumeRelative(RelativeVolume);
-        Wave.Play();
-        Wave.SetVolumeRelative(RelativeVolume);
-    }
 
     void OnStarted()
     {
         Began = true;
-        if (Wave)
-            Wave.SetVolumeRelative(RelativeVolume);
+        GRZHitmarkerAudio.ReportStarted(SoundKey, RelativeVolume);
+        if (Handle)
+            Handle.SetSoundVolume(RelativeVolume);
     }
 
     void OnEnded()
@@ -133,21 +107,33 @@ class GRZHitmarkerSoundVoice
 
     void Release()
     {
-        if (!Wave)
+        if (!Handle)
             return;
-        AbstractWaveEvents events = Wave.GetEvents();
-        events.Event_OnSoundWaveHeaderLoaded.Remove(Begin);
-        events.Event_OnSoundWaveStarted.Remove(OnStarted);
-        events.Event_OnSoundWaveEnded.Remove(OnEnded);
-        Wave.Stop();
-        Wave = null;
+        Handle.Event_OnSoundWaveStarted.Remove(OnStarted);
+        Handle.Event_OnSoundWaveEnded.Remove(OnEnded);
+        SEffectManager.DestroyEffect(Handle);
+        Handle = null;
     }
 }
 
 class GRZHitmarkerAudio
 {
     protected static bool s_Ticking;
+    protected static bool s_LoggedBodyStart;
+    protected static bool s_LoggedHeadStart;
     protected static ref array<ref GRZHitmarkerSoundVoice> s_Voices = new array<ref GRZHitmarkerSoundVoice>;
+
+    static void ReportStarted(string key, float volume)
+    {
+        bool head = key == "GRZ_HitmarkerHead_SoundSet";
+        if ((head && s_LoggedHeadStart) || (!head && s_LoggedBodyStart))
+            return;
+        Print(string.Format("[GRZ Hitmarker 0.1.4] Native audio started: %1 volume=%2 gameSoundVolume=%3", key, volume, g_Game.GetSoundScene().GetSoundVolume()));
+        if (head)
+            s_LoggedHeadStart = true;
+        else
+            s_LoggedBodyStart = true;
+    }
 
     static void Play(bool head, int volume)
     {
@@ -158,27 +144,28 @@ class GRZHitmarkerAudio
             soundSet = "GRZ_HitmarkerHead_SoundSet";
         GRZHitmarkerSoundVoice voice = new GRZHitmarkerSoundVoice;
         voice.SoundKey = soundSet;
-        voice.Params = new SoundParams(soundSet);
-        if (!voice.Params.IsValid())
+        voice.RelativeVolume = Math.Clamp(volume / 100.0, 0, 1);
+        vector position = g_Game.GetCurrentCameraPosition();
+        // Use the native effect manager and its header-loading/start lifecycle.
+        // spatial=0 in both sound sets keeps this client-only feedback non-spatial.
+        voice.Handle = SEffectManager.CreateSound(soundSet, position, 0, 0, false, false);
+        if (!voice.Handle)
         {
-            Error("GRZ Hitmarker: invalid sound set " + soundSet);
+            Print("[GRZ Hitmarker] Could not create native effect " + soundSet);
             return;
         }
-        voice.Builder = new SoundObjectBuilder(voice.Params);
-        voice.Sound = voice.Builder.BuildSoundObject();
-        if (!voice.Sound)
+        voice.Handle.SetSoundWaveKind(WaveKind.WAVEEFFECTEX);
+        voice.Handle.SetSoundAutodestroy(true);
+        voice.Handle.SetSoundMaxVolume(voice.RelativeVolume);
+        voice.Handle.SetSoundVolume(voice.RelativeVolume);
+        voice.Handle.Event_OnSoundWaveStarted.Insert(voice.OnStarted);
+        voice.Handle.Event_OnSoundWaveEnded.Insert(voice.OnEnded);
+        if (!voice.Handle.SoundPlay())
         {
-            Error("GRZ Hitmarker: could not build sound " + soundSet);
+            Print("[GRZ Hitmarker] Native sound playback failed: " + soundSet);
+            voice.Release();
             return;
         }
-        voice.Sound.SetKind(WaveKind.WAVEUI);
-        voice.Wave = g_Game.GetSoundScene().Play2D(voice.Sound, voice.Builder);
-        if (!voice.Wave)
-        {
-            Error("GRZ Hitmarker: 2D playback failed for " + soundSet);
-            return;
-        }
-        voice.Prepare(volume);
         if (s_Voices.Count() >= 12)
         {
             s_Voices[0].Release();
@@ -208,14 +195,10 @@ class GRZHitmarkerAudio
         {
             GRZHitmarkerSoundVoice voice = s_Voices[i];
             voice.Age += seconds;
-            // Polling also covers a header that finished between registration
-            // and the initial IsHeaderLoaded check.
-            if (!voice.Requested && voice.Wave && voice.Wave.IsHeaderLoaded())
-                voice.Begin();
             if (voice.Finished || voice.Age > 3.0)
             {
                 if (!voice.Began)
-                    Error("GRZ Hitmarker: sound did not start after loading: " + voice.SoundKey);
+                    Print("[GRZ Hitmarker] Native sound did not report a start: " + voice.SoundKey);
                 voice.Release();
                 s_Voices.Remove(i);
             }
@@ -229,6 +212,8 @@ class GRZHitmarkerAudio
             voice.Release();
         }
         s_Voices.Clear();
+        s_LoggedHeadStart = false;
+        s_LoggedBodyStart = false;
         s_Ticking = false;
         g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(Tick);
     }
@@ -262,7 +247,7 @@ modded class MissionGameplay
         GRZHitmarkerSettings settings = GRZHitmarkerStore.Current();
         if ((hit.IsHeadHit && !m_GRZLoggedHeadAudio) || (!hit.IsHeadHit && !m_GRZLoggedBodyAudio))
         {
-            Print(string.Format("[GRZ Hitmarker 0.1.3] Confirmed hit: head=%1 soundEnabled=%2 volume=%3", hit.IsHeadHit, settings.PlaySound, settings.VolumePercent));
+            Print(string.Format("[GRZ Hitmarker 0.1.4] Confirmed hit: head=%1 soundEnabled=%2 volume=%3", hit.IsHeadHit, settings.PlaySound, settings.VolumePercent));
             if (hit.IsHeadHit)
                 m_GRZLoggedHeadAudio = true;
             else

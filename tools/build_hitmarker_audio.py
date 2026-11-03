@@ -46,6 +46,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--headshot', type=Path)
     args = parser.parse_args()
+    if not shutil.which('ffmpeg'):
+        parser.error('Install ffmpeg to encode the game-ready OGG sounds.')
     SOUNDS.mkdir(exist_ok=True)
     synthesize(SOUNDS / 'body_hit.wav')
     imported = args.headshot is not None
@@ -57,6 +59,8 @@ def main():
         subprocess.run(['ffmpeg','-v','error','-y','-i',str(args.headshot),'-vn','-ac','1','-ar','48000','-af','loudnorm=I=-14:TP=-1:LRA=7,alimiter=limit=0.891:level=false','-c:a','pcm_s16le',str(SOUNDS/'headshot.wav')],check=True)
     else:
         synthesize(SOUNDS/'headshot.wav',True)
+    for name in ['body_hit', 'headshot']:
+        subprocess.run(['ffmpeg','-v','error','-y','-i',str(SOUNDS/(name+'.wav')),'-c:a','libvorbis','-q:a','6',str(SOUNDS/(name+'.ogg'))],check=True)
     flag = 'true' if imported else 'false'
     STATUS.write_text('class GRZHitmarkerAudioStatus\n{\n    static const bool RUST_HEADSHOT_INSTALLED = '+flag+';\n}\n')
     print('Headshot audio: '+('user-supplied clip' if imported else 'original temporary sound; Rust clip not installed'))

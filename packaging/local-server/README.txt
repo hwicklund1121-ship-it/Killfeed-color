@@ -30,8 +30,8 @@ GRZ_Hitmarker.pbo
 
 GRZ_Autorun.pbo is replaced with the user's v0.11 LB Screens TEST update.
 GRZ_CustomHud.pbo is updated to v0.1.15: white health/blood interiors drain
-transparently while black outlines remain visible; trend arrows and cut count remain. GRZ_Hitmarker.pbo v0.1.3 adds settings under Options > Game and uses header-ready
-local 2D UI audio playback. It currently
+transparently while black outlines remain visible; trend arrows and cut count remain. GRZ_Hitmarker.pbo v0.1.4 adds settings under Options > Game and uses native EffectSound
+non-spatial playback with OGG audio; the failed direct Play2D path is removed. It currently
 uses an explicitly labeled temporary headshot sound, pending the Rust audio clip.
 Other uploaded PBOs are preserved unchanged.
 Internal PBO prefixes are preserved. PBO-manifest.json has sizes and SHA-256 hashes.

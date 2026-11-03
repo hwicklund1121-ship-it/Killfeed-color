@@ -3,3 +3,6 @@ __pycache__/
 
 # Local admin identifiers are never published.
 **/admin-owner.local.txt
+
+# Large VPP PBO is reproducibly restored from the supplied ZIP.
+/packaging/admin-addons/@VPPAdminTools/Addons/VPPAdminTools.pbo

@@ -15,7 +15,7 @@ class CfgMods
         dir = "GRZ_Hitmarker";
         name = "GRZ Hitmarker";
         author = "GRZ";
-        version = "0.1.3";
+        version = "0.1.4";
         type = "mod";
         dependencies[] = {"Game", "World", "Mission"};
         class defs
@@ -30,14 +30,14 @@ class CfgSoundShaders
 {
     class GRZ_HitmarkerBody_Shader
     {
-        samples[] = {{"GRZ_Hitmarker/sounds/body_hit.wav", 1}};
+        samples[] = {{"GRZ_Hitmarker/sounds/body_hit.ogg", 1}};
         volume = 1;
         range = 10;
         rangeCurve[] = {{0, 1}, {10, 1}};
     };
     class GRZ_HitmarkerHead_Shader
     {
-        samples[] = {{"GRZ_Hitmarker/sounds/headshot.wav", 1}};
+        samples[] = {{"GRZ_Hitmarker/sounds/headshot.ogg", 1}};
         volume = 1;
         range = 10;
         rangeCurve[] = {{0, 1}, {10, 1}};
