@@ -2,6 +2,7 @@
 modded class IngameHud
 {
     protected Widget m_GRZStatusPanel;
+    protected ImageWidget m_GRZWatermark;
     protected int m_GRZHealthStatus;
     protected int m_GRZBloodStatus;
     protected int m_GRZHealthTrend;
@@ -21,6 +22,13 @@ modded class IngameHud
     {
         super.Init(hud_panel_widget);
         m_GRZStatusPanel = g_Game.GetWorkspace().CreateWidgets("GRZ_CustomHud/gui/layouts/grz_status.layout", m_HudPanelWidget);
+        m_GRZWatermark = ImageWidget.Cast(g_Game.GetWorkspace().CreateWidgets("GRZ_CustomHud/gui/layouts/grz_watermark.layout", m_HudPanelWidget));
+        if (m_GRZWatermark)
+        {
+            m_GRZWatermark.SetFlags(WidgetFlags.SOURCEALPHA | WidgetFlags.BLEND | WidgetFlags.STRETCH | WidgetFlags.IGNOREPOINTER);
+            m_GRZWatermark.LoadImageFile(0, "GRZ_CustomHud/gui/textures/grz_watermark_ca.paa");
+            m_GRZWatermark.SetColor(0x8CFFFFFF);
+        }
         if (!m_GRZStatusPanel)
             return;
         m_GRZStaminaPanel = g_Game.GetWorkspace().CreateWidgets("GRZ_CustomHud/gui/layouts/grz_stamina.layout", m_HudPanelWidget);
@@ -189,6 +197,12 @@ modded class IngameHud
         m_HudPanelWidget.GetScreenPos(x, y);
         m_HudPanelWidget.GetScreenSize(width, height);
         float scale = Math.Clamp(height / 1080.0, 0.75, 2.0);
+        if (m_GRZWatermark)
+        {
+            m_GRZWatermark.SetScreenSize(160 * scale, 80 * scale);
+            m_GRZWatermark.SetScreenPos(x + width - 184 * scale, y + 24 * scale);
+            m_GRZWatermark.Show(show);
+        }
         m_GRZStatusPanel.SetScreenPos(x + width - 280 * scale, y + height - 132 * scale);
         m_GRZStatusPanel.SetScreenSize(256 * scale, 120 * scale);
         float statusX, statusY;

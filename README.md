@@ -92,3 +92,5 @@ python3 tools/package_source.py --output /tmp/GRZ_CustomHud-source.zip
 ```
 
 There is no application server or package installation step. PBO compilation and actual gameplay validation require DayZ Tools and DayZ on Windows.
+
+The custom HUD includes a red GRZ watermark at the top right (55% opacity, transparent background). It scales with the HUD and follows the Show HUD setting. Rebuild its texture with `python3 tools/build_watermark.py`.

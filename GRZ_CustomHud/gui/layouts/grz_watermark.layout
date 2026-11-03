@@ -1,0 +1,12 @@
+ImageWidgetClass GRZWatermark
+{
+ visible 0
+ ignorepointer 1
+ color 1 1 1 0.55
+ position 0 0
+ size 160 80
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+}
