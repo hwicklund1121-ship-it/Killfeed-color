@@ -1,7 +1,7 @@
 FrameWidgetClass GRZHitmarkerOptions
 {
 position 0 0
-size 1 386
+size 1 366
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -11,7 +11,7 @@ color 0 0 0 0
 PanelWidgetClass SettingsBacking
 {
 position 0 0
-size 1 386
+size 1 366
 hexactpos 0
 vexactpos 1
 hexactsize 0
@@ -427,21 +427,6 @@ vexactpos 1
 hexactsize 0
 vexactsize 1
 color 0 0 0 0
-}
-TextWidgetClass AudioStatus
-{
-position 0.01 362
-size 0.98 24
-hexactpos 0
-vexactpos 1
-hexactsize 0
-vexactsize 1
-ignorepointer 1
-color 1 1 1 1
-font "gui/fonts/sdf_MetronLight16"
-"text valign" center
-text "Headshot: temporary sound; Rust clip pending upload."
-
 }
 }
 }

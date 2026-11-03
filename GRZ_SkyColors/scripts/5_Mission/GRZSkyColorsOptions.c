@@ -14,7 +14,6 @@ class GRZSkyColorOptions extends ScriptedWidgetEventHandler
         m_Color = new OptionSelectorMultistate(section.FindAnyWidget("SkyColorValue"), GRZSkyStore.Current().Color, this, false, names);
         m_Color.m_OptionChanged.Insert(ColorChanged);
         TextWidget.Cast(section.FindAnyWidget("Heading")).SetTextExactSize(20);
-        TextWidget.Cast(section.FindAnyWidget("SkyPreviewNote")).SetTextExactSize(14);
     }
 
     void ~GRZSkyColorOptions()
@@ -27,13 +26,7 @@ class GRZSkyColorOptions extends ScriptedWidgetEventHandler
     protected void ColorChanged(int index)
     {
         bool applied = GRZSkyRuntime.Preview(index);
-        TextWidget note = TextWidget.Cast(m_Section.FindAnyWidget("SkyPreviewNote"));
-        if (applied)
-            note.SetText("Live preview. Apply saves; Cancel restores your previous color.");
-        else if (!GRZSkyRuntime.Supported())
-            note.SetText("Custom sky colors support the default and dark-night lighting presets.");
-        else
-            note.SetText("Preview could not load. Check the client script log.");
+        Print(string.Format("[GRZ Sky colors 0.1.2] Selection=%1 index=%2 lightingRequestIssued=%3", GRZSkyPalette.Current().PaletteEntries[index].Name, index, applied));
         if (m_Menu)
             m_Menu.OnChanged();
     }
@@ -47,7 +40,7 @@ class GRZSkyColorOptions extends ScriptedWidgetEventHandler
     {
         if (!GRZSkyStore.Save(m_Color.GetValue()))
         {
-            TextWidget.Cast(m_Section.FindAnyWidget("SkyPreviewNote")).SetText("Could not save sky color. Check the client profile folder.");
+            Error("GRZ Sky colors: could not save client settings. Check the client profile folder.");
             return;
         }
         GRZSkyRuntime.EndPreview();
@@ -57,7 +50,6 @@ class GRZSkyColorOptions extends ScriptedWidgetEventHandler
     {
         m_Color.SetValue(GRZSkyStore.Current().Color, false);
         GRZSkyRuntime.EndPreview();
-        TextWidget.Cast(m_Section.FindAnyWidget("SkyPreviewNote")).SetText("Previous sky color restored.");
     }
 
     void Defaults()

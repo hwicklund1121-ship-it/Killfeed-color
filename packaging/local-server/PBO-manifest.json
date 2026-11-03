@@ -12,8 +12,8 @@
     "sha256": "b35dd281e7e67ad3cb8301e3f89afcef9d2fcd3b4db4ed45899a108644254783"
   },
   "GRZ_Hitmarker.pbo": {
-    "bytes": 69922,
-    "sha256": "cfa3625403021cd4a096ca0cccca889771c0fa560641835e92a590132446e45a"
+    "bytes": 69351,
+    "sha256": "d93fca5156a6078e561dda8df4c348b000e27bbc3db26588e1d8997fc231681d"
   },
   "GRZ_Killfeed.pbo": {
     "bytes": 592699,
@@ -48,7 +48,7 @@
     "sha256": "6b5bcd01dc631f52799e7f1b196c0b7b3fc5f26c0aae21c57b2004eb1cb48f20"
   },
   "GRZ_SkyColors.pbo": {
-    "bytes": 437277,
-    "sha256": "9f16e129d655f5607010c597dbc647e28d3ac96881c19b96b8444b3698c83cf8"
+    "bytes": 436552,
+    "sha256": "8b646ac37580ba7b89a3fa404b6ac4090ce5be8394edb8d0340b09d0f2e3f5e4"
   }
 }

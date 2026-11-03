@@ -30,10 +30,6 @@ class GRZHitmarkerOptions extends ScriptedWidgetEventHandler
         AddSelector("SizeValue", (settings.SizePercent - 25) / 5, sizes);
         AddSelector("VolumeValue", settings.VolumePercent / 5, volumes);
         TextWidget.Cast(section.FindAnyWidget("Heading")).SetTextExactSize(20);
-        TextWidget status = TextWidget.Cast(section.FindAnyWidget("AudioStatus"));
-        status.SetTextExactSize(13);
-        if (GRZHitmarkerAudioStatus.RUST_HEADSHOT_INSTALLED)
-            status.SetText("Headshot sound: Rust. Volume uses the setting above.");
         m_Preview = new GRZHitmarkerVisual(section.FindAnyWidget("PreviewHost"));
         section.SetHandler(this);
         g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(RefreshPreview, 50, false);
@@ -124,7 +120,7 @@ class GRZHitmarkerOptions extends ScriptedWidgetEventHandler
     void Apply()
     {
         if (!GRZHitmarkerStore.Save(Draft()))
-            TextWidget.Cast(m_Section.FindAnyWidget("AudioStatus")).SetText("Could not save hitmarker settings. Check the client profile folder.");
+            Error("GRZ Hitmarker: could not save client settings. Check the client profile folder.");
     }
 
     void Revert()

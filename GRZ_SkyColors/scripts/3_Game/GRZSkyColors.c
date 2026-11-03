@@ -123,6 +123,7 @@ class GRZSkyRuntime
                 base = "darknight";
             path = "GRZ_SkyColors/data/lighting/" + base + "_" + GRZSkyPalette.Current().PaletteEntries[color].Key + ".txt";
         }
+        path.Replace("/", "\\");
         if (!FileExist(path))
         {
             Error("GRZ Sky colors: lighting resource not found: " + path);
@@ -134,7 +135,7 @@ class GRZSkyRuntime
             // values in these tables are identical to the supplied base file.
             g_Game.GetWorld().LoadNewLightingCfg(path);
             s_AppliedPath = path;
-            Print("[GRZ Sky colors 0.1.1] Loaded lighting: " + path);
+            Print("[GRZ Sky colors 0.1.2] Requested lighting: " + path);
         }
         return true;
     }
