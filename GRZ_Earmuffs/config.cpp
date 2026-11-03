@@ -15,7 +15,7 @@ class CfgMods
         dir = "GRZ_Earmuffs";
         name = "GRZ Earmuffs";
         author = "GRZ";
-        version = "0.1.1";
+        version = "0.1.2";
         type = "mod";
         inputs = "GRZ_Earmuffs/inputs.xml";
         dependencies[] = {"Mission"};

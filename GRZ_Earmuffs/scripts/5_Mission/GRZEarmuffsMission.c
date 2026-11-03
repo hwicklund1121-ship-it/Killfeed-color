@@ -88,16 +88,25 @@ modded class MissionGameplay
         IngameHud hud = IngameHud.Cast(GetHud());
         PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
         bool alive = player && player.IsAlive();
-        // Suspend while menus are open, so the player's normal audio settings
-        // can be edited without saving the temporary earmuffs attenuation.
+        // Restore for player lifecycle/focus changes, never just for a menu.
         bool blocked = true;
         if (alive)
-            blocked = player.IsUnconscious() || !g_Game.IsAppActive() || g_Game.GetUIManager().GetMenu() || IsPaused();
+            blocked = player.IsUnconscious() || !g_Game.IsAppActive();
         if (blocked)
         {
             GRZEarmuffsRestore();
             if (!alive)
                 m_GRZEarmuffsEnabled = false;
+            if (m_GRZEarmuffsPopup)
+                m_GRZEarmuffsPopup.Show(false);
+            return;
+        }
+        // Keep attenuation in inventory, chat and Escape. Only block the
+        // hotkeys, so typing N/+/- or using menu controls cannot change it.
+        if (g_Game.GetUIManager().GetMenu() || IsPaused())
+        {
+            if (m_GRZEarmuffsEnabled && m_GRZEarmuffsPercent < 100 && !m_GRZEarmuffsApplied)
+                GRZEarmuffsApply();
             if (m_GRZEarmuffsPopup)
                 m_GRZEarmuffsPopup.Show(false);
             return;

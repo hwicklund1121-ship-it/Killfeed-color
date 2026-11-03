@@ -59,3 +59,4 @@ The watermark has been removed from the custom HUD.
 Earmuffs: N toggles; +/- changes game effects in 10% steps (10%-100%).
 A speaker symbol and percentage appear, then fade after each press.
 Voice chat volume is unchanged. Rebind under Controls > GRZ Earmuffs.
+Earmuffs stay active in inventory, chat and Esc; typing in menus does not trigger hotkeys.

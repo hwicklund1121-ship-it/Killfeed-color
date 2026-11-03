@@ -6,7 +6,7 @@ Earmuffs start off; the first activation uses 20%. N switches between your selec
 
 Each press shows a speaker symbol with the percentage to its right at the middle-left of the screen. It holds for 1.25 seconds then fades out over 0.75 seconds; another press restarts the display. The volume reduction stays active after the symbol disappears. There is no permanent watermark.
 
-Voice chat, radio, music and speech volume sliders are untouched. No physical item or server permission is needed. The selected level lasts until death or mission exit. The original effects volume is restored on exit/death and temporarily while menus are open or the app is inactive; when play resumes, the selected reduction is reapplied using the latest normal volume. The mod does not write audio settings to disk.
+Voice chat, radio, music and speech volume sliders are untouched. No physical item or server permission is needed. The selected level lasts until death or mission exit. Earmuffs stay active in inventory, chat and the Escape menu. Hotkeys are blocked while these menus are open, so typing N/+/- cannot change the volume. The original effects volume is restored on exit/death and temporarily while unconscious or the app is inactive; the selected reduction is reapplied when play resumes. The mod does not write audio settings to disk.
 
 Included in @GRZ_Local; replace the pack on both client and server and restart both. Standalone ZIP is also available. Build with `python3 tools/build_earmuffs.py`.
 
