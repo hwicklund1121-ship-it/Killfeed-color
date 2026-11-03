@@ -117,9 +117,41 @@ class GRZKillfeedServer
         rpc.Write(style.PrefixAnimation.Speed);
     }
 
+    static string DisplayName(PlayerBase player)
+    {
+        if (player && player.GetIdentity())
+            return player.GetIdentity().GetName();
+        return "BOT";
+    }
+
+    static void AnnounceMilestone(PlayerBase killer, int streak)
+    {
+        if (!g_Game.IsServer() || !killer || !killer.GetIdentity() || streak <= 0 || streak % 10 != 0)
+            return;
+        string name = DisplayName(killer);
+        name.Replace("\n", " ");
+        name.Replace("\r", " ");
+        name.Replace("\t", " ");
+        if (name.LengthUtf8() > 32)
+            name = name.SubstringUtf8(0, 32);
+        string announcement = "[GRZ Killstreaks] " + name + " is on a " + streak.ToString() + " killstreak!";
+        array<Man> players = new array<Man>;
+        g_Game.GetPlayers(players);
+        foreach (Man man : players)
+        {
+            PlayerBase recipient = PlayerBase.Cast(man);
+            if (!recipient || !recipient.GetIdentity())
+                continue;
+            ScriptRPC rpc = new ScriptRPC;
+            rpc.Write(announcement);
+            rpc.Send(recipient, GRZKillfeedRPC.STREAK, true, recipient.GetIdentity());
+        }
+        Print(announcement);
+    }
+
     static void PlayerKilled(PlayerBase victim, Object source)
     {
-        if (!g_Game.IsServer() || !g_Game.IsMultiplayer() || !victim || !victim.GetIdentity() || !source)
+        if (!g_Game.IsServer() || !g_Game.IsMultiplayer() || !victim || !source)
             return;
         PlayerBase killer = PlayerBase.Cast(source);
         EntityAI entity = EntityAI.Cast(source);
@@ -134,7 +166,7 @@ class GRZKillfeedServer
         }
         // No guessing from the last player who hit a victim: indirect deaths
         // without a player-owned fatal source do not become fake player kills.
-        if (!killer || killer == victim || !killer.GetIdentity())
+        if (!killer || killer == victim)
             return;
         int distance = Math.Round(vector.Distance(killer.GetPosition(), victim.GetPosition()));
         GRZNameStyle killerStyle = StyleFor(killer.GetIdentity());
@@ -162,14 +194,18 @@ class GRZKillfeedServer
             if (!recipient || !recipient.GetIdentity())
                 continue;
             ScriptRPC rpc = new ScriptRPC;
-            rpc.Write(killer.GetIdentity().GetName());
-            rpc.Write(victim.GetIdentity().GetName());
+            rpc.Write(DisplayName(killer));
+            rpc.Write(DisplayName(victim));
             rpc.Write(weaponJson);
             rpc.Write(distance);
             WriteStyle(rpc, killerStyle);
             WriteStyle(rpc, victimStyle);
             rpc.Send(recipient, GRZKillfeedRPC.KILL, true, recipient.GetIdentity());
         }
+        int milestone = killer.GRZRecordKill();
+        if (milestone > 0)
+            AnnounceMilestone(killer, milestone);
+
     }
 
     protected static void CaptureGun(EntityAI item, int parent, GRZKillfeedGunData gun, int depth, array<EntityAI> captured)

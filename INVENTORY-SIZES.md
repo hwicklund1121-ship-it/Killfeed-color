@@ -2,10 +2,10 @@
 
 The Windows builder generates `GRZ_InventorySizes.pbo` using the installed DayZ class hierarchy:
 
-- Clothing gets 10 columns × 10 rows of internal cargo (100 slots), including wearable classes that originally had no cargo and all discovered variants.
+- Vests, shirts/jackets, pants and belts get 10 columns × 10 rows of internal cargo (100 slots). Inherited inventory slots Body, Vest, Legs and Hips select the eligible types. All other clothing—including hats, shoes, gloves, masks, armbands, eyewear and backpacks—keeps its native cargo size.
 - Guns get an inventory footprint 10 columns wide × 2 rows high (20 slots).
 
-The gun change uses `itemSize`; the clothing change uses `itemsCargoSize`. Clothing's outer footprint, gun attachments/magazines, weapon stats and unrelated storage are preserved. Backpacks/vests/headgear/footwear/eyewear/gloves are covered when they inherit the native Clothing class. Native rifle/pistol/launcher descendants are covered; melee weapons and grenades are not resized.
+The gun change uses `itemSize`; the clothing change uses `itemsCargoSize`. Clothing's outer footprint, gun attachments/magazines, weapon stats and unrelated storage are preserved. The tool resolves original inherited cargo sizes and emits explicit normal-size restorations for excluded clothing, so a modified parent cannot accidentally give hats or other excluded types 100 slots. Native rifle/pistol/launcher descendants are covered; melee weapons and grenades are not resized.
 
 Download/extract `downloads/GRZ-clothing-10x10-guns-10x2-builder.zip`, run `Build-Inventory-Mod.cmd`, and select the DayZ game folder containing `DayZ_x64.exe`. It reads native Addons/dta PBO config tables and writes **Desktop/GRZ-InventorySizes/GRZ_InventorySizes.pbo**. It does not change the installed game. No Python, DayZ Tools, downloads or admin rights are needed on Windows.
 
@@ -20,3 +20,5 @@ Validation: actual PowerShell/C# execution against synthetic binary config/PBO f
 Build the downloadable tool ZIP with `python3 tools/build_inventory_builder.py`. Run its fixtures with `python3 tools/test_inventory_builder.py --pwsh <path-to-PowerShell>`. This builder is separate from the complete server ZIP because its resulting override depends on the classes installed on the user's machine.
 
 Builder v0.1.1 reads dta engine defaults before addons, allows provider-backed updates to engine defaults, and checks parent conflicts only on relevant clothing/weapon ancestry. Normal redefinitions of unrelated classes such as Man no longer abort a build. Fixtures cover both unrelated Man redefinition and relevant engine-to-addon base replacement.
+
+Builder v0.1.2 restricts expanded clothing to Body/Vest/Legs/Hips, preserves every excluded item’s original cargo, and retains gun footprints at 10 wide × 2 high. If neither feature appears, use `/grzvip inventory` in the updated GRZ pack: it reports whether the client loaded the generated addon and the effective configured sizes. The generated PBO must be copied to both client and server; the complete server ZIP does not contain this machine-specific generated PBO.

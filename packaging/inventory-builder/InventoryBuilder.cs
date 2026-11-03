@@ -12,6 +12,9 @@ public static class GRZInventoryBuilder
     {
         public string Name;
         public string Parent;
+        public string[] Slots;
+        public bool AppendSlots;
+        public int[] CargoSize;
         public HashSet<string> ParentChoices = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         public HashSet<string> AddonParentChoices = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         public HashSet<string> Providers = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -20,6 +23,7 @@ public static class GRZInventoryBuilder
     {
         public int ArchivesRead;
         public string[] Clothing;
+        public string[] NormalClothing;
         public string[] Guns;
         public string[] RequiredAddons;
         public string PboPath;
@@ -27,6 +31,7 @@ public static class GRZInventoryBuilder
     }
     private class Entry { public string Name; public uint Method; public uint Original; public uint Size; }
     private class Node { public string Name; public string Parent; public uint Offset; }
+    private class Metadata { public string[] Slots; public bool AppendSlots; public int[] CargoSize; }
     private class Rap : IDisposable
     {
         private BinaryReader r;
@@ -64,6 +69,77 @@ public static class GRZInventoryBuilder
             if (depth > 64) throw new InvalidDataException("Config nesting is too deep.");
             uint count = Count();
             for (uint i = 0; i < count; i++) SkipValue(r.ReadByte(), depth);
+        }
+        private string[] SlotArray()
+        {
+            uint count = Count();
+            List<string> slots = new List<string>();
+            for (uint i = 0; i < count; i++)
+            {
+                byte kind = r.ReadByte();
+                if (kind == 0 || kind == 4) slots.Add(ReadZ(r));
+                else throw new InvalidDataException("Unexpected inventorySlot array value.");
+            }
+            return slots.ToArray();
+        }
+        private int[] CargoArray()
+        {
+            uint count = Count();
+            List<int> dimensions = new List<int>();
+            for (uint i = 0; i < count; i++)
+            {
+                byte kind = r.ReadByte();
+                if (kind == 2) dimensions.Add(r.ReadInt32());
+                else if (kind == 1)
+                {
+                    float value = r.ReadSingle();
+                    if (Single.IsNaN(value) || Single.IsInfinity(value) || value != Math.Truncate(value))
+                        throw new InvalidDataException("Non-integer cargo dimensions.");
+                    dimensions.Add(checked((int)value));
+                }
+                else throw new InvalidDataException("Unexpected itemsCargoSize array value.");
+            }
+            if (dimensions.Count == 0) return new int[] {0, 0};
+            if (dimensions.Count != 2 || dimensions.Any(n => n < 0))
+                throw new InvalidDataException("Cargo dimensions must contain two nonnegative values.");
+            return dimensions.ToArray();
+        }
+        public Metadata Properties(uint offset)
+        {
+            r.BaseStream.Position = offset;
+            ReadZ(r);
+            uint count = Count();
+            Metadata metadata = new Metadata();
+            for (uint i = 0; i < count; i++)
+            {
+                byte kind = r.ReadByte();
+                if (kind == 0) { ReadZ(r); r.ReadUInt32(); }
+                else if (kind == 1)
+                {
+                    byte valueKind = r.ReadByte(); string name = ReadZ(r);
+                    if (name.Equals("inventorySlot", StringComparison.OrdinalIgnoreCase) && (valueKind == 0 || valueKind == 4))
+                        metadata.Slots = new string[] {ReadZ(r)};
+                    else SkipValue(valueKind, 0);
+                }
+                else if (kind == 2 || kind == 5)
+                {
+                    if (kind == 5) r.ReadUInt32();
+                    string name = ReadZ(r);
+                    if (name.Equals("inventorySlot", StringComparison.OrdinalIgnoreCase))
+                    {
+                        metadata.Slots = SlotArray(); metadata.AppendSlots = kind == 5;
+                    }
+                    else if (name.Equals("itemsCargoSize", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (kind == 5) throw new InvalidDataException("Appending cargo dimensions is unsupported.");
+                        metadata.CargoSize = CargoArray();
+                    }
+                    else SkipArray(0);
+                }
+                else if (kind == 3 || kind == 4) ReadZ(r);
+                else throw new InvalidDataException("Unknown config entry kind: " + kind);
+            }
+            return metadata;
         }
         public List<Node> Children(uint offset)
         {
@@ -159,7 +235,7 @@ public static class GRZInventoryBuilder
             return null; // resource-only archive has no class definitions
         }
     }
-    private static void Merge(Dictionary<string, Definition> table, List<Node> nodes, string[] providers)
+    private static void Merge(Dictionary<string, Definition> table, List<Node> nodes, string[] providers, Rap rap)
     {
         foreach (Node node in nodes)
         {
@@ -178,6 +254,13 @@ public static class GRZInventoryBuilder
                 def.ParentChoices.Add(node.Parent);
                 if (providers.Length > 0) def.AddonParentChoices.Add(node.Parent);
             }
+            Metadata metadata = rap.Properties(node.Offset);
+            if (metadata.Slots != null)
+            {
+                if (metadata.AppendSlots && def.Slots != null) def.Slots = def.Slots.Concat(metadata.Slots).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+                else { def.Slots = metadata.Slots; def.AppendSlots = metadata.AppendSlots; }
+            }
+            if (metadata.CargoSize != null) def.CargoSize = metadata.CargoSize;
             foreach (string provider in providers) def.Providers.Add(provider);
         }
     }
@@ -217,6 +300,21 @@ public static class GRZInventoryBuilder
         }
         return false;
     }
+    private static string[] EffectiveSlots(Definition def, Dictionary<string, Definition> table, HashSet<string> visited)
+    {
+        if (!visited.Add(def.Name)) throw new InvalidDataException("Circular clothing slot inheritance: " + def.Name);
+        if (def.Slots != null && !def.AppendSlots) return def.Slots;
+        Definition parent;
+        string[] inherited = table.TryGetValue(def.Parent, out parent) ? EffectiveSlots(parent, table, visited) : new string[0];
+        return def.Slots == null ? inherited : inherited.Concat(def.Slots).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+    }
+    private static int[] EffectiveCargo(Definition def, Dictionary<string, Definition> table, HashSet<string> visited)
+    {
+        if (!visited.Add(def.Name)) throw new InvalidDataException("Circular clothing cargo inheritance: " + def.Name);
+        if (def.CargoSize != null) return def.CargoSize;
+        Definition parent;
+        return table.TryGetValue(def.Parent, out parent) ? EffectiveCargo(parent, table, visited) : new int[] {0, 0};
+    }
     private static void Visit(Definition def, Dictionary<string, Definition> targets, HashSet<string> visiting, HashSet<string> done, List<Definition> ordered)
     {
         if (done.Contains(def.Name)) return;
@@ -225,7 +323,7 @@ public static class GRZInventoryBuilder
         if (targets.TryGetValue(def.Parent, out parent)) Visit(parent, targets, visiting, done, ordered);
         visiting.Remove(def.Name); done.Add(def.Name); ordered.Add(def);
     }
-    private static string Render(string category, List<Definition> selected, string property, string size)
+    private static string Render(string category, List<Definition> selected, string property, string size, Dictionary<string, int[]> cargoOverrides = null)
     {
         Dictionary<string, Definition> targets = selected.ToDictionary(d => d.Name, StringComparer.OrdinalIgnoreCase);
         List<Definition> ordered = new List<Definition>();
@@ -237,7 +335,8 @@ public static class GRZInventoryBuilder
             s.Append("    class " + parent + ";\n");
         foreach (Definition def in ordered)
         {
-            s.Append("    class " + def.Name + (def.Parent == "" ? "" : ": " + def.Parent) + "\n    {\n        " + property + "[] = {" + size + "};\n    };\n");
+            string dimensions = cargoOverrides == null ? size : String.Join(", ", cargoOverrides[def.Name]);
+            s.Append("    class " + def.Name + (def.Parent == "" ? "" : ": " + def.Parent) + "\n    {\n        " + property + "[] = {" + dimensions + "};\n    };\n");
         }
         s.Append("};\n");
         return s.ToString();
@@ -288,8 +387,8 @@ public static class GRZInventoryBuilder
                     string[] providers = patches == null ? new string[0] : rap.Children(patches.Offset).Select(n => n.Name).ToArray();
                     foreach (Node node in roots)
                     {
-                        if (node.Name.Equals("CfgVehicles", StringComparison.OrdinalIgnoreCase)) Merge(vehicles, rap.Children(node.Offset), providers);
-                        if (node.Name.Equals("CfgWeapons", StringComparison.OrdinalIgnoreCase)) Merge(weapons, rap.Children(node.Offset), providers);
+                        if (node.Name.Equals("CfgVehicles", StringComparison.OrdinalIgnoreCase)) Merge(vehicles, rap.Children(node.Offset), providers, rap);
+                        if (node.Name.Equals("CfgWeapons", StringComparison.OrdinalIgnoreCase)) Merge(weapons, rap.Children(node.Offset), providers, rap);
                     }
                 }
             }
@@ -300,14 +399,20 @@ public static class GRZInventoryBuilder
         HashSet<string> gunRoots = new HashSet<string>(new string[] {"RifleCore", "PistolCore", "LauncherCore", "Rifle_Base", "Pistol_Base", "Launcher_Base", "Weapon_Base"}, StringComparer.OrdinalIgnoreCase);
         CheckTargetParents(vehicles, clothingRoots);
         CheckTargetParents(weapons, gunRoots);
-        List<Definition> clothing = vehicles.Values.Where(d => IsTarget(d.Name, vehicles, clothingRoots)).ToList();
+        List<Definition> allClothing = vehicles.Values.Where(d => IsTarget(d.Name, vehicles, clothingRoots)).ToList();
+        HashSet<string> allowedSlots = new HashSet<string>(new string[] {"Body", "Vest", "Legs", "Hips"}, StringComparer.OrdinalIgnoreCase);
+        List<Definition> clothing = allClothing.Where(d => EffectiveSlots(d, vehicles, new HashSet<string>(StringComparer.OrdinalIgnoreCase)).Any(slot => allowedSlots.Contains(slot))).ToList();
+        HashSet<string> expanded = new HashSet<string>(clothing.Select(d => d.Name), StringComparer.OrdinalIgnoreCase);
+        Dictionary<string, int[]> cargoOverrides = new Dictionary<string, int[]>(StringComparer.OrdinalIgnoreCase);
+        foreach (Definition def in allClothing)
+            cargoOverrides[def.Name] = expanded.Contains(def.Name) ? new int[] {10, 10} : EffectiveCargo(def, vehicles, new HashSet<string>(StringComparer.OrdinalIgnoreCase));
         // The engine defines abstract anchors in dta/bin.pbo without CfgPatches.
         // Concrete/addon gun classes are all patched; those anchors stay intact.
         HashSet<string> engineAnchors = new HashSet<string>(new string[] {"Weapon_Base", "DefaultWeapon", "PistolCore", "RifleCore", "LauncherCore"}, StringComparer.OrdinalIgnoreCase);
         List<Definition> guns = weapons.Values.Where(d => IsTarget(d.Name, weapons, gunRoots) && !(d.Providers.Count == 0 && engineAnchors.Contains(d.Name))).ToList();
         if (clothing.Count == 0 || guns.Count == 0) throw new InvalidDataException("Clothing or gun definitions are missing. Select the complete DayZ game installation.");
         HashSet<string> dependencies = new HashSet<string>(new string[] {"DZ_Data", "DZ_Scripts"}, StringComparer.OrdinalIgnoreCase);
-        foreach (Definition def in clothing.Concat(guns))
+        foreach (Definition def in allClothing.Concat(guns))
         {
             if (!System.Text.RegularExpressions.Regex.IsMatch(def.Name, "^[A-Za-z_][A-Za-z0-9_]*$") || (def.Parent != "" && !System.Text.RegularExpressions.Regex.IsMatch(def.Parent, "^[A-Za-z_][A-Za-z0-9_]*$")))
                 throw new InvalidDataException("Invalid class identifier: " + def.Name);
@@ -319,13 +424,13 @@ public static class GRZInventoryBuilder
             if (!System.Text.RegularExpressions.Regex.IsMatch(dependency, "^[A-Za-z_][A-Za-z0-9_]*$"))
                 throw new InvalidDataException("Invalid addon identifier: " + dependency);
         string config = "// Generated from installed DayZ class definitions. Only inventory dimensions change.\nclass CfgPatches\n{\n    class GRZ_InventorySizes\n    {\n        units[] = {};\n        weapons[] = {};\n        requiredVersion = 0.1;\n        requiredAddons[] = {" + String.Join(", ", deps.Select(n => "\"" + n + "\"")) + "};\n    };\n};\n";
-        config += Render("CfgVehicles", clothing, "itemsCargoSize", "10, 10");
+        config += Render("CfgVehicles", allClothing, "itemsCargoSize", "10, 10", cargoOverrides);
         config += Render("CfgWeapons", guns, "itemSize", "10, 2");
         Directory.CreateDirectory(output);
         string source = Path.Combine(output, "config.cpp");
         string pbo = Path.Combine(output, "GRZ_InventorySizes.pbo");
         File.WriteAllText(source, config, new UTF8Encoding(false));
         File.WriteAllBytes(pbo, Pack(config));
-        return new Report { ArchivesRead = read, Clothing = clothing.Select(d => d.Name).OrderBy(n => n).ToArray(), Guns = guns.Select(d => d.Name).OrderBy(n => n).ToArray(), RequiredAddons = deps, PboPath = pbo, ConfigPath = source };
+        return new Report { ArchivesRead = read, Clothing = clothing.Select(d => d.Name).OrderBy(n => n).ToArray(), NormalClothing = allClothing.Where(d => !expanded.Contains(d.Name)).Select(d => d.Name).OrderBy(n => n).ToArray(), Guns = guns.Select(d => d.Name).OrderBy(n => n).ToArray(), RequiredAddons = deps, PboPath = pbo, ConfigPath = source };
     }
 }

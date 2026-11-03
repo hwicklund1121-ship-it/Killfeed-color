@@ -109,11 +109,19 @@ def main():
         if not resource.endswith("/"):
             assert resource in files, resource
     types = files["scripts/3_Game/GRZ_Killfeed/GRZKillfeedTypes.c"].decode()
-    assert len(set(re.findall(r"= (164728010\d);", types))) == 4
+    assert len(set(re.findall(r"= (164728010\d);", types))) == 5
     assert "PALETTE_COUNT = 12" in types and "EFFECT_COUNT = 6" in types
     assert not re.search(r"\b(?:int|float|bool|string)\s+(?:Effect|Weapon)\s*[;=]", text), "Engine type used as variable name"
     server = files["scripts/4_World/GRZ_Killfeed/GRZKillfeedServer.c"].decode()
     player = files["scripts/4_World/GRZ_Killfeed/GRZKillfeedPlayer.c"].decode()
+    assert 'GRZKillfeedRPC.STREAK' in player
+    assert 'g_Game.IsServer() || sender || this != PlayerBase.Cast(g_Game.GetPlayer())' in player
+    assert 'm_GRZKillstreak % 10 == 0' in player
+    assert 'GRZResetKillstreak();' in player
+    assert 'AnnounceMilestone(killer, milestone)' in server
+    assert 'rpc.Write(DisplayName(victim))' in server and 'return "BOT";' in server
+    assert '!victim.GetIdentity()' not in server
+    assert 'command != "/killfeed test"' in text and 'static void TestLocal()' in text
     # Static wire-format alignment only; not a runtime authorization test.
     write_fields = re.findall(r"rpc.Write\(style\.([\w.]+)\)", server)
     read_fields = re.findall(r"ctx.Read\(style\.([\w.]+)\)", player)

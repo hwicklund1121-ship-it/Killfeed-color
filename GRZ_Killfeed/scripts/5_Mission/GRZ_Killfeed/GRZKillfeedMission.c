@@ -109,6 +109,13 @@ modded class MissionServer
         super.OnInit();
         GRZKillfeedServer.Initialize();
     }
+
+    override void OnClientDisconnectedEvent(PlayerIdentity identity, PlayerBase player, int logoutTime, bool authFailed)
+    {
+        if (player)
+            player.GRZResetKillstreak();
+        super.OnClientDisconnectedEvent(identity, player, logoutTime, authFailed);
+    }
 }
 
 modded class MissionGameplay

@@ -3,6 +3,23 @@ modded class PlayerBase
     protected bool m_GRZKillfeedReported;
     protected int m_GRZKillfeedLastMenu;
     protected int m_GRZKillfeedLastSave;
+    protected int m_GRZKillstreak;
+
+    void GRZResetKillstreak()
+    {
+        if (g_Game.IsServer())
+            m_GRZKillstreak = 0;
+    }
+
+    int GRZRecordKill()
+    {
+        if (!g_Game.IsServer() || !GetIdentity() || !IsAlive())
+            return 0;
+        m_GRZKillstreak++;
+        if (m_GRZKillstreak % 10 == 0)
+            return m_GRZKillstreak;
+        return 0;
+    }
 
     override void EEKilled(Object killer)
     {
@@ -10,6 +27,7 @@ modded class PlayerBase
         if (g_Game.IsServer() && !m_GRZKillfeedReported)
         {
             m_GRZKillfeedReported = true;
+            GRZResetKillstreak();
             GRZKillfeedServer.PlayerKilled(this, killer);
         }
         super.EEKilled(killer);
@@ -52,6 +70,15 @@ modded class PlayerBase
                 GRZKillfeedServer.Reply(this, 2);
             else
                 GRZKillfeedServer.Reply(this, 3);
+            return;
+        }
+        if (rpc_type == GRZKillfeedRPC.STREAK)
+        {
+            if (g_Game.IsServer() || sender || this != PlayerBase.Cast(g_Game.GetPlayer()))
+                return;
+            string announcement;
+            if (ctx.Read(announcement) && announcement.Length() <= 512)
+                g_Game.Chat(announcement, "colorStatusChannel");
             return;
         }
         if (rpc_type == GRZKillfeedRPC.KILL || rpc_type == GRZKillfeedRPC.MENU_STATE)

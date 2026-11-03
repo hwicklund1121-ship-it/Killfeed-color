@@ -30,7 +30,7 @@ foreach ($folder in $folders) {
     }
 }
 if ($archives.Count -eq 0) { throw 'No PBO archives were found.' }
-Write-Host 'GRZ Inventory builder v0.1.1'
+Write-Host 'GRZ Inventory builder v0.1.2'
 Write-Host 'Reading installed clothing and gun class definitions. Game files remain unchanged...'
 if (-not ('GRZInventoryBuilder' -as [type])) {
     Add-Type -Path (Join-Path $PSScriptRoot 'InventoryBuilder.cs')
@@ -39,6 +39,7 @@ $report = [GRZInventoryBuilder]::Build($archives.ToArray(), $OutputPath)
 $report | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath (Join-Path $OutputPath 'Inventory-catalog.json') -Encoding UTF8
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'INSTALL.txt') -Destination (Join-Path $OutputPath 'INSTALL.txt') -Force
 Write-Host ('Clothing classes: ' + $report.Clothing.Count + ' -> 10 wide x 10 high CARGO')
+Write-Host ('Other clothing classes kept at original cargo: ' + $report.NormalClothing.Count)
 Write-Host ('Gun classes: ' + $report.Guns.Count + ' -> 10 wide x 2 high ITEM SIZE')
 Write-Host ('Ready PBO: ' + $report.PboPath)
 Write-Host 'Copy GRZ_InventorySizes.pbo into @GRZ_Local\Addons on BOTH client and server, then restart both.'

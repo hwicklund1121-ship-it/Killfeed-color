@@ -8,6 +8,7 @@ import hashlib
 import json
 import os
 import re
+import shutil
 from pathlib import Path
 import struct
 import subprocess
@@ -30,17 +31,24 @@ def integer(value):
     return bytes(data)
 
 
-def node(name, parent='', children=()):
-    return name, parent, list(children)
+def node(name, parent='', children=(), properties=None):
+    return name, parent, list(children), properties or {}
 
 
 def rap(root):
     data = bytearray(b'\0raP' + struct.pack('<III', 0, 8, 0))
 
     def body(entry):
-        name, parent, children = entry
+        name, parent, children, properties = entry
         offset = len(data)
-        data.extend(z(parent) + integer(len(children)))
+        data.extend(z(parent) + integer(len(children) + len(properties)))
+        for key, value in properties.items():
+            if isinstance(value, str):
+                data.extend(b'\x01\x00' + z(key) + z(value))
+            else:
+                data.extend(b'\x02' + z(key) + integer(len(value)))
+                for item in value:
+                    data.extend(b'\x00' + z(item) if isinstance(item,str) else b'\x02' + struct.pack('<i',item))
         fixes = []
         for child in children:
             data.extend(b'\0' + z(child[0]))
@@ -66,6 +74,7 @@ def archive(path, root, prefix='Fixture'):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--pwsh', required=True)
+    parser.add_argument('--reference-pbo', type=Path)
     args = parser.parse_args()
     with tempfile.TemporaryDirectory(prefix='grz inventory test ') as tmp:
         temp = Path(tmp)
@@ -75,7 +84,25 @@ def main():
         (game/'DayZ_x64.exe').touch()
         # Engine anchor classes have no CfgPatches provider.
         archive(game/'dta/bin.pbo',node('',children=[node('CfgPatches'),node('CfgVehicles',children=[node('Man','All'),node('Clothing','Thing')]),node('CfgWeapons',children=[node('Weapon_Base'),node('DefaultWeapon','Weapon_Base'),node('PistolCore','DefaultWeapon'),node('RifleCore','DefaultWeapon'),node('LauncherCore','DefaultWeapon'),node('Rifle_Base','DefaultWeapon')])]))
-        vehicles = [node('Man','SurvivorBase'),node('SurvivorBase','Man'),node('Inventory_Base'), node('Clothing','Inventory_Base'), node('Jacket_ColorBase','Clothing'), node('Jacket_Black','Jacket_ColorBase'), node('Shoes_ColorBase','Clothing'), node('Shoes_Blue','Shoes_ColorBase'), node('Backpack_Base','Clothing'), node('AliceBag_Black','Backpack_Base'), node('Grenade','Inventory_Base')]
+        if args.reference_pbo:
+            shutil.copyfile(args.reference_pbo, game/'dta/bin.pbo')
+        vehicles = [
+            node('Man','SurvivorBase'),node('SurvivorBase','Man'),node('Inventory_Base'),
+            node('Clothing','Inventory_Base',properties={'inventorySlot':[],'itemsCargoSize':[0,0]}),
+            node('Jacket_ColorBase','Clothing',properties={'inventorySlot':['Body'],'itemsCargoSize':[4,3]}),
+            node('Jacket_Black','Jacket_ColorBase'),
+            node('Shoes_ColorBase','Clothing',properties={'inventorySlot':['Feet']}),node('Shoes_Blue','Shoes_ColorBase'),
+            node('Backpack_Base','Clothing',properties={'inventorySlot':['Back'],'itemsCargoSize':[8,10]}),node('AliceBag_Black','Backpack_Base'),
+            node('Vest_Base','Clothing',properties={'inventorySlot':['Vest'],'itemsCargoSize':[6,4]}),node('Vest_Black','Vest_Base'),
+            node('Pants_Base','Clothing',properties={'inventorySlot':['Legs'],'itemsCargoSize':[4,5]}),node('Pants_Blue','Pants_Base'),
+            node('Belt_Base','Clothing',properties={'inventorySlot':'Hips','itemsCargoSize':[3,2]}),node('Belt_Brown','Belt_Base'),
+            node('Hat_Base','Clothing',properties={'inventorySlot':['Headgear']}),
+            node('Gloves_Base','Clothing',properties={'inventorySlot':['Gloves']}),
+            node('Mask_Base','Clothing',properties={'inventorySlot':['Mask']}),
+            node('Armband_Base','Clothing',properties={'inventorySlot':['Armband']}),
+            node('Hat_From_Jacket','Jacket_ColorBase',properties={'inventorySlot':['Headgear']}),
+            node('Grenade','Inventory_Base')]
+
         weapons = [node('Rifle_Base','RifleCore'),node('M4A1','Rifle_Base'),node('Pistol_Base','PistolCore'),node('Glock19','Pistol_Base'),node('Launcher_Base','LauncherCore'),node('M79','Launcher_Base')]
         archive(game/'Addons/base.pbo',node('',children=[node('CfgPatches',children=[node('DZ_Fixture')]),node('CfgVehicles',children=vehicles),node('CfgWeapons',children=weapons)]))
         # A later patch reopens an existing class without repeating its parent.
@@ -88,12 +115,17 @@ def main():
         result=subprocess.run(command,env=environment,capture_output=True,text=True)
         assert result.returncode==0,result.stdout+result.stderr
         report=json.loads((output/'Inventory-catalog.json').read_text(encoding='utf-8-sig'))
-        assert len(report['Clothing'])==7 and len(report['Guns'])==6
+        assert len(report['Clothing'])==8 and len(report['NormalClothing'])==10 and len(report['Guns'])==6
         assert 'Grenade' not in report['Clothing'] and 'Weapon_Base' not in report['Guns']
         assert 'DZ_Fixture' in report['RequiredAddons'] and 'DZ_Fixture_Variant' in report['RequiredAddons']
         config=(output/'config.cpp').read_text()
-        assert config.count('itemsCargoSize[] = {10, 10};')==7
+        assert config.count('itemsCargoSize[] = {10, 10};')==8
         assert config.count('itemSize[] = {10, 2};')==6
+        for name in ['Shoes_ColorBase','Shoes_Blue','Hat_Base','Gloves_Base','Mask_Base','Armband_Base','Backpack_Base','AliceBag_Black','Hat_From_Jacket']:
+            assert name not in report['Clothing']
+        assert 'Belt_Brown' in report['Clothing'] and 'Jacket_Black' in report['Clothing']
+        assert re.search(r'class Hat_From_Jacket: Jacket_ColorBase\s*\{\s*itemsCargoSize\[\] = \{4, 3\}',config)
+        assert re.search(r'class AliceBag_Black: Backpack_Base\s*\{\s*itemsCargoSize\[\] = \{8, 10\}',config)
         assert 'class Man' not in config and 'class SurvivorBase' not in config
         assert 'class Clothing: Inventory_Base' in config
         assert 'class Rifle_Base: RifleCore' in config
@@ -122,7 +154,7 @@ def main():
         failed=subprocess.run(failure_command,env=environment,capture_output=True,text=True)
         assert failed.returncode!=0 and not (bad_output/'GRZ_InventorySizes.pbo').exists()
         assert 'Compressed config.bin' in failed.stdout+failed.stderr
-        print('PowerShell/C# tests passed: normal unrelated engine redefinitions, inherited variants, original parents, unrelated items, exact cargo/footprint fields, provider dependencies, PBO byte/checksum compatibility, and fail-closed conflict/unsupported compression handling.')
+        print('PowerShell/C# tests passed: normal unrelated engine redefinitions, inherited variants, original parents, unrelated items, restricted clothing slots, restored excluded cargo, exact cargo/footprint fields, provider dependencies, PBO byte/checksum compatibility, and fail-closed conflict/unsupported compression handling.')
 
 
 if __name__=='__main__':

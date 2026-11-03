@@ -1,4 +1,4 @@
-GRZ CLOTHING 10x10 + GUNS 10x2 BUILDER v0.1.1
+GRZ VEST/TOP/PANTS/BELT 10x10 + GUNS 10x2 BUILDER v0.1.2
 
 1. Close DayZ and extract this ZIP into a folder.
 2. Double-click Build-Inventory-Mod.cmd (or run cmd /c .\Build-Inventory-Mod.cmd).

@@ -1,6 +1,7 @@
 GRZ INVENTORY SIZES
 
-Clothing: 10 columns x 10 rows INTERNAL cargo (100 slots).
+Vests, shirts/jackets, pants and belts: 10 x 10 INTERNAL cargo (100 slots).
+All other clothing, including backpacks, keeps its normal cargo size.
 Guns: 10 columns x 2 rows INVENTORY footprint (20 slots).
 
 1. Stop the server and fully close DayZ.
@@ -8,13 +9,18 @@ Guns: 10 columns x 2 rows INVENTORY footprint (20 slots).
    the DayZ game client and server. Use the exact same generated PBO.
 3. Restart the server and game. Your existing @GRZ_Local launch line works.
 
-The builder catalogs every Clothing descendant and rifle/pistol/launcher family
-in the selected game's installed config.bin resources, preserving each item's
-original base class and requiring the defining addons to load before the patch.
-This includes ordinary clothing variants, backpacks, vests, boots, gloves,
-headgear and eyewear where they inherit Clothing. Formerly zero-cargo clothing
-gets 100 slots as well. Clothing's outer item size is unchanged. Gun attachments,
-magazines, damage, handling and recoil are unchanged. Other storage is unchanged.
+The builder catalogs clothing and rifle/pistol/launcher families in installed
+config.bin resources. It expands only clothing whose inherited inventory slot
+is Body, Vest, Legs or Hips. Hats, footwear, gloves, masks, armbands, eyewear,
+backpacks and other slots retain their original cargo, even where a modified
+parent could otherwise enlarge them. Gun attachments, magazines, damage,
+handling and recoil are unchanged. Clothing's outer item size is unchanged.
+
+Replace the previous GRZ_InventorySizes.pbo with the new one; do not load a
+second copy under another name. After a full restart use /grzvip inventory
+(with the latest GRZ killfeed pack) to check the client patch is LOADED and
+inspect the gun in your hands (or M4A1 if none) and your worn clothing sizes.
+If it says NOT LOADED, the client launcher is not loading this PBO's folder.
 
 Back up server mission storage before applying inventory-size changes. Existing
 packed guns may need rearranging because a 10-wide gun fits only at column zero

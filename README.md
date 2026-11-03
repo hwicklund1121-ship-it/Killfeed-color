@@ -96,8 +96,10 @@ There is no application server or package installation step. PBO compilation and
 
 [GRZ No Grass](NO-GRASS.md) disables terrain clutter on the current ChernarusPlus server. The watermark has been removed.
 
-[GRZ Earmuffs](EARMUFFS.md): N toggles; +/- adjusts effects volume (10%-100%). A speaker symbol and percentage appear briefly, then fade away.
+[GRZ Earmuffs](EARMUFFS.md): N toggles; +/- adjusts effects volume (10%-100%). An ear-with-sound-waves symbol and percentage appear briefly, then fade away.
 
 [GRZ Environment](ENVIRONMENT.md) freezes midday/weather and suppresses dynamic PO-X strikes. Staff-style prefixes are blocked in the killfeed. [GRZ Sky colors](SKY-COLORS.md) adds player-specific sky color choices with live preview below Hit Marker in Options > Game. Apply saves; Cancel restores.
 
-[GRZ Inventory Sizes](INVENTORY-SIZES.md): generate a local PBO for 10×10 clothing cargo and gun footprints 10 wide × 2 high, using your installed item classes.
+[GRZ Inventory Sizes](INVENTORY-SIZES.md): generate a local PBO for 10×10 vest/top/pants/belt cargo and gun footprints 10 wide × 2 high, using your installed item classes.
+
+Killfeed test: `/killfeed test`. Spawned survivor kills show BOT. GRZ Killstreaks announces at each 10-kill milestone. Updated StartServer.bat runs the backed-up empty-world economy setup before launching.

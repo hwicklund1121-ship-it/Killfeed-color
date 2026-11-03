@@ -4,6 +4,7 @@ class GRZKillfeedRPC
     static const int MENU_STATE = 1647280102;
     static const int SAVE_STYLE = 1647280103;
     static const int KILL = 1647280104;
+    static const int STREAK = 1647280105;
 }
 
 class GRZAnimationStyle

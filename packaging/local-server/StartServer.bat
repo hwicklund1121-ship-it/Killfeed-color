@@ -5,5 +5,10 @@ if not exist "DayZServer_x64.exe" (
  pause
  exit /b 1
 )
+powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0Setup-GRZEmptyWorld.ps1"
+if errorlevel 1 (
+ pause
+ exit /b 1
+)
 DayZServer_x64.exe -config=serverDZ.cfg -port=2302 "-profiles=profiles" "-mod=@GRZ_Local" -dologs -adminlog
 pause

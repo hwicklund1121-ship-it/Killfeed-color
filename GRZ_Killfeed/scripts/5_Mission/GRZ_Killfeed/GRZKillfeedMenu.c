@@ -24,13 +24,13 @@ class GRZKillfeedClient
         if (!ActiveMenu || !ActiveMenu.GetLayoutRoot())
         {
             ActiveMenu = null;
-            Error("[GRZ Killfeed 0.1.17] Native menu factory did not return an initialized settings menu.");
+            Error("[GRZ Killfeed 0.1.18] Native menu factory did not return an initialized settings menu.");
             g_Game.Chat("GRZ Killfeed: menu creation failed. Check the client script log.", "colorStatusChannel");
             return;
         }
         ActiveMenu.ApplyLocalStyle(LocalStyle);
         ActiveMenu.EnsureVisible();
-        Print("[GRZ Killfeed 0.1.17] Native menu registered and retained.");
+        Print("[GRZ Killfeed 0.1.18] Native menu registered and retained.");
     }
 
     static void ReleaseMenu()
@@ -57,16 +57,49 @@ class GRZKillfeedClient
         rpc.Send(player, GRZKillfeedRPC.REQUEST_MENU, true, null);
     }
 
+    static void TestLocal()
+    {
+        if (g_Game.IsDedicatedServer() || !g_Game.GetPlayer())
+            return;
+        Demo(LocalStyle);
+        g_Game.Chat("GRZ Killfeed: local test only; this does not add a kill or killstreak.", "colorStatusChannel");
+    }
+
     static void TestOffline()
     {
-        if (!CanLocalPreview())
-        {
-            PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
-            if (player)
-                player.MessageStatus("GRZ Killfeed: /grzvip test is available only in offline editor sessions.");
+        TestLocal();
+    }
+
+    static string InventoryDimensions(string configPath)
+    {
+        array<int> dimensions = new array<int>;
+        g_Game.ConfigGetIntArray(configPath, dimensions);
+        if (dimensions.Count() < 2)
+            return "not defined";
+        return dimensions[0].ToString() + " wide x " + dimensions[1].ToString() + " high";
+    }
+
+    static void CheckInventory()
+    {
+        PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
+        if (!player)
             return;
+        string status = "NOT LOADED";
+        if (g_Game.ConfigIsExisting("CfgPatches GRZ_InventorySizes"))
+            status = "LOADED";
+        g_Game.Chat("GRZ Inventory client patch: " + status, "colorStatusChannel");
+        string gunType = "M4A1";
+        Weapon_Base held = Weapon_Base.Cast(player.GetHumanInventory().GetEntityInHands());
+        if (held)
+            gunType = held.GetType();
+        g_Game.Chat("GRZ Inventory " + gunType + ": " + InventoryDimensions("CfgWeapons " + gunType + " itemSize"), "colorStatusChannel");
+        array<string> slots = {"Body", "Vest", "Legs", "Hips"};
+        foreach (string slot : slots)
+        {
+            EntityAI worn = player.FindAttachmentBySlotName(slot);
+            if (worn)
+                g_Game.Chat("GRZ Inventory " + slot + " " + worn.GetType() + ": " + InventoryDimensions("CfgVehicles " + worn.GetType() + " itemsCargoSize"), "colorStatusChannel");
         }
-        Demo(LocalStyle);
     }
 
     static void Demo(GRZNameStyle style)
@@ -74,7 +107,7 @@ class GRZKillfeedClient
         // Client-only preview. Never sends an announcement to other players.
         GRZKillfeedMessage message = new GRZKillfeedMessage;
         g_Game.GetPlayerName(message.Killer);
-        message.Victim = "Target Dummy";
+        message.Victim = "BOT";
         message.GunData.Types = {"M4A1", "ACOGOptic", "M4_RISHndgrd", "M4_OEBttstck", "M4_Suppressor", "Mag_STANAG_30Rnd"};
         message.GunData.Parents = {-1, 0, 0, 0, 0, 0};
         message.GunData.Slots = {-1, -1, -1, -1, -1, -1};
@@ -103,17 +136,19 @@ modded class ChatInputMenu
             return false;
         string command = input.GetText().Trim();
         command.ToLower();
-        if (command != "/grzvip" && command != "/grzvip test")
+        if (command != "/grzvip" && command != "/grzvip test" && command != "/killfeed test" && command != "/grzvip inventory")
             return false;
         if (m_GRZVipSubmitted)
             return true;
         m_GRZVipSubmitted = true;
-        Print("[GRZ Killfeed 0.1.17] Intercepted local VIP command before public/VPP chat.");
+        Print("[GRZ Killfeed 0.1.18] Intercepted local VIP command before public/VPP chat.");
         Close();
         if (command == "/grzvip")
             g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZKillfeedClient.RequestMenu, 150, false);
+        else if (command == "/grzvip inventory")
+            g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZKillfeedClient.CheckInventory, 150, false);
         else
-            g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZKillfeedClient.TestOffline, 150, false);
+            g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZKillfeedClient.TestLocal, 150, false);
         return true;
     }
 
@@ -206,7 +241,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
         if (IsOfflinePreview)
             m_Status.SetText("Local preview — server access and persistence are not tested.");
         PositionPanel();
-        Print("[GRZ Killfeed 0.1.17] Init: layout created.");
+        Print("[GRZ Killfeed 0.1.18] Init: layout created.");
         return layoutRoot;
     }
 
@@ -261,7 +296,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
             m_LoggedUpdate = true;
             float width, height;
             layoutRoot.GetScreenSize(width, height);
-            Print(string.Format("[GRZ Killfeed 0.1.17] Update: root %1 x %2; visible %3.", width, height, layoutRoot.IsVisibleHierarchy()));
+            Print(string.Format("[GRZ Killfeed 0.1.18] Update: root %1 x %2; visible %3.", width, height, layoutRoot.IsVisibleHierarchy()));
         }
     }
 
@@ -277,14 +312,14 @@ class GRZKillfeedMenu extends UIScriptedMenu
             return;
         }
         EnsureVisible();
-        Print("[GRZ Killfeed 0.1.17] OnShow called.");
+        Print("[GRZ Killfeed 0.1.18] OnShow called.");
     }
 
     override void OnHide()
     {
         m_GRZDismissRequested = true;
         GRZKillfeedBus.AppDeactivated.Remove(CloseSafely);
-        Print("[GRZ Killfeed 0.1.17] OnHide called.");
+        Print("[GRZ Killfeed 0.1.18] OnHide called.");
         super.OnHide();
     }
 

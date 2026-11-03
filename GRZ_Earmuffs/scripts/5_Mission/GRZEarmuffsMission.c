@@ -48,21 +48,21 @@ modded class MissionGameplay
             CanvasWidget symbol = CanvasWidget.Cast(m_GRZEarmuffsPopup.FindAnyWidget("GRZEarmuffsSymbol"));
             if (symbol)
             {
-                // Solid speaker cabinet and tapered cone, like the supplied icon.
-                symbol.DrawLine(5, 20, 12, 20, 10, 0xFFFFFFFF);
-                for (int column = 0; column <= 10; column++)
-                {
-                    float extent = 5 + column * 0.8;
-                    symbol.DrawLine(12 + column, 20 - extent, 12 + column, 20 + extent, 1.5, 0xFFFFFFFF);
-                }
+                // White ear outline with sound waves, matching the reference.
+                array<float> ear = {4,20, 3,15, 5,9, 9,5, 15,3, 21,5, 25,9, 26,14, 24,20, 20,24, 17,29, 15,35, 11,38, 7,36, 6,32};
+                for (int point = 0; point < ear.Count() - 2; point += 2)
+                    symbol.DrawLine(ear[point], ear[point + 1], ear[point + 2], ear[point + 3], 2, 0xFFFFFFFF);
+                array<float> inner = {8,18, 8,13, 11,9, 16,8, 21,11, 22,15, 19,19, 15,20, 13,25};
+                for (int innerPoint = 0; innerPoint < inner.Count() - 2; innerPoint += 2)
+                    symbol.DrawLine(inner[innerPoint], inner[innerPoint + 1], inner[innerPoint + 2], inner[innerPoint + 3], 2, 0xFFFFFFFF);
                 for (int wave = 0; wave < 2; wave++)
                 {
-                    float radius = 8 + wave * 7;
+                    float radius = 8 + wave * 6;
                     for (int segment = 0; segment < 8; segment++)
                     {
-                        float a = -0.8 + segment * 0.2;
-                        float b = a + 0.2;
-                        symbol.DrawLine(22 + Math.Cos(a) * radius, 20 + Math.Sin(a) * radius, 22 + Math.Cos(b) * radius, 20 + Math.Sin(b) * radius, 2, 0xFFFFFFFF);
+                        float a = -0.7 + segment * 0.175;
+                        float b = a + 0.175;
+                        symbol.DrawLine(24 + Math.Cos(a) * radius, 13 + Math.Sin(a) * radius, 24 + Math.Cos(b) * radius, 13 + Math.Sin(b) * radius, 2, 0xFFFFFFFF);
                     }
                 }
             }
@@ -118,6 +118,8 @@ modded class MissionGameplay
         if (toggle && toggle.LocalPress())
         {
             m_GRZEarmuffsEnabled = !m_GRZEarmuffsEnabled;
+            if (m_GRZEarmuffsEnabled)
+                m_GRZEarmuffsPercent = 20;
             changed = true;
         }
         if (m_GRZEarmuffsEnabled)

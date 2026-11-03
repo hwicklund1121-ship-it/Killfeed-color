@@ -59,7 +59,7 @@ GRZ No Grass disables terrain clutter on ChernarusPlus. Replace the client pack 
 The watermark has been removed from the custom HUD.
 
 Earmuffs: N toggles; +/- changes game effects in 10% steps (10%-100%).
-A speaker symbol and percentage appear, then fade after each press.
+An ear symbol and percentage appear, then fade after each press.
 Voice chat volume is unchanged. Rebind under Controls > GRZ Earmuffs.
 Earmuffs stay active in inventory, chat and Esc; typing in menus does not trigger hotkeys.
 
@@ -74,3 +74,14 @@ Changing only the PBO will not increase the server replication range.
 GRZ Sky colors: Options > Game, below Hit Marker. Arrow choices preview
 immediately; Apply saves your local choice and Cancel/Back restores it.
 Cloud lighting is retained. Replace the pack on your DayZ client too.
+
+NEW STARTUP SCRIPT REQUIRED FOR EMPTY WORLD:
+Copy Setup-GRZEmptyWorld.ps1 and the updated StartServer.bat beside the server exe.
+It backs up and zeros loot nominal/min values and disables natural world/NPC
+events in the installed mission XML before startup. Player storage is preserved.
+Existing saved loot is not deleted; it may remain until separate cleanup.
+
+Killfeed: /killfeed test makes a local BOT preview. Actual spawned survivor kills
+show BOT. GRZ Killstreaks announces at 10,20,30... kills; resets on death/logout.
+Earmuffs: N starts at 20% every time, +/- adjusts; ear-with-waves icon fades.
+Inventory: /grzvip inventory checks whether your generated override is loaded.
