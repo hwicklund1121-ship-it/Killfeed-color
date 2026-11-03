@@ -16,8 +16,8 @@
     "sha256": "d93fca5156a6078e561dda8df4c348b000e27bbc3db26588e1d8997fc231681d"
   },
   "GRZ_Killfeed.pbo": {
-    "bytes": 592699,
-    "sha256": "c533fdee7395f23be51c7ef8b25cb7b70e08840cdce84c26bebb245d85ffbe92"
+    "bytes": 593056,
+    "sha256": "3f26d7aaf3078d258ebb08af00d71b5d73dc52a974790caae057c63b034a4cab"
   },
   "GRZ_LUGU_RollStand.pbo": {
     "bytes": 3377,
@@ -44,11 +44,11 @@
     "sha256": "82f36e2bc2970bbb312c244441eabbbe80d8252bef8e464b283f92a068733da7"
   },
   "GRZ_Environment.pbo": {
-    "bytes": 4706,
-    "sha256": "6b5bcd01dc631f52799e7f1b196c0b7b3fc5f26c0aae21c57b2004eb1cb48f20"
+    "bytes": 4865,
+    "sha256": "080427c5e90f78ad9456bc97afb9c8d44c16e179e7b4b2c892b118aec17a23f3"
   },
   "GRZ_SkyColors.pbo": {
-    "bytes": 436552,
-    "sha256": "8b646ac37580ba7b89a3fa404b6ac4090ce5be8394edb8d0340b09d0f2e3f5e4"
+    "bytes": 436538,
+    "sha256": "accf647fb053b54bf8d4a958a71012a62f938cd3263020e0bc5d12df1e2bfdd0"
   }
 }

@@ -135,7 +135,7 @@ class GRZSkyRuntime
             // values in these tables are identical to the supplied base file.
             g_Game.GetWorld().LoadNewLightingCfg(path);
             s_AppliedPath = path;
-            Print("[GRZ Sky colors 0.1.2] Requested lighting: " + path);
+            Print("[GRZ Sky colors 0.1.3] Requested lighting: " + path);
         }
         return true;
     }

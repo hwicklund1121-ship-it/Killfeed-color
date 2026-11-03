@@ -1,15 +1,103 @@
 {
   "PaletteEntries": [
-    {"Name": "DEFAULT", "Key": "default", "RGB": [0.5, 0.64, 1.0]},
-    {"Name": "BLACK", "Key": "black", "RGB": [0.0, 0.0, 0.0]},
-    {"Name": "RED", "Key": "red", "RGB": [1.0, 0.015, 0.015]},
-    {"Name": "BLUE", "Key": "blue", "RGB": [0.03, 0.18, 1.0]},
-    {"Name": "PINK", "Key": "pink", "RGB": [1.0, 0.12, 0.52]},
-    {"Name": "PURPLE", "Key": "purple", "RGB": [0.54, 0.06, 1.0]},
-    {"Name": "CYAN", "Key": "cyan", "RGB": [0.02, 0.82, 1.0]},
-    {"Name": "GREEN", "Key": "green", "RGB": [0.06, 1.0, 0.16]},
-    {"Name": "ORANGE", "Key": "orange", "RGB": [1.0, 0.24, 0.015]},
-    {"Name": "YELLOW", "Key": "yellow", "RGB": [1.0, 0.87, 0.04]},
-    {"Name": "WHITE", "Key": "white", "RGB": [1.0, 1.0, 1.0]}
+    {
+      "Name": "DEFAULT",
+      "Key": "default",
+      "RGB": [
+        0.5,
+        0.64,
+        1.0
+      ]
+    },
+    {
+      "Name": "BLACK",
+      "Key": "black",
+      "RGB": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "Name": "RED",
+      "Key": "red",
+      "RGB": [
+        1.0,
+        0.015,
+        0.015
+      ]
+    },
+    {
+      "Name": "BLUE",
+      "Key": "blue",
+      "RGB": [
+        0.03,
+        0.18,
+        1.0
+      ]
+    },
+    {
+      "Name": "PINK",
+      "Key": "pink",
+      "RGB": [
+        1.0,
+        0.12,
+        0.52
+      ]
+    },
+    {
+      "Name": "PURPLE",
+      "Key": "purple",
+      "RGB": [
+        0.54,
+        0.06,
+        1.0
+      ]
+    },
+    {
+      "Name": "CYAN",
+      "Key": "cyan",
+      "RGB": [
+        0.02,
+        0.82,
+        1.0
+      ]
+    },
+    {
+      "Name": "GREEN",
+      "Key": "green",
+      "RGB": [
+        0.06,
+        1.0,
+        0.16
+      ]
+    },
+    {
+      "Name": "ORANGE",
+      "Key": "orange",
+      "RGB": [
+        1.0,
+        0.24,
+        0.015
+      ]
+    },
+    {
+      "Name": "YELLOW",
+      "Key": "yellow",
+      "RGB": [
+        1.0,
+        0.4,
+        0.0
+      ]
+    },
+    {
+      "Name": "WHITE",
+      "Key": "white",
+      "RGB": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    }
   ]
 }

@@ -11,7 +11,9 @@ modded class MissionGameplay
             return;
         m_GRZVisibilityCheck = 0;
         // Session rendering only: do not persist preferred graphics settings.
-        g_Game.GetWorld().SetViewDistance(1400);
+        // Keep the terrain horizon/far-distance haze beyond the entity bubble.
+        // With a 1400m terrain cap the colored distance fade reaches players.
+        g_Game.GetWorld().SetViewDistance(3200);
         g_Game.GetWorld().SetObjectViewDistance(1400);
         Weather weather = g_Game.GetWeather();
         weather.GetFog().SetLimits(0, 0);

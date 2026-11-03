@@ -15,7 +15,7 @@ class CfgMods
         dir = "GRZ_Environment";
         name = "GRZ Environment";
         author = "GRZ";
-        version = "0.1.1";
+        version = "0.1.2";
         type = "mod";
         dependencies[] = {"World", "Mission"};
         class defs

@@ -8,6 +8,7 @@ import json
 import shutil
 from pathlib import Path
 from zipfile import ZipFile, ZIP_DEFLATED
+from build_pbo import build
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT/'packaging/admin-addons'
@@ -36,6 +37,10 @@ def main():
     bootstrap = (b'powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0Setup-VPPAdmin.ps1"\r\n'
                  b'if errorlevel 1 (\r\n pause\r\n exit /b 1\r\n)\r\n')
     allowed = EXPECTED | {'@CF/mod.cpp', '@VPPAdminTools/mod.cpp', 'ADMIN-SETUP.txt', 'Setup-VPPAdmin.ps1'}
+    # Optional VPP-dependent patch stays out of the GRZ-only pack.
+    compat_name = '@GRZ_Local/Addons/GRZ_KillfeedVPPCompat.pbo'
+    compat_data = build(ROOT/'GRZ_KillfeedVPPCompat')
+    (ROOT/'downloads/GRZ_KillfeedVPPCompat.pbo').write_bytes(compat_data)
     target = ROOT/'downloads/GRZ-local-server-with-admin.zip'
     with ZipFile(ROOT/'downloads/GRZ-local-server-ready.zip') as base, ZipFile(target,'w',ZIP_DEFLATED) as output:
         for name in base.namelist():
@@ -43,15 +48,21 @@ def main():
                 payload=base.read(name).replace(b'"-mod=@GRZ_Local"', b'"-mod=@CF;@VPPAdminTools;@GRZ_Local"')
                 payload=payload.replace(b'DayZServer_x64.exe -config',bootstrap+b'DayZServer_x64.exe -config',1)
                 output.writestr(name,payload)
+            elif name == 'PBO-manifest.json':
+                grz_manifest = json.loads(base.read(name))
+                grz_manifest['GRZ_KillfeedVPPCompat.pbo'] = {'bytes':len(compat_data), 'sha256':hashlib.sha256(compat_data).hexdigest()}
+                output.writestr(name,json.dumps(grz_manifest,indent=2)+'\n')
             elif name == 'README.txt':
                 intro = ('CF + VPP ADMIN + GRZ COMPLETE LOCAL SERVER PACK\n\n'
                          'Extract all contents beside DayZServer_x64.exe, including the new StartServer.bat.\n'
                          'Enable @CF, @VPPAdminTools and @GRZ_Local in your client launcher.\n'
                          'StartServer.bat asks for your SteamID64 locally on first launch and preserves other admins.\n'
+                         'Includes GRZ_KillfeedVPPCompat.pbo so /grzvip is handled before VPP slash commands.\n'
                          'See ADMIN-SETUP.txt for VPP password/login instructions.\n\n')
                 output.writestr(name,intro+base.read(name).decode())
             else:
                 output.writestr(name,base.read(name))
+        output.writestr(compat_name,compat_data)
         manifest={}
         for path in sorted(SOURCE.rglob('*')):
             if not path.is_file():
@@ -69,9 +80,11 @@ def main():
         assert b'"-mod=@CF;@VPPAdminTools;@GRZ_Local"' in check.read('StartServer.bat')
         assert b'Setup-VPPAdmin.ps1' in check.read('StartServer.bat')
         assert not any(name.endswith('admin-owner.local.txt') for name in check.namelist())
+        assert check.read(compat_name)==compat_data
+        assert json.loads(check.read('PBO-manifest.json'))['GRZ_KillfeedVPPCompat.pbo']['sha256']==hashlib.sha256(compat_data).hexdigest()
         for name in EXPECTED:
             assert check.read(name)==(SOURCE/name).read_bytes()
-    print(f'Verified admin pack: {target.stat().st_size} bytes; all six admin/framework PBOs preserved.')
+    print(f'Verified admin pack: {target.stat().st_size} bytes; VPP command compatibility included; all six admin/framework PBOs preserved.')
 
 
 if __name__=='__main__':

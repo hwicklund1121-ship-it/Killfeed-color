@@ -24,13 +24,13 @@ class GRZKillfeedClient
         if (!ActiveMenu || !ActiveMenu.GetLayoutRoot())
         {
             ActiveMenu = null;
-            Error("[GRZ Killfeed 0.1.15] Native menu factory did not return an initialized settings menu.");
+            Error("[GRZ Killfeed 0.1.17] Native menu factory did not return an initialized settings menu.");
             g_Game.Chat("GRZ Killfeed: menu creation failed. Check the client script log.", "colorStatusChannel");
             return;
         }
         ActiveMenu.ApplyLocalStyle(LocalStyle);
         ActiveMenu.EnsureVisible();
-        Print("[GRZ Killfeed 0.1.15] Native menu registered and retained.");
+        Print("[GRZ Killfeed 0.1.17] Native menu registered and retained.");
     }
 
     static void ReleaseMenu()
@@ -86,27 +86,41 @@ class GRZKillfeedClient
 
 modded class ChatInputMenu
 {
+    protected bool m_GRZVipSubmitted;
+
+    override void OnShow()
+    {
+        m_GRZVipSubmitted = false;
+        super.OnShow();
+    }
+
+    protected bool GRZTryHandleVipCommand(bool finished)
+    {
+        if (!finished || !layoutRoot)
+            return false;
+        EditBoxWidget input = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("InputEditBoxWidget"));
+        if (!input)
+            return false;
+        string command = input.GetText().Trim();
+        command.ToLower();
+        if (command != "/grzvip" && command != "/grzvip test")
+            return false;
+        if (m_GRZVipSubmitted)
+            return true;
+        m_GRZVipSubmitted = true;
+        Print("[GRZ Killfeed 0.1.17] Intercepted local VIP command before public/VPP chat.");
+        Close();
+        if (command == "/grzvip")
+            g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZKillfeedClient.RequestMenu, 150, false);
+        else
+            g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZKillfeedClient.TestOffline, 150, false);
+        return true;
+    }
+
     override bool OnChange(Widget w, int x, int y, bool finished)
     {
-        // Intercept before vanilla ChatPlayer sends anything to public chat.
-        EditBoxWidget input = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("InputEditBoxWidget"));
-        if (finished && input)
-        {
-            string command = input.GetText().Trim();
-            command.ToLower();
-            if (command == "/grzvip")
-            {
-                Close();
-                g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZKillfeedClient.RequestMenu, 150, false);
-                return true;
-            }
-            if (command == "/grzvip test")
-            {
-                Close();
-                g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZKillfeedClient.TestOffline, 150, false);
-                return true;
-            }
-        }
+        if (GRZTryHandleVipCommand(finished))
+            return true;
         return super.OnChange(w, x, y, finished);
     }
 }
@@ -192,7 +206,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
         if (IsOfflinePreview)
             m_Status.SetText("Local preview — server access and persistence are not tested.");
         PositionPanel();
-        Print("[GRZ Killfeed 0.1.15] Init: layout created.");
+        Print("[GRZ Killfeed 0.1.17] Init: layout created.");
         return layoutRoot;
     }
 
@@ -247,7 +261,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
             m_LoggedUpdate = true;
             float width, height;
             layoutRoot.GetScreenSize(width, height);
-            Print(string.Format("[GRZ Killfeed 0.1.15] Update: root %1 x %2; visible %3.", width, height, layoutRoot.IsVisibleHierarchy()));
+            Print(string.Format("[GRZ Killfeed 0.1.17] Update: root %1 x %2; visible %3.", width, height, layoutRoot.IsVisibleHierarchy()));
         }
     }
 
@@ -263,14 +277,14 @@ class GRZKillfeedMenu extends UIScriptedMenu
             return;
         }
         EnsureVisible();
-        Print("[GRZ Killfeed 0.1.15] OnShow called.");
+        Print("[GRZ Killfeed 0.1.17] OnShow called.");
     }
 
     override void OnHide()
     {
         m_GRZDismissRequested = true;
         GRZKillfeedBus.AppDeactivated.Remove(CloseSafely);
-        Print("[GRZ Killfeed 0.1.15] OnHide called.");
+        Print("[GRZ Killfeed 0.1.17] OnHide called.");
         super.OnHide();
     }
 

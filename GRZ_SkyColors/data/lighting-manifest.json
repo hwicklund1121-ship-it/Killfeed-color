@@ -38,7 +38,7 @@
         },
         "default_yellow.txt": {
           "changed_sky_fields": 56,
-          "sha256": "0d7e3d5c4b5c249aa1dc13eb50687109eb6c03145ba9ef2ef19a7c63c9495c1d"
+          "sha256": "43e3d00768d1b8104c7611b7c538b25d6fdc61a7284f9f7e4920a68550895ee4"
         },
         "default_white.txt": {
           "changed_sky_fields": 56,
@@ -83,7 +83,7 @@
         },
         "darknight_yellow.txt": {
           "changed_sky_fields": 56,
-          "sha256": "8342aa87ecdc5cf7876fbc202bf166d169df150997f2e31c7dc75a7ee3884bdd"
+          "sha256": "1661d7ad149b741bcf486429d22f10b4c6d9c2bc35ae785d2bfec96f6d319846"
         },
         "darknight_white.txt": {
           "changed_sky_fields": 56,
