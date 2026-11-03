@@ -1,3 +1,5 @@
+The separate **GRZ Survival** mod disables fall damage and keeps hunger, thirst and temperature neutral for all players. See [SURVIVAL.md](SURVIVAL.md).
+
 The separate **GRZ Hitmarker** mod adds configurable markers, damage info and sound under **Options → Game**. See [HITMARKER.md](HITMARKER.md). The exact Rust headshot clip is pending upload; this build labels its temporary sound.
 
 # GRZ Custom Hud

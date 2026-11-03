@@ -30,5 +30,9 @@
   "LUGUINSTADROPFIX.pbo": {
     "bytes": 276061,
     "sha256": "b7828501469aa310f20700b1e7021c11f8656bc8170f291d85c4249f6417127b"
+  },
+  "GRZ_Survival.pbo": {
+    "bytes": 3523,
+    "sha256": "fb57cb3e61f6c07658873ac002ae48956aae5583738bada5c78f22bd20ef2dd8"
   }
 }
