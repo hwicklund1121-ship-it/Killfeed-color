@@ -12,6 +12,8 @@ public static class GRZInventoryBuilder
     {
         public string Name;
         public string Parent;
+        public HashSet<string> ParentChoices = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        public HashSet<string> AddonParentChoices = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         public HashSet<string> Providers = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
     }
     public class Report
@@ -169,12 +171,39 @@ public static class GRZInventoryBuilder
             }
             else if (node.Parent != "")
             {
-                if (def.Parent != "" && !def.Parent.Equals(node.Parent, StringComparison.OrdinalIgnoreCase))
-                    throw new InvalidDataException("Conflicting base classes for " + node.Name + "; do not scan inactive/alternative mods together.");
                 def.Parent = node.Parent;
+            }
+            if (node.Parent != "")
+            {
+                def.ParentChoices.Add(node.Parent);
+                if (providers.Length > 0) def.AddonParentChoices.Add(node.Parent);
             }
             foreach (string provider in providers) def.Providers.Add(provider);
         }
+    }
+    private static bool IsPotentialTarget(string name, Dictionary<string, Definition> table, HashSet<string> roots)
+    {
+        // Only relevant clothing/weapon ancestry needs an unambiguous parent.
+        // Engine/addon redefinitions of unrelated classes (e.g. Man) are normal.
+        Stack<string> pending = new Stack<string>();
+        HashSet<string> visited = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        pending.Push(name);
+        while (pending.Count > 0)
+        {
+            string current = pending.Pop();
+            if (!visited.Add(current)) continue;
+            if (roots.Contains(current)) return true;
+            Definition def;
+            if (table.TryGetValue(current, out def))
+                foreach (string parent in def.ParentChoices) pending.Push(parent);
+        }
+        return false;
+    }
+    private static void CheckTargetParents(Dictionary<string, Definition> table, HashSet<string> roots)
+    {
+        foreach (Definition def in table.Values)
+            if (def.AddonParentChoices.Count > 1 && IsPotentialTarget(def.Name, table, roots))
+                throw new InvalidDataException("Conflicting base classes for clothing/gun class " + def.Name + "; do not scan inactive/alternative mods together.");
     }
     private static bool IsTarget(string name, Dictionary<string, Definition> table, HashSet<string> roots)
     {
@@ -245,7 +274,7 @@ public static class GRZInventoryBuilder
         Dictionary<string, Definition> weapons = new Dictionary<string, Definition>(StringComparer.OrdinalIgnoreCase);
         int read = 0;
         List<string> failures = new List<string>();
-        foreach (string archive in archives.Distinct(StringComparer.OrdinalIgnoreCase).OrderBy(p => p, StringComparer.OrdinalIgnoreCase))
+        foreach (string archive in archives.Distinct(StringComparer.OrdinalIgnoreCase).OrderBy(p => String.Equals(Path.GetFileName(Path.GetDirectoryName(p)), "dta", StringComparison.OrdinalIgnoreCase) ? 0 : 1).ThenBy(p => p, StringComparer.OrdinalIgnoreCase))
         {
             try
             {
@@ -269,6 +298,8 @@ public static class GRZInventoryBuilder
         if (failures.Count > 0) throw new InvalidDataException("No partial override was produced.\n" + String.Join("\n", failures));
         HashSet<string> clothingRoots = new HashSet<string>(new string[] {"Clothing", "Clothing_Base"}, StringComparer.OrdinalIgnoreCase);
         HashSet<string> gunRoots = new HashSet<string>(new string[] {"RifleCore", "PistolCore", "LauncherCore", "Rifle_Base", "Pistol_Base", "Launcher_Base", "Weapon_Base"}, StringComparer.OrdinalIgnoreCase);
+        CheckTargetParents(vehicles, clothingRoots);
+        CheckTargetParents(weapons, gunRoots);
         List<Definition> clothing = vehicles.Values.Where(d => IsTarget(d.Name, vehicles, clothingRoots)).ToList();
         // The engine defines abstract anchors in dta/bin.pbo without CfgPatches.
         // Concrete/addon gun classes are all patched; those anchors stay intact.

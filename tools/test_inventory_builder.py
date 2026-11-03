@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import struct
 import subprocess
@@ -73,8 +74,8 @@ def main():
         (game/'dta').mkdir()
         (game/'DayZ_x64.exe').touch()
         # Engine anchor classes have no CfgPatches provider.
-        archive(game/'dta/bin.pbo',node('',children=[node('CfgPatches'),node('CfgWeapons',children=[node('Weapon_Base'),node('DefaultWeapon','Weapon_Base'),node('PistolCore','DefaultWeapon'),node('RifleCore','DefaultWeapon'),node('LauncherCore','DefaultWeapon')])]))
-        vehicles = [node('Inventory_Base'), node('Clothing','Inventory_Base'), node('Jacket_ColorBase','Clothing'), node('Jacket_Black','Jacket_ColorBase'), node('Shoes_ColorBase','Clothing'), node('Shoes_Blue','Shoes_ColorBase'), node('Backpack_Base','Clothing'), node('AliceBag_Black','Backpack_Base'), node('Grenade','Inventory_Base')]
+        archive(game/'dta/bin.pbo',node('',children=[node('CfgPatches'),node('CfgVehicles',children=[node('Man','All'),node('Clothing','Thing')]),node('CfgWeapons',children=[node('Weapon_Base'),node('DefaultWeapon','Weapon_Base'),node('PistolCore','DefaultWeapon'),node('RifleCore','DefaultWeapon'),node('LauncherCore','DefaultWeapon'),node('Rifle_Base','DefaultWeapon')])]))
+        vehicles = [node('Man','SurvivorBase'),node('SurvivorBase','Man'),node('Inventory_Base'), node('Clothing','Inventory_Base'), node('Jacket_ColorBase','Clothing'), node('Jacket_Black','Jacket_ColorBase'), node('Shoes_ColorBase','Clothing'), node('Shoes_Blue','Shoes_ColorBase'), node('Backpack_Base','Clothing'), node('AliceBag_Black','Backpack_Base'), node('Grenade','Inventory_Base')]
         weapons = [node('Rifle_Base','RifleCore'),node('M4A1','Rifle_Base'),node('Pistol_Base','PistolCore'),node('Glock19','Pistol_Base'),node('Launcher_Base','LauncherCore'),node('M79','Launcher_Base')]
         archive(game/'Addons/base.pbo',node('',children=[node('CfgPatches',children=[node('DZ_Fixture')]),node('CfgVehicles',children=vehicles),node('CfgWeapons',children=weapons)]))
         # A later patch reopens an existing class without repeating its parent.
@@ -93,6 +94,9 @@ def main():
         config=(output/'config.cpp').read_text()
         assert config.count('itemsCargoSize[] = {10, 10};')==7
         assert config.count('itemSize[] = {10, 2};')==6
+        assert 'class Man' not in config and 'class SurvivorBase' not in config
+        assert 'class Clothing: Inventory_Base' in config
+        assert 'class Rifle_Base: RifleCore' in config
         assert 'class Jacket_Black: Jacket_ColorBase' in config
         assert config.index('class Jacket_ColorBase:')<config.index('class Jacket_Black:')
         pbo=(output/'GRZ_InventorySizes.pbo').read_bytes()
@@ -107,7 +111,8 @@ def main():
         failure_command=command.copy();failure_command[failure_command.index(str(output))]=str(bad_output)
         failed=subprocess.run(failure_command,env=environment,capture_output=True,text=True)
         assert failed.returncode!=0 and not (bad_output/'GRZ_InventorySizes.pbo').exists()
-        assert 'Conflicting base classes' in failed.stdout+failed.stderr
+        error_text = ' '.join(re.sub(r'(?m)^\s*\|\s*', '', failed.stdout+failed.stderr).split())
+        assert 'Conflicting base classes' in error_text,error_text
         (game/'Addons/conflict.pbo').unlink()
         archive(game/'Addons/compressed.pbo',node('',children=[node('CfgPatches',children=[node('Compressed_Fixture')])]))
         compressed=bytearray((game/'Addons/compressed.pbo').read_bytes())
@@ -117,7 +122,7 @@ def main():
         failed=subprocess.run(failure_command,env=environment,capture_output=True,text=True)
         assert failed.returncode!=0 and not (bad_output/'GRZ_InventorySizes.pbo').exists()
         assert 'Compressed config.bin' in failed.stdout+failed.stderr
-        print('PowerShell/C# tests passed: inherited variants, original parents, unrelated items, exact cargo/footprint fields, provider dependencies, PBO byte/checksum compatibility, and fail-closed conflict/unsupported compression handling.')
+        print('PowerShell/C# tests passed: normal unrelated engine redefinitions, inherited variants, original parents, unrelated items, exact cargo/footprint fields, provider dependencies, PBO byte/checksum compatibility, and fail-closed conflict/unsupported compression handling.')
 
 
 if __name__=='__main__':

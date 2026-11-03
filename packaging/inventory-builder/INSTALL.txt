@@ -25,7 +25,7 @@ The output config.cpp and Inventory-catalog.json list the exact items patched.
 The builder reads Addons and dta; it does not install or modify game files.
 Use -ExtraModPaths with the PS1 for additional ENABLED mod folders containing
 binarized config.bin resources. Source-only/encrypted/compressed unsupported
-configs or conflicting class definitions cause an error instead of silently
+configs or conflicting clothing/gun class definitions cause an error instead of silently
 producing partial coverage. Rebuild after adding new clothing/weapon mods or
 updating game definitions. Disabled alternative mods must not be included.
 

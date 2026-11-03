@@ -30,6 +30,7 @@ foreach ($folder in $folders) {
     }
 }
 if ($archives.Count -eq 0) { throw 'No PBO archives were found.' }
+Write-Host 'GRZ Inventory builder v0.1.1'
 Write-Host 'Reading installed clothing and gun class definitions. Game files remain unchanged...'
 if (-not ('GRZInventoryBuilder' -as [type])) {
     Add-Type -Path (Join-Path $PSScriptRoot 'InventoryBuilder.cs')
