@@ -7,7 +7,7 @@ class GRZSkyColor
 
 class GRZSkyPaletteData
 {
-    ref array<ref GRZSkyColor> Colors;
+    ref array<ref GRZSkyColor> PaletteEntries;
 }
 
 class GRZSkyPalette
@@ -19,14 +19,14 @@ class GRZSkyPalette
         if (!s_Data)
         {
             string error;
-            if (!JsonFileLoader<GRZSkyPaletteData>.LoadFile("GRZ_SkyColors/data/palette.json", s_Data, error) || !s_Data || !s_Data.Colors || s_Data.Colors.Count() != 11)
+            if (!JsonFileLoader<GRZSkyPaletteData>.LoadFile("GRZ_SkyColors/data/palette.json", s_Data, error) || !s_Data || !s_Data.PaletteEntries || s_Data.PaletteEntries.Count() != 11)
             {
                 s_Data = new GRZSkyPaletteData;
-                s_Data.Colors = new array<ref GRZSkyColor>;
+                s_Data.PaletteEntries = new array<ref GRZSkyColor>;
                 GRZSkyColor fallback = new GRZSkyColor;
                 fallback.Name = "DEFAULT";
                 fallback.Key = "default";
-                s_Data.Colors.Insert(fallback);
+                s_Data.PaletteEntries.Insert(fallback);
                 Error("GRZ Sky colors: palette failed to load: " + error);
             }
         }
@@ -35,7 +35,7 @@ class GRZSkyPalette
 
     static bool Valid(int index)
     {
-        return index >= 0 && index < Current().Colors.Count();
+        return index >= 0 && index < Current().PaletteEntries.Count();
     }
 }
 
@@ -121,7 +121,7 @@ class GRZSkyRuntime
             string base = "default";
             if (s_BaseId == 1)
                 base = "darknight";
-            path = "GRZ_SkyColors/data/lighting/" + base + "_" + GRZSkyPalette.Current().Colors[color].Key + ".txt";
+            path = "GRZ_SkyColors/data/lighting/" + base + "_" + GRZSkyPalette.Current().PaletteEntries[color].Key + ".txt";
         }
         if (!FileExist(path))
         {
@@ -134,7 +134,7 @@ class GRZSkyRuntime
             // values in these tables are identical to the supplied base file.
             g_Game.GetWorld().LoadNewLightingCfg(path);
             s_AppliedPath = path;
-            Print("[GRZ Sky colors 0.1.0] Loaded lighting: " + path);
+            Print("[GRZ Sky colors 0.1.1] Loaded lighting: " + path);
         }
         return true;
     }

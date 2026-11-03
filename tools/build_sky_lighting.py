@@ -35,7 +35,7 @@ def main():
     parser.add_argument('--default', type=Path, required=True)
     parser.add_argument('--darknight', type=Path, required=True)
     args = parser.parse_args()
-    palette = json.loads((ROOT/'GRZ_SkyColors/data/palette.json').read_text())['Colors']
+    palette = json.loads((ROOT/'GRZ_SkyColors/data/palette.json').read_text())['PaletteEntries']
     output = ROOT/'GRZ_SkyColors/data/lighting'
     output.mkdir(exist_ok=True)
     manifest = {'source': 'User-supplied DayZ native lighting files; original engine lighting data by Bohemia Interactive.', 'tables': {}}

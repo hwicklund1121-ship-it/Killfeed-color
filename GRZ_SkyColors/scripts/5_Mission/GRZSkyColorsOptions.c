@@ -9,7 +9,7 @@ class GRZSkyColorOptions extends ScriptedWidgetEventHandler
         m_Section = section;
         m_Menu = menu;
         array<string> names = new array<string>;
-        foreach (GRZSkyColor color : GRZSkyPalette.Current().Colors)
+        foreach (GRZSkyColor color : GRZSkyPalette.Current().PaletteEntries)
             names.Insert(color.Name);
         m_Color = new OptionSelectorMultistate(section.FindAnyWidget("SkyColorValue"), GRZSkyStore.Current().Color, this, false, names);
         m_Color.m_OptionChanged.Insert(ColorChanged);

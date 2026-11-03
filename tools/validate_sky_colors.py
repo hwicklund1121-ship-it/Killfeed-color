@@ -14,7 +14,7 @@ SOURCE = ROOT/'GRZ_SkyColors'
 
 
 def main():
-    palette = json.loads((SOURCE/'data/palette.json').read_text())['Colors']
+    palette = json.loads((SOURCE/'data/palette.json').read_text())['PaletteEntries']
     assert len(palette)==11 and palette[0]['Key']=='default'
     assert len({c['Key'] for c in palette})==len(palette)
     for color in palette:
@@ -52,6 +52,8 @@ def main():
         text=p.read_text();assert text.count('{')==text.count('}')
         widgets.update(re.findall(r'\w+WidgetClass\s+(\w+)',text))
     script='\n'.join(p.read_text() for p in SOURCE.rglob('*.c'))
+    assert not re.search(r'\bColors\b', script), 'Colors conflicts with the native DayZ type'
+    assert 'ref array<ref GRZSkyColor> PaletteEntries;' in script
     refs=set(re.findall(r'FindAnyWidget\("(\w+)"\)',script))
     assert not refs-widgets-{'game_settings_root','game_settings_scroll'},refs-widgets
     assert 'section.SetSort(210)' in script

@@ -1,6 +1,6 @@
 # GRZ Sky colors
 
-Development mod v0.1.0. Open **Options > Game**, scroll below **GRZ HITMARKER**, and find **GRZ Sky colors**. The section uses the same transparent black panel, centered black header, white labels and native arrow selector as the other GRZ settings.
+Development mod v0.1.1. Open **Options > Game**, scroll below **GRZ HITMARKER**, and find **GRZ Sky colors**. The section uses the same transparent black panel, centered black header, white labels and native arrow selector as the other GRZ settings.
 
 Choose DEFAULT, BLACK, RED, BLUE, PINK, PURPLE, CYAN, GREEN, ORANGE, YELLOW or WHITE. Each arrow press loads the selected sky immediately before Apply. Apply saves the choice in the client's `$profile:GRZ_SkyColors/settings.json`. Cancel/Back and resetting the section restore the saved choice; Defaults previews DEFAULT until Apply. Selection is individual to each player and restored on join. No chat command or keybind is needed.
 
@@ -12,4 +12,4 @@ Included in @GRZ_Local; replace the pack on client and server, then restart both
 
 Build with `python3 tools/build_sky_colors.py` and check with `python3 tools/validate_sky_colors.py`. To regenerate the derived tables from extracted native resources, run `python3 tools/build_sky_lighting.py --default <lighting_default.txt> --darknight <lighting_darknight.txt>`. Original engine lighting data is by Bohemia Interactive; these tables derive from the user's installed DayZ resources. Unmodified original PBOs and reference resources are not bundled.
 
-Validated here: native file structure and API signatures, all 20 derived tables changing only sky fields, palette paths, layout/widget bindings and PBO/ZIP equality. No DayZ runtime or Enforce compiler is available. Required in-game checks: section visibility below Hit Marker, each live color including Black, retained clouds, Apply/reconnect, Cancel/Back, Defaults, dark-night profile and other GRZ options remaining functional. Client script logs include `[GRZ Sky colors 0.1.0] Loaded lighting:` for diagnosis.
+Validated here: native file structure and API signatures, all 20 derived tables changing only sky fields, palette paths, layout/widget bindings and PBO/ZIP equality. No DayZ runtime or Enforce compiler is available. Required in-game checks: section visibility below Hit Marker, each live color including Black, retained clouds, Apply/reconnect, Cancel/Back, Defaults, dark-night profile and other GRZ options remaining functional. Client script logs include `[GRZ Sky colors 0.1.1] Loaded lighting:` for diagnosis.
