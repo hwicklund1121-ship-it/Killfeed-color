@@ -2,7 +2,7 @@ ImageWidgetClass GRZWatermark
 {
  visible 0
  ignorepointer 1
- color 1 1 1 0.55
+ color 1 1 1 0.30
  position 0 0
  size 160 80
  hexactpos 1

@@ -27,7 +27,7 @@ modded class IngameHud
         {
             m_GRZWatermark.SetFlags(WidgetFlags.SOURCEALPHA | WidgetFlags.BLEND | WidgetFlags.STRETCH | WidgetFlags.IGNOREPOINTER);
             m_GRZWatermark.LoadImageFile(0, "GRZ_CustomHud/gui/textures/grz_watermark_ca.paa");
-            m_GRZWatermark.SetColor(0x8CFFFFFF);
+            m_GRZWatermark.SetColor(0x4DFFFFFF);
         }
         if (!m_GRZStatusPanel)
             return;
