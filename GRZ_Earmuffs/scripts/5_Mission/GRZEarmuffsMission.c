@@ -48,15 +48,23 @@ modded class MissionGameplay
             CanvasWidget symbol = CanvasWidget.Cast(m_GRZEarmuffsPopup.FindAnyWidget("GRZEarmuffsSymbol"));
             if (symbol)
             {
-                // Headphone headband, followed by the two padded ear cups.
-                for (int i = 0; i < 12; i++)
+                // Solid speaker cabinet and tapered cone, like the supplied icon.
+                symbol.DrawLine(5, 20, 12, 20, 10, 0xFFFFFFFF);
+                for (int column = 0; column <= 10; column++)
                 {
-                    float a = 3.14159265 + i * 3.14159265 / 12.0;
-                    float b = 3.14159265 + (i + 1) * 3.14159265 / 12.0;
-                    symbol.DrawLine(20 + Math.Cos(a) * 14, 22 + Math.Sin(a) * 14, 20 + Math.Cos(b) * 14, 22 + Math.Sin(b) * 14, 3, 0xFFFFFFFF);
+                    float extent = 5 + column * 0.8;
+                    symbol.DrawLine(12 + column, 20 - extent, 12 + column, 20 + extent, 1.5, 0xFFFFFFFF);
                 }
-                symbol.DrawLine(6, 21, 6, 33, 6, 0xFFFFFFFF);
-                symbol.DrawLine(34, 21, 34, 33, 6, 0xFFFFFFFF);
+                for (int wave = 0; wave < 2; wave++)
+                {
+                    float radius = 8 + wave * 7;
+                    for (int segment = 0; segment < 8; segment++)
+                    {
+                        float a = -0.8 + segment * 0.2;
+                        float b = a + 0.2;
+                        symbol.DrawLine(22 + Math.Cos(a) * radius, 20 + Math.Sin(a) * radius, 22 + Math.Cos(b) * radius, 20 + Math.Sin(b) * radius, 2, 0xFFFFFFFF);
+                    }
+                }
             }
         }
         if (!m_GRZEarmuffsPopup)
@@ -128,7 +136,7 @@ modded class MissionGameplay
         float x, y, width, height;
         hud.GetHudPanelWidget().GetScreenPos(x, y);
         hud.GetHudPanelWidget().GetScreenSize(width, height);
-        m_GRZEarmuffsPopup.SetScreenPos(x + (width - 130) * 0.5, y + height - 210);
+        m_GRZEarmuffsPopup.SetScreenPos(x + 24, y + (height - 52) * 0.5);
         // Hold for 1.25 seconds, then fade over 0.75 seconds. Every press restarts it.
         m_GRZEarmuffsPopup.SetAlpha(Math.Clamp((2.0 - m_GRZEarmuffsPopupAge) / 0.75, 0, 1));
         m_GRZEarmuffsPopup.Show(m_GRZEarmuffsPopupAge < 2.0 && !hud.GetHudVisibility().IsContextFlagActive(IngameHudVisibility.HUD_HIDE_FLAGS));

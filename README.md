@@ -96,4 +96,4 @@ There is no application server or package installation step. PBO compilation and
 
 [GRZ No Grass](NO-GRASS.md) disables terrain clutter on the current ChernarusPlus server. The watermark has been removed.
 
-[GRZ Earmuffs](EARMUFFS.md): N toggles; +/- adjusts effects volume (10%-100%). A headphones symbol and percentage appear briefly, then fade away.
+[GRZ Earmuffs](EARMUFFS.md): N toggles; +/- adjusts effects volume (10%-100%). A speaker symbol and percentage appear briefly, then fade away.
