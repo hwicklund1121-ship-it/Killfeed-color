@@ -1,0 +1,102 @@
+FrameWidgetClass GRZSkyColorOptions
+{
+position 0 0
+size 1 138
+hexactpos 0
+vexactpos 1
+hexactsize 0
+vexactsize 1
+color 0 0 0 0
+{
+PanelWidgetClass SettingsBacking
+{
+position 0 0
+size 1 138
+hexactpos 0
+vexactpos 1
+hexactsize 0
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0 0 0 0.45
+}
+PanelWidgetClass Header
+{
+position 0 0
+size 1 30
+hexactpos 0
+vexactpos 1
+hexactsize 0
+vexactsize 1
+ignorepointer 1
+style rover_sim_colorable
+color 0 0 0 1
+}
+TextWidgetClass Heading
+{
+position 0 0
+size 1 30
+hexactpos 0
+vexactpos 1
+hexactsize 0
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"text valign" center
+text "GRZ Sky colors"
+"text halign" center
+}
+FrameWidgetClass SkyColorRow
+{
+position 0 32
+size 1 25
+hexactpos 0
+vexactpos 1
+hexactsize 0
+vexactsize 1
+color 0 0 0 0
+{
+TextWidgetClass SkyColorLabel
+{
+position 0.01 0
+size 0.51 25
+hexactpos 0
+vexactpos 1
+hexactsize 0
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"text valign" center
+text "SKY COLOR"
+
+}
+FrameWidgetClass SkyColorValue
+{
+position 0.53 0
+size 0.47 25
+hexactpos 0
+vexactpos 1
+hexactsize 0
+vexactsize 1
+color 0 0 0 0
+}
+}
+}
+TextWidgetClass SkyPreviewNote
+{
+position 0.01 66
+size 0.98 56
+hexactpos 0
+vexactpos 1
+hexactsize 0
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"text valign" center
+text "Live preview • Apply saves • Cancel restores"
+}
+}
+}

@@ -518,7 +518,10 @@ class GRZKillfeedMenu extends UIScriptedMenu
             {
                 Chosen.PrefixWord = previous;
                 m_PrefixInput.SetText(previous);
-                m_Status.SetText("Use up to 12 letters, digits, _ or -.");
+                if (GRZPrefixPolicy.Reserved(candidate))
+                    m_Status.SetText("Staff titles such as Admin, Owner, Mod and Support are not allowed.");
+                else
+                    m_Status.SetText("Use up to 12 letters, digits, _ or -.");
             }
             else
                 m_Status.SetText("Prefix preview updated. Press Save to apply.");

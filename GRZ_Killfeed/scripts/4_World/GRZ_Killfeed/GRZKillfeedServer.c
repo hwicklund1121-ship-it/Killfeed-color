@@ -52,8 +52,14 @@ class GRZKillfeedServer
         {
             foreach (GRZKillfeedSavedStyle saved : s_Styles.Players)
             {
-                if (saved && saved.SteamId == identity.GetPlainId() && saved.Style && saved.Style.IsValid())
-                    return saved.Style;
+                if (saved && saved.SteamId == identity.GetPlainId() && saved.Style)
+                {
+                    GRZNameStyle displayed = saved.Style.Clone();
+                    if (GRZPrefixPolicy.Reserved(displayed.PrefixWord))
+                        displayed.PrefixWord = "";
+                    if (displayed.IsValid())
+                        return displayed;
+                }
             }
         }
         return new GRZNameStyle;

@@ -185,7 +185,7 @@ class GRZNameStyle extends GRZAnimationStyle
             if (allowed.IndexOf(PrefixWord.Substring(i, 1)) < 0)
                 return false;
         }
-        return true;
+        return !GRZPrefixPolicy.Reserved(PrefixWord);
     }
 
     GRZNameStyle Clone()

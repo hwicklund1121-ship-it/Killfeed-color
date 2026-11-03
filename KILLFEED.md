@@ -99,3 +99,5 @@ The included custom choices are Skull, Bat, Cross, Fangs, Fanged Star, Biohazard
 Package validation checks matching client/server style fields, widget bindings and custom icon assets. It does not compile Enforce Script or exercise DayZ multiplayer/Editor.
 
 To regenerate the menu shell and page layouts, run `python3 tools/build_killfeed_menu.py` before packaging. The layout validator also checks that navigation belongs to the menu panel and that page controls fit inside their own containers.
+
+Staff-style prefixes are blocked for every VIP: Admin, Owner, Mod/Moderator, Staff, Support, Helper, Manager, Dev/Developer, Founder, Operator, Official, GameMaster/GM, SuperUser and SysOp. Matching ignores case, underscores/hyphens and common numeric substitutions (for example ADM1N and M0D). Substring matching also blocks decorated titles and compounds. Existing reserved saved prefixes are omitted from live styles while keeping their colors/animation/icon. Enforcement runs in shared validation and on the server, including direct RPC saves.

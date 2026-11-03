@@ -16,8 +16,8 @@
     "sha256": "cfa3625403021cd4a096ca0cccca889771c0fa560641835e92a590132446e45a"
   },
   "GRZ_Killfeed.pbo": {
-    "bytes": 590701,
-    "sha256": "650529bee67d93a9996409ea41c80b156b9d3d1da8089b4b1b7e2887d239df01"
+    "bytes": 592699,
+    "sha256": "c533fdee7395f23be51c7ef8b25cb7b70e08840cdce84c26bebb245d85ffbe92"
   },
   "GRZ_LUGU_RollStand.pbo": {
     "bytes": 3377,
@@ -42,5 +42,9 @@
   "GRZ_Earmuffs.pbo": {
     "bytes": 9244,
     "sha256": "82f36e2bc2970bbb312c244441eabbbe80d8252bef8e464b283f92a068733da7"
+  },
+  "GRZ_Environment.pbo": {
+    "bytes": 3857,
+    "sha256": "d5dabce92d3877a690c7354e5b3dab174410a1e85c25b690771ed4783d11a2b2"
   }
 }

@@ -4,9 +4,9 @@ GRZ LOCAL SERVER - DRAG AND DROP PACK
 2. Extract ALL contents of this ZIP into that folder, beside DayZServer_x64.exe.
    This includes @GRZ_Local, serverDZ.cfg and StartServer.bat.
    If you already have a serverDZ.cfg or StartServer.bat, keep a copy before replacing them.
-3. Double-click StartServer.bat. The server loads all eleven bundled PBOs.
+3. Double-click StartServer.bat. The server loads all twelve bundled PBOs.
 4. In the DayZ client launcher, add the @GRZ_Local folder as a Local mod and enable it.
-   Do not also enable separate copies of the eleven bundled mods.
+   Do not also enable separate copies of the twelve bundled mods.
 5. Connect to 127.0.0.1:2302. Password: test. Map: Chernarus.
 6. Type /grzvip for the VIP menu.
 
@@ -30,6 +30,7 @@ GRZ_Hitmarker.pbo
 GRZ_Survival.pbo
 GRZ_NoGrass.pbo
 GRZ_Earmuffs.pbo
+GRZ_Environment.pbo
 
 GRZ_Autorun.pbo v0.12 adds Alt/remapped freelook while keeping the supplied
 v0.11 LB-screen support and existing autorun binding.
@@ -60,3 +61,7 @@ Earmuffs: N toggles; +/- changes game effects in 10% steps (10%-100%).
 A speaker symbol and percentage appear, then fade after each press.
 Voice chat volume is unchanged. Rebind under Controls > GRZ Earmuffs.
 Earmuffs stay active in inventory, chat and Esc; typing in menus does not trigger hotkeys.
+
+Environment: fixed noon, static clouds, no rain/fog/snow/wind/storms.
+Dynamic PO-X gas artillery is suppressed; static gas zones remain.
+Staff-related VIP prefix words are blocked by server validation.
