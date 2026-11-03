@@ -99,3 +99,5 @@ There is no application server or package installation step. PBO compilation and
 [GRZ Earmuffs](EARMUFFS.md): N toggles; +/- adjusts effects volume (10%-100%). A speaker symbol and percentage appear briefly, then fade away.
 
 [GRZ Environment](ENVIRONMENT.md) freezes midday/weather and suppresses dynamic PO-X strikes. Staff-style prefixes are blocked in the killfeed. [GRZ Sky colors](SKY-COLORS.md) adds player-specific sky color choices with live preview below Hit Marker in Options > Game. Apply saves; Cancel restores.
+
+[GRZ Inventory Sizes](INVENTORY-SIZES.md): generate a local PBO for 10×10 clothing cargo and gun footprints 10 wide × 2 high, using your installed item classes.

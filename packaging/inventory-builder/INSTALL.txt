@@ -1,0 +1,34 @@
+GRZ INVENTORY SIZES
+
+Clothing: 10 columns x 10 rows INTERNAL cargo (100 slots).
+Guns: 10 columns x 2 rows INVENTORY footprint (20 slots).
+
+1. Stop the server and fully close DayZ.
+2. Copy the generated GRZ_InventorySizes.pbo into @GRZ_Local\Addons on BOTH
+   the DayZ game client and server. Use the exact same generated PBO.
+3. Restart the server and game. Your existing @GRZ_Local launch line works.
+
+The builder catalogs every Clothing descendant and rifle/pistol/launcher family
+in the selected game's installed config.bin resources, preserving each item's
+original base class and requiring the defining addons to load before the patch.
+This includes ordinary clothing variants, backpacks, vests, boots, gloves,
+headgear and eyewear where they inherit Clothing. Formerly zero-cargo clothing
+gets 100 slots as well. Clothing's outer item size is unchanged. Gun attachments,
+magazines, damage, handling and recoil are unchanged. Other storage is unchanged.
+
+Back up server mission storage before applying inventory-size changes. Existing
+packed guns may need rearranging because a 10-wide gun fits only at column zero
+inside a 10-wide clothing grid. Do not remove an expanded-storage mod while
+items occupy slots outside the original inventory dimensions.
+
+The output config.cpp and Inventory-catalog.json list the exact items patched.
+The builder reads Addons and dta; it does not install or modify game files.
+Use -ExtraModPaths with the PS1 for additional ENABLED mod folders containing
+binarized config.bin resources. Source-only/encrypted/compressed unsupported
+configs or conflicting class definitions cause an error instead of silently
+producing partial coverage. Rebuild after adding new clothing/weapon mods or
+updating game definitions. Disabled alternative mods must not be included.
+
+This is an unsigned development PBO for the current local server with signature
+checks disabled. Test cargo layout, pickup/rotation, reconnect and persistence
+before using it on a live server. No DayZ runtime test was available here.
