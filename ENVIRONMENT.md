@@ -2,7 +2,7 @@
 
 Server-wide fixed noon (July 1, 2026, 12:00), with native time multiplier zero. The included server config also uses zero time acceleration. A 30-second guard reasserts the lock after conflicting mission/admin changes.
 
-Keeps 25% cloud cover. Disables changing weather, rain, snowfall, fog/volumetric fog, wind and thunderstorms on the current ChernarusPlus setup. Clouds remain rendered; this does not replace the sky or supply custom sky colors. The requested GRZ Sky colors settings/live preview need a verified native sky-preset asset format before implementation.
+Keeps 25% cloud cover. Disables changing weather, rain, snowfall, fog/volumetric fog, wind and thunderstorms on the current ChernarusPlus setup. Clouds remain rendered; this does not replace the sky or supply custom sky colors. Player-specific colors and live preview are supplied separately by GRZ Sky colors.
 
 Dynamic PO-X artillery areas are suppressed at their CE/deferred initialization and zone setup entry points, before the native artillery RPC and gas/explosion timers. This also discards loaded dynamic areas. Permanent static gas zones and player-thrown gas grenades remain.
 

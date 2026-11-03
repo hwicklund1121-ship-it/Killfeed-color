@@ -46,5 +46,9 @@
   "GRZ_Environment.pbo": {
     "bytes": 4706,
     "sha256": "6b5bcd01dc631f52799e7f1b196c0b7b3fc5f26c0aae21c57b2004eb1cb48f20"
+  },
+  "GRZ_SkyColors.pbo": {
+    "bytes": 437205,
+    "sha256": "0fa2926fc85692c7b154079b09c5b322bea3a8c7249c4f71620a7621d9e68022"
   }
 }

@@ -13,7 +13,7 @@ def main():
     assert 'instanceId = 1;' in config
     manifest = json.loads((SOURCE / 'PBO-manifest.json').read_text())
     pbos = list((SOURCE / '@GRZ_Local/Addons').glob('*.pbo'))
-    assert len(pbos) == len(manifest) == 12
+    assert len(pbos) == len(manifest) == 13
     for pbo in pbos:
         data = pbo.read_bytes()
         assert len(data) == manifest[pbo.name]['bytes'], pbo.name

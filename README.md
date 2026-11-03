@@ -98,4 +98,4 @@ There is no application server or package installation step. PBO compilation and
 
 [GRZ Earmuffs](EARMUFFS.md): N toggles; +/- adjusts effects volume (10%-100%). A speaker symbol and percentage appear briefly, then fade away.
 
-[GRZ Environment](ENVIRONMENT.md) freezes midday/weather and suppresses dynamic PO-X strikes. Staff-style prefixes are blocked in the killfeed. [GRZ Sky colors](SKY-COLORS.md) is pending native sky asset verification and is not included in the pack yet.
+[GRZ Environment](ENVIRONMENT.md) freezes midday/weather and suppresses dynamic PO-X strikes. Staff-style prefixes are blocked in the killfeed. [GRZ Sky colors](SKY-COLORS.md) adds player-specific sky color choices with live preview below Hit Marker in Options > Game. Apply saves; Cancel restores.

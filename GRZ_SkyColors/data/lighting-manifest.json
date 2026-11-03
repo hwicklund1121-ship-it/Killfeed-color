@@ -1,0 +1,95 @@
+{
+  "source": "User-supplied DayZ native lighting files; original engine lighting data by Bohemia Interactive.",
+  "tables": {
+    "default": {
+      "sha256": "57eb5926c0393c532be0c2560c7c0f73de29f26e91899cee1d255cdc4e8adb76",
+      "files": {
+        "default_black.txt": {
+          "changed_sky_fields": 56,
+          "sha256": "cf01cf0981a718290adb86c7683c298ea42e5069103d9c2369f4ac496e78f5a2"
+        },
+        "default_red.txt": {
+          "changed_sky_fields": 56,
+          "sha256": "b0ecc2fb9703857c0b1a124c0ef462fd3906135b66f8dbebe8a2c6ceb8dd0401"
+        },
+        "default_blue.txt": {
+          "changed_sky_fields": 56,
+          "sha256": "ac1dba454b82b035eac2e87ee29a32f0b65ab7aeddeb0a7accc2cb10f568f3ec"
+        },
+        "default_pink.txt": {
+          "changed_sky_fields": 56,
+          "sha256": "81aa73380862a0a5789c6fcf3682c81c60257bf59cd8659f99b0f4a5f14a8996"
+        },
+        "default_purple.txt": {
+          "changed_sky_fields": 56,
+          "sha256": "cf946e0cf05a9ca4971f0298662141462cc6a8c2ab4658be5f2bebc28c9b11c1"
+        },
+        "default_cyan.txt": {
+          "changed_sky_fields": 56,
+          "sha256": "ac0fc645479f6848770040e0c16244d8d825ee061becf93976d6ef3e7265768e"
+        },
+        "default_green.txt": {
+          "changed_sky_fields": 56,
+          "sha256": "1e2e670f4089757f9b06d683b39808483185ff98d2284b2f3890722e153f6924"
+        },
+        "default_orange.txt": {
+          "changed_sky_fields": 56,
+          "sha256": "68f06c3f90d6ecd4169885283f15218d14fbc38358f1da128993d48a5bc9c344"
+        },
+        "default_yellow.txt": {
+          "changed_sky_fields": 56,
+          "sha256": "0d7e3d5c4b5c249aa1dc13eb50687109eb6c03145ba9ef2ef19a7c63c9495c1d"
+        },
+        "default_white.txt": {
+          "changed_sky_fields": 56,
+          "sha256": "084105afdc44139083da6b13e16752fac3686f5eab21da76e8691d23a4b20f88"
+        }
+      }
+    },
+    "darknight": {
+      "sha256": "c208fe79b7ff413201673611662b0f3cf0b250c59d67507edb8d2ab3fed71746",
+      "files": {
+        "darknight_black.txt": {
+          "changed_sky_fields": 56,
+          "sha256": "a0d32035607a58437d3ec950994d796ace5603d551eab2dbe9e7b49c6f8ded44"
+        },
+        "darknight_red.txt": {
+          "changed_sky_fields": 56,
+          "sha256": "e708cb71139073e3ed76bb53b0b05249c7611a7efe4a1edce60dae03b84bacd0"
+        },
+        "darknight_blue.txt": {
+          "changed_sky_fields": 56,
+          "sha256": "ecb888f5aa1ee90f027b3e9f189c806143d4cd5ad89363c1e395a23a20188013"
+        },
+        "darknight_pink.txt": {
+          "changed_sky_fields": 56,
+          "sha256": "84524be156f410d4bac2ea9e0aa65439b30e07844245b158daf319e365be40c4"
+        },
+        "darknight_purple.txt": {
+          "changed_sky_fields": 56,
+          "sha256": "ffb34e45fe6779482bb0958b3b492ef7af99c4e0fc0f4f697b9fb1ef0385397b"
+        },
+        "darknight_cyan.txt": {
+          "changed_sky_fields": 56,
+          "sha256": "4061614f3959c279aaf61f102f8c8f5408e9c21885009cf2231f0418b144fc4d"
+        },
+        "darknight_green.txt": {
+          "changed_sky_fields": 56,
+          "sha256": "1984c108982f3411b0539e73058ad645350ff42ec2e5aece7764ed98563a4bd6"
+        },
+        "darknight_orange.txt": {
+          "changed_sky_fields": 56,
+          "sha256": "c701836d764754de907898b494bf66f6e814e4edeb002bf9d38530c1d4afb97e"
+        },
+        "darknight_yellow.txt": {
+          "changed_sky_fields": 56,
+          "sha256": "8342aa87ecdc5cf7876fbc202bf166d169df150997f2e31c7dc75a7ee3884bdd"
+        },
+        "darknight_white.txt": {
+          "changed_sky_fields": 56,
+          "sha256": "9d6f2a5a20938f2dba7b8aa1f1108583fb87ae10b20a25401eda6d1e911ffb15"
+        }
+      }
+    }
+  }
+}
