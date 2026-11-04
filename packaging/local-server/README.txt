@@ -4,9 +4,9 @@ GRZ LOCAL SERVER - DRAG AND DROP PACK
 2. Extract ALL contents of this ZIP into that folder, beside DayZServer_x64.exe.
    This includes @GRZ_Local, serverDZ.cfg and StartServer.bat.
    If you already have a serverDZ.cfg or StartServer.bat, keep a copy before replacing them.
-3. Double-click StartServer.bat. The server loads all thirteen bundled PBOs.
+3. Double-click StartServer.bat. The server loads all fifteen bundled PBOs.
 4. In the DayZ client launcher, add the @GRZ_Local folder as a Local mod and enable it.
-   Do not also enable separate copies of the thirteen bundled mods.
+   Do not also enable separate copies of the fifteen bundled mods.
 5. Connect to 127.0.0.1:2302. Password: test. Map: Chernarus.
 6. Type /grzvip for the VIP menu.
 
@@ -93,3 +93,5 @@ Install matching updated client/server GRZ_Killfeed.pbo files.
 When updating, merge the new GRZ files into your existing @GRZ_Local folder.
 Preserve extra addons you installed, including UAVWEAPONS.pbo and your generated
 GRZ_InventorySizes.pbo. They are not supplied by this server ZIP.
+
+This update includes GRZ_Hitscan TEST and GRZ_NoSway. Read GRZ-Hitscan-TEST.md before testing. Hitscan damage is instant for supported single-muzzle, single-projectile firearms within 1400m; native tracer/impact effects remain. Explosives, multi-pellet/multi-muzzle guns and invalid custom muzzle configs keep native ballistics. Runtime validation is outstanding. Merge updates; keep your custom UAVWEAPONS.pbo and generated GRZ_InventorySizes.pbo.

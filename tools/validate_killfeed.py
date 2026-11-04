@@ -140,14 +140,18 @@ def main():
     assert write_fields == read_fields == ["ColorA", "ColorB", "AnimationMode", "Speed", "PrefixIcon", "PrefixWord", "PrefixAnimation.ColorA", "PrefixAnimation.ColorB", "PrefixAnimation.AnimationMode", "PrefixAnimation.Speed"]
     row = files["gui/layouts/row.layout"].decode()
     assert "Outline" not in row, "Killfeed entries should have no thorn image"
-    assert "color 0 0 0 0.45" in row
+    assert "color 0 0 0 0.18" in row
     for edge in ["BorderTop", "BorderBottom", "BorderLeft", "BorderRight"]:
-        assert f"PanelWidgetClass {edge}" in row
+        assert edge not in row and edge not in mission
+    nodes = verify_menu_bounds(row)
+    assert [n["name"] for n in nodes if not n["parent"]] == ["GRZKillfeedRow"]
+    assert next(n for n in nodes if n["name"] == "WeaponFallback")["parent"]["name"] == "GRZKillfeedRow"
+    assert 'SetOutline(1,' not in mission
     assert "gui/textures/grz_menu_logo_ca.paa" in files
     assert "gui/textures/grz_menu_outline_ca.paa" not in files
     assert "ItemPreviewWidgetClass GunPreview" in row
     mission = files["scripts/5_Mission/GRZ_Killfeed/GRZKillfeedMission.c"].decode()
-    assert 'detail.SetText(message.Distance.ToString() + " m")' in mission
+    assert 'detail.SetText(message.Distance.ToString() + "m")' in mission
     assert "message.WeaponName" not in text
     assert "KC_F7" not in mission and "inputs.xml" not in files
     assert "TextWidgetClass Arrow" not in row
@@ -165,7 +169,7 @@ def main():
     assert "hexactsize 0" in root and "vexactsize 0" in root
     assert "g_Game.GetWorkspace().GetScreenSize(width, height)" in menu
     assert "GRZKillfeedClient.ReleaseMenu();" in mission
-    assert "size 580 60" in row
+    assert "size 580 32" in row
     assert "current.UseLocalPreview();" in mission
     assert "if (!Allowed(identity)" in server
     assert "GunWidget.SetItem(null)" in mission and "g_Game.ObjectDelete(PreviewGun)" in mission
@@ -173,8 +177,8 @@ def main():
         for prefix in ["Swatch", "SwatchFill", "SwatchBorder", "SwatchLabel"]:
             assert prefix + str(index) in declared
     assert "animation.ColorA = i;" in menu and "animation.ColorB = i;" in menu
-    assert "row.Killer.SetTextExactSize(24)" in mission
-    assert "row.Victim.SetTextExactSize(24)" in mission
+    assert "row.Killer.SetTextExactSize(16)" in mission
+    assert "row.Victim.SetTextExactSize(16)" in mission
     focus = files["scripts/3_Game/GRZ_Killfeed/GRZKillfeedFocus.c"].decode()
     assert "override void OnDeactivateMessage()" in focus
     assert "GRZKillfeedBus.AppDeactivated.Invoke();" in focus

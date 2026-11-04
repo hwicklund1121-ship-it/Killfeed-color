@@ -100,8 +100,8 @@ class GRZKillfeedRow
         VictimPrefix.SetColor(victimPrefixColor);
         VictimPrefixIcon.SetColor(victimPrefixColor);
         // Never make the transparent root opaque while fading its children.
-        Root.FindAnyWidget("Backing").SetAlpha(0.45 * fade);
-        array<string> names = {"Detail", "BorderTop", "BorderBottom", "BorderLeft", "BorderRight"};
+        Root.FindAnyWidget("Backing").SetAlpha(0.18 * fade);
+        array<string> names = {"Detail"};
         foreach (string name : names)
             Root.FindAnyWidget(name).SetAlpha(fade);
         if (GunWidget)
@@ -250,8 +250,8 @@ modded class MissionGameplay
 
     protected int GRZLayoutName(TextWidget label, TextWidget prefix, ImageWidget icon, string playerName, GRZNameStyle style, int left, bool alignRight)
     {
-        prefix.SetTextExactSize(16);
-        prefix.SetOutline(1, 0xFF000000);
+        prefix.SetTextExactSize(12);
+        prefix.SetOutline(0, 0x00000000);
         string word;
         if (style.PrefixWord != "" || style.PrefixIcon > 0)
             word = style.PrefixWord + " |";
@@ -262,7 +262,7 @@ modded class MissionGameplay
             prefixWidth = 0;
         int iconWidth;
         if (style.PrefixIcon > 0)
-            iconWidth = 22;
+            iconWidth = 16;
         int gap;
         if (prefixWidth > 0)
             gap = 4;
@@ -274,11 +274,11 @@ modded class MissionGameplay
         if (alignRight)
             start += Math.Max(0, 140 - nameWidth);
         GRZNameStyle.ApplyIcon(icon, style.PrefixIcon);
-        icon.SetPos(start, 19);
-        prefix.SetPos(start + iconWidth, 19);
-        prefix.SetSize(prefixWidth + 2, 22);
-        label.SetPos(start + reserved, 16);
-        label.SetSize(Math.Min(nameWidth + 2, 140), 28);
+        icon.SetPos(start, 8);
+        prefix.SetPos(start + iconWidth, 8);
+        prefix.SetSize(prefixWidth + 2, 16);
+        label.SetPos(start + reserved, 6);
+        label.SetSize(Math.Min(nameWidth + 2, 140), 20);
         return reserved;
     }
 
@@ -293,32 +293,31 @@ modded class MissionGameplay
         row.Message = message;
         row.Killer = TextWidget.Cast(row.Root.FindAnyWidget("Killer"));
         row.Victim = TextWidget.Cast(row.Root.FindAnyWidget("Victim"));
-        row.Killer.SetTextExactSize(24);
-        row.Victim.SetTextExactSize(24);
-        row.Killer.SetOutline(1, 0xFF000000);
-        row.Victim.SetOutline(1, 0xFF000000);
+        row.Killer.SetTextExactSize(16);
+        row.Victim.SetTextExactSize(16);
+        row.Killer.SetOutline(0, 0x00000000);
+        row.Victim.SetOutline(0, 0x00000000);
         row.KillerPrefix = TextWidget.Cast(row.Root.FindAnyWidget("KillerPrefix"));
         row.VictimPrefix = TextWidget.Cast(row.Root.FindAnyWidget("VictimPrefix"));
         row.KillerPrefixIcon = ImageWidget.Cast(row.Root.FindAnyWidget("KillerPrefixIcon"));
         row.VictimPrefixIcon = ImageWidget.Cast(row.Root.FindAnyWidget("VictimPrefixIcon"));
-        int killerExtra = GRZLayoutName(row.Killer, row.KillerPrefix, row.KillerPrefixIcon, GRZShortName(message.Killer), message.KillerStyle, 12, true);
-        int victimExtra = GRZLayoutName(row.Victim, row.VictimPrefix, row.VictimPrefixIcon, GRZShortName(message.Victim), message.VictimStyle, 428 + killerExtra, false);
+        int killerExtra = GRZLayoutName(row.Killer, row.KillerPrefix, row.KillerPrefixIcon, GRZShortName(message.Killer), message.KillerStyle, 12, false);
+        int victimExtra = GRZLayoutName(row.Victim, row.VictimPrefix, row.VictimPrefixIcon, GRZShortName(message.Victim), message.VictimStyle, 328 + killerExtra, false);
         row.Width = 580 + killerExtra + victimExtra;
-        row.Root.SetSize(row.Width, 60);
-        row.Root.FindAnyWidget("Backing").SetSize(row.Width - 4, 56);
-        row.Root.FindAnyWidget("BorderTop").SetSize(row.Width, 2);
-        row.Root.FindAnyWidget("BorderBottom").SetSize(row.Width, 2);
-        row.Root.FindAnyWidget("BorderRight").SetPos(row.Width - 2, 2);
-        row.Root.FindAnyWidget("GunPreview").SetPos(164 + killerExtra, 2);
+        row.Root.SetSize(row.Width, 32);
+        row.Root.FindAnyWidget("Backing").SetSize(row.Width, 32);
+        row.Root.FindAnyWidget("GunPreview").SetPos(164 + killerExtra, 1);
         TextWidget detail = TextWidget.Cast(row.Root.FindAnyWidget("Detail"));
-        detail.SetPos(352 + killerExtra, 16);
-        detail.SetText(message.Distance.ToString() + " m");
-        detail.SetTextExactSize(20);
+        detail.SetPos(492 + killerExtra + victimExtra, 6);
+        detail.SetText(message.Distance.ToString() + "m");
+        detail.SetTextExactSize(14);
+        detail.SetOutline(0, 0x00000000);
         row.WeaponFallback = TextWidget.Cast(row.Root.FindAnyWidget("WeaponFallback"));
         if (row.WeaponFallback)
         {
-            row.WeaponFallback.SetPos(164 + killerExtra, 18);
-            row.WeaponFallback.SetTextExactSize(14);
+            row.WeaponFallback.SetPos(164 + killerExtra, 6);
+            row.WeaponFallback.SetTextExactSize(12);
+            row.WeaponFallback.SetOutline(0, 0x00000000);
             if (message.GunData && message.GunData.Types.Count() > 0)
                 row.WeaponFallback.SetText(message.GunData.Types[0]);
         }
@@ -333,7 +332,7 @@ modded class MissionGameplay
         GRZPositionRows();
         // Keep script-heavy modded weapon initialization outside row delivery.
         g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(row.CreateGunPreview, 1, false);
-        Print("[GRZ Killfeed 0.1.19] Live/test row added; preview deferred.");
+        Print("[GRZ Killfeed 0.1.20] Live/test row added; preview deferred.");
     }
 
     protected void GRZReceiveStreak(string playerName, int count)
@@ -357,7 +356,7 @@ modded class MissionGameplay
         m_GRZFeed.SetSize(maximumWidth, 320);
         m_GRZFeed.SetScreenPos(x + width - maximumWidth - 24, y + 28);
         for (int i = 0; i < m_GRZRows.Count(); i++)
-            m_GRZRows[i].Root.SetPos(maximumWidth - m_GRZRows[i].Width, i * 64);
+            m_GRZRows[i].Root.SetPos(maximumWidth - m_GRZRows[i].Width, i * 36);
     }
 
     protected void GRZReceiveMenu(int status, GRZNameStyle style)

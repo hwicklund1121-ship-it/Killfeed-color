@@ -16,8 +16,8 @@
     "sha256": "d93fca5156a6078e561dda8df4c348b000e27bbc3db26588e1d8997fc231681d"
   },
   "GRZ_Killfeed.pbo": {
-    "bytes": 676836,
-    "sha256": "0cc174aa0ac7288f4474f9ed5d087d9a64071b63631925e0103901eaa8d2a134"
+    "bytes": 675977,
+    "sha256": "0fe5748f574c82c63499790b554176e55eaed0b6340b359942d8c4030f90b340"
   },
   "GRZ_LUGU_RollStand.pbo": {
     "bytes": 3377,
@@ -54,5 +54,9 @@
   "GRZ_NoSway.pbo": {
     "bytes": 2466,
     "sha256": "d532c72d48d22cbf2dc4226cb2d573819c24afa9498d18b4ffadc8d5b7bdbc1b"
+  },
+  "GRZ_Hitscan.pbo": {
+    "bytes": 7040,
+    "sha256": "d45029e33bdadc1bda5bcc75092a84ae1e716bf952d197a148b7c00c624321ee"
   }
 }

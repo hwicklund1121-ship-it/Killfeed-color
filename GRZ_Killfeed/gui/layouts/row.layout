@@ -3,7 +3,7 @@ FrameWidgetClass GRZKillfeedRow
  color 0 0 0 0
  ignorepointer 1
  position 0 0
- size 580 60
+ size 580 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -12,90 +12,27 @@ FrameWidgetClass GRZKillfeedRow
 PanelWidgetClass Backing
 {
  ignorepointer 1
- position 2 2
- size 576 56
- hexactpos 1
- vexactpos 1
- hexactsize 1
- vexactsize 1
- style rover_sim_colorable
- color 0 0 0 0.45
-}
-PanelWidgetClass BorderTop
-{
- ignorepointer 1
  position 0 0
- size 580 2
+ size 580 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
  vexactsize 1
  style rover_sim_colorable
- color 0 0 0 1
-}
-PanelWidgetClass BorderBottom
-{
- ignorepointer 1
- position 0 58
- size 580 2
- hexactpos 1
- vexactpos 1
- hexactsize 1
- vexactsize 1
- style rover_sim_colorable
- color 0 0 0 1
-}
-PanelWidgetClass BorderLeft
-{
- ignorepointer 1
- position 0 2
- size 2 56
- hexactpos 1
- vexactpos 1
- hexactsize 1
- vexactsize 1
- style rover_sim_colorable
- color 0 0 0 1
-}
-PanelWidgetClass BorderRight
-{
- ignorepointer 1
- position 578 2
- size 2 56
- hexactpos 1
- vexactpos 1
- hexactsize 1
- vexactsize 1
- style rover_sim_colorable
- color 0 0 0 1
+ color 0 0 0 0.18
 }
 TextWidgetClass Killer
 {
- "text halign" right
- position 12 16
- size 140 28
+ ignorepointer 1
+ position 12 6
+ size 140 20
  hexactpos 1
  vexactpos 1
  hexactsize 1
  vexactsize 1
- ignorepointer 1
+ "text halign" left
  color 1 1 1 1
- font "gui/fonts/sdf_MetronLight24"
- "exact text" 1
- "text valign" center
- text ""
-}
-TextWidgetClass Victim
-{
- position 428 16
- size 140 28
- hexactpos 1
- vexactpos 1
- hexactsize 1
- vexactsize 1
- ignorepointer 1
- color 1 1 1 1
- font "gui/fonts/sdf_MetronLight24"
+ font "gui/fonts/sdf_MetronLight16"
  "exact text" 1
  "text valign" center
  text ""
@@ -103,102 +40,117 @@ TextWidgetClass Victim
 ItemPreviewWidgetClass GunPreview
 {
  ignorepointer 1
+ position 164 1
+ size 150 30
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
  mode blend
- position 164 2
- size 180 56
+ color 1 1 1 1
+}
+TextWidgetClass WeaponFallback
+{
+ ignorepointer 1
+ position 164 6
+ size 150 20
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ "text halign" center
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ text ""
+}
+TextWidgetClass Victim
+{
+ ignorepointer 1
+ position 328 6
+ size 140 20
  hexactpos 1
  vexactpos 1
  hexactsize 1
  vexactsize 1
  color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ text ""
 }
 TextWidgetClass Detail
 {
- "text halign" center
- position 352 16
- size 64 28
+ ignorepointer 1
+ position 492 6
+ size 76 20
  hexactpos 1
  vexactpos 1
  hexactsize 1
  vexactsize 1
- ignorepointer 1
+ "text halign" right
  color 1 1 1 1
- font "gui/fonts/sdf_MetronLight24"
+ font "gui/fonts/sdf_MetronLight16"
  "exact text" 1
  "text valign" center
  text ""
 }
 ImageWidgetClass KillerPrefixIcon
 {
- position 0 19
- size 22 22
+ ignorepointer 1
+ position 0 8
+ size 16 16
  hexactpos 1
  vexactpos 1
  hexactsize 1
  vexactsize 1
- ignorepointer 1
  color 1 1 1 1
  mode blend
  stretch 1
 }
 TextWidgetClass KillerPrefix
 {
- position 0 19
- size 64 22
+ ignorepointer 1
+ position 0 8
+ size 64 16
  hexactpos 1
  vexactpos 1
  hexactsize 1
  vexactsize 1
- ignorepointer 1
  color 1 1 1 1
- font "gui/fonts/sdf_MetronLight24"
+ font "gui/fonts/sdf_MetronLight16"
  "exact text" 1
  "text valign" center
  text ""
 }
 ImageWidgetClass VictimPrefixIcon
 {
- position 0 19
- size 22 22
+ ignorepointer 1
+ position 0 8
+ size 16 16
  hexactpos 1
  vexactpos 1
  hexactsize 1
  vexactsize 1
- ignorepointer 1
  color 1 1 1 1
  mode blend
  stretch 1
 }
 TextWidgetClass VictimPrefix
 {
- position 0 19
- size 64 22
+ ignorepointer 1
+ position 0 8
+ size 64 16
  hexactpos 1
  vexactpos 1
  hexactsize 1
  vexactsize 1
- ignorepointer 1
  color 1 1 1 1
- font "gui/fonts/sdf_MetronLight24"
+ font "gui/fonts/sdf_MetronLight16"
  "exact text" 1
  "text valign" center
  text ""
 }
  }
-}
-TextWidgetClass WeaponFallback
-{
- position 164 18
- size 180 24
- hexactpos 1
- vexactpos 1
- hexactsize 1
- vexactsize 1
- ignorepointer 1
- color 1 1 1 1
- font "gui/fonts/sdf_MetronLight16"
- "exact text" 1
- "text halign" center
- "text valign" center
- text ""
 }
