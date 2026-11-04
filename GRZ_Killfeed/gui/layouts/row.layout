@@ -3,7 +3,7 @@ FrameWidgetClass GRZKillfeedRow
  color 0 0 0 0
  ignorepointer 1
  position 0 0
- size 580 32
+ size 360 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -13,7 +13,7 @@ PanelWidgetClass Backing
 {
  ignorepointer 1
  position 0 0
- size 580 32
+ size 360 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -24,7 +24,7 @@ PanelWidgetClass Backing
 TextWidgetClass Killer
 {
  ignorepointer 1
- position 12 6
+ position 8 6
  size 140 20
  hexactpos 1
  vexactpos 1
@@ -40,8 +40,8 @@ TextWidgetClass Killer
 ItemPreviewWidgetClass GunPreview
 {
  ignorepointer 1
- position 164 1
- size 150 30
+ position 156 1
+ size 84 30
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -52,8 +52,8 @@ ItemPreviewWidgetClass GunPreview
 TextWidgetClass WeaponFallback
 {
  ignorepointer 1
- position 164 6
- size 150 20
+ position 156 6
+ size 84 20
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -68,8 +68,8 @@ TextWidgetClass WeaponFallback
 TextWidgetClass Victim
 {
  ignorepointer 1
- position 328 6
- size 140 20
+ position 248 6
+ size 64 20
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -83,13 +83,13 @@ TextWidgetClass Victim
 TextWidgetClass Detail
 {
  ignorepointer 1
- position 492 6
- size 76 20
+ position 320 6
+ size 32 20
  hexactpos 1
  vexactpos 1
  hexactsize 1
  vexactsize 1
- "text halign" right
+ "text halign" left
  color 1 1 1 1
  font "gui/fonts/sdf_MetronLight16"
  "exact text" 1

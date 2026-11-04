@@ -169,7 +169,7 @@ def main():
     assert "hexactsize 0" in root and "vexactsize 0" in root
     assert "g_Game.GetWorkspace().GetScreenSize(width, height)" in menu
     assert "GRZKillfeedClient.ReleaseMenu();" in mission
-    assert "size 580 32" in row
+    assert "size 360 32" in row
     assert "current.UseLocalPreview();" in mission
     assert "if (!Allowed(identity)" in server
     assert "GunWidget.SetItem(null)" in mission and "g_Game.ObjectDelete(PreviewGun)" in mission
@@ -234,7 +234,6 @@ def main():
     for name in ["NameTab", "PrefixTab", "PageHost"]:
         node = next(n for n in shell_nodes if n["name"] == name)
         assert node["parent"]["name"] == "MenuPanel", name
-    assert "580 + killerExtra + victimExtra" in mission
     print(f"Verified PBO prefix/checksum and {len(files)} source/asset entries; ZIP payloads match.")
     print("Layout/widget/resource bindings and style wire-field order checked.")
     print("These checks do not compile Enforce Script or test networking, permissions, or DayZ Editor.")

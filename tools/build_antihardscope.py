@@ -57,7 +57,7 @@ def main():
         'Stop DayZ and the server. Merge @GRZ_Local into BOTH the DayZ game folder and installed server folder.\n'
         'Replace the matching PBOs and add GRZ_Quickscope.pbo. Keep every other addon, especially UAVWEAPONS.pbo and your locally generated GRZ_InventorySizes.pbo.\n'
         'Restart both. No extra launch argument is needed when @GRZ_Local is already loaded.\n\n'
-        'Anti hardscope: weapon optics stay clear for 2 seconds, then the gameplay view turns black until you exit optics.\n'
+        'Anti hardscope: weapon optics stay clear for 0.75 seconds, then the gameplay view turns black until you exit optics.\n'
         'Killfeed: compact translucent row; killer, weapon, victim, distance; no outlines. Existing animations/prefixes stay active.\n'
         'No sway: removes breathing/horizontal aiming wander while preserving recoil.\n'
         'Quickscope TEST: custom 0.08s camera blends, shorter script ADS delay and server-aim-aligned supported hitscan shots. This is NOT an exact DayZ 1.29 rollback. Read GRZ-Quickscope-TEST.md.\n'

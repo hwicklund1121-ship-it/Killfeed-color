@@ -2,7 +2,7 @@
 modded class MissionGameplay
 {
     // Time starts when the local player actually enters the optics camera.
-    static const float GRZ_SCOPE_GRACE_SECONDS = 2.0;
+    static const float GRZ_SCOPE_GRACE_SECONDS = 0.75;
     protected float m_GRZScopeAge;
     protected PlayerBase m_GRZScopePlayer;
     protected Weapon_Base m_GRZScopeWeapon;
