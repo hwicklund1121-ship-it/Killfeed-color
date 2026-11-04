@@ -1,8 +1,9 @@
-GRZ VEST/TOP/PANTS/BELT 10x10 + GUNS 10x2 BUILDER v0.1.2
+GRZ VEST/TOP/PANTS/BELT 10x10 + GUNS 10x2 BUILDER v0.1.3
 
 1. Close DayZ and extract this ZIP into a folder.
 2. Double-click Build-Inventory-Mod.cmd (or run cmd /c .\Build-Inventory-Mod.cmd).
-3. Select the DayZ GAME installation folder containing DayZ_x64.exe.
+3. Select the DayZ GAME folder, then select extra weapon/clothing PBOs
+   such as UAVWEAPONS.pbo. Cancel the second picker for vanilla-only items.
 4. It produces Desktop\GRZ-InventorySizes\GRZ_InventorySizes.pbo.
 5. Copy that PBO into @GRZ_Local\Addons on BOTH client and server; restart both.
 

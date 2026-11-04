@@ -7,6 +7,7 @@ class GRZKillfeedRow
     TextWidget VictimPrefix;
     ImageWidget KillerPrefixIcon;
     ImageWidget VictimPrefixIcon;
+    TextWidget WeaponFallback;
     ref GRZKillfeedMessage Message;
     EntityAI PreviewGun;
     ItemPreviewWidget GunWidget;
@@ -15,6 +16,8 @@ class GRZKillfeedRow
 
     void CreateGunPreview()
     {
+        if (!Root || !Message)
+            return;
         GunWidget = ItemPreviewWidget.Cast(Root.FindAnyWidget("GunPreview"));
         GRZKillfeedGunData data = Message.GunData;
         if (!GunWidget || !data || !data.IsValid() || data.Types.Count() == 0)
@@ -58,10 +61,14 @@ class GRZKillfeedRow
         GunWidget.SetModelPosition("0 0 0.55");
         GunWidget.SetModelOrientation("0 0 0");
         GunWidget.Show(true);
+        if (WeaponFallback)
+            WeaponFallback.Show(false);
     }
 
     void Dispose()
     {
+        if (g_Game)
+            g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(CreateGunPreview);
         if (GunWidget)
             GunWidget.SetItem(null);
         if (PreviewGun)
@@ -99,6 +106,8 @@ class GRZKillfeedRow
             Root.FindAnyWidget(name).SetAlpha(fade);
         if (GunWidget)
             GunWidget.SetAlpha(fade);
+        if (WeaponFallback)
+            WeaponFallback.SetAlpha(fade);
     }
 }
 
@@ -123,6 +132,7 @@ modded class MissionGameplay
     protected Widget m_GRZFeed;
     protected ref array<ref GRZKillfeedRow> m_GRZRows = new array<ref GRZKillfeedRow>;
     protected bool m_GRZListening;
+    protected ref GRZKillstreakPopup m_GRZStreakPopup;
 
     override void OnInit()
     {
@@ -131,6 +141,8 @@ modded class MissionGameplay
         {
             GRZKillfeedBus.Kills.Insert(GRZReceiveKill);
             GRZKillfeedBus.Menu.Insert(GRZReceiveMenu);
+            GRZKillfeedBus.Streak.Insert(GRZReceiveStreak);
+            m_GRZStreakPopup = new GRZKillstreakPopup;
             if (IsCLIParam("GRZKillfeedPreview"))
                 g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZKillfeedClient.OpenLocalPreview, 1000, false);
             m_GRZListening = true;
@@ -160,6 +172,10 @@ modded class MissionGameplay
     {
         GRZKillfeedBus.Kills.Remove(GRZReceiveKill);
         GRZKillfeedBus.Menu.Remove(GRZReceiveMenu);
+        GRZKillfeedBus.Streak.Remove(GRZReceiveStreak);
+        if (m_GRZStreakPopup)
+            m_GRZStreakPopup.Dispose();
+        m_GRZStreakPopup = null;
         m_GRZListening = false;
         GRZKillfeedClient.ReleaseMenu();
         g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(GRZKillfeedClient.OpenLocalPreview);
@@ -178,6 +194,9 @@ modded class MissionGameplay
     override void OnUpdate(float timeslice)
     {
         super.OnUpdate(timeslice);
+        IngameHud streakHud = IngameHud.Cast(GetHud());
+        if (m_GRZStreakPopup && streakHud)
+            m_GRZStreakPopup.Update(timeslice, streakHud.GetHudPanelWidget());
         if (!m_GRZFeed)
             return;
         for (int i = m_GRZRows.Count() - 1; i >= 0; i--)
@@ -295,7 +314,15 @@ modded class MissionGameplay
         detail.SetPos(352 + killerExtra, 16);
         detail.SetText(message.Distance.ToString() + " m");
         detail.SetTextExactSize(20);
-        row.CreateGunPreview();
+        row.WeaponFallback = TextWidget.Cast(row.Root.FindAnyWidget("WeaponFallback"));
+        if (row.WeaponFallback)
+        {
+            row.WeaponFallback.SetPos(164 + killerExtra, 18);
+            row.WeaponFallback.SetTextExactSize(14);
+            if (message.GunData && message.GunData.Types.Count() > 0)
+                row.WeaponFallback.SetText(message.GunData.Types[0]);
+        }
+        row.Root.FindAnyWidget("GunPreview").Show(false);
         m_GRZRows.InsertAt(row, 0);
         while (m_GRZRows.Count() > 5)
         {
@@ -304,6 +331,16 @@ modded class MissionGameplay
         }
         row.Update(0);
         GRZPositionRows();
+        // Keep script-heavy modded weapon initialization outside row delivery.
+        g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(row.CreateGunPreview, 1, false);
+        Print("[GRZ Killfeed 0.1.19] Live/test row added; preview deferred.");
+    }
+
+    protected void GRZReceiveStreak(string playerName, int count)
+    {
+        if (!m_GRZStreakPopup)
+            m_GRZStreakPopup = new GRZKillstreakPopup;
+        m_GRZStreakPopup.Enqueue(playerName, count);
     }
 
     protected void GRZPositionRows()

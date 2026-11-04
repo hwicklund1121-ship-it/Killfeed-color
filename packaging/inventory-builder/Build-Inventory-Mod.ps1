@@ -1,10 +1,12 @@
 param(
     [string]$DayZPath,
     [string[]]$ExtraModPaths = @(),
+    [string[]]$ExtraPboPaths = @(),
     [string]$OutputPath,
     [switch]$NoExplorer
 )
 $ErrorActionPreference = 'Stop'
+$interactiveSelection = -not $DayZPath
 if (-not $DayZPath) {
     Add-Type -AssemblyName System.Windows.Forms
     $dialog = New-Object System.Windows.Forms.FolderBrowserDialog
@@ -29,13 +31,40 @@ foreach ($folder in $folders) {
         $archives.Add($file.FullName)
     }
 }
+if ($interactiveSelection -and $ExtraPboPaths.Count -eq 0 -and $ExtraModPaths.Count -eq 0) {
+    $extraDialog = New-Object System.Windows.Forms.OpenFileDialog
+    $extraDialog.Title = 'Select extra gun/clothing PBOs, e.g. UAVWEAPONS.pbo (Cancel for vanilla only)'
+    $extraDialog.Filter = 'DayZ addon PBO (*.pbo)|*.pbo'
+    $extraDialog.Multiselect = $true
+    $extraDialog.InitialDirectory = $DayZPath
+    if ($extraDialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
+        $ExtraPboPaths = $extraDialog.FileNames
+    }
+}
+foreach ($pbo in $ExtraPboPaths) {
+    if (-not (Test-Path -LiteralPath $pbo -PathType Leaf) -or [System.IO.Path]::GetExtension($pbo) -ne '.pbo') {
+        throw ('Additional PBO file not found: ' + $pbo)
+    }
+    $archives.Add([System.IO.Path]::GetFullPath($pbo))
+}
 if ($archives.Count -eq 0) { throw 'No PBO archives were found.' }
-Write-Host 'GRZ Inventory builder v0.1.2'
+Write-Host 'GRZ Inventory builder v0.1.3'
 Write-Host 'Reading installed clothing and gun class definitions. Game files remain unchanged...'
 if (-not ('GRZInventoryBuilder' -as [type])) {
     Add-Type -Path (Join-Path $PSScriptRoot 'InventoryBuilder.cs')
 }
-$report = [GRZInventoryBuilder]::Build($archives.ToArray(), $OutputPath)
+foreach ($pbo in $ExtraPboPaths) {
+    $exported = [GRZInventoryBuilder]::ExportConfig($pbo, (Join-Path $OutputPath 'ExtraConfigs'))
+    if ($exported) { Write-Host ('Extra mod config copy: ' + $exported) }
+}
+try {
+    $report = [GRZInventoryBuilder]::Build($archives.ToArray(), $OutputPath)
+} catch {
+    if ($ExtraPboPaths.Count -gt 0) {
+        Write-Host ('If this extra mod config is unsupported, send the small files from ' + (Join-Path $OutputPath 'ExtraConfigs') + ' for integration. No new PBO was built.')
+    }
+    throw
+}
 $report | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath (Join-Path $OutputPath 'Inventory-catalog.json') -Encoding UTF8
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'INSTALL.txt') -Destination (Join-Path $OutputPath 'INSTALL.txt') -Force
 Write-Host ('Clothing classes: ' + $report.Clothing.Count + ' -> 10 wide x 10 high CARGO')

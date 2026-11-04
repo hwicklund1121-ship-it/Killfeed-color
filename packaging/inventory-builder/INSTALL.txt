@@ -38,3 +38,10 @@ updating game definitions. Disabled alternative mods must not be included.
 This is an unsigned development PBO for the current local server with signature
 checks disabled. Test cargo layout, pickup/rotation, reconnect and persistence
 before using it on a live server. No DayZ runtime test was available here.
+
+MODDED GUNS (v0.1.3): include UAVWEAPONS.pbo or other gun/clothing addon PBOs
+in the second file picker. The vanilla catalog alone cannot override concrete
+modded guns that define their own sizes. CLI: use -ExtraPboPaths for individual
+PBO files, or -ExtraModPaths for folders. Selected extra config resources are
+copied to Desktop\GRZ-InventorySizes\ExtraConfigs for diagnosis. If a source-only
+config is unsupported, send that small exported config instead of the huge PBO.

@@ -143,7 +143,8 @@ class GRZKillfeedServer
             if (!recipient || !recipient.GetIdentity())
                 continue;
             ScriptRPC rpc = new ScriptRPC;
-            rpc.Write(announcement);
+            rpc.Write(name);
+            rpc.Write(streak);
             rpc.Send(recipient, GRZKillfeedRPC.STREAK, true, recipient.GetIdentity());
         }
         Print(announcement);

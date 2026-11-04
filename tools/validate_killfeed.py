@@ -122,6 +122,18 @@ def main():
     assert 'rpc.Write(DisplayName(victim))' in server and 'return "BOT";' in server
     assert '!victim.GetIdentity()' not in server
     assert 'command != "/killfeed test"' in text and 'static void TestLocal()' in text
+    popup=files['scripts/5_Mission/GRZ_Killfeed/GRZKillstreakPopup.c'].decode()
+    mission=files['scripts/5_Mission/GRZ_Killfeed/GRZKillfeedMission.c'].decode()
+    assert 'WaveKind.WAVEUI' in popup and 'GRZ_Killstreak_Notification_SoundSet' in popup
+    assert '(width - popupWidth) * 0.5' in popup and 'y + 48 * scale' in popup
+    assert 'StreakTitle' in declared and 'StreakDetail' in declared
+    assert 'ctx.Read(streakName)' in player and 'ctx.Read(streakCount)' in player
+    assert 'rpc.Write(name);' in server and 'rpc.Write(streak);' in server
+    assert 'GRZKillfeedBus.Streak.Invoke' in player
+    assert 'command != "/killfeed streaktest"' in text
+    assert 'row.CreateGunPreview();' not in mission
+    assert mission.index('m_GRZRows.InsertAt(row, 0)') < mission.index('CallLater(row.CreateGunPreview, 1, false)')
+    assert 'WeaponFallback' in declared
     # Static wire-format alignment only; not a runtime authorization test.
     write_fields = re.findall(r"rpc.Write\(style\.([\w.]+)\)", server)
     read_fields = re.findall(r"ctx.Read\(style\.([\w.]+)\)", player)

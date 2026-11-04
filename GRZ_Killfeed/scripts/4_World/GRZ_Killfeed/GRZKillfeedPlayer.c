@@ -76,9 +76,14 @@ modded class PlayerBase
         {
             if (g_Game.IsServer() || sender || this != PlayerBase.Cast(g_Game.GetPlayer()))
                 return;
-            string announcement;
-            if (ctx.Read(announcement) && announcement.Length() <= 512)
-                g_Game.Chat(announcement, "colorStatusChannel");
+            string streakName;
+            int streakCount;
+            if (!ctx.Read(streakName) || !ctx.Read(streakCount) || streakName.Length() > 128 || streakCount <= 0 || streakCount % 10 != 0)
+            {
+                Print("[GRZ Killstreaks] Unsupported notification payload; check matching client/server GRZ versions.");
+                return;
+            }
+            GRZKillfeedBus.Streak.Invoke(streakName, streakCount);
             return;
         }
         if (rpc_type == GRZKillfeedRPC.KILL || rpc_type == GRZKillfeedRPC.MENU_STATE)
@@ -91,8 +96,19 @@ modded class PlayerBase
                 GRZKillfeedMessage message = new GRZKillfeedMessage;
                 if (!ctx.Read(message.Killer) || !ctx.Read(message.Victim) || !ctx.Read(message.WeaponJson) || !ctx.Read(message.Distance))
                     return;
-                if (!GRZReadStyle(ctx, message.KillerStyle) || !GRZReadStyle(ctx, message.VictimStyle))
+                if (!GRZReadStyle(ctx, message.KillerStyle, false) || !GRZReadStyle(ctx, message.VictimStyle, false))
+                {
+                    Print("[GRZ Killfeed] Live kill RPC style fields could not be read.");
                     return;
+                }
+                if (!message.KillerStyle.IsValid())
+                {
+                    Print("[GRZ Killfeed] Client-incompatible killer style; drawing default instead of dropping the row.");
+                    message.KillerStyle = new GRZNameStyle;
+                }
+                if (!message.VictimStyle.IsValid())
+                    message.VictimStyle = new GRZNameStyle;
+                Print("[GRZ Killfeed 0.1.19] Live kill RPC received.");
                 string error;
                 GRZKillfeedGunData gun;
                 if (message.WeaponJson.Length() <= 16384 && JsonFileLoader<GRZKillfeedGunData>.LoadData(message.WeaponJson, gun, error) && gun && gun.IsValid())
@@ -111,8 +127,8 @@ modded class PlayerBase
         super.OnRPC(sender, rpc_type, ctx);
     }
 
-    protected bool GRZReadStyle(ParamsReadContext ctx, GRZNameStyle style)
+    protected bool GRZReadStyle(ParamsReadContext ctx, GRZNameStyle style, bool requireValid = true)
     {
-        return ctx.Read(style.ColorA) && ctx.Read(style.ColorB) && ctx.Read(style.AnimationMode) && ctx.Read(style.Speed) && ctx.Read(style.PrefixIcon) && ctx.Read(style.PrefixWord) && ctx.Read(style.PrefixAnimation.ColorA) && ctx.Read(style.PrefixAnimation.ColorB) && ctx.Read(style.PrefixAnimation.AnimationMode) && ctx.Read(style.PrefixAnimation.Speed) && style.IsValid();
+        return ctx.Read(style.ColorA) && ctx.Read(style.ColorB) && ctx.Read(style.AnimationMode) && ctx.Read(style.Speed) && ctx.Read(style.PrefixIcon) && ctx.Read(style.PrefixWord) && ctx.Read(style.PrefixAnimation.ColorA) && ctx.Read(style.PrefixAnimation.ColorB) && ctx.Read(style.PrefixAnimation.AnimationMode) && ctx.Read(style.PrefixAnimation.Speed) && (!requireValid || style.IsValid());
     }
 }

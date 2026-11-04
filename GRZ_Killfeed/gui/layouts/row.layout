@@ -186,3 +186,19 @@ TextWidgetClass VictimPrefix
 }
  }
 }
+TextWidgetClass WeaponFallback
+{
+ position 164 18
+ size 180 24
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text halign" center
+ "text valign" center
+ text ""
+}

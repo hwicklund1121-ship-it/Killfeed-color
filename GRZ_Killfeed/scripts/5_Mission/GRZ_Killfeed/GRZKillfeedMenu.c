@@ -24,13 +24,13 @@ class GRZKillfeedClient
         if (!ActiveMenu || !ActiveMenu.GetLayoutRoot())
         {
             ActiveMenu = null;
-            Error("[GRZ Killfeed 0.1.18] Native menu factory did not return an initialized settings menu.");
+            Error("[GRZ Killfeed 0.1.19] Native menu factory did not return an initialized settings menu.");
             g_Game.Chat("GRZ Killfeed: menu creation failed. Check the client script log.", "colorStatusChannel");
             return;
         }
         ActiveMenu.ApplyLocalStyle(LocalStyle);
         ActiveMenu.EnsureVisible();
-        Print("[GRZ Killfeed 0.1.18] Native menu registered and retained.");
+        Print("[GRZ Killfeed 0.1.19] Native menu registered and retained.");
     }
 
     static void ReleaseMenu()
@@ -68,6 +68,16 @@ class GRZKillfeedClient
     static void TestOffline()
     {
         TestLocal();
+    }
+
+    static void TestStreak()
+    {
+        if (g_Game.IsDedicatedServer() || !g_Game.GetPlayer())
+            return;
+        string playerName;
+        g_Game.GetPlayerName(playerName);
+        GRZKillfeedBus.Streak.Invoke(playerName, 10);
+        g_Game.Chat("GRZ Killstreaks: local popup/sound test; streak count is unchanged.", "colorStatusChannel");
     }
 
     static string InventoryDimensions(string configPath)
@@ -136,15 +146,17 @@ modded class ChatInputMenu
             return false;
         string command = input.GetText().Trim();
         command.ToLower();
-        if (command != "/grzvip" && command != "/grzvip test" && command != "/killfeed test" && command != "/grzvip inventory")
+        if (command != "/grzvip" && command != "/grzvip test" && command != "/killfeed test" && command != "/killfeed streaktest" && command != "/grzvip inventory")
             return false;
         if (m_GRZVipSubmitted)
             return true;
         m_GRZVipSubmitted = true;
-        Print("[GRZ Killfeed 0.1.18] Intercepted local VIP command before public/VPP chat.");
+        Print("[GRZ Killfeed 0.1.19] Intercepted local VIP command before public/VPP chat.");
         Close();
         if (command == "/grzvip")
             g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZKillfeedClient.RequestMenu, 150, false);
+        else if (command == "/killfeed streaktest")
+            g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZKillfeedClient.TestStreak, 150, false);
         else if (command == "/grzvip inventory")
             g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZKillfeedClient.CheckInventory, 150, false);
         else
@@ -241,7 +253,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
         if (IsOfflinePreview)
             m_Status.SetText("Local preview — server access and persistence are not tested.");
         PositionPanel();
-        Print("[GRZ Killfeed 0.1.18] Init: layout created.");
+        Print("[GRZ Killfeed 0.1.19] Init: layout created.");
         return layoutRoot;
     }
 
@@ -296,7 +308,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
             m_LoggedUpdate = true;
             float width, height;
             layoutRoot.GetScreenSize(width, height);
-            Print(string.Format("[GRZ Killfeed 0.1.18] Update: root %1 x %2; visible %3.", width, height, layoutRoot.IsVisibleHierarchy()));
+            Print(string.Format("[GRZ Killfeed 0.1.19] Update: root %1 x %2; visible %3.", width, height, layoutRoot.IsVisibleHierarchy()));
         }
     }
 
@@ -312,14 +324,14 @@ class GRZKillfeedMenu extends UIScriptedMenu
             return;
         }
         EnsureVisible();
-        Print("[GRZ Killfeed 0.1.18] OnShow called.");
+        Print("[GRZ Killfeed 0.1.19] OnShow called.");
     }
 
     override void OnHide()
     {
         m_GRZDismissRequested = true;
         GRZKillfeedBus.AppDeactivated.Remove(CloseSafely);
-        Print("[GRZ Killfeed 0.1.18] OnHide called.");
+        Print("[GRZ Killfeed 0.1.19] OnHide called.");
         super.OnHide();
     }
 
@@ -528,6 +540,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
     void ApplyServerStyle(GRZNameStyle style)
     {
         Chosen = style.Clone();
+        GRZKillfeedClient.LocalStyle = style.Clone();
         m_PrefixInput.SetText(Chosen.PrefixWord);
         IsOfflinePreview = false;
         RefreshLabels();
@@ -545,7 +558,10 @@ class GRZKillfeedMenu extends UIScriptedMenu
         if (!m_Status)
             return;
         if (status == 2)
+        {
+            GRZKillfeedClient.LocalStyle = Chosen.Clone();
             m_Status.SetText("Saved. Your killfeed name style is active.");
+        }
         else
             m_Status.SetText("Could not save. Check access and server profile write permissions.");
     }

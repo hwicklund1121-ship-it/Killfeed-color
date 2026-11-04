@@ -188,7 +188,7 @@ public static class GRZInventoryBuilder
         }
         throw new InvalidDataException("Invalid null-terminated string.");
     }
-    private static byte[] ReadConfig(string path)
+    private static byte[] ReadConfig(string path, bool allowSourceText = false)
     {
         using (BinaryReader r = new BinaryReader(File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
         {
@@ -216,9 +216,15 @@ public static class GRZInventoryBuilder
             }
             long offset = r.BaseStream.Position;
             bool sourceOnly = false;
+            long sourceOffset = 0;
+            uint sourceSize = 0;
+            uint sourceMethod = 0;
             foreach (Entry entry in entries)
             {
-                if (entry.Name.Equals("config.cpp", StringComparison.OrdinalIgnoreCase)) sourceOnly = true;
+                if (entry.Name.Equals("config.cpp", StringComparison.OrdinalIgnoreCase))
+                {
+                    sourceOnly = true; sourceOffset = offset; sourceSize = entry.Size; sourceMethod = entry.Method;
+                }
                 if (entry.Name.Equals("config.bin", StringComparison.OrdinalIgnoreCase))
                 {
                     if (entry.Method != 0)
@@ -231,7 +237,14 @@ public static class GRZInventoryBuilder
                 offset += entry.Size;
             }
             if (sourceOnly)
-                throw new InvalidDataException("Source-only config.cpp requires a binarized config for cataloging; archive: " + Path.GetFileName(path));
+            {
+                if (!allowSourceText)
+                    throw new InvalidDataException("Source-only config.cpp requires a binarized config for cataloging; archive: " + Path.GetFileName(path));
+                if (sourceMethod != 0 || sourceSize == 0 || sourceSize > 32 * 1024 * 1024 || sourceOffset + sourceSize > r.BaseStream.Length)
+                    throw new InvalidDataException("Source config cannot be exported from " + Path.GetFileName(path));
+                r.BaseStream.Position = sourceOffset;
+                return r.ReadBytes((int)sourceSize);
+            }
             return null; // resource-only archive has no class definitions
         }
     }
@@ -366,6 +379,16 @@ public static class GRZInventoryBuilder
             byte[] digest = sha.ComputeHash(body); result.Write(digest, 0, digest.Length);
             return result.ToArray();
         }
+    }
+    public static string ExportConfig(string archive, string output)
+    {
+        byte[] data = ReadConfig(archive, true);
+        if (data == null) return "";
+        Directory.CreateDirectory(output);
+        bool binary = data.Length >= 4 && data[0] == 0 && data[1] == 114 && data[2] == 97 && data[3] == 80;
+        string path = Path.Combine(output, Path.GetFileNameWithoutExtension(archive) + "-config." + (binary ? "bin" : "cpp"));
+        File.WriteAllBytes(path, data);
+        return path;
     }
     public static Report Build(string[] archives, string output)
     {

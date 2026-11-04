@@ -85,3 +85,11 @@ Killfeed: /killfeed test makes a local BOT preview. Actual spawned survivor kill
 show BOT. GRZ Killstreaks announces at 10,20,30... kills; resets on death/logout.
 Earmuffs: N starts at 20% every time, +/- adjusts; ear-with-waves icon fades.
 Inventory: /grzvip inventory checks whether your generated override is loaded.
+
+Killstreak notifications: top-center popup and sound at each 10-kill milestone.
+/killfeed streaktest previews the popup and chime locally without adding kills.
+Install matching updated client/server GRZ_Killfeed.pbo files.
+
+When updating, merge the new GRZ files into your existing @GRZ_Local folder.
+Preserve extra addons you installed, including UAVWEAPONS.pbo and your generated
+GRZ_InventorySizes.pbo. They are not supplied by this server ZIP.

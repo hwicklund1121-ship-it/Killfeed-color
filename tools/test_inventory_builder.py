@@ -137,6 +137,32 @@ def main():
         (source/'$PBOPREFIX$').write_text('GRZ_InventorySizes')
         (source/'config.cpp').write_bytes((output/'config.cpp').read_bytes())
         assert pbo==build(source),'Generated PBO differs from established Python packer'
+        # Explicit extra mod PBOs must override their own concrete gun size.
+        extra_dir=temp/'Extra Weapon Mod';extra_dir.mkdir()
+        extra=extra_dir/'UAVWEAPONS.pbo'
+        archive(extra,node('',children=[node('CfgPatches',children=[node('UAV_Fixture')]),node('CfgWeapons',children=[node('UAV_CS5_BLACK','Rifle_Base',properties={'itemSize':[10,4]})])]))
+        extra_output=temp/'Extra Built Mod'
+        extra_command=command.copy();extra_command[extra_command.index(str(output))]=str(extra_output)
+        extra_command+=['-ExtraPboPaths',str(extra)]
+        result=subprocess.run(extra_command,env=environment,capture_output=True,text=True)
+        assert result.returncode==0,result.stdout+result.stderr
+        extra_config=(extra_output/'config.cpp').read_text()
+        assert re.search(r'class UAV_CS5_BLACK: Rifle_Base\s*\{\s*itemSize\[\] = \{10, 2\}',extra_config)
+        assert 'UAV_Fixture' in json.loads((extra_output/'Inventory-catalog.json').read_text(encoding='utf-8-sig'))['RequiredAddons']
+        assert (extra_output/'ExtraConfigs/UAVWEAPONS-config.bin').exists()
+        # Unsupported source configs still export a small diagnostic file.
+        cpp_source=temp/'Source Config';cpp_source.mkdir()
+        (cpp_source/'$PBOPREFIX$').write_text('SourceFixture')
+        source_text='class CfgPatches { class SourceFixture {}; };'
+        (cpp_source/'config.cpp').write_text(source_text)
+        cpp_pbo=extra_dir/'SourceWeapon.pbo';cpp_pbo.write_bytes(build(cpp_source))
+        cpp_output=temp/'Source Export'
+        cpp_command=extra_command.copy()
+        cpp_command[cpp_command.index(str(extra_output))]=str(cpp_output)
+        cpp_command[cpp_command.index(str(extra))]=str(cpp_pbo)
+        failed_cpp=subprocess.run(cpp_command,env=environment,capture_output=True,text=True)
+        assert failed_cpp.returncode!=0 and not (cpp_output/'GRZ_InventorySizes.pbo').exists()
+        assert (cpp_output/'ExtraConfigs/SourceWeapon-config.cpp').read_text()==source_text
         # Inactive conflicting mods must not silently choose an arbitrary parent.
         archive(game/'Addons/conflict.pbo',node('',children=[node('CfgPatches',children=[node('Bad_Fixture')]),node('CfgVehicles',children=[node('Jacket_Black','Inventory_Base')])]))
         bad_output=temp/'Failed Build'
@@ -154,7 +180,7 @@ def main():
         failed=subprocess.run(failure_command,env=environment,capture_output=True,text=True)
         assert failed.returncode!=0 and not (bad_output/'GRZ_InventorySizes.pbo').exists()
         assert 'Compressed config.bin' in failed.stdout+failed.stderr
-        print('PowerShell/C# tests passed: normal unrelated engine redefinitions, inherited variants, original parents, unrelated items, restricted clothing slots, restored excluded cargo, exact cargo/footprint fields, provider dependencies, PBO byte/checksum compatibility, and fail-closed conflict/unsupported compression handling.')
+        print('PowerShell/C# tests passed: normal unrelated engine redefinitions, inherited variants, original parents, unrelated items, restricted clothing slots, restored excluded cargo, exact cargo/footprint fields, provider dependencies, explicit modded-gun override/export, PBO byte/checksum compatibility, and fail-closed conflict/unsupported compression handling.')
 
 
 if __name__=='__main__':
