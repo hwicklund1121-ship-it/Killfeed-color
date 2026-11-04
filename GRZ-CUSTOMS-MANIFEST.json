@@ -1,14 +1,20 @@
 {
-  "version": "0.1.2",
+  "version": "0.1.3",
   "included_reskins": [
     "Gunrunnerz HEXGRID",
-    "Blakes Kit (without kit HEXGRID)"
+    "Blakes Kit (without kit HEXGRID)",
+    "GRZ_Tracksuit_Pants"
   ],
   "additional_addons": {
     "Blakes_Kit": {
       "sha256": "2ff87f243be487294be03a425599e0cb5b1952502fb9c7a8349b6976092b63db",
       "prefix": "Blakes_Kit",
       "files": 18
+    },
+    "GRZ_Tracksuit_Pants": {
+      "sha256": "8e2ccc32e3a6d7b01a512644b25d6d69f4fd49a9b29382411d6806f9ec961fea",
+      "prefix": "GRZ_Customs/Tracksuit",
+      "files": 4
     }
   },
   "item_class": "GRZ_GunRunnerZ_Hexgrid",

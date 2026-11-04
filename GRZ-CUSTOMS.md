@@ -1,4 +1,10 @@
-GRZ Customs 0.1.2
+GRZ Customs 0.1.3
+
+Includes separate GRZ_Tracksuit_Pants item, display name GRZ_Tracksuit_Pants,
+description Made By Blake. It inherits vanilla TrackSuitPants_Blue geometry,
+clothing behaviour and stats, with supplied 2048x2048 colour/normal artwork.
+No additional model dependency is required for these pants. Their custom
+material remains selected at all damage levels.
 
 Also includes Blake's configured kit, excluding its HEXGRID item and textures:
 - blake_SurgicalGloves
