@@ -66,5 +66,9 @@
   "GRZ_BetterAim.pbo": {
     "bytes": 1390,
     "sha256": "78a83b1f49958bab20edf729307400738510f3fdb1a08cfc8413a4307390c5b2"
+  },
+  "GRZ_LowRecoil.pbo": {
+    "bytes": 1420,
+    "sha256": "364b687b6883ae03a04550c5ef01ab87e7e303202b6427bcd1853327267bfcec"
   }
 }
