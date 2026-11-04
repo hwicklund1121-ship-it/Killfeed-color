@@ -1,13 +1,17 @@
 {
-  "version": "0.1.0",
+  "version": "0.1.1",
   "included_reskins": [
     "Gunrunnerz HEXGRID"
   ],
-  "item_class": "UAV_HEXGRID",
+  "item_class": "GRZ_GunRunnerZ_Hexgrid",
+  "base_item_class": "UAV_HEXGRID",
+  "display_name": "GunRunnerZ Hexgrid",
+  "description": "Made By Blake",
+  "base_pbo_sha256": "bce542616472287c31d0b64e0d0ad0581dcba6ab4eb13e6b2a8287b9f1602a54",
   "original_sha256": "f53d9e1a6e1d2675a8ef990c05d6b2af72cc47d09d961dd684e33961f8f4fa6e",
-  "pbo_sha256": "66fb5a38abfb80715156404f0ce40d5da7d743ad328ed8de45ff43c2b0d703ba",
-  "prefix": "PVPPack\\HEXGRID",
-  "verified_internal_resources": 7,
+  "pbo_sha256": "b097744d19a9d18154f40d2d760cc933136713510156098d9d158cd314ad5d32",
+  "prefix": "GRZ_Customs\\Hexgrid",
+  "verified_internal_resources": 16,
   "maps": {
     "HEXGRID_co.paa": {
       "source_sha256": "ff3a0419fd65faa77717106365e66d4d9cd7abec204ab25013550e9404631af9",

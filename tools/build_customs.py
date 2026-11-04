@@ -51,7 +51,9 @@ def main():
     args = parser.parse_args()
     original = args.hexgrid.read_bytes()
     _, original_files = read_pbo(original)
-    prefix, files = fix_hexgrid(original_files)
+    base_prefix, base_files = fix_hexgrid(original_files)
+    prefix = 'GRZ_Customs\\Hexgrid'
+    files = {}
     maps = {}
     for source_name, target_name in [('colour', 'HEXGRID_co.paa'), ('normal', 'HEXGRID_nohq.paa')]:
         source_path = ROOT / 'art/customs/hexgrid' / (source_name + '.png')
@@ -61,14 +63,67 @@ def main():
         # carry the old texture's DXT5nm swizzle onto these RGB PNG channels.
         data = encode_paa(image)
         mips = verify_paa(data, image)
-        files['HEXGRID/data/' + target_name] = data
+        files['data/' + target_name] = data
         maps[target_name] = {'source_sha256': hashlib.sha256(source_path.read_bytes()).hexdigest(),
                              'paa_sha256': hashlib.sha256(data).hexdigest(),
                              'size': list(image.size), 'mips': mips, 'encoding': 'DXT5, direct RGBA, no swizzle'}
+    material = original_files['HEXGRID/data/HEXGRID.rvmat'].decode('utf-8-sig')
+    material = material.replace('PVPPack\\HEXGRID\\HEXGRID\\data\\HEXGRID_nohq.paa',
+                                'GRZ_Customs\\Hexgrid\\data\\HEXGRID_nohq.paa')
+    assert 'GRZ_Customs\\Hexgrid\\data\\HEXGRID_nohq.paa' in material
+    files['data/HEXGRID.rvmat'] = material.encode()
+    config = r'''
+class CfgPatches
+{
+    class GRZ_Customs_Hexgrid
+    {
+        units[] = {"GRZ_GunRunnerZ_Hexgrid"};
+        weapons[] = {};
+        requiredVersion = 0.1;
+        requiredAddons[] = {"Hexgrid"};
+    };
+};
+class CfgVehicles
+{
+    class UAV_HEXGRID;
+    class GRZ_GunRunnerZ_Hexgrid: UAV_HEXGRID
+    {
+        scope = 2;
+        displayName = "GunRunnerZ Hexgrid";
+        descriptionShort = "Made By Blake";
+        hiddenSelectionsTextures[] = {"GRZ_Customs\Hexgrid\data\HEXGRID_co.paa"};
+        hiddenSelectionsMaterials[] = {"GRZ_Customs\Hexgrid\data\HEXGRID.rvmat"};
+        class DamageSystem: DamageSystem
+        {
+            class GlobalHealth: GlobalHealth
+            {
+                class Health: Health
+                {
+                    healthLevels[] = {
+                        {1,{"GRZ_Customs\Hexgrid\data\HEXGRID.rvmat"}},
+                        {0.45,{"GRZ_Customs\Hexgrid\data\HEXGRID.rvmat"}},
+                        {0.35,{"GRZ_Customs\Hexgrid\data\HEXGRID.rvmat"}},
+                        {0.3,{"GRZ_Customs\Hexgrid\data\HEXGRID.rvmat"}},
+                        {0,{"GRZ_Customs\Hexgrid\data\HEXGRID.rvmat"}}
+                    };
+                };
+            };
+        };
+    };
+};
+'''
+    files['config.cpp'] = config.encode()
+    # Resolve references across both PBO mounts, including original material maps.
+    import re
+    mounted = {(base_prefix + '/' + name).replace('\\', '/').lower() for name in base_files}
+    mounted |= {(prefix + '/' + name).replace('\\', '/').lower() for name in files}
+    checked = verify_resources(base_prefix, base_files)
     for path, data in files.items():
-        if path not in ('config.cpp', 'HEXGRID/data/HEXGRID_co.paa', 'HEXGRID/data/HEXGRID_nohq.paa'):
-            assert data == original_files[path], path
-    checked = verify_resources(prefix, files)
+        if path.endswith(('.cpp', '.rvmat')):
+            for ref in re.findall(r'"([^"\r\n]+\.(?:paa|rvmat))"', data.decode(), re.I):
+                if ref.lower().startswith(('grz_customs', 'pvppack')):
+                    assert ref.replace('\\', '/').lower() in mounted, ref
+                    checked += 1
     with tempfile.TemporaryDirectory(prefix='grz-customs-') as folder:
         source = Path(folder)
         (source / '$PBOPREFIX$').write_text(prefix)
@@ -77,28 +132,45 @@ def main():
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(data)
         pbo = build(source)
+    with tempfile.TemporaryDirectory(prefix='grz-hexgrid-base-') as folder:
+        source = Path(folder)
+        (source / '$PBOPREFIX$').write_text(base_prefix)
+        for path, data in base_files.items():
+            target = source / path
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(data)
+        base_pbo = build(source)
+    for path, data in base_files.items():
+        if path != 'config.cpp':
+            assert data == original_files[path], path
+    assert read_pbo(base_pbo)[1] == base_files
     extensions, packed = read_pbo(pbo)
     assert packed == files and extensions['prefix'] == prefix
     assert hashlib.sha1(pbo[:-21]).digest() == pbo[-20:]
     output = ROOT / 'downloads'
-    (output / 'HEXGRID.pbo').write_bytes(pbo)
-    report = {'version': '0.1.0', 'included_reskins': ['Gunrunnerz HEXGRID'],
-              'item_class': 'UAV_HEXGRID', 'original_sha256': hashlib.sha256(original).hexdigest(),
+    (output / 'HEXGRID.pbo').write_bytes(base_pbo)
+    (output / 'GRZ_Customs_Hexgrid.pbo').write_bytes(pbo)
+    report = {'version': '0.1.1', 'included_reskins': ['Gunrunnerz HEXGRID'],
+              'item_class': 'GRZ_GunRunnerZ_Hexgrid', 'base_item_class': 'UAV_HEXGRID',
+              'display_name': 'GunRunnerZ Hexgrid', 'description': 'Made By Blake',
+              'base_pbo_sha256': hashlib.sha256(base_pbo).hexdigest(), 'original_sha256': hashlib.sha256(original).hexdigest(),
               'pbo_sha256': hashlib.sha256(pbo).hexdigest(), 'prefix': prefix,
               'verified_internal_resources': checked, 'maps': maps}
     (ROOT / 'GRZ-CUSTOMS-MANIFEST.json').write_text(json.dumps(report, indent=2) + '\n')
     with ZipFile(output / 'GRZ-Customs.zip', 'w', ZIP_DEFLATED) as archive:
-        archive.writestr('@GRZ_Customs/Addons/HEXGRID.pbo', pbo)
-        archive.writestr('@GRZ_Customs/mod.cpp', 'name = "GRZ Customs";\nauthor = "GRZ";\nversion = "0.1.0";\n')
+        archive.writestr('@GRZ_Customs/Addons/HEXGRID.pbo', base_pbo)
+        archive.writestr('@GRZ_Customs/Addons/GRZ_Customs_Hexgrid.pbo', pbo)
+        archive.writestr('@GRZ_Customs/mod.cpp', 'name = "GRZ Customs";\nauthor = "GRZ";\nversion = "0.1.1";\n')
         archive.write(ROOT / 'GRZ-CUSTOMS.md', 'INSTALL.md')
         archive.write(ROOT / 'GRZ-CUSTOMS-MANIFEST.json', '@GRZ_Customs/MANIFEST.json')
     # Keep the older direct model-fix download consistent with HEXGRID.pbo.
     with ZipFile(output / 'GRZ-HEXGRID-model-fix.zip', 'w', ZIP_DEFLATED) as archive:
-        archive.writestr('@GRZ_Local/Addons/HEXGRID.pbo', pbo)
+        archive.writestr('@GRZ_Local/Addons/HEXGRID.pbo', base_pbo)
         archive.write(ROOT / 'HEXGRID-REPAIR.md', 'INSTALL.md')
     with ZipFile(output / 'GRZ-Customs.zip') as archive:
         assert archive.testzip() is None
-        assert archive.read('@GRZ_Customs/Addons/HEXGRID.pbo') == pbo
+        assert archive.read('@GRZ_Customs/Addons/HEXGRID.pbo') == base_pbo
+        assert archive.read('@GRZ_Customs/Addons/GRZ_Customs_Hexgrid.pbo') == pbo
     print(json.dumps(report, indent=2))
 
 
