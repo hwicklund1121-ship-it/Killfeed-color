@@ -1,21 +1,21 @@
 class CfgPatches
 {
-    class GRZ_AimControl
+    class GRZ_BetterAim
     {
         units[] = {};
         weapons[] = {};
         requiredVersion = 0.1;
-        requiredAddons[] = {"DZ_Data", "DZ_Scripts", "GRZ_Hitscan", "GRZ_NoSway"};
+        requiredAddons[] = {"DZ_Data", "DZ_Scripts"};
     };
 };
 class CfgMods
 {
-    class GRZ_AimControl
+    class GRZ_BetterAim
     {
-        dir = "GRZ_AimControl";
-        name = "GRZ Aim Control Test";
+        dir = "GRZ_BetterAim";
+        name = "GRZ Better Aim";
         author = "GRZ";
-        version = "0.1.2";
+        version = "0.1.0";
         type = "mod";
         dependencies[] = {"World"};
         class defs
@@ -23,7 +23,7 @@ class CfgMods
             class worldScriptModule
             {
                 value = "";
-                files[] = {"GRZ_AimControl/scripts/4_World"};
+                files[] = {"GRZ_BetterAim/scripts/4_World"};
             };
         };
     };

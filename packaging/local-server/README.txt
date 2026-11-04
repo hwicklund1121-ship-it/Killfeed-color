@@ -94,12 +94,12 @@ When updating, merge the new GRZ files into your existing @GRZ_Local folder.
 Preserve extra addons you installed, including UAVWEAPONS.pbo and your generated
 GRZ_InventorySizes.pbo. They are not supplied by this server ZIP.
 
-This update includes GRZ_Hitscan TEST and GRZ_NoSway. Read GRZ-Hitscan-TEST.md before testing. Hitscan damage is instant for supported single-muzzle, single-projectile firearms within 1400m; native tracer/impact effects remain. Explosives, multi-pellet/multi-muzzle guns and invalid custom muzzle configs keep native ballistics. Runtime validation is outstanding. Merge updates; keep your custom UAVWEAPONS.pbo and generated GRZ_InventorySizes.pbo.
 
 GRZ Anti Hardscope: weapon optics black out after 0.75 seconds continuously scoped. Exit optics to clear/reset. Quickscopes under 0.75 seconds and ordinary iron sights stay clear. Read GRZ-AntiHardscope.md; runtime rendering still needs testing.
 
 
 
-Latest update: DELETE GRZ_Quickscope.pbo from BOTH game and server @GRZ_Local/Addons folders. It is no longer bundled. GRZ_AimControl.pbo keeps 10% ADS recoil and crosshair aim alignment with fast 0.15s scope transitions and reduced reticle lag, while the native weapon-ready delay remains to prevent exposing a still-raising scope. The 0.75s blackout keeps its centered red GRZ logo. Keep custom weapon and inventory PBOs. See GRZ-AimControl-TEST.md.
 
 Sky Colors v0.1.4 adds GREY after WHITE under Options > Game. Clouds and existing saved color indices are preserved.
+
+CURRENT REPAIR: Replace GRZ_Hitscan.pbo on both client/server with the supplied native-damage compatibility build. Experimental hitscan and its damage blocker are disabled; native bullet damage, flight and hit reporting are restored. True hitscan/no-drop is not active. DELETE GRZ_AimControl.pbo and GRZ_Quickscope.pbo from both Addons folders. Run Remove-GRZScopeOverrides.cmd while both game/server are stopped for default Steam paths, or delete those two files manually for other library paths. Native scope timing, camera movement and recoil return. GRZ_BetterAim applies only our native camera-shooting setup, independently written at 250m / 0.03m / 0.85. Anti-hardscope keeps the 0.75s delay and centered GRZ logo; GREY sky remains. Killfeed rows are 438 x 24. Preserve custom weapon/inventory PBOs. Read GRZ-Hitscan-TEST.md and GRZ-BetterAim.md. Gameplay still needs testing.

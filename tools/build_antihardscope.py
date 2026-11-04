@@ -51,26 +51,28 @@ def main():
     manifest_path.write_text(json.dumps(manifest, indent=2) + '\n')
     (base / 'GRZ-AntiHardscope.md').write_bytes((ROOT / 'ANTI-HARDSCOPE.md').read_bytes())
     payloads = {}
-    for name in ['GRZ_AntiHardscope', 'GRZ_Hitscan', 'GRZ_NoSway', 'GRZ_Killfeed', 'GRZ_AimControl', 'GRZ_SkyColors']:
+    for name in ['GRZ_AntiHardscope', 'GRZ_Hitscan', 'GRZ_NoSway', 'GRZ_Killfeed', 'GRZ_BetterAim', 'GRZ_SkyColors', 'GRZ_Hitmarker']:
         payload = (output / (name + '.pbo')).read_bytes()
         # Fail if an older downloadable addon is left over after a source change.
         assert payload == build(ROOT / name), name
         payloads['@GRZ_Local/Addons/' + name + '.pbo'] = payload
     payloads['GRZ-AntiHardscope.md'] = (ROOT / 'ANTI-HARDSCOPE.md').read_bytes()
     payloads['GRZ-Hitscan-TEST.md'] = (ROOT / 'HITSCAN.md').read_bytes()
-    payloads['GRZ-AimControl-TEST.md'] = (ROOT / 'AIM-CONTROL.md').read_bytes()
+    payloads['GRZ-BetterAim.md'] = (ROOT / 'BETTER-AIM.md').read_bytes()
     payloads['GRZ-SkyColors.md'] = (ROOT / 'SKY-COLORS.md').read_bytes()
+    for cleanup in ['Remove-GRZScopeOverrides.ps1', 'Remove-GRZScopeOverrides.cmd']:
+        payloads[cleanup] = (base / cleanup).read_bytes()
     payloads['READ-ME-FIRST.txt'] = (
         'Stop DayZ and the server. Merge @GRZ_Local into BOTH the DayZ game folder and installed server folder.\n'
-        'DELETE the old GRZ_Quickscope.pbo from BOTH installed Addons folders; merging this ZIP does not remove old files.\n'
-        'Replace the matching PBOs and add GRZ_AimControl.pbo. Keep every other addon, especially UAVWEAPONS.pbo and your locally generated GRZ_InventorySizes.pbo.\n'
-        'Restart both. No extra launch argument is needed when @GRZ_Local is already loaded.\n\n'
+        'DELETE GRZ_Quickscope.pbo AND GRZ_AimControl.pbo from BOTH installed Addons folders; merging this ZIP does not remove old files.\n'
+        'Replace the matching PBOs and add GRZ_BetterAim.pbo. Keep every other addon, especially UAVWEAPONS.pbo and your locally generated GRZ_InventorySizes.pbo.\n'
+        'Run Remove-GRZScopeOverrides.cmd while both are stopped to remove old scope PBOs from default Steam installs. For other library paths, remove the two old PBOs manually. Restart both. No extra launch argument is needed when @GRZ_Local is already loaded.\n\n'
         'Anti hardscope: after 0.75 seconds the gameplay view goes black with the red GRZ logo in the center until you exit optics.\n'
         'Sky Colors: GREY added after WHITE under Options > Game; clouds retained and saved selections preserved.\n'
-        'Killfeed: compact translucent row; killer, weapon, victim, distance; no outlines. Existing animations/prefixes stay active.\n'
+        'Killfeed: reference-size 438 x 24 translucent row; killer, weapon, victim, distance; no outlines. Existing animations/prefixes stay active.\n'
         'No sway: removes breathing/horizontal aiming wander while preserving recoil.\n'
-        'Aim Control TEST: 10% ADS recoil and hipfire/ADS aim-point alignment for supported hitscan shots. Fast 0.15s scope transitions and reduced reticle lag are restored while native weapon-ready checks remain; the forced early-ADS bypass stays removed. Read GRZ-AimControl-TEST.md.\n'
-        'Hitscan is an EXPERIMENTAL damage-path replacement. Read GRZ-Hitscan-TEST.md for supported guns, native visual effects and duplicate-hit tests.\n'
+        'Better Aim: native camera-shooting setup at 250m / 0.03m / 0.85. All prior custom scope timing, camera motion and recoil overrides are removed. Read GRZ-BetterAim.md.\n'
+        'DAMAGE REPAIR: replace GRZ_Hitscan.pbo with this compatibility build. Experimental scripted hitscan and its native-damage filter are DISABLED. Native bullets, damage and hit reporting are restored; true hitscan/no-drop is not active in this build.\n'
         'Your generated inventory override is NOT included: it must be built with your own installed/custom gun definitions.\n'
         'Package and static source checks passed. Enforce compilation and in-game tests remain outstanding.\n'
     ).encode()
@@ -83,7 +85,7 @@ def main():
         assert set(archive.namelist()) == set(payloads)
         for name, payload in payloads.items():
             assert archive.read(name) == payload
-    print(f'Verified {target.name}: {target.stat().st_size} bytes; six matching PBOs and installation notes.')
+    print(f'Verified {target.name}: {target.stat().st_size} bytes; seven matching PBOs and installation notes.')
     print('Static/package checks only; actual scope rendering and timing require DayZ testing.')
 
 

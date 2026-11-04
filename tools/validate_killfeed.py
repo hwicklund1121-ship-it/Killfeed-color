@@ -169,7 +169,7 @@ def main():
     assert "hexactsize 0" in root and "vexactsize 0" in root
     assert "g_Game.GetWorkspace().GetScreenSize(width, height)" in menu
     assert "GRZKillfeedClient.ReleaseMenu();" in mission
-    assert "size 360 32" in row
+    assert "size 438 24" in row
     assert "current.UseLocalPreview();" in mission
     assert "if (!Allowed(identity)" in server
     assert "GunWidget.SetItem(null)" in mission and "g_Game.ObjectDelete(PreviewGun)" in mission
@@ -177,8 +177,8 @@ def main():
         for prefix in ["Swatch", "SwatchFill", "SwatchBorder", "SwatchLabel"]:
             assert prefix + str(index) in declared
     assert "animation.ColorA = i;" in menu and "animation.ColorB = i;" in menu
-    assert "row.Killer.SetTextExactSize(16)" in mission
-    assert "row.Victim.SetTextExactSize(16)" in mission
+    assert "row.Killer.SetTextExactSize(12)" in mission
+    assert "row.Victim.SetTextExactSize(12)" in mission
     focus = files["scripts/3_Game/GRZ_Killfeed/GRZKillfeedFocus.c"].decode()
     assert "override void OnDeactivateMessage()" in focus
     assert "GRZKillfeedBus.AppDeactivated.Invoke();" in focus

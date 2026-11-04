@@ -16,8 +16,8 @@
     "sha256": "d93fca5156a6078e561dda8df4c348b000e27bbc3db26588e1d8997fc231681d"
   },
   "GRZ_Killfeed.pbo": {
-    "bytes": 676417,
-    "sha256": "6f9e4cf3ebb993be3628493d3ee3e78ce839a9baa555cca2b412f7bf75a79dc1"
+    "bytes": 677218,
+    "sha256": "79d7e2f2adbad310345927f8e40718f2c2b81db694c8d63db026ee56c979b648"
   },
   "GRZ_LUGU_RollStand.pbo": {
     "bytes": 3377,
@@ -56,15 +56,15 @@
     "sha256": "d532c72d48d22cbf2dc4226cb2d573819c24afa9498d18b4ffadc8d5b7bdbc1b"
   },
   "GRZ_Hitscan.pbo": {
-    "bytes": 10297,
-    "sha256": "d2aac2f8739906b177925292ffd9085301661671025b9f36eefcabf376daedb7"
+    "bytes": 993,
+    "sha256": "fee4b3ddc2cd07295b9713c61db2504914411d203b2a1cb2e6b59ebeb0aee277"
   },
   "GRZ_AntiHardscope.pbo": {
     "bytes": 179711,
     "sha256": "7823cc80597acd022ba5c5fd0e8da455f30c7a72d0d7cf1ec58a90a61af79831"
   },
-  "GRZ_AimControl.pbo": {
-    "bytes": 6535,
-    "sha256": "ddab63836c489d940eb6dc1a4832118f8d0895cee8cdb731f9d98ff26d32eb54"
+  "GRZ_BetterAim.pbo": {
+    "bytes": 1410,
+    "sha256": "81af850a6d0ca1fa04ced12e62ed9335a93cb4ba2526c18b52b7745393478574"
   }
 }

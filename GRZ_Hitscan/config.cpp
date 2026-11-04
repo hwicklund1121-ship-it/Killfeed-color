@@ -13,18 +13,13 @@ class CfgMods
     class GRZ_Hitscan
     {
         dir = "GRZ_Hitscan";
-        name = "GRZ Hitscan Test";
+        name = "GRZ Native Damage Compatibility";
         author = "GRZ";
-        version = "0.1.3";
+        version = "0.1.4";
         type = "mod";
-        dependencies[] = {"Game", "World"};
+        dependencies[] = {"World"};
         class defs
         {
-            class gameScriptModule
-            {
-                value = "";
-                files[] = {"GRZ_Hitscan/scripts/3_Game"};
-            };
             class worldScriptModule
             {
                 value = "";

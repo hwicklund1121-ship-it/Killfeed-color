@@ -1,4 +1,4 @@
-"""Pack the hitscan test update; optional native signature checks are not compilation."""
+"""Pack the native-damage repair; optional native signature checks are not compilation."""
 import argparse
 import hashlib
 import json
@@ -19,18 +19,15 @@ def signature(text, method):
 
 def check_reference(reference):
     pairs = [
-        ('GRZ_Hitscan/scripts/4_World/grzhitscantargets.c', '3_game/entities/object.c', 'EEOnDamageCalculated'),
-        ('GRZ_Hitscan/scripts/4_World/grzhitscan.c', '4_world/entities/firearms/weapon_base.c', 'EEFired'),
         ('GRZ_NoSway/scripts/4_World/grznosway.c', '4_world/entities/dayzplayerimplementaiming.c', 'ApplyBreathingPattern'),
         ('GRZ_NoSway/scripts/4_World/grznosway.c', '4_world/entities/dayzplayerimplementaiming.c', 'ApplyHorizontalNoise'),
     ]
     for own, native, method in pairs:
         assert signature((ROOT / own).read_text(), method) == signature((reference / native).read_text(), method), method
-    # Confirm that the native exception specifically wrapped in this addon bypasses super.
-    plastic = (reference / '4_world/entities/explosivesbase/plastic_explosive.c').read_text()
-    callback = plastic.split('override bool EEOnDamageCalculated', 1)[1].split('override void', 1)[0]
-    assert 'return true;' in callback and 'super.EEOnDamageCalculated' not in callback
-    print('Native event/sway signatures match; vanilla plastic-explosive bypass confirmed.')
+    compat = '\n'.join(p.read_text() for p in (ROOT / 'GRZ_Hitscan').rglob('*.c'))
+    for callback in ['EEOnDamageCalculated', 'EEHitBy', 'EEFired', 'ProcessDirectDamage', 'RejectNative']:
+        assert callback not in compat, 'Native-damage compatibility addon must not intercept firing or damage: ' + callback
+    print('Native-damage compatibility addon has no firing/damage callbacks; no-sway signatures match.')
 
 
 def main():
