@@ -66,7 +66,7 @@ modded class MissionGameplay
             m_GRZScopeBlackout.Show(showBlackout);
         if (showBlackout && m_GRZScopeLogo)
         {
-            int width, height;
+            float width, height;
             g_Game.GetWorkspace().GetScreenSize(width, height);
             float scale = Math.Clamp(Math.Min(width / 1920.0, height / 1080.0), 0.5, 2.0);
             float logoWidth = 320 * scale;

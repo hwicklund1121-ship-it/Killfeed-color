@@ -1,4 +1,4 @@
-GRZ Anti Hardscope v0.1.3
+GRZ Anti Hardscope v0.1.4
 
 After 0.75 seconds continuously in the weapon optics camera, an opaque black panel covers the gameplay viewport with the red GRZ logo centered on screen. Exiting optics immediately clears it and resets the timer. Shorter quickscope aims stay clear. Re-entering optics gets a fresh 0.75-second window. The addon does not change firing, recoil or weapon animations.
 
