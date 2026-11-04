@@ -1,0 +1,18 @@
+{
+  "HEXGRID": {
+    "input_sha256": "f53d9e1a6e1d2675a8ef990c05d6b2af72cc47d09d961dd684e33961f8f4fa6e",
+    "original_prefix": "HEXGRID",
+    "repaired_prefix": "PVPPack\\HEXGRID",
+    "output_sha256": "bce542616472287c31d0b64e0d0ad0581dcba6ab4eb13e6b2a8287b9f1602a54",
+    "bytes": 2545252,
+    "verified_internal_resources": 7,
+    "assets": {
+      "HEXGRID/data/HEXGRID_co.paa": "885b57b787b463eab6c87eecb09e5d35c6873cb5ec773e99686e46ae0d702d80",
+      "HEXGRID/data/HEXGRID_f.p3d": "b7eec6abe97007acf555559f1e85c279ce7e9be1372ae5d9675983ac5ebe78dd",
+      "HEXGRID/data/HEXGRID_g.p3d": "b61f2b1705b447cf48ec066266cefd9130be88f476556a91965b1a8897d03a5d",
+      "HEXGRID/data/HEXGRID_m.p3d": "46bec9ab0cad16d6a3e530c1d0db887bbd75bba063405856b398229810fdaf8b",
+      "HEXGRID/data/HEXGRID_nohq.paa": "6fa540e3465d8be2e0e58ca16904ba6ff7f56c7a3e56244a9b330fe890b78410",
+      "HEXGRID/data/HEXGRID_smdi.paa": "f7c9f2347e2a5125e2eb064395ce847a91680ff9cdf7cadbc83739b859074e56"
+    }
+  }
+}
