@@ -15,7 +15,7 @@ class CfgMods
         dir = "GRZ_AntiHardscope";
         name = "GRZ Anti Hardscope";
         author = "GRZ";
-        version = "0.1.1";
+        version = "0.1.2";
         type = "mod";
         dependencies[] = {"Mission"};
         class defs

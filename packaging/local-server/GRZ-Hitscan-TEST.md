@@ -1,4 +1,4 @@
-GRZ Hitscan 0.1.2 — local-server test build
+GRZ Hitscan 0.1.3 — local-server test build
 
 Merge the update ZIP into the installed DayZ Server folder and your DayZ game folder. It contains @GRZ_Local/Addons/GRZ_Hitscan.pbo, GRZ_NoSway.pbo and the updated GRZ_Killfeed.pbo. Load @GRZ_Local on both sides and fully restart both. Preserve UAVWEAPONS.pbo, GRZ_InventorySizes.pbo and all other addons. There is no extra startup argument when using @GRZ_Local.
 
@@ -12,7 +12,7 @@ Compatibility: damage filters are installed on scripted PlayerBase, ZombieBase, 
 
 Check in DayZ before continuing normal play:
 
-1. Start the server, join, and fire an ordinary M4A1 or similar rifle. The server script log should say `[GRZ Hitscan TEST 0.1.2] Server muzzle ray active` once per weapon instance. No such line means this hook/weapon did not activate. The wrapper fix removes the reported engine-class compile error; actual Enforce compilation still requires this restart.
+1. Start the server, join, and fire an ordinary M4A1 or similar rifle. The server script log should say `[GRZ Hitscan TEST 0.1.3] Server muzzle ray active` once per weapon instance. No such line means this hook/weapon did not activate. The wrapper fix removes the reported engine-class compile error; actual Enforce compilation still requires this restart.
 2. Shoot an unarmoured survivor BOT at close range and at 300+ metres. Confirm immediate damage and correct head/body zones. Inspect health after a single shot and again after the original bullet would arrive: there must be no delayed second damage.
 3. Repeat with armour and the custom UAV gun, checking hitmarkers, live BOT killfeed and killstreak attribution. Native engine damage transfer and proxy collision behavior need this test.
 4. Put a BOT behind a wall and shoot toward it. It must remain unharmed, including after the native projectile's arrival time. Repeat a deliberate ray miss with a target behind/below the aim point.
@@ -25,3 +25,5 @@ Verification here checks packaging, source API signatures and damage-hook inheri
 Version 0.1.1 fixes the reported Game-module error `Engine class Object cannot be modded` by moving damage callbacks onto the seven scripted target families in the World module. Filters run before inherited hitmarker callbacks so rejected native bullet hits do not become extra damage reports. Native target-specific damage rules still run for permitted scripted hits and for other damage types.
 
 Version 0.1.2 adds an optional GRZAdjustHitscanDirection hook for the separately packaged GRZ_Quickscope addon. Without it, shots retain the previous muzzle direction. With it, ADS rays use server aiming angles plus hand offsets, retaining the actual muzzle origin and nearest-surface collision. Install matching updated Hitscan and Quickscope PBOs on both sides.
+
+Version 0.1.3 passes the muzzle origin and self-exclusion list into the optional aiming hook. Matching GRZ_Quickscope v0.1.1 converges both hipfire and ADS rays toward a camera/head aim contact, then retains the authoritative muzzle collision test. Dedicated-server head/aim fallback is approximate when no native per-player camera exists. The quickscope addon also reduces ADS recoil modifiers to 10%; otherwise this addon leaves native recoil alone. Install matching PBOs on both sides.

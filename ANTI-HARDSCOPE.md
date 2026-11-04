@@ -1,10 +1,10 @@
-GRZ Anti Hardscope v0.1.1
+GRZ Anti Hardscope v0.1.2
 
-After 0.75 seconds continuously in the weapon optics camera, an opaque black panel covers the gameplay viewport. Exiting optics immediately clears it and resets the timer. Shorter quickscope aims stay clear. Re-entering optics gets a fresh 0.75-second window. The addon does not change firing, recoil or weapon animations.
+After 0.75 seconds continuously in the weapon optics camera, an opaque black panel covers the gameplay viewport with the red GRZ logo centered on screen. Exiting optics immediately clears it and resets the timer. Shorter quickscope aims stay clear. Re-entering optics gets a fresh 0.75-second window. The addon does not change firing, recoil or weapon animations.
 
 It applies to weapon views reported by DayZ as IsInOptics(), including attached and built-in scopes. Ordinary iron sights, hipfire and handheld binoculars are excluded. Custom sights implemented entirely as iron-sight cameras are not detected. This is a client visual rule, not a server-enforced anti-cheat or a firing restriction. Native scopes render in different ways; 2D and 3D scopes need in-game confirmation.
 
-The blackout covers the full gameplay viewport so peripheral vision cannot bypass it. It is independent of Show HUD. Inventory/Esc/scripted menus remain visible and usable; the scope timer continues while a menu is open. Closing a menu while still scoped restores the blackout. Death, unconsciousness, dropping/switching the weapon, leaving optics and mission shutdown clear it. Cleanup releases the overlay on disconnect.
+The blackout covers the full gameplay viewport so peripheral vision cannot bypass it. Only the red logo is visible over the black backing; its artwork is reused from the previously supplied GRZ logo texture, at full opacity. The logo preserves its aspect ratio and is centered/sized for the current resolution. It disappears together with the blackout and is not a permanent HUD watermark. It is independent of Show HUD. Inventory/Esc/scripted menus remain visible and usable; the scope timer continues while a menu is open. Closing a menu while still scoped restores the blackout. Death, unconsciousness, dropping/switching the weapon, leaving optics and mission shutdown clear it. Cleanup releases the overlay on disconnect.
 
 Install GRZ_AntiHardscope.pbo in @GRZ_Local/Addons on both client and server, preserving your other PBOs. Restart both. The normal @GRZ_Local startup argument includes this addon automatically.
 

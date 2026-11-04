@@ -3,7 +3,7 @@ modded class Weapon_Base
     protected bool m_GRZHitscanReported;
 
     // Optional aim-policy addons may adjust the ray before collision is tested.
-    void GRZAdjustHitscanDirection(inout vector direction)
+    void GRZAdjustHitscanDirection(vector origin, array<Object> excluded, inout vector direction)
     {
     }
 
@@ -15,30 +15,30 @@ modded class Weapon_Base
         vector origin, direction;
         if (!GRZHitscanPolicy.GetRay(this, origin, direction))
             return;
-        GRZAdjustHitscanDirection(direction);
         if (!m_GRZHitscanReported)
         {
             m_GRZHitscanReported = true;
-            Print("[GRZ Hitscan TEST 0.1.2] Server muzzle ray active: " + GetType() + " / " + ammoType);
+            Print("[GRZ Hitscan TEST 0.1.3] Server muzzle ray active: " + GetType() + " / " + ammoType);
         }
 
-        // The ray begins at the muzzle, not the camera, so nearby cover blocks it.
-        RaycastRVParams params = new RaycastRVParams(origin, origin + direction * 1400.0, this, 0);
-        params.type = ObjIntersectFire;
-        params.sorted = true;
-        params.flags = CollisionFlags.NEARESTCONTACT;
         array<Object> excluded = new array<Object>;
         excluded.Insert(this);
         Man shooter = GetHierarchyRootPlayer();
         if (shooter)
         {
-            params.with = shooter;
             excluded.Insert(shooter);
             array<EntityAI> carried = new array<EntityAI>;
             shooter.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, carried);
             foreach (EntityAI item : carried)
                 excluded.Insert(item);
         }
+        GRZAdjustHitscanDirection(origin, excluded, direction);
+        // The damage ray begins at the muzzle so nearby cover still blocks it.
+        RaycastRVParams params = new RaycastRVParams(origin, origin + direction * 1400.0, this, 0);
+        params.with = shooter;
+        params.type = ObjIntersectFire;
+        params.sorted = true;
+        params.flags = CollisionFlags.NEARESTCONTACT;
         array<ref RaycastRVResult> results = new array<ref RaycastRVResult>;
         if (!DayZPhysics.RaycastRVProxy(params, results, excluded) || results.Count() == 0)
             return;

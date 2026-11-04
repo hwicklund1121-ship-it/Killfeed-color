@@ -99,3 +99,5 @@ This update includes GRZ_Hitscan TEST and GRZ_NoSway. Read GRZ-Hitscan-TEST.md b
 GRZ Anti Hardscope: weapon optics black out after 0.75 seconds continuously scoped. Exit optics to clear/reset. Quickscopes under 0.75 seconds and ordinary iron sights stay clear. Read GRZ-AntiHardscope.md; runtime rendering still needs testing.
 
 GRZ Quickscope TEST: custom faster scope transitions and supported ADS ray alignment. This is not an exact 1.29 rollback. See GRZ-Quickscope-TEST.md. The 0.75-second anti-hardscope timer is unchanged.
+
+Latest update: AntiHardscope shows the red GRZ logo centered over its black screen after 0.75s. Quickscope reduces ADS recoil modifiers to 10% and aligns supported hipfire/ADS hitscan toward the aim point, with native camera-shooting flags enabled for weapon cameras. Keep matching updated GRZ_Hitscan and GRZ_Quickscope PBOs on both client/server. Dedicated-server alignment and native/custom weapon behavior need testing; see the included test notes.

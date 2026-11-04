@@ -6,7 +6,6 @@ from pathlib import Path
 from zipfile import ZipFile, ZIP_DEFLATED
 
 from build_pbo import build
-from validate_killfeed import verify_menu_bounds
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -26,9 +25,11 @@ def main():
         assert 'override bool IsUnconscious()' in (args.reference_scripts / '4_world/entities/manbase/playerbase.c').read_text()
         print('Scope state, unconsciousness and mission lifecycle APIs found in native script reference.')
     layout = (source / 'gui/layouts/blackout.layout').read_text()
-    nodes = verify_menu_bounds(layout)
-    assert len(nodes) == 1 and nodes[0]['name'] == 'GRZScopeBlackout'
-    assert nodes[0]['position'] == (0, 0) and nodes[0]['size'] == (1, 1)
+    assert layout.count('{') == layout.count('}')
+    assert 'PanelWidgetClass GRZScopeBlackout' in layout and 'ImageWidgetClass GRZScopeLogo' in layout
+    root = layout.split('ImageWidgetClass', 1)[0]
+    assert 'position 0 0' in root and 'size 1 1' in root and 'color 0 0 0 1' in root
+    assert (source / 'gui/textures/grz_scope_logo_ca.paa').read_bytes()[:2] == b'\x05\xff'
     assert 'hexactsize 0' in layout and 'vexactsize 0' in layout
     assert 'visible 0' in layout and 'ignorepointer 1' in layout
     assert script.count('{') == script.count('}')
@@ -57,10 +58,10 @@ def main():
         'Stop DayZ and the server. Merge @GRZ_Local into BOTH the DayZ game folder and installed server folder.\n'
         'Replace the matching PBOs and add GRZ_Quickscope.pbo. Keep every other addon, especially UAVWEAPONS.pbo and your locally generated GRZ_InventorySizes.pbo.\n'
         'Restart both. No extra launch argument is needed when @GRZ_Local is already loaded.\n\n'
-        'Anti hardscope: weapon optics stay clear for 0.75 seconds, then the gameplay view turns black until you exit optics.\n'
+        'Anti hardscope: after 0.75 seconds the gameplay view goes black with the red GRZ logo in the center until you exit optics.\n'
         'Killfeed: compact translucent row; killer, weapon, victim, distance; no outlines. Existing animations/prefixes stay active.\n'
         'No sway: removes breathing/horizontal aiming wander while preserving recoil.\n'
-        'Quickscope TEST: custom 0.08s camera blends, shorter script ADS delay and server-aim-aligned supported hitscan shots. This is NOT an exact DayZ 1.29 rollback. Read GRZ-Quickscope-TEST.md.\n'
+        'Quickscope TEST: custom 0.08s camera blends, shorter ADS delay, 10% ADS recoil and hipfire/ADS aim-point alignment for supported hitscan shots. This is NOT an exact DayZ 1.29 rollback. Read GRZ-Quickscope-TEST.md.\n'
         'Hitscan is an EXPERIMENTAL damage-path replacement. Read GRZ-Hitscan-TEST.md for supported guns, native visual effects and duplicate-hit tests.\n'
         'Your generated inventory override is NOT included: it must be built with your own installed/custom gun definitions.\n'
         'Package and static source checks passed. Enforce compilation and in-game tests remain outstanding.\n'

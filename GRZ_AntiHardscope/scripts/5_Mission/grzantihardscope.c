@@ -7,6 +7,7 @@ modded class MissionGameplay
     protected PlayerBase m_GRZScopePlayer;
     protected Weapon_Base m_GRZScopeWeapon;
     protected Widget m_GRZScopeBlackout;
+    protected ImageWidget m_GRZScopeLogo;
     protected bool m_GRZScopeLayoutAttempted;
 
     protected void GRZResetScopeTimer()
@@ -47,17 +48,36 @@ modded class MissionGameplay
             // Independent of the HUD visibility toggle; never capture mouse/keyboard.
             m_GRZScopeBlackout = g_Game.GetWorkspace().CreateWidgets("GRZ_AntiHardscope/gui/layouts/blackout.layout");
             if (m_GRZScopeBlackout)
+            {
                 m_GRZScopeBlackout.SetSort(1000);
+                m_GRZScopeLogo = ImageWidget.Cast(m_GRZScopeBlackout.FindAnyWidget("GRZScopeLogo"));
+                if (m_GRZScopeLogo)
+                {
+                    m_GRZScopeLogo.LoadImage(0, "GRZ_AntiHardscope/gui/textures/grz_scope_logo_ca.paa");
+                    m_GRZScopeLogo.SetImage(0);
+                }
+            }
             else
                 Print("[GRZ Anti Hardscope] Blackout layout could not be loaded.");
         }
         if (m_GRZScopeBlackout)
             m_GRZScopeBlackout.Show(showBlackout);
+        if (showBlackout && m_GRZScopeLogo)
+        {
+            int width, height;
+            g_Game.GetWorkspace().GetScreenSize(width, height);
+            float scale = Math.Clamp(Math.Min(width / 1920.0, height / 1080.0), 0.5, 2.0);
+            float logoWidth = 320 * scale;
+            float logoHeight = 160 * scale;
+            m_GRZScopeLogo.SetSize(logoWidth, logoHeight);
+            m_GRZScopeLogo.SetPos((width - logoWidth) * 0.5, (height - logoHeight) * 0.5);
+        }
     }
 
     override void OnMissionFinish()
     {
         GRZResetScopeTimer();
+        m_GRZScopeLogo = null;
         if (m_GRZScopeBlackout)
         {
             m_GRZScopeBlackout.Unlink();

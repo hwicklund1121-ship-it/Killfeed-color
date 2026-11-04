@@ -56,15 +56,15 @@
     "sha256": "d532c72d48d22cbf2dc4226cb2d573819c24afa9498d18b4ffadc8d5b7bdbc1b"
   },
   "GRZ_Hitscan.pbo": {
-    "bytes": 10248,
-    "sha256": "9b47786c0517845d37913e0438b54c62b2bdedf9e26b6c9bba0e2a342b6e9ad1"
+    "bytes": 10297,
+    "sha256": "d2aac2f8739906b177925292ffd9085301661671025b9f36eefcabf376daedb7"
   },
   "GRZ_AntiHardscope.pbo": {
-    "bytes": 3546,
-    "sha256": "0ce842f818af73fc9fcc6b3c1c80590e812fb551597aac6041196dd93da318bf"
+    "bytes": 179579,
+    "sha256": "38d65b1b7bf688c96911508488b642bbf63ef2f4e498352dbd767f5db46ac5a9"
   },
   "GRZ_Quickscope.pbo": {
-    "bytes": 4501,
-    "sha256": "661bdad0f97061e5bb6abf17e87ea149b2b53f6a16b8ccb902da3d1f98861681"
+    "bytes": 7501,
+    "sha256": "6b7cecfd5cb6d87cd866f2823c1b4025a0707768916a4c8d2f265885e8fb299b"
   }
 }

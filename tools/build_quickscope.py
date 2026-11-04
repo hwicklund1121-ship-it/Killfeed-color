@@ -21,6 +21,8 @@ def main():
             ('OnCameraChange', '4_world/entities/manbase/dayzplayer/dayzplayercameras.c'),
             ('HandleADS', '4_world/entities/dayzplayerimplement.c'),
             ('OnUpdate', '4_world/entities/manbase/dayzplayer/dayzplayercameraironsights.c'),
+            ('StdFovUpdate', '4_world/entities/manbase/dayzplayer/dayzplayercamera_base.c'),
+            ('GetRecoilModifier', '4_world/classes/recoilbase/recoilbase.c'),
         ]:
             assert signature(script, method) == signature((args.reference_scripts / filename).read_text(), method), method
         weapon = (args.reference_scripts / '4_world/entities/firearms/weapon_base.c').read_text()
