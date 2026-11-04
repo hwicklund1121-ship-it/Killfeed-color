@@ -48,6 +48,24 @@ stats are retained. Custom damage materials keep the skin as the vest wears.
 
 Installation
 
+Recommended: extract the entire ZIP, close DayZ and the server, and run
+Install-GRZCustoms.cmd. This copies and verifies all five PBOs in the default
+Steam game/server folders, backs up duplicates from @GRZ_Local, and adds
+@GRZ_Customs to the existing server BAT -mod argument. Existing BAT settings
+are preserved. If installed under Program Files, run as administrator if Windows
+reports access denied. For other install locations, use PowerShell:
+./Install-GRZCustoms.ps1 -ServerPath 'D:\DayZServer' -GamePath 'D:\DayZ'
+
+Then enable the DayZ game folder's @GRZ_Customs as a LOCAL MOD in the DayZ
+Launcher and check its box before launching. Copying its folder alone does not
+load it. The server BAT must also load it, using -mod rather than -servermod.
+Spawn GRZ_Tracksuit_Pants or GRZ_Gunwraps_Red to check the vanilla-only items.
+If missing after both installations are verified and enabled, inspect the client
+and server RPT for loading/dependency/config errors. Packaging checks do not
+prove that an installation has loaded the mod or compiled its configs in DayZ.
+
+Manual installation:
+
 1. Stop DayZ and the server. Extract @GRZ_Customs into BOTH the DayZ game folder
    and the DayZServer folder, beside @GRZ_Local.
 2. Replace the previous @GRZ_Customs pack with this update. Move any other

@@ -195,6 +195,8 @@ class CfgVehicles
         archive.write(ROOT / 'GRZ-CUSTOMS.md', 'INSTALL.md')
         archive.write(ROOT / 'GRZ-CUSTOMS-MANIFEST.json', '@GRZ_Customs/MANIFEST.json')
         archive.write(ROOT / 'GRZ-GUNWRAPS-ITEMS.json', '@GRZ_Customs/GUNWRAPS-ITEMS.json')
+        for name in ['Install-GRZCustoms.ps1', 'Install-GRZCustoms.cmd']:
+            archive.write(ROOT / 'packaging/customs' / name, name)
     # Keep the older direct model-fix download consistent with HEXGRID.pbo.
     with ZipFile(output / 'GRZ-HEXGRID-model-fix.zip', 'w', ZIP_DEFLATED) as archive:
         archive.writestr('@GRZ_Local/Addons/HEXGRID.pbo', base_pbo)
