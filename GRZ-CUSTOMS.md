@@ -1,4 +1,8 @@
-GRZ Customs 0.1.4
+GRZ Customs 0.1.5
+
+Fix: HEXGRID and tracksuit damage-material sections use nested config overrides
+without self-referencing base declarations, preventing Undefined base class
+DamageSystem at startup. Original item classes remain unchanged.
 
 Gun wraps: 48 separate GRZ_Gunwraps_<Colour> items (36 solids and 12 mixes).
 All display names match their spawn class and descriptions say Made By Blake.

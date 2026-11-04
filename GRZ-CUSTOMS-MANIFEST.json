@@ -1,5 +1,5 @@
 {
-  "version": "0.1.4",
+  "version": "0.1.5",
   "gunwrap_variants": 48,
   "included_reskins": [
     "Gunrunnerz HEXGRID",
@@ -19,7 +19,7 @@
       "files": 49
     },
     "GRZ_Tracksuit_Pants": {
-      "sha256": "8e2ccc32e3a6d7b01a512644b25d6d69f4fd49a9b29382411d6806f9ec961fea",
+      "sha256": "6927ad966486b378f509fb509e0232a3c6fe8310a346b2a63a94d00251656fd1",
       "prefix": "GRZ_Customs/Tracksuit",
       "files": 4
     }
@@ -30,7 +30,7 @@
   "description": "Made By Blake",
   "base_pbo_sha256": "bce542616472287c31d0b64e0d0ad0581dcba6ab4eb13e6b2a8287b9f1602a54",
   "original_sha256": "f53d9e1a6e1d2675a8ef990c05d6b2af72cc47d09d961dd684e33961f8f4fa6e",
-  "pbo_sha256": "b097744d19a9d18154f40d2d760cc933136713510156098d9d158cd314ad5d32",
+  "pbo_sha256": "e66c3c56b207986cd444607405d02bfd0e896a339225d7ec76e1e47d546aed93",
   "prefix": "GRZ_Customs\\Hexgrid",
   "verified_internal_resources": 16,
   "maps": {
