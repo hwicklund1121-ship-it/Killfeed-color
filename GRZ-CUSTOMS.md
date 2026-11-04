@@ -1,4 +1,17 @@
-GRZ Customs 0.1.3
+GRZ Customs 0.1.4
+
+Gun wraps: 48 separate GRZ_Gunwraps_<Colour> items (36 solids and 12 mixes).
+All display names match their spawn class and descriptions say Made By Blake.
+Examples: GRZ_Gunwraps_Red, GRZ_Gunwraps_Black, GRZ_Gunwraps_White,
+GRZ_Gunwraps_Red_Black, GRZ_Gunwraps_Cyan_Purple, GRZ_Gunwraps_Rainbow.
+GUNWRAPS-ITEMS.json lists every variant. Original vanilla wraps remain available.
+
+The wraps inherit GhillieAtt_Tan model, attachment slot, handling, stats and
+native materials (including normal/specular detail). Only the colour texture
+changes. The supplied native colour map's UV positions, cut-out alpha and
+alpha-test flag are preserved. Mixed colours form alternating fabric patches.
+They attach to weapons that already support vanilla gun ghillie wraps.
+These items need the vanilla DZ_Weapons_Supports addon, not an extra Workshop mod.
 
 Includes separate GRZ_Tracksuit_Pants item, display name GRZ_Tracksuit_Pants,
 description Made By Blake. It inherits vanilla TrackSuitPants_Blue geometry,

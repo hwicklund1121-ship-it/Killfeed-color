@@ -152,6 +152,8 @@ class CfgVehicles
     (output / 'GRZ_Customs_Hexgrid.pbo').write_bytes(pbo)
     extras = {}
     extra_report = {}
+    from build_gunwraps import build_wraps
+    wrap_count = build_wraps(verify_paa)
     for name, target in [('colour', 'tracksuit_co.paa'), ('normal', 'tracksuit_nohq.paa')]:
         image = Image.open(ROOT / 'art/customs/tracksuit' / (name + '.png')).convert('RGBA')
         data = encode_paa(image)
@@ -176,7 +178,7 @@ class CfgVehicles
         extras[source.name + '.pbo'] = addon
         extra_report[source.name] = {'sha256': hashlib.sha256(addon).hexdigest(),
                                     'prefix': extension['prefix'], 'files': len(contents)}
-    report = {'version': '0.1.3', 'included_reskins': ['Gunrunnerz HEXGRID', 'Blakes Kit (without kit HEXGRID)', 'GRZ_Tracksuit_Pants'],
+    report = {'version': '0.1.4', 'gunwrap_variants': wrap_count, 'included_reskins': ['Gunrunnerz HEXGRID', 'Blakes Kit (without kit HEXGRID)', 'GRZ_Tracksuit_Pants', 'GRZ_Gunwraps'],
               'additional_addons': extra_report,
               'item_class': 'GRZ_GunRunnerZ_Hexgrid', 'base_item_class': 'UAV_HEXGRID',
               'display_name': 'GunRunnerZ Hexgrid', 'description': 'Made By Blake',
@@ -189,9 +191,10 @@ class CfgVehicles
         archive.writestr('@GRZ_Customs/Addons/GRZ_Customs_Hexgrid.pbo', pbo)
         for name, addon in extras.items():
             archive.writestr('@GRZ_Customs/Addons/' + name, addon)
-        archive.writestr('@GRZ_Customs/mod.cpp', 'name = "GRZ Customs";\nauthor = "GRZ";\nversion = "0.1.3";\n')
+        archive.writestr('@GRZ_Customs/mod.cpp', 'name = "GRZ Customs";\nauthor = "GRZ";\nversion = "0.1.4";\n')
         archive.write(ROOT / 'GRZ-CUSTOMS.md', 'INSTALL.md')
         archive.write(ROOT / 'GRZ-CUSTOMS-MANIFEST.json', '@GRZ_Customs/MANIFEST.json')
+        archive.write(ROOT / 'GRZ-GUNWRAPS-ITEMS.json', '@GRZ_Customs/GUNWRAPS-ITEMS.json')
     # Keep the older direct model-fix download consistent with HEXGRID.pbo.
     with ZipFile(output / 'GRZ-HEXGRID-model-fix.zip', 'w', ZIP_DEFLATED) as archive:
         archive.writestr('@GRZ_Local/Addons/HEXGRID.pbo', base_pbo)

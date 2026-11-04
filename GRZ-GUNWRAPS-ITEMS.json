@@ -1,0 +1,452 @@
+[
+  {
+    "class": "GRZ_Gunwraps_Black",
+    "display_name": "GRZ_Gunwraps_Black",
+    "description": "Made By Blake",
+    "colours": [
+      "Black"
+    ],
+    "texture": "data/black_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_White",
+    "display_name": "GRZ_Gunwraps_White",
+    "description": "Made By Blake",
+    "colours": [
+      "White"
+    ],
+    "texture": "data/white_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Grey",
+    "display_name": "GRZ_Gunwraps_Grey",
+    "description": "Made By Blake",
+    "colours": [
+      "Grey"
+    ],
+    "texture": "data/grey_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Charcoal",
+    "display_name": "GRZ_Gunwraps_Charcoal",
+    "description": "Made By Blake",
+    "colours": [
+      "Charcoal"
+    ],
+    "texture": "data/charcoal_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Silver",
+    "display_name": "GRZ_Gunwraps_Silver",
+    "description": "Made By Blake",
+    "colours": [
+      "Silver"
+    ],
+    "texture": "data/silver_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Red",
+    "display_name": "GRZ_Gunwraps_Red",
+    "description": "Made By Blake",
+    "colours": [
+      "Red"
+    ],
+    "texture": "data/red_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_DarkRed",
+    "display_name": "GRZ_Gunwraps_DarkRed",
+    "description": "Made By Blake",
+    "colours": [
+      "DarkRed"
+    ],
+    "texture": "data/darkred_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Crimson",
+    "display_name": "GRZ_Gunwraps_Crimson",
+    "description": "Made By Blake",
+    "colours": [
+      "Crimson"
+    ],
+    "texture": "data/crimson_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Orange",
+    "display_name": "GRZ_Gunwraps_Orange",
+    "description": "Made By Blake",
+    "colours": [
+      "Orange"
+    ],
+    "texture": "data/orange_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Amber",
+    "display_name": "GRZ_Gunwraps_Amber",
+    "description": "Made By Blake",
+    "colours": [
+      "Amber"
+    ],
+    "texture": "data/amber_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Yellow",
+    "display_name": "GRZ_Gunwraps_Yellow",
+    "description": "Made By Blake",
+    "colours": [
+      "Yellow"
+    ],
+    "texture": "data/yellow_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Gold",
+    "display_name": "GRZ_Gunwraps_Gold",
+    "description": "Made By Blake",
+    "colours": [
+      "Gold"
+    ],
+    "texture": "data/gold_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Lime",
+    "display_name": "GRZ_Gunwraps_Lime",
+    "description": "Made By Blake",
+    "colours": [
+      "Lime"
+    ],
+    "texture": "data/lime_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Green",
+    "display_name": "GRZ_Gunwraps_Green",
+    "description": "Made By Blake",
+    "colours": [
+      "Green"
+    ],
+    "texture": "data/green_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_DarkGreen",
+    "display_name": "GRZ_Gunwraps_DarkGreen",
+    "description": "Made By Blake",
+    "colours": [
+      "DarkGreen"
+    ],
+    "texture": "data/darkgreen_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Olive",
+    "display_name": "GRZ_Gunwraps_Olive",
+    "description": "Made By Blake",
+    "colours": [
+      "Olive"
+    ],
+    "texture": "data/olive_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Mint",
+    "display_name": "GRZ_Gunwraps_Mint",
+    "description": "Made By Blake",
+    "colours": [
+      "Mint"
+    ],
+    "texture": "data/mint_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Teal",
+    "display_name": "GRZ_Gunwraps_Teal",
+    "description": "Made By Blake",
+    "colours": [
+      "Teal"
+    ],
+    "texture": "data/teal_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Cyan",
+    "display_name": "GRZ_Gunwraps_Cyan",
+    "description": "Made By Blake",
+    "colours": [
+      "Cyan"
+    ],
+    "texture": "data/cyan_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Turquoise",
+    "display_name": "GRZ_Gunwraps_Turquoise",
+    "description": "Made By Blake",
+    "colours": [
+      "Turquoise"
+    ],
+    "texture": "data/turquoise_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_SkyBlue",
+    "display_name": "GRZ_Gunwraps_SkyBlue",
+    "description": "Made By Blake",
+    "colours": [
+      "SkyBlue"
+    ],
+    "texture": "data/skyblue_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Blue",
+    "display_name": "GRZ_Gunwraps_Blue",
+    "description": "Made By Blake",
+    "colours": [
+      "Blue"
+    ],
+    "texture": "data/blue_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_DarkBlue",
+    "display_name": "GRZ_Gunwraps_DarkBlue",
+    "description": "Made By Blake",
+    "colours": [
+      "DarkBlue"
+    ],
+    "texture": "data/darkblue_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Navy",
+    "display_name": "GRZ_Gunwraps_Navy",
+    "description": "Made By Blake",
+    "colours": [
+      "Navy"
+    ],
+    "texture": "data/navy_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Purple",
+    "display_name": "GRZ_Gunwraps_Purple",
+    "description": "Made By Blake",
+    "colours": [
+      "Purple"
+    ],
+    "texture": "data/purple_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Violet",
+    "display_name": "GRZ_Gunwraps_Violet",
+    "description": "Made By Blake",
+    "colours": [
+      "Violet"
+    ],
+    "texture": "data/violet_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Lavender",
+    "display_name": "GRZ_Gunwraps_Lavender",
+    "description": "Made By Blake",
+    "colours": [
+      "Lavender"
+    ],
+    "texture": "data/lavender_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Magenta",
+    "display_name": "GRZ_Gunwraps_Magenta",
+    "description": "Made By Blake",
+    "colours": [
+      "Magenta"
+    ],
+    "texture": "data/magenta_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Pink",
+    "display_name": "GRZ_Gunwraps_Pink",
+    "description": "Made By Blake",
+    "colours": [
+      "Pink"
+    ],
+    "texture": "data/pink_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_HotPink",
+    "display_name": "GRZ_Gunwraps_HotPink",
+    "description": "Made By Blake",
+    "colours": [
+      "HotPink"
+    ],
+    "texture": "data/hotpink_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Rose",
+    "display_name": "GRZ_Gunwraps_Rose",
+    "description": "Made By Blake",
+    "colours": [
+      "Rose"
+    ],
+    "texture": "data/rose_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Brown",
+    "display_name": "GRZ_Gunwraps_Brown",
+    "description": "Made By Blake",
+    "colours": [
+      "Brown"
+    ],
+    "texture": "data/brown_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Tan",
+    "display_name": "GRZ_Gunwraps_Tan",
+    "description": "Made By Blake",
+    "colours": [
+      "Tan"
+    ],
+    "texture": "data/tan_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Beige",
+    "display_name": "GRZ_Gunwraps_Beige",
+    "description": "Made By Blake",
+    "colours": [
+      "Beige"
+    ],
+    "texture": "data/beige_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Cream",
+    "display_name": "GRZ_Gunwraps_Cream",
+    "description": "Made By Blake",
+    "colours": [
+      "Cream"
+    ],
+    "texture": "data/cream_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Maroon",
+    "display_name": "GRZ_Gunwraps_Maroon",
+    "description": "Made By Blake",
+    "colours": [
+      "Maroon"
+    ],
+    "texture": "data/maroon_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Red_Black",
+    "display_name": "GRZ_Gunwraps_Red_Black",
+    "description": "Made By Blake",
+    "colours": [
+      "Red",
+      "Black"
+    ],
+    "texture": "data/red_black_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_White_Black",
+    "display_name": "GRZ_Gunwraps_White_Black",
+    "description": "Made By Blake",
+    "colours": [
+      "White",
+      "Black"
+    ],
+    "texture": "data/white_black_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Blue_Black",
+    "display_name": "GRZ_Gunwraps_Blue_Black",
+    "description": "Made By Blake",
+    "colours": [
+      "Blue",
+      "Black"
+    ],
+    "texture": "data/blue_black_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Pink_Black",
+    "display_name": "GRZ_Gunwraps_Pink_Black",
+    "description": "Made By Blake",
+    "colours": [
+      "HotPink",
+      "Black"
+    ],
+    "texture": "data/pink_black_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Purple_Black",
+    "display_name": "GRZ_Gunwraps_Purple_Black",
+    "description": "Made By Blake",
+    "colours": [
+      "Purple",
+      "Black"
+    ],
+    "texture": "data/purple_black_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Gold_Black",
+    "display_name": "GRZ_Gunwraps_Gold_Black",
+    "description": "Made By Blake",
+    "colours": [
+      "Gold",
+      "Black"
+    ],
+    "texture": "data/gold_black_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Red_White",
+    "display_name": "GRZ_Gunwraps_Red_White",
+    "description": "Made By Blake",
+    "colours": [
+      "Red",
+      "White"
+    ],
+    "texture": "data/red_white_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Blue_White",
+    "display_name": "GRZ_Gunwraps_Blue_White",
+    "description": "Made By Blake",
+    "colours": [
+      "Blue",
+      "White"
+    ],
+    "texture": "data/blue_white_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Pink_White",
+    "display_name": "GRZ_Gunwraps_Pink_White",
+    "description": "Made By Blake",
+    "colours": [
+      "Pink",
+      "White"
+    ],
+    "texture": "data/pink_white_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Cyan_Purple",
+    "display_name": "GRZ_Gunwraps_Cyan_Purple",
+    "description": "Made By Blake",
+    "colours": [
+      "Cyan",
+      "Purple"
+    ],
+    "texture": "data/cyan_purple_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Red_Blue",
+    "display_name": "GRZ_Gunwraps_Red_Blue",
+    "description": "Made By Blake",
+    "colours": [
+      "Red",
+      "Blue"
+    ],
+    "texture": "data/red_blue_co.paa"
+  },
+  {
+    "class": "GRZ_Gunwraps_Rainbow",
+    "display_name": "GRZ_Gunwraps_Rainbow",
+    "description": "Made By Blake",
+    "colours": [
+      "Red",
+      "Orange",
+      "Yellow",
+      "Green",
+      "Cyan",
+      "Blue",
+      "Purple",
+      "Pink"
+    ],
+    "texture": "data/rainbow_co.paa"
+  }
+]
