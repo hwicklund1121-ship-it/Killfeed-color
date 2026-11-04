@@ -15,7 +15,7 @@ class CfgMods
         dir = "GRZ_Hitscan";
         name = "GRZ Hitscan Test";
         author = "GRZ";
-        version = "0.1.1";
+        version = "0.1.2";
         type = "mod";
         dependencies[] = {"Game", "World"};
         class defs

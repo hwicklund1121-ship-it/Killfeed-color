@@ -4,9 +4,9 @@ GRZ LOCAL SERVER - DRAG AND DROP PACK
 2. Extract ALL contents of this ZIP into that folder, beside DayZServer_x64.exe.
    This includes @GRZ_Local, serverDZ.cfg and StartServer.bat.
    If you already have a serverDZ.cfg or StartServer.bat, keep a copy before replacing them.
-3. Double-click StartServer.bat. The server loads all sixteen bundled PBOs.
+3. Double-click StartServer.bat. The server loads all seventeen bundled PBOs.
 4. In the DayZ client launcher, add the @GRZ_Local folder as a Local mod and enable it.
-   Do not also enable separate copies of the sixteen bundled mods.
+   Do not also enable separate copies of the seventeen bundled mods.
 5. Connect to 127.0.0.1:2302. Password: test. Map: Chernarus.
 6. Type /grzvip for the VIP menu.
 
@@ -97,3 +97,5 @@ GRZ_InventorySizes.pbo. They are not supplied by this server ZIP.
 This update includes GRZ_Hitscan TEST and GRZ_NoSway. Read GRZ-Hitscan-TEST.md before testing. Hitscan damage is instant for supported single-muzzle, single-projectile firearms within 1400m; native tracer/impact effects remain. Explosives, multi-pellet/multi-muzzle guns and invalid custom muzzle configs keep native ballistics. Runtime validation is outstanding. Merge updates; keep your custom UAVWEAPONS.pbo and generated GRZ_InventorySizes.pbo.
 
 GRZ Anti Hardscope: weapon optics black out after 2 seconds continuously scoped. Exit optics to clear/reset. Quickscopes under 2 seconds and ordinary iron sights stay clear. Read GRZ-AntiHardscope.md; runtime rendering still needs testing.
+
+GRZ Quickscope TEST: custom faster scope transitions and supported ADS ray alignment. This is not an exact 1.29 rollback. See GRZ-Quickscope-TEST.md. The 2-second anti-hardscope timer is unchanged.

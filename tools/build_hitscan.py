@@ -12,9 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def signature(text, method):
-    match = re.search(r'\bvoid\s+' + method + r'\s*\(([^)]*)\)', text)
-    if not match:
-        match = re.search(r'\bbool\s+' + method + r'\s*\(([^)]*)\)', text)
+    match = re.search(r'\b(?:void|bool|float)\s+' + method + r'\s*\(([^)]*)\)', text)
     assert match, method
     return [p.strip().split()[:-1] for p in match[1].split(',')]
 

@@ -2,6 +2,11 @@ modded class Weapon_Base
 {
     protected bool m_GRZHitscanReported;
 
+    // Optional aim-policy addons may adjust the ray before collision is tested.
+    void GRZAdjustHitscanDirection(inout vector direction)
+    {
+    }
+
     override void EEFired(int muzzleType, int mode, string ammoType)
     {
         super.EEFired(muzzleType, mode, ammoType);
@@ -10,10 +15,11 @@ modded class Weapon_Base
         vector origin, direction;
         if (!GRZHitscanPolicy.GetRay(this, origin, direction))
             return;
+        GRZAdjustHitscanDirection(direction);
         if (!m_GRZHitscanReported)
         {
             m_GRZHitscanReported = true;
-            Print("[GRZ Hitscan TEST 0.1.1] Server muzzle ray active: " + GetType() + " / " + ammoType);
+            Print("[GRZ Hitscan TEST 0.1.2] Server muzzle ray active: " + GetType() + " / " + ammoType);
         }
 
         // The ray begins at the muzzle, not the camera, so nearby cover blocks it.
