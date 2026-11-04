@@ -23,6 +23,9 @@ def main():
         for callback in ['void OnUpdate(float timeslice)', 'void OnMissionFinish()']:
             assert callback in native_mission and callback in script
         assert 'override bool IsUnconscious()' in (args.reference_scripts / '4_world/entities/manbase/playerbase.c').read_text()
+        native_widgets = (args.reference_scripts / '1_core/proto/enwidgets.c').read_text()
+        assert 'bool LoadImageFile(int num, string name, bool noCache = false)' in native_widgets
+        assert '.LoadImageFile(' in script and '.LoadImage(' not in script
         print('Scope state, unconsciousness and mission lifecycle APIs found in native script reference.')
     layout = (source / 'gui/layouts/blackout.layout').read_text()
     assert layout.count('{') == layout.count('}')

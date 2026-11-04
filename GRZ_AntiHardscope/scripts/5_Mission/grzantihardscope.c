@@ -53,8 +53,10 @@ modded class MissionGameplay
                 m_GRZScopeLogo = ImageWidget.Cast(m_GRZScopeBlackout.FindAnyWidget("GRZScopeLogo"));
                 if (m_GRZScopeLogo)
                 {
-                    m_GRZScopeLogo.LoadImage(0, "GRZ_AntiHardscope/gui/textures/grz_scope_logo_ca.paa");
-                    m_GRZScopeLogo.SetImage(0);
+                    if (m_GRZScopeLogo.LoadImageFile(0, "GRZ_AntiHardscope/gui/textures/grz_scope_logo_ca.paa"))
+                        m_GRZScopeLogo.SetImage(0);
+                    else
+                        Print("[GRZ Anti Hardscope] GRZ logo texture could not be loaded.");
                 }
             }
             else
