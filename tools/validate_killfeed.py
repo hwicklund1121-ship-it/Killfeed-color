@@ -140,7 +140,7 @@ def main():
     assert write_fields == read_fields == ["ColorA", "ColorB", "AnimationMode", "Speed", "PrefixIcon", "PrefixWord", "PrefixAnimation.ColorA", "PrefixAnimation.ColorB", "PrefixAnimation.AnimationMode", "PrefixAnimation.Speed"]
     row = files["gui/layouts/row.layout"].decode()
     assert "Outline" not in row, "Killfeed entries should have no thorn image"
-    assert "color 0 0 0 0.18" in row
+    assert "color 0.5 0.5 0.5 0.35" in row
     for edge in ["BorderTop", "BorderBottom", "BorderLeft", "BorderRight"]:
         assert edge not in row and edge not in mission
     nodes = verify_menu_bounds(row)
@@ -169,7 +169,7 @@ def main():
     assert "hexactsize 0" in root and "vexactsize 0" in root
     assert "g_Game.GetWorkspace().GetScreenSize(width, height)" in menu
     assert "GRZKillfeedClient.ReleaseMenu();" in mission
-    assert "size 600 40" in row
+    assert "size 540 28" in row
     assert "current.UseLocalPreview();" in mission
     assert "if (!Allowed(identity)" in server
     assert "GunWidget.SetItem(null)" in mission and "g_Game.ObjectDelete(PreviewGun)" in mission
@@ -177,8 +177,8 @@ def main():
         for prefix in ["Swatch", "SwatchFill", "SwatchBorder", "SwatchLabel"]:
             assert prefix + str(index) in declared
     assert "animation.ColorA = i;" in menu and "animation.ColorB = i;" in menu
-    assert "row.Killer.SetTextExactSize(20)" in mission
-    assert "row.Victim.SetTextExactSize(20)" in mission
+    assert "row.Killer.SetTextExactSize(14)" in mission
+    assert "row.Victim.SetTextExactSize(14)" in mission
     focus = files["scripts/3_Game/GRZ_Killfeed/GRZKillfeedFocus.c"].decode()
     assert "override void OnDeactivateMessage()" in focus
     assert "GRZKillfeedBus.AppDeactivated.Invoke();" in focus

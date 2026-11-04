@@ -12,7 +12,7 @@ class GRZKillfeedRow
     EntityAI PreviewGun;
     ItemPreviewWidget GunWidget;
     float Age;
-    int Width = 600;
+    int Width = 540;
 
     void CreateGunPreview()
     {
@@ -58,7 +58,7 @@ class GRZKillfeedRow
         GunWidget.SetItem(PreviewGun);
         GunWidget.SetFlags(WidgetFlags.SOURCEALPHA | WidgetFlags.BLEND);
         GunWidget.SetView(PreviewGun.GetViewIndex());
-        GunWidget.SetModelPosition("0 0 0.42");
+        GunWidget.SetModelPosition("0 0 0.32");
         GunWidget.SetModelOrientation("0 0 0");
         GunWidget.Show(true);
         if (WeaponFallback)
@@ -100,7 +100,7 @@ class GRZKillfeedRow
         VictimPrefix.SetColor(victimPrefixColor);
         VictimPrefixIcon.SetColor(victimPrefixColor);
         // Never make the transparent root opaque while fading its children.
-        Root.FindAnyWidget("Backing").SetAlpha(0.18 * fade);
+        Root.FindAnyWidget("Backing").SetColor(GRZNameStyle.WithAlpha(0xFF808080, 90 * fade));
         array<string> names = {"Detail"};
         foreach (string name : names)
             Root.FindAnyWidget(name).SetAlpha(fade);
@@ -250,7 +250,7 @@ modded class MissionGameplay
 
     protected int GRZLayoutName(TextWidget label, TextWidget prefix, ImageWidget icon, string playerName, GRZNameStyle style, int left)
     {
-        prefix.SetTextExactSize(16);
+        prefix.SetTextExactSize(11);
         prefix.SetOutline(0, 0x00000000);
         string word;
         if (style.PrefixWord != "" || style.PrefixIcon > 0)
@@ -262,10 +262,10 @@ modded class MissionGameplay
             prefixWidth = 0;
         int iconWidth;
         if (style.PrefixIcon > 0)
-            iconWidth = 20;
+            iconWidth = 14;
         int gap;
         if (prefixWidth > 0)
-            gap = 5;
+            gap = 4;
         int reserved = iconWidth + prefixWidth + gap;
         int nameLimit = 168 - reserved;
         GRZFitName(label, playerName, nameLimit);
@@ -273,11 +273,11 @@ modded class MissionGameplay
         label.GetTextSize(nameWidth, nameHeight);
         int start = left;
         GRZNameStyle.ApplyIcon(icon, style.PrefixIcon);
-        icon.SetPos(start, 10);
-        prefix.SetPos(start + iconWidth, 10);
-        prefix.SetSize(prefixWidth + 2, 20);
-        label.SetPos(start + reserved, 8);
-        label.SetSize(Math.Min(nameWidth + 2, nameLimit), 24);
+        icon.SetPos(start, 7);
+        prefix.SetPos(start + iconWidth, 7);
+        prefix.SetSize(prefixWidth + 2, 14);
+        label.SetPos(start + reserved, 5);
+        label.SetSize(Math.Min(nameWidth + 2, nameLimit), 18);
         return reserved + Math.Min(nameWidth + 2, nameLimit);
     }
 
@@ -292,39 +292,42 @@ modded class MissionGameplay
         row.Message = message;
         row.Killer = TextWidget.Cast(row.Root.FindAnyWidget("Killer"));
         row.Victim = TextWidget.Cast(row.Root.FindAnyWidget("Victim"));
-        row.Killer.SetTextExactSize(20);
-        row.Victim.SetTextExactSize(20);
+        row.Killer.SetTextExactSize(14);
+        row.Victim.SetTextExactSize(14);
         row.Killer.SetOutline(0, 0x00000000);
         row.Victim.SetOutline(0, 0x00000000);
         row.KillerPrefix = TextWidget.Cast(row.Root.FindAnyWidget("KillerPrefix"));
         row.VictimPrefix = TextWidget.Cast(row.Root.FindAnyWidget("VictimPrefix"));
         row.KillerPrefixIcon = ImageWidget.Cast(row.Root.FindAnyWidget("KillerPrefixIcon"));
         row.VictimPrefixIcon = ImageWidget.Cast(row.Root.FindAnyWidget("VictimPrefixIcon"));
-        // Larger content occupies four columns across the complete row.
-        GRZLayoutName(row.Killer, row.KillerPrefix, row.KillerPrefixIcon, GRZShortName(message.Killer), message.KillerStyle, 12);
-        int gunLeft = 192;
-        int gunWidth = 140;
-        int victimLeft = 344;
-        GRZLayoutName(row.Victim, row.VictimPrefix, row.VictimPrefixIcon, GRZShortName(message.Victim), message.VictimStyle, victimLeft);
-        row.Root.FindAnyWidget("GunPreview").SetPos(gunLeft, 2);
-        row.Root.FindAnyWidget("GunPreview").SetSize(gunWidth, 36);
+        // Pack measured content together; no empty fixed-width name columns.
+        int killerWidth = GRZLayoutName(row.Killer, row.KillerPrefix, row.KillerPrefixIcon, GRZShortName(message.Killer), message.KillerStyle, 8);
+        int gunLeft = 8 + killerWidth + 8;
+        int gunWidth = 112;
+        int victimLeft = gunLeft + gunWidth + 8;
+        int victimWidth = GRZLayoutName(row.Victim, row.VictimPrefix, row.VictimPrefixIcon, GRZShortName(message.Victim), message.VictimStyle, victimLeft);
+        row.Root.FindAnyWidget("GunPreview").SetPos(gunLeft, 1);
+        row.Root.FindAnyWidget("GunPreview").SetSize(gunWidth, 26);
         TextWidget detail = TextWidget.Cast(row.Root.FindAnyWidget("Detail"));
-        int distanceLeft = 524;
-        detail.SetPos(distanceLeft, 8);
+        int distanceLeft = victimLeft + victimWidth + 8;
+        detail.SetPos(distanceLeft, 5);
         detail.SetText(message.Distance.ToString() + "m");
-        detail.SetTextExactSize(18);
+        detail.SetTextExactSize(12);
         detail.SetOutline(0, 0x00000000);
-        GRZFitName(detail, message.Distance.ToString() + "m", 62);
-        detail.SetSize(64, 24);
-        row.Width = 600;
-        row.Root.SetSize(row.Width, 40);
-        row.Root.FindAnyWidget("Backing").SetSize(row.Width, 40);
+        GRZFitName(detail, message.Distance.ToString() + "m", 46);
+        int distanceWidth, distanceHeight;
+        detail.GetTextSize(distanceWidth, distanceHeight);
+        distanceWidth += 2;
+        detail.SetSize(distanceWidth, 18);
+        row.Width = distanceLeft + distanceWidth + 8;
+        row.Root.SetSize(row.Width, 28);
+        row.Root.FindAnyWidget("Backing").SetSize(row.Width, 28);
         row.WeaponFallback = TextWidget.Cast(row.Root.FindAnyWidget("WeaponFallback"));
         if (row.WeaponFallback)
         {
-            row.WeaponFallback.SetPos(gunLeft, 8);
-            row.WeaponFallback.SetSize(gunWidth, 24);
-            row.WeaponFallback.SetTextExactSize(16);
+            row.WeaponFallback.SetPos(gunLeft, 5);
+            row.WeaponFallback.SetSize(gunWidth, 18);
+            row.WeaponFallback.SetTextExactSize(11);
             row.WeaponFallback.SetOutline(0, 0x00000000);
             if (message.GunData && message.GunData.Types.Count() > 0)
                 GRZFitName(row.WeaponFallback, message.GunData.Types[0], gunWidth);
@@ -340,7 +343,7 @@ modded class MissionGameplay
         GRZPositionRows();
         // Keep script-heavy modded weapon initialization outside row delivery.
         g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(row.CreateGunPreview, 1, false);
-        Print("[GRZ Killfeed 0.1.23] Live/test row added; preview deferred.");
+        Print("[GRZ Killfeed 0.1.24] Live/test row added; preview deferred.");
     }
 
     protected void GRZReceiveStreak(string playerName, int count)
@@ -361,10 +364,10 @@ modded class MissionGameplay
         int maximumWidth = 0;
         foreach (GRZKillfeedRow entry : m_GRZRows)
             maximumWidth = Math.Max(maximumWidth, entry.Width);
-        m_GRZFeed.SetSize(maximumWidth, 220);
+        m_GRZFeed.SetSize(maximumWidth, 160);
         m_GRZFeed.SetScreenPos(x + width - maximumWidth - 24, y + 28);
         for (int i = 0; i < m_GRZRows.Count(); i++)
-            m_GRZRows[i].Root.SetPos(maximumWidth - m_GRZRows[i].Width, i * 44);
+            m_GRZRows[i].Root.SetPos(maximumWidth - m_GRZRows[i].Width, i * 32);
     }
 
     protected void GRZReceiveMenu(int status, GRZNameStyle style)
