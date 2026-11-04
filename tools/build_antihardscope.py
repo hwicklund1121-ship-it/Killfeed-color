@@ -70,7 +70,7 @@ def main():
         'Run Remove-GRZScopeOverrides.cmd while both are stopped to remove old scope PBOs from default Steam installs. For other library paths, remove the two old PBOs manually. Restart both. No extra launch argument is needed when @GRZ_Local is already loaded.\n\n'
         'Anti hardscope: after 0.75 seconds the gameplay view goes black with the red GRZ logo in the center until you exit optics.\n'
         'Sky Colors: GREY added after WHITE under Options > Game; clouds retained and saved selections preserved.\n'
-        'Killfeed: reference-size 438 x 24 translucent row; killer, weapon, victim, distance; no outlines. Existing animations/prefixes stay active.\n'
+        'Killfeed: larger 600 x 40 translucent row with 20px names and larger gun preview; killer, weapon, victim, distance; no outlines. Existing animations/prefixes stay active.\n'
         'No sway: removes breathing/horizontal aiming wander while preserving recoil.\n'
         'Better Aim: native camera-shooting setup at 250m / 0.03m / 0.85. Old scope timing and camera-motion experiments are removed. The separate GRZ_LowRecoil addon now restores the requested 10% ADS/quickscope recoil modifier; hipfire remains native. Read GRZ-BetterAim.md.\n'
         'DAMAGE REPAIR: replace GRZ_Hitscan.pbo with this compatibility build. Experimental scripted hitscan and its native-damage filter are DISABLED. Native bullets, damage and hit reporting are restored; true hitscan/no-drop is not active in this build.\n'
