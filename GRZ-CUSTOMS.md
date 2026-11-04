@@ -1,4 +1,18 @@
-GRZ Customs 0.1.1
+GRZ Customs 0.1.2
+
+Also includes Blake's configured kit, excluding its HEXGRID item and textures:
+- blake_SurgicalGloves
+- blake_jean
+- blake_helment (original class spelling retained)
+- blake_sneakers
+- blake_Tshirt
+
+Their supplied names, descriptions, base classes, materials and PAA assets are
+preserved. The kit's units list now lists its actual five items. It requires
+UAV_Helmet_BNTI and sk_taladro in addition to vanilla DayZ clothing addons.
+Load the mods supplying these addons on both client and server before Customs.
+Their external models are not included in the uploaded kit. Remove any other
+active Blakes_Kit.pbo before using the copy supplied in this pack.
 
 This separate reskin pack currently contains the supplied Gunrunnerz HEXGRID:
 black/white artwork and matching embossed normal map, both 2048x2048 PAA.

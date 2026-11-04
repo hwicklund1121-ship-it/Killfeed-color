@@ -150,7 +150,29 @@ class CfgVehicles
     output = ROOT / 'downloads'
     (output / 'HEXGRID.pbo').write_bytes(base_pbo)
     (output / 'GRZ_Customs_Hexgrid.pbo').write_bytes(pbo)
-    report = {'version': '0.1.1', 'included_reskins': ['Gunrunnerz HEXGRID'],
+    extras = {}
+    extra_report = {}
+    for source in sorted((ROOT / 'packaging/customs').iterdir()):
+        if not source.is_dir():
+            continue
+        addon = build(source)
+        extension, contents = read_pbo(addon)
+        assert hashlib.sha1(addon[:-21]).digest() == addon[-20:]
+        mounted = {(extension['prefix'] + '/' + name).lower() for name in contents}
+        for path, data in contents.items():
+            assert data == (source / path).read_bytes()
+            if path.endswith(('.cpp', '.rvmat')):
+                for ref in re.findall(r'"([^"\r\n]+\.(?:paa|rvmat))"', data.decode('utf-8-sig'), re.I):
+                    if ref.lower().startswith(extension['prefix'].lower()):
+                        assert ref.replace('\\', '/').lower() in mounted, ref
+        config = contents['config.cpp'].decode()
+        assert 'BUCA_Vest_HexGrid' not in config and 'blake_beaniehat' not in config
+        assert not any('/hexgrid/' in path.lower() for path in contents)
+        extras[source.name + '.pbo'] = addon
+        extra_report[source.name] = {'sha256': hashlib.sha256(addon).hexdigest(),
+                                    'prefix': extension['prefix'], 'files': len(contents)}
+    report = {'version': '0.1.2', 'included_reskins': ['Gunrunnerz HEXGRID', 'Blakes Kit (without kit HEXGRID)'],
+              'additional_addons': extra_report,
               'item_class': 'GRZ_GunRunnerZ_Hexgrid', 'base_item_class': 'UAV_HEXGRID',
               'display_name': 'GunRunnerZ Hexgrid', 'description': 'Made By Blake',
               'base_pbo_sha256': hashlib.sha256(base_pbo).hexdigest(), 'original_sha256': hashlib.sha256(original).hexdigest(),
@@ -160,7 +182,9 @@ class CfgVehicles
     with ZipFile(output / 'GRZ-Customs.zip', 'w', ZIP_DEFLATED) as archive:
         archive.writestr('@GRZ_Customs/Addons/HEXGRID.pbo', base_pbo)
         archive.writestr('@GRZ_Customs/Addons/GRZ_Customs_Hexgrid.pbo', pbo)
-        archive.writestr('@GRZ_Customs/mod.cpp', 'name = "GRZ Customs";\nauthor = "GRZ";\nversion = "0.1.1";\n')
+        for name, addon in extras.items():
+            archive.writestr('@GRZ_Customs/Addons/' + name, addon)
+        archive.writestr('@GRZ_Customs/mod.cpp', 'name = "GRZ Customs";\nauthor = "GRZ";\nversion = "0.1.2";\n')
         archive.write(ROOT / 'GRZ-CUSTOMS.md', 'INSTALL.md')
         archive.write(ROOT / 'GRZ-CUSTOMS-MANIFEST.json', '@GRZ_Customs/MANIFEST.json')
     # Keep the older direct model-fix download consistent with HEXGRID.pbo.
@@ -171,6 +195,8 @@ class CfgVehicles
         assert archive.testzip() is None
         assert archive.read('@GRZ_Customs/Addons/HEXGRID.pbo') == base_pbo
         assert archive.read('@GRZ_Customs/Addons/GRZ_Customs_Hexgrid.pbo') == pbo
+        for name, addon in extras.items():
+            assert archive.read('@GRZ_Customs/Addons/' + name) == addon
     print(json.dumps(report, indent=2))
 
 

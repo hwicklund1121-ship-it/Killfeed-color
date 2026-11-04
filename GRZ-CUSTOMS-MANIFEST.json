@@ -1,8 +1,16 @@
 {
-  "version": "0.1.1",
+  "version": "0.1.2",
   "included_reskins": [
-    "Gunrunnerz HEXGRID"
+    "Gunrunnerz HEXGRID",
+    "Blakes Kit (without kit HEXGRID)"
   ],
+  "additional_addons": {
+    "Blakes_Kit": {
+      "sha256": "2ff87f243be487294be03a425599e0cb5b1952502fb9c7a8349b6976092b63db",
+      "prefix": "Blakes_Kit",
+      "files": 18
+    }
+  },
   "item_class": "GRZ_GunRunnerZ_Hexgrid",
   "base_item_class": "UAV_HEXGRID",
   "display_name": "GunRunnerZ Hexgrid",
