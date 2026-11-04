@@ -7,12 +7,12 @@ class GRZBetterAimSettings
 
 modded class DayZPlayerTypeUtils
 {
-    override static void DayZPlayerTypeCreate(DayZPlayerType playerType)
+    override static void DayZPlayerTypeCreate(DayZPlayerType pType)
     {
-        if (!playerType)
+        if (!pType)
             return;
-        super.DayZPlayerTypeCreate(playerType);
+        super.DayZPlayerTypeCreate(pType);
         // A modest native alignment adjustment; damage and camera motion stay native.
-        playerType.SetCameraShootParams(GRZBetterAimSettings.PROBE_DISTANCE, GRZBetterAimSettings.PROBE_RADIUS, GRZBetterAimSettings.ALIGNMENT_COSINE);
+        pType.SetCameraShootParams(GRZBetterAimSettings.PROBE_DISTANCE, GRZBetterAimSettings.PROBE_RADIUS, GRZBetterAimSettings.ALIGNMENT_COSINE);
     }
 }

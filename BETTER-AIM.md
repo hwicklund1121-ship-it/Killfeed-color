@@ -1,4 +1,4 @@
-GRZ Better Aim v0.1.0
+GRZ Better Aim v0.1.1
 
 Replaces the custom GRZ_Quickscope and GRZ_AimControl scope experiments with a native player-type camera-shooting setup. Our settings are 250m probe distance, 0.03m probe radius and 0.85 alignment cosine (about 31.8 degrees). The supplied PKBetterAimSetup example uses 250m / 0.10m / 0.75 (about 41.4 degrees); its file is not bundled. Official 1.29 and 1.30 script defaults are 250m / 0.01m / 0.866 (about 30 degrees). This is our own modest adjustment using the public native API, not an exact 1.29 restoration.
 

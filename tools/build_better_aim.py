@@ -21,6 +21,8 @@ def main():
         assert signature(script, 'DayZPlayerTypeCreate') == signature(native, 'DayZPlayerTypeCreate')
         assert 'void SetCameraShootParams(float pRayDistance, float pRayRadius, float pMaxAngleCos)' in (args.reference_scripts / '3_game/dayzplayer.c').read_text()
         print('Native player-type creation and SetCameraShootParams signatures checked.')
+    assert 'DayZPlayerTypeCreate(DayZPlayerType pType)' in script
+    assert 'playerType' not in script
     assert script.count('{') == script.count('}')
     data = build(source)
     assert data[-21] == 0 and hashlib.sha1(data[:-21]).digest() == data[-20:]

@@ -15,7 +15,7 @@ class CfgMods
         dir = "GRZ_BetterAim";
         name = "GRZ Better Aim";
         author = "GRZ";
-        version = "0.1.0";
+        version = "0.1.1";
         type = "mod";
         dependencies[] = {"World"};
         class defs
