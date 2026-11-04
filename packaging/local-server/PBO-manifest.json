@@ -50,5 +50,9 @@
   "GRZ_SkyColors.pbo": {
     "bytes": 436538,
     "sha256": "accf647fb053b54bf8d4a958a71012a62f938cd3263020e0bc5d12df1e2bfdd0"
+  },
+  "GRZ_NoSway.pbo": {
+    "bytes": 2466,
+    "sha256": "d532c72d48d22cbf2dc4226cb2d573819c24afa9498d18b4ffadc8d5b7bdbc1b"
   }
 }
