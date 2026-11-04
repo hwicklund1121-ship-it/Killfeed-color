@@ -1,0 +1,33 @@
+{
+  "version": "0.1.0",
+  "included_reskins": [
+    "Gunrunnerz HEXGRID"
+  ],
+  "item_class": "UAV_HEXGRID",
+  "original_sha256": "f53d9e1a6e1d2675a8ef990c05d6b2af72cc47d09d961dd684e33961f8f4fa6e",
+  "pbo_sha256": "66fb5a38abfb80715156404f0ce40d5da7d743ad328ed8de45ff43c2b0d703ba",
+  "prefix": "PVPPack\\HEXGRID",
+  "verified_internal_resources": 7,
+  "maps": {
+    "HEXGRID_co.paa": {
+      "source_sha256": "ff3a0419fd65faa77717106365e66d4d9cd7abec204ab25013550e9404631af9",
+      "paa_sha256": "0d64769f512f8f4f9623c615972970ff8df93de637937e5d2a37bfbc4098c71f",
+      "size": [
+        2048,
+        2048
+      ],
+      "mips": 10,
+      "encoding": "DXT5, direct RGBA, no swizzle"
+    },
+    "HEXGRID_nohq.paa": {
+      "source_sha256": "1be40fc10b005a6c1fc66df25b99313030544a7e61473d707fae2ffb900b8b7f",
+      "paa_sha256": "fda84b213c65e2dcc70772faa1ff0c7bf6540a4e466731b1d6ffdbb2204cae6a",
+      "size": [
+        2048,
+        2048
+      ],
+      "mips": 10,
+      "encoding": "DXT5, direct RGBA, no swizzle"
+    }
+  }
+}
