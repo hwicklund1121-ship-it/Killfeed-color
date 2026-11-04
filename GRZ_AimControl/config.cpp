@@ -15,7 +15,7 @@ class CfgMods
         dir = "GRZ_AimControl";
         name = "GRZ Aim Control Test";
         author = "GRZ";
-        version = "0.1.1";
+        version = "0.1.2";
         type = "mod";
         dependencies[] = {"World"};
         class defs

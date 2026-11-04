@@ -100,6 +100,6 @@ GRZ Anti Hardscope: weapon optics black out after 0.75 seconds continuously scop
 
 
 
-Latest update: DELETE GRZ_Quickscope.pbo from BOTH game and server @GRZ_Local/Addons folders. It is no longer bundled. GRZ_AimControl.pbo keeps 10% ADS recoil and crosshair aim alignment with fast 0.08s scope transitions and reduced reticle lag, while the native weapon-ready delay remains to prevent exposing a still-raising scope. The 0.75s blackout keeps its centered red GRZ logo. Keep custom weapon and inventory PBOs. See GRZ-AimControl-TEST.md.
+Latest update: DELETE GRZ_Quickscope.pbo from BOTH game and server @GRZ_Local/Addons folders. It is no longer bundled. GRZ_AimControl.pbo keeps 10% ADS recoil and crosshair aim alignment with fast 0.15s scope transitions and reduced reticle lag, while the native weapon-ready delay remains to prevent exposing a still-raising scope. The 0.75s blackout keeps its centered red GRZ logo. Keep custom weapon and inventory PBOs. See GRZ-AimControl-TEST.md.
 
 Sky Colors v0.1.4 adds GREY after WHITE under Options > Game. Clouds and existing saved color indices are preserved.

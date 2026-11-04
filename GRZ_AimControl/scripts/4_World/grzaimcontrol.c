@@ -11,7 +11,7 @@ modded class DayZPlayerCameras
         bool normalFrom = pFrom == DAYZCAMERA_1ST || pFrom == DAYZCAMERA_3RD_ERC || pFrom == DAYZCAMERA_3RD_CRO || pFrom == DAYZCAMERA_3RD_PRO || pFrom == DAYZCAMERA_3RD_ERC_RAISED || pFrom == DAYZCAMERA_3RD_CRO_RAISED || pFrom == DAYZCAMERA_3RD_PRO_RAISED;
         bool normalTo = pTo == DAYZCAMERA_1ST || pTo == DAYZCAMERA_3RD_ERC || pTo == DAYZCAMERA_3RD_CRO || pTo == DAYZCAMERA_3RD_PRO || pTo == DAYZCAMERA_3RD_ERC_RAISED || pTo == DAYZCAMERA_3RD_CRO_RAISED || pTo == DAYZCAMERA_3RD_PRO_RAISED;
         if ((aimingTo && (normalFrom || aimingFrom)) || (aimingFrom && normalTo))
-            return Math.Min(nativeTime, 0.08);
+            return 0.15;
         return nativeTime;
     }
 }
