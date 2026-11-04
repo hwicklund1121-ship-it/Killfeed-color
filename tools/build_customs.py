@@ -53,7 +53,7 @@ def main():
     original = args.hexgrid.read_bytes()
     _, original_files = read_pbo(original)
     base_prefix, base_files = fix_hexgrid(original_files)
-    prefix = 'GRZ_Customs\\Hexgrid'
+    prefix = 'GRZ_Customs_Hexgrid'
     files = {}
     maps = {}
     for source_name, target_name in [('colour', 'HEXGRID_co.paa'), ('normal', 'HEXGRID_nohq.paa')]:
@@ -70,8 +70,8 @@ def main():
                              'size': list(image.size), 'mips': mips, 'encoding': 'DXT5, direct RGBA, no swizzle'}
     material = original_files['HEXGRID/data/HEXGRID.rvmat'].decode('utf-8-sig')
     material = material.replace('PVPPack\\HEXGRID\\HEXGRID\\data\\HEXGRID_nohq.paa',
-                                'GRZ_Customs\\Hexgrid\\data\\HEXGRID_nohq.paa')
-    assert 'GRZ_Customs\\Hexgrid\\data\\HEXGRID_nohq.paa' in material
+                                'GRZ_Customs_Hexgrid\\data\\HEXGRID_nohq.paa')
+    assert 'GRZ_Customs_Hexgrid\\data\\HEXGRID_nohq.paa' in material
     files['data/HEXGRID.rvmat'] = material.encode()
     config = r'''
 class CfgPatches
@@ -81,19 +81,19 @@ class CfgPatches
         units[] = {"GRZ_GunRunnerZ_Hexgrid"};
         weapons[] = {};
         requiredVersion = 0.1;
-        requiredAddons[] = {"Hexgrid"};
+        requiredAddons[] = {"DZ_Data","DZ_Characters","DZ_Characters_Vests","Hexgrid"};
     };
 };
 class CfgVehicles
 {
-    class UAV_HEXGRID;
-    class GRZ_GunRunnerZ_Hexgrid: UAV_HEXGRID
+    class HEXGRID_Base;
+    class GRZ_GunRunnerZ_Hexgrid: HEXGRID_Base
     {
         scope = 2;
         displayName = "GunRunnerZ Hexgrid";
         descriptionShort = "Made By Blake";
-        hiddenSelectionsTextures[] = {"GRZ_Customs\Hexgrid\data\HEXGRID_co.paa"};
-        hiddenSelectionsMaterials[] = {"GRZ_Customs\Hexgrid\data\HEXGRID.rvmat"};
+        hiddenSelectionsTextures[] = {"GRZ_Customs_Hexgrid\data\HEXGRID_co.paa"};
+        hiddenSelectionsMaterials[] = {"GRZ_Customs_Hexgrid\data\HEXGRID.rvmat"};
         
     };
 };
@@ -165,9 +165,9 @@ class CfgVehicles
         extras[source.name + '.pbo'] = addon
         extra_report[source.name] = {'sha256': hashlib.sha256(addon).hexdigest(),
                                     'prefix': extension['prefix'], 'files': len(contents)}
-    report = {'version': '0.1.6', 'gunwrap_variants': wrap_count, 'included_reskins': ['Gunrunnerz HEXGRID', 'Blakes Kit (without kit HEXGRID)', 'GRZ_Tracksuit_Pants', 'GRZ_Gunwraps'],
+    report = {'version': '0.1.7', 'gunwrap_variants': wrap_count, 'included_reskins': ['Gunrunnerz HEXGRID', 'Blakes Kit (without kit HEXGRID)', 'GRZ_Tracksuit_Pants', 'GRZ_Gunwraps'],
               'additional_addons': extra_report,
-              'item_class': 'GRZ_GunRunnerZ_Hexgrid', 'base_item_class': 'UAV_HEXGRID',
+              'item_class': 'GRZ_GunRunnerZ_Hexgrid', 'base_item_class': 'HEXGRID_Base',
               'display_name': 'GunRunnerZ Hexgrid', 'description': 'Made By Blake',
               'base_pbo_sha256': hashlib.sha256(base_pbo).hexdigest(), 'original_sha256': hashlib.sha256(original).hexdigest(),
               'pbo_sha256': hashlib.sha256(pbo).hexdigest(), 'prefix': prefix,
@@ -178,7 +178,7 @@ class CfgVehicles
         archive.writestr('@GRZ_Customs/Addons/GRZ_Customs_Hexgrid.pbo', pbo)
         for name, addon in extras.items():
             archive.writestr('@GRZ_Customs/Addons/' + name, addon)
-        archive.writestr('@GRZ_Customs/mod.cpp', 'name = "GRZ Customs";\nauthor = "GRZ";\nversion = "0.1.6";\n')
+        archive.writestr('@GRZ_Customs/mod.cpp', 'name = "GRZ Customs";\nauthor = "GRZ";\nversion = "0.1.7";\n')
         archive.write(ROOT / 'GRZ-CUSTOMS.md', 'INSTALL.md')
         archive.write(ROOT / 'GRZ-CUSTOMS-MANIFEST.json', '@GRZ_Customs/MANIFEST.json')
         archive.write(ROOT / 'GRZ-GUNWRAPS-ITEMS.json', '@GRZ_Customs/GUNWRAPS-ITEMS.json')

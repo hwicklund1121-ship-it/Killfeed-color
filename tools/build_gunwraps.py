@@ -40,7 +40,7 @@ def build_wraps(verify):
     luminance = luminance.point(lambda value: 90 + round(value * 165 / 255))
     output = ROOT / 'packaging/customs/GRZ_Gunwraps'
     (output / 'data').mkdir(parents=True, exist_ok=True)
-    (output / '$PBOPREFIX$').write_text('GRZ_Customs/Gunwraps\n')
+    (output / '$PBOPREFIX$').write_text('GRZ_Gunwraps\n')
     configs, manifest = [], []
     for name in list(SOLIDS) + list(MIXES):
         names = MIXES.get(name, [name])
@@ -70,18 +70,18 @@ def build_wraps(verify):
         filename = name.lower() + '_co.paa'
         (output / 'data' / filename).write_bytes(data)
         classname = 'GRZ_Gunwraps_' + name
-        configs.append('    class ' + classname + ': GhillieAtt_Tan\n    {\n'
+        configs.append('    class ' + classname + ': GhillieAtt_ColorBase\n    {\n'
                        '        scope = 2;\n        displayName = "' + classname + '";\n'
                        '        descriptionShort = "Made By Blake";\n'
-                       '        hiddenSelectionsTextures[] = {"GRZ_Customs\\Gunwraps\\data\\' + filename + '"};\n    };\n')
+                       '        hiddenSelectionsTextures[] = {"GRZ_Gunwraps\\data\\' + filename + '"};\n    };\n')
         manifest.append({'class': classname, 'display_name': classname, 'description': 'Made By Blake',
                          'colours': names, 'texture': 'data/' + filename})
     units = ','.join('"' + item['class'] + '"' for item in manifest)
     config = ('class CfgPatches\n{\n    class GRZ_Customs_Gunwraps\n    {\n'
               '        units[] = {' + units + '};\n        weapons[] = {};\n'
               '        requiredVersion = 0.1;\n'
-              '        requiredAddons[] = {"DZ_Weapons_Supports"};\n    };\n};\n'
-              'class CfgVehicles\n{\n    class GhillieAtt_Tan;\n' + ''.join(configs) + '};\n')
+              '        requiredAddons[] = {"DZ_Data","DZ_Weapons_Supports"};\n    };\n};\n'
+              'class CfgVehicles\n{\n    class GhillieAtt_ColorBase;\n' + ''.join(configs) + '};\n')
     (output / 'config.cpp').write_text(config)
     (ROOT / 'GRZ-GUNWRAPS-ITEMS.json').write_text(json.dumps(manifest, indent=2) + '\n')
     return len(manifest)

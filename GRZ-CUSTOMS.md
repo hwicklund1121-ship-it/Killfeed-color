@@ -1,4 +1,4 @@
-GRZ Customs 0.1.6
+GRZ Customs 0.1.7
 
 Fix: custom HEXGRID and tracksuit configs no longer declare any DamageSystem,
 GlobalHealth or Health blocks. Their native damage settings are inherited.
@@ -10,7 +10,7 @@ Examples: GRZ_Gunwraps_Red, GRZ_Gunwraps_Black, GRZ_Gunwraps_White,
 GRZ_Gunwraps_Red_Black, GRZ_Gunwraps_Cyan_Purple, GRZ_Gunwraps_Rainbow.
 GUNWRAPS-ITEMS.json lists every variant. Original vanilla wraps remain available.
 
-The wraps inherit GhillieAtt_Tan model, attachment slot, handling, stats and
+The wraps inherit GhillieAtt_ColorBase model, attachment slot, handling, stats and
 native materials (including normal/specular detail). Only the colour texture
 changes. The supplied native colour map's UV positions, cut-out alpha and
 alpha-test flag are preserved. Mixed colours form alternating fabric patches.
@@ -18,7 +18,7 @@ They attach to weapons that already support vanilla gun ghillie wraps.
 These items need the vanilla DZ_Weapons_Supports addon, not an extra Workshop mod.
 
 Includes separate GRZ_Tracksuit_Pants item, display name GRZ_Tracksuit_Pants,
-description Made By Blake. It inherits vanilla TrackSuitPants_Blue geometry,
+description Made By Blake. It inherits vanilla TrackSuitPants_ColorBase geometry,
 clothing behaviour and stats, with supplied 2048x2048 colour/normal artwork.
 No additional model dependency is required for these pants. Their damage settings and damage-level materials are inherited from the original pants.
 
@@ -35,6 +35,11 @@ UAV_Helmet_BNTI and sk_taladro in addition to vanilla DayZ clothing addons.
 Load the mods supplying these addons on both client and server before Customs.
 Their external models are not included in the uploaded kit. Remove any other
 active Blakes_Kit.pbo before using the copy supplied in this pack.
+
+Config layout follows Blake's kit: declared ColourBase parent, separate scoped
+item, displayName, descriptionShort and hidden-selection texture/material arrays.
+Custom addon asset paths match their own PBO prefixes. No native class is
+overwritten. HEXGRID inherits HEXGRID_Base; the original UAV_HEXGRID is retained.
 
 This separate reskin pack currently contains the supplied Gunrunnerz HEXGRID:
 black/white artwork and matching embossed normal map, both 2048x2048 PAA.

@@ -16,7 +16,7 @@ $source = Join-Path $PSScriptRoot '@GRZ_Customs'
 $manifestPath = Join-Path $source 'MANIFEST.json'
 if (!(Test-Path $manifestPath)) { throw 'Missing pack manifest. Extract the entire new ZIP first.' }
 $manifest = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
-if ($manifest.version -ne '0.1.6') { throw "This installer needs GRZ Customs 0.1.6; this folder contains $($manifest.version). Extract the latest ZIP into a NEW folder." }
+if ($manifest.version -ne '0.1.7') { throw "This installer needs GRZ Customs 0.1.7; this folder contains $($manifest.version). Extract the latest ZIP into a NEW folder." }
 Write-Host "Installing GRZ Customs $($manifest.version) - damage overrides removed."
 $names = @('HEXGRID.pbo','GRZ_Customs_Hexgrid.pbo','Blakes_Kit.pbo','GRZ_Tracksuit_Pants.pbo','GRZ_Gunwraps.pbo')
 $expectedHashes = @{

@@ -8,7 +8,7 @@ PixelShaderID = "Super";
 VertexShaderID = "Super";
 class Stage1
 {
-    texture = "GRZ_Customs\Tracksuit\data\tracksuit_nohq.paa";
+    texture = "GRZ_Tracksuit_Pants\data\tracksuit_nohq.paa";
     uvSource = "tex";
 };
 class Stage2
