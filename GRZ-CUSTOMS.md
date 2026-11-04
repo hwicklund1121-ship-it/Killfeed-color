@@ -1,4 +1,4 @@
-GRZ Customs 0.1.7
+GRZ Customs 0.1.8
 
 Fix: custom HEXGRID and tracksuit configs no longer declare any DamageSystem,
 GlobalHealth or Health blocks. Their native damage settings are inherited.
@@ -51,8 +51,8 @@ Two separate spawnable items are available:
 
 HEXGRID.pbo supplies the original model and item, with its broken mount repaired.
 GRZ_Customs_Hexgrid.pbo adds the new item through inheritance, with its own
-texture/material paths. Original geometry, animation script and armour/cargo
-stats are retained. Damage settings and damage-level materials are inherited from the original vest.
+texture/material paths. Original geometry, animation script and cargo are retained. Shared armour and
+durability are balanced as described below. Damage settings and damage-level materials are inherited from the original vest.
 
 Installation
 
@@ -98,3 +98,24 @@ and ZIP contents. DayZ rendering and script compilation require in-game testing.
 
 Rebuild: python tools/build_customs.py --hexgrid <original HEXGRID.pbo>
 Requires Pillow with DXT5 DDS encoding. Source artwork is in art/customs/hexgrid.
+
+HEXGRID armour balance (0.1.8)
+
+All variants inheriting HEXGRID_Base, including UAV_HEXGRID and
+GRZ_GunRunnerZ_Hexgrid, use native GlobalArmor projectile health damage 0.045.
+This replaces the supplied, ineffective GlobalHEXGRID block name. Blood/shock
+and other damage-type values from the source armour block are retained. Vest
+hitpoints increase from 150 to 10000 so it can remain protective across these hits.
+Models/textures/cargo and ammo definitions are unchanged.
+
+Supplied ammo base health damage and calculated player damage:
+- UAV_Bullet_408: 1000 x 0.045 = 45; 2 hits leave 10 HP, third is lethal.
+- UAV_Bullet_50CAL: 1300 x 0.045 = 58.5; second hit is lethal.
+- UAV_Bullet_VULCAN: 5000 x 0.045 = 225; first hit is lethal.
+
+These are calculations for a full-health player with direct, vest-covered torso
+hits. Test with god mode off and a fresh vest; native hitzone/range effects,
+other clothing and damage-altering mods can change outcomes. Other ammunition
+also receives this native vest protection. No scripts replace native damage,
+hitmarker or killfeed callbacks. This does not change BC_Ammo_20mm or other
+20mm definitions; the supplied 20mm config specifically defines VULCAN.

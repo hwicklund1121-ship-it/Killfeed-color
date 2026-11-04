@@ -1,5 +1,32 @@
 {
-  "version": "0.1.7",
+  "version": "0.1.8",
+  "hexgrid_armour": {
+    "health_multiplier": 0.045,
+    "vest_hitpoints": 10000,
+    "affected_base": "HEXGRID_Base",
+    "applies_to": [
+      "UAV_HEXGRID",
+      "GRZ_GunRunnerZ_Hexgrid"
+    ],
+    "ammo": {
+      "UAV_Bullet_408": {
+        "base_health_damage": 1000,
+        "calculated_damage": 45.0,
+        "target_shots_from_100_health": 3
+      },
+      "UAV_Bullet_50CAL": {
+        "base_health_damage": 1300,
+        "calculated_damage": 58.5,
+        "target_shots_from_100_health": 2
+      },
+      "UAV_Bullet_VULCAN": {
+        "base_health_damage": 5000,
+        "calculated_damage": 225.0,
+        "target_shots_from_100_health": 1
+      }
+    },
+    "assumptions": "100 player health, covered direct torso hits; native hitzone/range, other gear and mods require in-game testing. Other projectiles also use the native armour multiplier."
+  },
   "gunwrap_variants": 48,
   "included_reskins": [
     "Gunrunnerz HEXGRID",
@@ -28,7 +55,7 @@
   "base_item_class": "HEXGRID_Base",
   "display_name": "GunRunnerZ Hexgrid",
   "description": "Made By Blake",
-  "base_pbo_sha256": "bce542616472287c31d0b64e0d0ad0581dcba6ab4eb13e6b2a8287b9f1602a54",
+  "base_pbo_sha256": "79c274f9483ccf492025c7b1a6f53c94c3319120de44abb3291137c309162c8c",
   "original_sha256": "f53d9e1a6e1d2675a8ef990c05d6b2af72cc47d09d961dd684e33961f8f4fa6e",
   "pbo_sha256": "58f3487f5ff3233494f921243337395b08c77bbf0293b9b98d4b63b769d2b4d3",
   "prefix": "GRZ_Customs_Hexgrid",
