@@ -58,5 +58,9 @@
   "GRZ_Hitscan.pbo": {
     "bytes": 7040,
     "sha256": "d45029e33bdadc1bda5bcc75092a84ae1e716bf952d197a148b7c00c624321ee"
+  },
+  "GRZ_AntiHardscope.pbo": {
+    "bytes": 3545,
+    "sha256": "3fe90f1d4397f4e963549008db628f17a83c9f677c3bf6408e735da027d3ed53"
   }
 }
