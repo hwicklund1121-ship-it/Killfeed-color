@@ -158,7 +158,7 @@ def main():
     assert '"text halign" center' in row
     menu = files["scripts/5_Mission/GRZ_Killfeed/GRZKillfeedMenu.c"].decode()
     request = menu.split("static void RequestMenu()", 1)[1].split("static void TestOffline()", 1)[0]
-    assert request.index("OpenLocalPreview();") < request.index("if (CanLocalPreview())")
+    assert request.index("OpenLocalPreview();") < request.index("if (!g_Game.IsMultiplayer() || g_Game.IsServer())")
     opener = menu.split("static void OpenLocalPreview()", 1)[1].split("static void RequestMenu()", 1)[0]
     assert "EnterScriptedMenu(GRZKillfeedMenu.MENU_ID, parent)" in opener
     assert "static ref GRZKillfeedMenu ActiveMenu;" in menu
@@ -169,7 +169,7 @@ def main():
     assert "hexactsize 0" in root and "vexactsize 0" in root
     assert "g_Game.GetWorkspace().GetScreenSize(width, height)" in menu
     assert "GRZKillfeedClient.ReleaseMenu();" in mission
-    assert "size 540 28" in row
+    assert "size 720 46" in row
     assert "current.UseLocalPreview();" in mission
     assert "if (!Allowed(identity)" in server
     assert "GunWidget.SetItem(null)" in mission and "g_Game.ObjectDelete(PreviewGun)" in mission
@@ -177,8 +177,8 @@ def main():
         for prefix in ["Swatch", "SwatchFill", "SwatchBorder", "SwatchLabel"]:
             assert prefix + str(index) in declared
     assert "animation.ColorA = i;" in menu and "animation.ColorB = i;" in menu
-    assert "row.Killer.SetTextExactSize(14)" in mission
-    assert "row.Victim.SetTextExactSize(14)" in mission
+    assert "row.Killer.SetTextExactSize(22)" in mission
+    assert "row.Victim.SetTextExactSize(22)" in mission
     focus = files["scripts/3_Game/GRZ_Killfeed/GRZKillfeedFocus.c"].decode()
     assert "override void OnDeactivateMessage()" in focus
     assert "GRZKillfeedBus.AppDeactivated.Invoke();" in focus

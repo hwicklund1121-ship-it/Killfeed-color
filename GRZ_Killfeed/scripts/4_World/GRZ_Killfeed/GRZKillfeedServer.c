@@ -77,19 +77,45 @@ class GRZKillfeedServer
         }
         GRZKillfeedSavedStyle updated = new GRZKillfeedSavedStyle;
         updated.SteamId = identity.GetPlainId();
-        updated.Style = style;
+        updated.Style = style.Clone();
         next.Players.Insert(updated);
         string error;
         string temporary = DIRECTORY + "/styles.pending.json";
         if (!JsonFileLoader<GRZKillfeedSavedStyles>.SaveFile(temporary, next, error))
             return false;
+        GRZKillfeedSavedStyles pending = new GRZKillfeedSavedStyles;
+        if (!JsonFileLoader<GRZKillfeedSavedStyles>.LoadFile(temporary, pending, error) || !SavedStyleMatches(pending, identity.GetPlainId(), style))
+            return false;
         if (FileExist(STYLES) && !CopyFile(STYLES, DIRECTORY + "/styles.backup.json"))
             return false;
         if (!CopyFile(temporary, STYLES))
             return false;
+        GRZKillfeedSavedStyles persisted = new GRZKillfeedSavedStyles;
+        if (!JsonFileLoader<GRZKillfeedSavedStyles>.LoadFile(STYLES, persisted, error) || !SavedStyleMatches(persisted, identity.GetPlainId(), style))
+        {
+            if (FileExist(DIRECTORY + "/styles.backup.json"))
+                CopyFile(DIRECTORY + "/styles.backup.json", STYLES);
+            s_CanSave = false;
+            Error("GRZ Killfeed: could not verify the saved style on disk. Check the server profile directory before restarting.");
+            return false;
+        }
         DeleteFile(temporary);
-        s_Styles = next;
+        s_Styles = persisted;
         return true;
+    }
+
+    protected static bool SavedStyleMatches(GRZKillfeedSavedStyles stored, string steamId, GRZNameStyle expected)
+    {
+        if (!stored || !stored.Players || !expected || !expected.PrefixAnimation)
+            return false;
+        foreach (GRZKillfeedSavedStyle entry : stored.Players)
+        {
+            if (!entry || entry.SteamId != steamId || !entry.Style || !entry.Style.PrefixAnimation)
+                continue;
+            GRZNameStyle actual = entry.Style;
+            return actual.ColorA == expected.ColorA && actual.ColorB == expected.ColorB && actual.AnimationMode == expected.AnimationMode && actual.Speed == expected.Speed && actual.PrefixIcon == expected.PrefixIcon && actual.PrefixWord == expected.PrefixWord && actual.PrefixAnimation.ColorA == expected.PrefixAnimation.ColorA && actual.PrefixAnimation.ColorB == expected.PrefixAnimation.ColorB && actual.PrefixAnimation.AnimationMode == expected.PrefixAnimation.AnimationMode && actual.PrefixAnimation.Speed == expected.PrefixAnimation.Speed;
+        }
+        return false;
     }
 
     static void Reply(PlayerBase player, int status)
@@ -172,6 +198,7 @@ class GRZKillfeedServer
         int distance = Math.Round(vector.Distance(killer.GetPosition(), victim.GetPosition()));
         GRZNameStyle killerStyle = StyleFor(killer.GetIdentity());
         GRZNameStyle victimStyle = StyleFor(victim.GetIdentity());
+        Print(string.Format("[GRZ Killfeed] Live style: killerAllowed=%1 killerEffect=%2 victimEffect=%3", Allowed(killer.GetIdentity()), killerStyle.AnimationMode, victimStyle.AnimationMode));
         GRZKillfeedGunData gun = new GRZKillfeedGunData;
         if (entity && entity.IsWeapon())
         {

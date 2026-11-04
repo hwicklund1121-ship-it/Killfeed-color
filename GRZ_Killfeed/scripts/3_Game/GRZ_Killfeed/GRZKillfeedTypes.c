@@ -198,10 +198,15 @@ class GRZNameStyle extends GRZAnimationStyle
         copy.Speed = Speed;
         copy.PrefixIcon = PrefixIcon;
         copy.PrefixWord = PrefixWord;
-        copy.PrefixAnimation.ColorA = PrefixAnimation.ColorA;
-        copy.PrefixAnimation.ColorB = PrefixAnimation.ColorB;
-        copy.PrefixAnimation.AnimationMode = PrefixAnimation.AnimationMode;
-        copy.PrefixAnimation.Speed = PrefixAnimation.Speed;
+        // Deprecated prefix-only animation is not used to draw the group.
+        // Malformed legacy data must not discard a valid main name animation.
+        if (PrefixAnimation && PrefixAnimation.IsValid())
+        {
+            copy.PrefixAnimation.ColorA = PrefixAnimation.ColorA;
+            copy.PrefixAnimation.ColorB = PrefixAnimation.ColorB;
+            copy.PrefixAnimation.AnimationMode = PrefixAnimation.AnimationMode;
+            copy.PrefixAnimation.Speed = PrefixAnimation.Speed;
+        }
         return copy;
     }
 
