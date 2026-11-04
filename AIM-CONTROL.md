@@ -1,0 +1,17 @@
+GRZ Aim Control v0.1.0 — test build
+
+The old GRZ_Quickscope revert is removed. DELETE GRZ_Quickscope.pbo from @GRZ_Local/Addons in BOTH the DayZ game and server installations. Merging a ZIP alone does not remove an installed old PBO. Native scope-entry blend timing, weapon raise delay, reticle lag and movement bob are restored. The separate GRZ_NoSway breathing/wandering override remains.
+
+GRZ_AimControl keeps the newer requested aiming and recoil changes:
+
+- ADS/quickscope mouse, hand and camera-Z recoil modifiers are reduced to 10% of their native values. Native RecoilBase.PostInit samples the modifier once per shot, so immediately unscoping cannot restore a full-strength recoil tail. Hipfire recoil and injury effects keep native values. Custom recoil implementations bypassing GetRecoilModifier may require integration.
+- The native camera-shooting flag is enabled for regular weapon cameras and weapon sights. Native weapons outside the scripted hitscan set retain projectile ballistics, dispersion and shotgun spread. This does not make every pellet land on one point.
+- Supported GRZ Hitscan shots align toward an aim-ray contact in both hipfire and ADS. The server uses its per-player camera transform when available, near the player and facing the replicated aim. Otherwise it falls back to head position and replicated aiming angles plus native hand offsets. A camera/head ray finds the aim point; the damage ray then starts at the actual muzzle and can hit closer cover. Free-look/stale/spectator camera directions do not redirect shots. No client-supplied target or damage RPC is used.
+
+Limitations: server hitscan alignment applies only to the supported single-muzzle, nonexplosive, single-projectile firearms and filtered target families described in GRZ-Hitscan-TEST.md. Without a rendered server camera, the head/aim fallback cannot guarantee pixel-perfect third-person parallax at every distance. Native camera flags, scoped reticles and custom gun axes need runtime verification. Unsupported pellet/multi-muzzle/explosive weapons retain native projectile damage, spread and flight.
+
+Install matching updated GRZ_AimControl.pbo and GRZ_Hitscan.pbo on BOTH client and server. Keep GRZ_NoSway.pbo and the other pack addons. Keep custom UAVWEAPONS.pbo and your locally generated GRZ_InventorySizes.pbo. Restart both. The 0.75-second anti-hardscope blackout with centered red GRZ logo is unchanged.
+
+Required in-game checks: native scope entry/exit timing; first/third person; standing/crouched/prone; hipfire and scoped hits at several distances; single and repeated quickscope shots followed by immediate unscope; armour/head/body hits; native and custom UAV guns; nearby muzzle cover; sprint/reload/bolt cycling; death/unconsciousness; binoculars; 0.75-second blackout and reset; no delayed duplicate damage. Native compilation and gameplay are not available in this workspace, so these checks remain outstanding.
+
+To disable Aim Control, remove only GRZ_AimControl.pbo from BOTH sides and restart. GRZ_Hitscan then uses its original muzzle direction and native recoil without this addon. No mission or save files are changed.

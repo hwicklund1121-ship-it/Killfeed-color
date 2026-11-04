@@ -15,7 +15,7 @@ SOURCE = ROOT/'GRZ_SkyColors'
 
 def main():
     palette = json.loads((SOURCE/'data/palette.json').read_text())['PaletteEntries']
-    assert len(palette)==11 and palette[0]['Key']=='default'
+    assert len(palette)==12 and palette[0]['Key']=='default'
     assert len({c['Key'] for c in palette})==len(palette)
     for color in palette:
         assert re.fullmatch('[a-z]+',color['Key'])
@@ -44,9 +44,16 @@ def main():
                 if color['Key']=='black': assert rgb==[0,0,0]
                 elif max(rgb)>0:
                     peak=max(rgb)
-                    assert all(abs(a/peak-b)<1e-6 for a,b in zip(rgb,color['RGB']))
+                    assert all(abs(a/peak-b)<1e-6 for a,b in zip(rgb,[v/max(color['RGB']) for v in color['RGB']]))
+        # Grey must be dimmer than white, not merely another neutral white entry.
+        white_fields = list(ARRAY.finditer((SOURCE/'data/lighting'/(base+'_white.txt')).read_text()))
+        grey_fields = list(ARRAY.finditer((SOURCE/'data/lighting'/(base+'_grey.txt')).read_text()))
+        for white, grey in zip(white_fields, grey_fields):
+            w = [float(v) for v in TRIPLET.search(white[2]).groups()]
+            g = [float(v) for v in TRIPLET.search(grey[2]).groups()]
+            assert all(abs(b - a * 0.35) <= 1e-6 * max(1, abs(a)) for a, b in zip(w, g))
         assert 'diffuseCloud[]' in non_sky and 'ambientCloud[]' in non_sky
-        print(base+': 10 presets retain identical non-sky/cloud tables.')
+        print(base+f': {len(palette)-1} presets retain identical non-sky/cloud tables.')
     widgets=set()
     for p in SOURCE.rglob('*.layout'):
         text=p.read_text();assert text.count('{')==text.count('}')

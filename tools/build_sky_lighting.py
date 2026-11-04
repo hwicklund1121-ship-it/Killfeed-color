@@ -49,7 +49,7 @@ def main():
             baseline['files'][filename] = {'changed_sky_fields': count, 'sha256': hashlib.sha256(result.encode()).hexdigest()}
         manifest['tables'][base] = baseline
     (ROOT/'GRZ_SkyColors/data/lighting-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
-    print('Generated 20 native lighting presets; all non-sky declarations preserved.')
+    print(f'Generated {2 * (len(palette) - 1)} native lighting presets; all non-sky declarations preserved.')
 
 
 if __name__ == '__main__':

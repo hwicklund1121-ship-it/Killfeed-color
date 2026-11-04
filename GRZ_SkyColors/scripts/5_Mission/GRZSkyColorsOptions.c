@@ -26,7 +26,7 @@ class GRZSkyColorOptions extends ScriptedWidgetEventHandler
     protected void ColorChanged(int index)
     {
         bool applied = GRZSkyRuntime.Preview(index);
-        Print(string.Format("[GRZ Sky colors 0.1.3] Selection=%1 index=%2 lightingRequestIssued=%3", GRZSkyPalette.Current().PaletteEntries[index].Name, index, applied));
+        Print(string.Format("[GRZ Sky colors 0.1.4] Selection=%1 index=%2 lightingRequestIssued=%3", GRZSkyPalette.Current().PaletteEntries[index].Name, index, applied));
         if (m_Menu)
             m_Menu.OnChanged();
     }

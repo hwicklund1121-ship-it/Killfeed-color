@@ -15,7 +15,7 @@ class CfgMods
         dir = "GRZ_SkyColors";
         name = "GRZ Sky colors";
         author = "GRZ";
-        version = "0.1.3";
+        version = "0.1.4";
         type = "mod";
         dependencies[] = {"Game", "Mission"};
         class defs

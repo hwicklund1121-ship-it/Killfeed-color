@@ -46,22 +46,25 @@ def main():
     manifest_path.write_text(json.dumps(manifest, indent=2) + '\n')
     (base / 'GRZ-AntiHardscope.md').write_bytes((ROOT / 'ANTI-HARDSCOPE.md').read_bytes())
     payloads = {}
-    for name in ['GRZ_AntiHardscope', 'GRZ_Hitscan', 'GRZ_NoSway', 'GRZ_Killfeed', 'GRZ_Quickscope']:
+    for name in ['GRZ_AntiHardscope', 'GRZ_Hitscan', 'GRZ_NoSway', 'GRZ_Killfeed', 'GRZ_AimControl', 'GRZ_SkyColors']:
         payload = (output / (name + '.pbo')).read_bytes()
         # Fail if an older downloadable addon is left over after a source change.
         assert payload == build(ROOT / name), name
         payloads['@GRZ_Local/Addons/' + name + '.pbo'] = payload
     payloads['GRZ-AntiHardscope.md'] = (ROOT / 'ANTI-HARDSCOPE.md').read_bytes()
     payloads['GRZ-Hitscan-TEST.md'] = (ROOT / 'HITSCAN.md').read_bytes()
-    payloads['GRZ-Quickscope-TEST.md'] = (ROOT / 'QUICKSCOPE.md').read_bytes()
+    payloads['GRZ-AimControl-TEST.md'] = (ROOT / 'AIM-CONTROL.md').read_bytes()
+    payloads['GRZ-SkyColors.md'] = (ROOT / 'SKY-COLORS.md').read_bytes()
     payloads['READ-ME-FIRST.txt'] = (
         'Stop DayZ and the server. Merge @GRZ_Local into BOTH the DayZ game folder and installed server folder.\n'
-        'Replace the matching PBOs and add GRZ_Quickscope.pbo. Keep every other addon, especially UAVWEAPONS.pbo and your locally generated GRZ_InventorySizes.pbo.\n'
+        'DELETE the old GRZ_Quickscope.pbo from BOTH installed Addons folders; merging this ZIP does not remove old files.\n'
+        'Replace the matching PBOs and add GRZ_AimControl.pbo. Keep every other addon, especially UAVWEAPONS.pbo and your locally generated GRZ_InventorySizes.pbo.\n'
         'Restart both. No extra launch argument is needed when @GRZ_Local is already loaded.\n\n'
         'Anti hardscope: after 0.75 seconds the gameplay view goes black with the red GRZ logo in the center until you exit optics.\n'
+        'Sky Colors: GREY added after WHITE under Options > Game; clouds retained and saved selections preserved.\n'
         'Killfeed: compact translucent row; killer, weapon, victim, distance; no outlines. Existing animations/prefixes stay active.\n'
         'No sway: removes breathing/horizontal aiming wander while preserving recoil.\n'
-        'Quickscope TEST: custom 0.08s camera blends, shorter ADS delay, 10% ADS recoil and hipfire/ADS aim-point alignment for supported hitscan shots. This is NOT an exact DayZ 1.29 rollback. Read GRZ-Quickscope-TEST.md.\n'
+        'Aim Control TEST: 10% ADS recoil and hipfire/ADS aim-point alignment for supported hitscan shots. Native scope-entry timing and camera movement are restored. Read GRZ-AimControl-TEST.md.\n'
         'Hitscan is an EXPERIMENTAL damage-path replacement. Read GRZ-Hitscan-TEST.md for supported guns, native visual effects and duplicate-hit tests.\n'
         'Your generated inventory override is NOT included: it must be built with your own installed/custom gun definitions.\n'
         'Package and static source checks passed. Enforce compilation and in-game tests remain outstanding.\n'
@@ -75,7 +78,7 @@ def main():
         assert set(archive.namelist()) == set(payloads)
         for name, payload in payloads.items():
             assert archive.read(name) == payload
-    print(f'Verified {target.name}: {target.stat().st_size} bytes; five matching PBOs and installation notes.')
+    print(f'Verified {target.name}: {target.stat().st_size} bytes; six matching PBOs and installation notes.')
     print('Static/package checks only; actual scope rendering and timing require DayZ testing.')
 
 

@@ -48,8 +48,8 @@
     "sha256": "080427c5e90f78ad9456bc97afb9c8d44c16e179e7b4b2c892b118aec17a23f3"
   },
   "GRZ_SkyColors.pbo": {
-    "bytes": 436538,
-    "sha256": "accf647fb053b54bf8d4a958a71012a62f938cd3263020e0bc5d12df1e2bfdd0"
+    "bytes": 479424,
+    "sha256": "37a18400c0405ad7ba0db0dbf87a8b0f8182e07eb0599feee9c65c08d56e3cde"
   },
   "GRZ_NoSway.pbo": {
     "bytes": 2466,
@@ -63,8 +63,8 @@
     "bytes": 179579,
     "sha256": "38d65b1b7bf688c96911508488b642bbf63ef2f4e498352dbd767f5db46ac5a9"
   },
-  "GRZ_Quickscope.pbo": {
-    "bytes": 7501,
-    "sha256": "6b7cecfd5cb6d87cd866f2823c1b4025a0707768916a4c8d2f265885e8fb299b"
+  "GRZ_AimControl.pbo": {
+    "bytes": 5279,
+    "sha256": "dd7fefd9443341a26c6a8b0cd9d312610d703000f1a15b62ee4b56daf3896baf"
   }
 }

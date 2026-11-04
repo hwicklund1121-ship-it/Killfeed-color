@@ -1,50 +1,8 @@
-// Custom quickscope behavior, not a binary rollback of DayZ 1.29.
-modded class DayZPlayerCameras
-{
-    override static float OnCameraChange(DayZPlayer pPlayer, int pFrom, int pTo)
-    {
-        float nativeTime = super.OnCameraChange(pPlayer, pFrom, pTo);
-        if (!pPlayer || !Weapon_Base.Cast(pPlayer.GetEntityInHands()))
-            return nativeTime;
-        bool aimingFrom = pFrom == DAYZCAMERA_IRONSIGHTS || pFrom == DAYZCAMERA_OPTICS;
-        bool aimingTo = pTo == DAYZCAMERA_IRONSIGHTS || pTo == DAYZCAMERA_OPTICS;
-        bool normalFrom = pFrom == DAYZCAMERA_1ST || pFrom == DAYZCAMERA_3RD_ERC || pFrom == DAYZCAMERA_3RD_CRO || pFrom == DAYZCAMERA_3RD_PRO || pFrom == DAYZCAMERA_3RD_ERC_RAISED || pFrom == DAYZCAMERA_3RD_CRO_RAISED || pFrom == DAYZCAMERA_3RD_PRO_RAISED;
-        bool normalTo = pTo == DAYZCAMERA_1ST || pTo == DAYZCAMERA_3RD_ERC || pTo == DAYZCAMERA_3RD_CRO || pTo == DAYZCAMERA_3RD_PRO || pTo == DAYZCAMERA_3RD_ERC_RAISED || pTo == DAYZCAMERA_3RD_CRO_RAISED || pTo == DAYZCAMERA_3RD_PRO_RAISED;
-        if ((aimingTo && (normalFrom || aimingFrom)) || (aimingFrom && normalTo))
-            return Math.Min(nativeTime, 0.08);
-        return nativeTime;
-    }
-}
-
-modded class DayZPlayerImplement
-{
-    override void HandleADS()
-    {
-        HumanInputController input = GetInputController();
-        PlayerBase player = PlayerBase.Cast(this);
-        // Complete the extra script raise delay only after native raised state is reached.
-        // Super retains sprint, obstruction, inventory, fighting and weapon-manager checks.
-        if (player && IsAlive() && !player.IsUnconscious() && input && input.WeaponADS() && IsRaised() && !IsWeaponRaiseCompleted() && !IsLiftWeapon() && !IsWeaponObstructionBlockingADS() && !IsFighting())
-        {
-            Weapon_Base weapon = Weapon_Base.Cast(GetEntityInHands());
-            if (weapon && player.GetWeaponManager() && !player.GetWeaponManager().IsRunning() && !GetDayZPlayerInventory().IsProcessing())
-                CompleteWeaponRaise();
-        }
-        super.HandleADS();
-    }
-}
-
+// Aim/recoil controls only. Native scope-entry timing and camera movement are retained.
 modded class DayZPlayerCameraIronsights
 {
     override void OnUpdate(float pDt, out DayZPlayerCameraResult pOutResult)
     {
-        if (m_weaponUsed)
-        {
-            // Keep recoil in the aiming model; remove additional reticle lag/bob.
-            m_dynamicsStrength = 0;
-            m_movementAmplitudeX = 0;
-            m_movementAmplitudeY = 0;
-        }
         super.OnUpdate(pDt, pOutResult);
         if (m_weaponUsed)
             pOutResult.m_fShootFromCamera = 1.0;

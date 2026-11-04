@@ -1,6 +1,6 @@
 class CfgPatches
 {
-    class GRZ_Quickscope
+    class GRZ_AimControl
     {
         units[] = {};
         weapons[] = {};
@@ -10,12 +10,12 @@ class CfgPatches
 };
 class CfgMods
 {
-    class GRZ_Quickscope
+    class GRZ_AimControl
     {
-        dir = "GRZ_Quickscope";
-        name = "GRZ Quickscope Test";
+        dir = "GRZ_AimControl";
+        name = "GRZ Aim Control Test";
         author = "GRZ";
-        version = "0.1.1";
+        version = "0.1.0";
         type = "mod";
         dependencies[] = {"World"};
         class defs
@@ -23,7 +23,7 @@ class CfgMods
             class worldScriptModule
             {
                 value = "";
-                files[] = {"GRZ_Quickscope/scripts/4_World"};
+                files[] = {"GRZ_AimControl/scripts/4_World"};
             };
         };
     };

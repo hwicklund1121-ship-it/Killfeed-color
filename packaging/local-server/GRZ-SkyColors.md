@@ -1,0 +1,19 @@
+# GRZ Sky colors
+
+Development mod v0.1.4. Open **Options > Game**, scroll below **GRZ HITMARKER**, and find **GRZ Sky colors**. The section uses the same transparent black panel, centered black header, white labels and native arrow selector as the other GRZ settings.
+
+Choose DEFAULT, BLACK, RED, BLUE, PINK, PURPLE, CYAN, GREEN, ORANGE, YELLOW, WHITE or GREY. Each arrow press loads the selected sky immediately before Apply. Apply saves the choice in the client's `$profile:GRZ_SkyColors/settings.json`. Cancel/Back and resetting the section restore the saved choice; Defaults previews DEFAULT until Apply. Selection is individual to each player and restored on join. No chat command or keybind is needed.
+
+Uses `World.LoadNewLightingCfg` with native `LightingNew` tables derived from the two supplied DayZ lighting files. Only RGB values in `sky[]` and `skyAroundSun[]` change; their exposure/luminance exponents and every non-sky declaration remain intact. Cloud illumination, weather controls, scene diffuse/ambient light parameters, sun position and geometry are preserved. Native sky color can influence atmospheric appearance and the engine's exposure response; actual appearance needs an in-game check. No screen filter, custom dome, or weather suppression is added by this mod. The existing GRZ Environment mod controls static clouds, weather and time separately.
+
+Supports standard ChernarusPlus/Livonia default and dark-night lighting IDs 0/1. Sakhal/Nasdara IDs 2/3 keep their native base lighting; custom colors for those tables are not supplied. Other mods that change lighting tables may need compatibility work. Underwater/underground lighting continues through the native engine and needs runtime verification.
+
+Included in @GRZ_Local; replace the pack on client and server, then restart both. Standalone ZIP requires GRZ_Hitmarker because its settings section must load first. No serverDZ.cfg/startup changes are needed for this addition. No server-side color RPCs or permission changes are added.
+
+Build with `python3 tools/build_sky_colors.py` and check with `python3 tools/validate_sky_colors.py`. To regenerate the derived tables from extracted native resources, run `python3 tools/build_sky_lighting.py --default <lighting_default.txt> --darknight <lighting_darknight.txt>`. Original engine lighting data is by Bohemia Interactive; these tables derive from the user's installed DayZ resources. Unmodified original PBOs and reference resources are not bundled.
+
+Validated here: native file structure and API signatures, all 22 derived tables changing only sky fields, palette paths, layout/widget bindings and PBO/ZIP equality. No DayZ runtime or Enforce compiler is available. Required in-game checks: section visibility below Hit Marker, each live color including Black, retained clouds, Apply/reconnect, Cancel/Back, Defaults, dark-night profile and other GRZ options remaining functional. Client script logs include `[GRZ Sky colors 0.1.4] Requested lighting:` for diagnosis.
+
+User screenshots confirm native sky recoloring is visible. Sky tint also colors the engine's distance haze; GRZ Environment v0.1.2 extends terrain view to 3200m while retaining the requested 1400m object/network range to push the terrain fade farther away. The sky still meets terrain at the horizon. YELLOW is rebalanced toward a warmer red/green ratio after the initial preset appeared green in-game; this adjustment needs a fresh visual check. The two settings footnotes remain removed.
+
+GREY is appended after WHITE so existing saved color indices keep their meaning. It uses equal RGB components at 35% of the original sky peak, producing a neutral dimmer sky than WHITE. Both native default and dark-night GREY tables preserve all non-sky/cloud declarations. Live preview, Apply and Cancel use the existing controls; final in-game tone still needs visual verification.

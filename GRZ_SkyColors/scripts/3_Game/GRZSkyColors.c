@@ -19,7 +19,7 @@ class GRZSkyPalette
         if (!s_Data)
         {
             string error;
-            if (!JsonFileLoader<GRZSkyPaletteData>.LoadFile("GRZ_SkyColors/data/palette.json", s_Data, error) || !s_Data || !s_Data.PaletteEntries || s_Data.PaletteEntries.Count() != 11)
+            if (!JsonFileLoader<GRZSkyPaletteData>.LoadFile("GRZ_SkyColors/data/palette.json", s_Data, error) || !s_Data || !s_Data.PaletteEntries || s_Data.PaletteEntries.Count() != 12)
             {
                 s_Data = new GRZSkyPaletteData;
                 s_Data.PaletteEntries = new array<ref GRZSkyColor>;
@@ -135,7 +135,7 @@ class GRZSkyRuntime
             // values in these tables are identical to the supplied base file.
             g_Game.GetWorld().LoadNewLightingCfg(path);
             s_AppliedPath = path;
-            Print("[GRZ Sky colors 0.1.3] Requested lighting: " + path);
+            Print("[GRZ Sky colors 0.1.4] Requested lighting: " + path);
         }
         return true;
     }
