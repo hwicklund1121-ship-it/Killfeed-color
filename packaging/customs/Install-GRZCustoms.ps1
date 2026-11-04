@@ -13,9 +13,23 @@ foreach ($target in @(@($ServerPath,'DayZServer_x64.exe'), @($GamePath,'DayZ_x64
     }
 }
 $source = Join-Path $PSScriptRoot '@GRZ_Customs'
+$manifestPath = Join-Path $source 'MANIFEST.json'
+if (!(Test-Path $manifestPath)) { throw 'Missing pack manifest. Extract the entire new ZIP first.' }
+$manifest = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
+if ($manifest.version -ne '0.1.6') { throw "This installer needs GRZ Customs 0.1.6; this folder contains $($manifest.version). Extract the latest ZIP into a NEW folder." }
+Write-Host "Installing GRZ Customs $($manifest.version) - damage overrides removed."
 $names = @('HEXGRID.pbo','GRZ_Customs_Hexgrid.pbo','Blakes_Kit.pbo','GRZ_Tracksuit_Pants.pbo','GRZ_Gunwraps.pbo')
+$expectedHashes = @{
+    'HEXGRID.pbo' = $manifest.base_pbo_sha256
+    'GRZ_Customs_Hexgrid.pbo' = $manifest.pbo_sha256
+}
+foreach ($addon in $manifest.additional_addons.PSObject.Properties) {
+    $expectedHashes[$addon.Name + '.pbo'] = $addon.Value.sha256
+}
 foreach ($name in $names) {
     if (!(Test-Path (Join-Path $source "Addons\$name"))) { throw "Extract the entire ZIP first. Missing $name." }
+    $sourceHash = (Get-FileHash (Join-Path $source "Addons\$name") -Algorithm SHA256).Hash
+    if ($sourceHash -ne $expectedHashes[$name]) { throw "The extracted $name does not match the new manifest. Extract the latest ZIP into a NEW folder." }
 }
 $bat = Join-Path $ServerPath $BatName
 if (!(Test-Path $bat)) { throw "Cannot find $bat. Supply -BatName if your server BAT has a different name." }

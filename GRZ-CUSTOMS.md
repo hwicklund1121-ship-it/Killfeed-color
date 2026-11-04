@@ -1,8 +1,8 @@
-GRZ Customs 0.1.5
+GRZ Customs 0.1.6
 
-Fix: HEXGRID and tracksuit damage-material sections use nested config overrides
-without self-referencing base declarations, preventing Undefined base class
-DamageSystem at startup. Original item classes remain unchanged.
+Fix: custom HEXGRID and tracksuit configs no longer declare any DamageSystem,
+GlobalHealth or Health blocks. Their native damage settings are inherited.
+Installer prints and checks the supplied pack version before copying files.
 
 Gun wraps: 48 separate GRZ_Gunwraps_<Colour> items (36 solids and 12 mixes).
 All display names match their spawn class and descriptions say Made By Blake.
@@ -20,8 +20,7 @@ These items need the vanilla DZ_Weapons_Supports addon, not an extra Workshop mo
 Includes separate GRZ_Tracksuit_Pants item, display name GRZ_Tracksuit_Pants,
 description Made By Blake. It inherits vanilla TrackSuitPants_Blue geometry,
 clothing behaviour and stats, with supplied 2048x2048 colour/normal artwork.
-No additional model dependency is required for these pants. Their custom
-material remains selected at all damage levels.
+No additional model dependency is required for these pants. Their damage settings and damage-level materials are inherited from the original pants.
 
 Also includes Blake's configured kit, excluding its HEXGRID item and textures:
 - blake_SurgicalGloves
@@ -48,7 +47,7 @@ Two separate spawnable items are available:
 HEXGRID.pbo supplies the original model and item, with its broken mount repaired.
 GRZ_Customs_Hexgrid.pbo adds the new item through inheritance, with its own
 texture/material paths. Original geometry, animation script and armour/cargo
-stats are retained. Custom damage materials keep the skin as the vest wears.
+stats are retained. Damage settings and damage-level materials are inherited from the original vest.
 
 Installation
 
