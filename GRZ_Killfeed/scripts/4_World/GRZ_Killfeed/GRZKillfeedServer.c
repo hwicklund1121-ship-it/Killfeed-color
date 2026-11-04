@@ -113,7 +113,28 @@ class GRZKillfeedServer
             if (!entry || entry.SteamId != steamId || !entry.Style || !entry.Style.PrefixAnimation)
                 continue;
             GRZNameStyle actual = entry.Style;
-            return actual.ColorA == expected.ColorA && actual.ColorB == expected.ColorB && actual.AnimationMode == expected.AnimationMode && actual.Speed == expected.Speed && actual.PrefixIcon == expected.PrefixIcon && actual.PrefixWord == expected.PrefixWord && actual.PrefixAnimation.ColorA == expected.PrefixAnimation.ColorA && actual.PrefixAnimation.ColorB == expected.PrefixAnimation.ColorB && actual.PrefixAnimation.AnimationMode == expected.PrefixAnimation.AnimationMode && actual.PrefixAnimation.Speed == expected.PrefixAnimation.Speed;
+            // Separate comparisons stay below the Enforce expression limit.
+            if (actual.ColorA != expected.ColorA)
+                return false;
+            if (actual.ColorB != expected.ColorB)
+                return false;
+            if (actual.AnimationMode != expected.AnimationMode)
+                return false;
+            if (actual.Speed != expected.Speed)
+                return false;
+            if (actual.PrefixIcon != expected.PrefixIcon)
+                return false;
+            if (actual.PrefixWord != expected.PrefixWord)
+                return false;
+            if (actual.PrefixAnimation.ColorA != expected.PrefixAnimation.ColorA)
+                return false;
+            if (actual.PrefixAnimation.ColorB != expected.PrefixAnimation.ColorB)
+                return false;
+            if (actual.PrefixAnimation.AnimationMode != expected.PrefixAnimation.AnimationMode)
+                return false;
+            if (actual.PrefixAnimation.Speed != expected.PrefixAnimation.Speed)
+                return false;
+            return true;
         }
         return false;
     }

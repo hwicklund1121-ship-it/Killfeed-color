@@ -114,7 +114,7 @@ modded class PlayerBase
                     message.VictimStyle = message.VictimStyle.Clone();
                 if (!message.VictimStyle.IsValid())
                     message.VictimStyle = new GRZNameStyle;
-                Print("[GRZ Killfeed 0.1.26] Live kill RPC received.");
+                Print("[GRZ Killfeed 0.1.27] Live kill RPC received.");
                 string error;
                 GRZKillfeedGunData gun;
                 if (message.WeaponJson.Length() <= 16384 && JsonFileLoader<GRZKillfeedGunData>.LoadData(message.WeaponJson, gun, error) && gun && gun.IsValid())

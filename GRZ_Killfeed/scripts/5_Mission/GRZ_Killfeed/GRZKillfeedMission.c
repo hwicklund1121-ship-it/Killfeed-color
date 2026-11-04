@@ -374,7 +374,7 @@ modded class MissionGameplay
         GRZPositionRows();
         // Keep script-heavy modded weapon initialization outside row delivery.
         g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(row.CreateGunPreview, 1, false);
-        Print(string.Format("[GRZ Killfeed 0.1.26] Row added: killerEffect=%1 victimEffect=%2 prefixIcon=%3; preview deferred.", message.KillerStyle.AnimationMode, message.VictimStyle.AnimationMode, message.KillerStyle.PrefixIcon));
+        Print(string.Format("[GRZ Killfeed 0.1.27] Row added: killerEffect=%1 victimEffect=%2 prefixIcon=%3; preview deferred.", message.KillerStyle.AnimationMode, message.VictimStyle.AnimationMode, message.KillerStyle.PrefixIcon));
     }
 
     protected void GRZReceiveStreak(string playerName, int count)
