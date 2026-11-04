@@ -13,7 +13,7 @@ modded class Weapon_Base
         if (!m_GRZHitscanReported)
         {
             m_GRZHitscanReported = true;
-            Print("[GRZ Hitscan TEST 0.1.0] Server muzzle ray active: " + GetType() + " / " + ammoType);
+            Print("[GRZ Hitscan TEST 0.1.1] Server muzzle ray active: " + GetType() + " / " + ammoType);
         }
 
         // The ray begins at the muzzle, not the camera, so nearby cover blocks it.
@@ -39,7 +39,7 @@ modded class Weapon_Base
         RaycastRVResult hit = results[0];
         Object target = hit.obj;
         // Terrain and non-entity model proxies stop the ray without a damage call.
-        if (!target || target == this || target == shooter)
+        if (!target || target == this || target == shooter || !GRZHitscanTargets.Supports(target))
             return;
         string zone = target.GetDamageZoneNameByComponentIndex(hit.component);
         EntityAI savedSource = GRZHitscanPolicy.DirectSource;
@@ -54,7 +54,7 @@ modded class Weapon_Base
     }
 }
 
-// Vanilla plastic explosives return true without calling the Object hook.
+// Vanilla plastic explosives bypass their inherited damage callback.
 modded class Plastic_Explosive
 {
     override bool EEOnDamageCalculated(TotalDamageResult damageResult, int damageType, EntityAI source, int component, string dmgZone, string ammo, vector modelPos, float speedCoef)

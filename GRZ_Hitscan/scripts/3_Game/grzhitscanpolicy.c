@@ -61,15 +61,3 @@ class GRZHitscanPolicy
         return GetRay(source, origin, direction);
     }
 }
-
-// Native bullet damage must be rejected even for a shot whose ray misses.
-// Filtering only victims hit by the ray would allow a second, delayed hit.
-modded class Object
-{
-    override bool EEOnDamageCalculated(TotalDamageResult damageResult, int damageType, EntityAI source, int component, string dmgZone, string ammo, vector modelPos, float speedCoef)
-    {
-        if (GRZHitscanPolicy.RejectNative(damageType, source, ammo))
-            return false;
-        return super.EEOnDamageCalculated(damageResult, damageType, source, component, dmgZone, ammo, modelPos, speedCoef);
-    }
-}

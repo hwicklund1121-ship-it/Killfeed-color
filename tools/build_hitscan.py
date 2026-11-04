@@ -21,7 +21,7 @@ def signature(text, method):
 
 def check_reference(reference):
     pairs = [
-        ('GRZ_Hitscan/scripts/3_Game/grzhitscanpolicy.c', '3_game/entities/object.c', 'EEOnDamageCalculated'),
+        ('GRZ_Hitscan/scripts/4_World/grzhitscantargets.c', '3_game/entities/object.c', 'EEOnDamageCalculated'),
         ('GRZ_Hitscan/scripts/4_World/grzhitscan.c', '4_world/entities/firearms/weapon_base.c', 'EEFired'),
         ('GRZ_NoSway/scripts/4_World/grznosway.c', '4_world/entities/dayzplayerimplementaiming.c', 'ApplyBreathingPattern'),
         ('GRZ_NoSway/scripts/4_World/grznosway.c', '4_world/entities/dayzplayerimplementaiming.c', 'ApplyHorizontalNoise'),
@@ -39,6 +39,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--reference-scripts', type=Path)
     args = parser.parse_args()
+    for script in (ROOT / 'GRZ_Hitscan/scripts').rglob('*.c'):
+        assert not re.search(r'modded\s+class\s+Object\b', script.read_text()), 'Engine Object cannot be modded'
     if args.reference_scripts:
         check_reference(args.reference_scripts)
     output = ROOT / 'downloads'
