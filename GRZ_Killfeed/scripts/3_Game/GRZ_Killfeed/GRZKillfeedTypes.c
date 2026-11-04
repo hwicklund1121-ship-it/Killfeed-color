@@ -235,6 +235,7 @@ class GRZKillfeedMessage
     string Victim;
     string WeaponJson;
     int Distance;
+    int Streak;
     ref GRZKillfeedGunData GunData = new GRZKillfeedGunData;
     ref GRZNameStyle KillerStyle = new GRZNameStyle;
     ref GRZNameStyle VictimStyle = new GRZNameStyle;

@@ -28,15 +28,40 @@ class GRZKillfeedServer
         else if (!JsonFileLoader<GRZKillfeedConfig>.SaveFile(CONFIG, s_Config, error))
             Error("GRZ Killfeed: could not create config.json in the server profiles directory.");
 
+        // Preferences live in the server profile, independently of sessions/PBOs.
+        if (FileExist(STYLES) && TryLoadStyles(STYLES))
+            return;
+        string backup = DIRECTORY + "/styles.backup.json";
+        if (!FileExist(STYLES) && !FileExist(backup))
+            return;
+        bool preserved = true;
         if (FileExist(STYLES))
+            preserved = CopyFile(STYLES, DIRECTORY + "/styles.invalid.json");
+        if (preserved && TryLoadStyles(backup))
         {
-            if (!JsonFileLoader<GRZKillfeedSavedStyles>.LoadFile(STYLES, s_Styles, error) || !s_Styles || !s_Styles.Players)
+            if (CopyFile(backup, STYLES))
             {
-                s_Styles = new GRZKillfeedSavedStyles;
-                s_CanSave = false; // Never overwrite a malformed preferences file.
-                Error("GRZ Killfeed: styles.json could not be loaded; saving is disabled until it is repaired and the server restarts.");
+                Print("GRZ Killfeed: restored saved prefixes/styles from backup.");
+                return;
             }
         }
+        s_Styles = new GRZKillfeedSavedStyles;
+        s_CanSave = false;
+        Error("GRZ Killfeed: saved styles and backup could not be restored; saving is disabled to protect existing preferences.");
+    }
+
+    protected static bool TryLoadStyles(string path)
+    {
+        if (!FileExist(path))
+            return false;
+        string error;
+        GRZKillfeedSavedStyles loaded = new GRZKillfeedSavedStyles;
+        if (!JsonFileLoader<GRZKillfeedSavedStyles>.LoadFile(path, loaded, error))
+            return false;
+        if (!loaded || !loaded.Players)
+            return false;
+        s_Styles = loaded;
+        return true;
     }
 
     static bool Allowed(PlayerIdentity identity)
@@ -235,6 +260,7 @@ class GRZKillfeedServer
         string weaponJson;
         string jsonError;
         JsonFileLoader<GRZKillfeedGunData>.MakeData(gun, weaponJson, jsonError, false);
+        int milestone = killer.GRZRecordKill();
         array<Man> players = new array<Man>;
         g_Game.GetPlayers(players);
         foreach (Man man : players)
@@ -249,10 +275,10 @@ class GRZKillfeedServer
             rpc.Write(distance);
             WriteStyle(rpc, killerStyle);
             WriteStyle(rpc, victimStyle);
+            rpc.Write(milestone);
             rpc.Send(recipient, GRZKillfeedRPC.KILL, true, recipient.GetIdentity());
         }
-        int milestone = killer.GRZRecordKill();
-        if (milestone > 0)
+        if (milestone > 0 && milestone % 10 == 0)
             AnnounceMilestone(killer, milestone);
 
     }

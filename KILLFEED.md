@@ -135,3 +135,19 @@ Animation persistence: successful save replies now apply the actual server-retur
 Killfeed v0.1.26 makes persistence explicit: Save clones the requested style, verifies the pending JSON and the final styles.json by reading back all ten style fields, then updates the live server cache from the verified disk copy before acknowledging success. The existing backup is retained and restored on a final readback failure where available; saving is then disabled for inspection. Identity-keyed records stay in the same server profile file and disconnect still resets only killstreaks.
 
 After reconnect/respawn, the client silently fetches its server style with bounded retries and refreshes its preview cache without opening the menu. Reopening the menu can use the known server-authorized state while waiting for a refresh; server save checks remain authoritative. A GRZKillfeedPreview launch flag no longer prevents dedicated-server multiplayer clients from requesting/saving a live style. No allowlist, reserved-prefix or sender validation is bypassed. Select a style and press Save once; applied name colours/effects, prefix text/icon and speed are retained for later sessions using the same server profile directory. The larger v0.1.25 row remains. Actual disconnect/reconnect, server-restart and real-kill animation tests remain required in DayZ.
+
+
+Version 0.1.28: slim 620x32 grey rows, no outlines, compact columns and a larger
+weapon view relative to row height. Every server-confirmed kill carries the
+killer's current streak and displays X1, X2, X3, etc. Player/bot survivor kills
+count; streak resets on death/disconnect. Notification and sound remain
+server-wide at 10, 20, 30 kills only, not on a timer or every kill.
+
+Prefixes/styles persist by SteamID in profiles/GRZ_Killfeed/styles.json. Logout
+and death do not remove them. Server restart reloads them, with recovery from
+styles.backup.json if necessary. Unreadable originals are preserved as
+styles.invalid.json. Keep the same -profiles folder across server launches.
+The installer/PBO update does not replace these profile files. To revoke a
+player's custom prefix/style access, stop the server, remove their SteamID from
+profiles/GRZ_Killfeed/config.json AllowedSteamIds, and restart. Their saved
+selection remains on disk but is no longer applied while access is revoked.

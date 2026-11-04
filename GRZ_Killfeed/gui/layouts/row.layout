@@ -3,7 +3,7 @@ FrameWidgetClass GRZKillfeedRow
  color 0 0 0 0
  ignorepointer 1
  position 0 0
- size 720 46
+ size 620 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -13,7 +13,7 @@ PanelWidgetClass Backing
 {
  ignorepointer 1
  position 0 0
- size 720 46
+ size 620 32
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -24,52 +24,40 @@ PanelWidgetClass Backing
 TextWidgetClass Killer
 {
  ignorepointer 1
- position 14 9
- size 190 28
+ position 12 5
+ size 150 22
  hexactpos 1
  vexactpos 1
  hexactsize 1
  vexactsize 1
- "text halign" left
  color 1 1 1 1
  font "gui/fonts/sdf_MetronLight24"
  "exact text" 1
  "text valign" center
+ "text halign" left
  text ""
-}
-ItemPreviewWidgetClass GunPreview
-{
- ignorepointer 1
- position 218 2
- size 200 42
- hexactpos 1
- vexactpos 1
- hexactsize 1
- vexactsize 1
- mode blend
- color 1 1 1 1
 }
 TextWidgetClass WeaponFallback
 {
  ignorepointer 1
- position 218 9
- size 200 28
+ position 170 5
+ size 132 22
  hexactpos 1
  vexactpos 1
  hexactsize 1
  vexactsize 1
- "text halign" center
  color 1 1 1 1
  font "gui/fonts/sdf_MetronLight24"
  "exact text" 1
  "text valign" center
+ "text halign" center
  text ""
 }
 TextWidgetClass Victim
 {
  ignorepointer 1
- position 432 9
- size 190 28
+ position 310 5
+ size 150 22
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -78,42 +66,46 @@ TextWidgetClass Victim
  font "gui/fonts/sdf_MetronLight24"
  "exact text" 1
  "text valign" center
+ "text halign" left
  text ""
 }
 TextWidgetClass Detail
 {
  ignorepointer 1
- position 636 9
- size 70 28
+ position 468 5
+ size 70 22
  hexactpos 1
  vexactpos 1
  hexactsize 1
  vexactsize 1
- "text halign" right
  color 1 1 1 1
  font "gui/fonts/sdf_MetronLight24"
  "exact text" 1
  "text valign" center
+ "text halign" right
  text ""
 }
-ImageWidgetClass KillerPrefixIcon
+TextWidgetClass StreakCount
 {
  ignorepointer 1
- position 0 11
- size 24 24
+ position 546 5
+ size 62 22
  hexactpos 1
  vexactpos 1
  hexactsize 1
  vexactsize 1
  color 1 1 1 1
- mode blend
- stretch 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" right
+ text ""
 }
 TextWidgetClass KillerPrefix
 {
  ignorepointer 1
- position 0 11
- size 90 24
+ position 0 7
+ size 64 18
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -122,13 +114,42 @@ TextWidgetClass KillerPrefix
  font "gui/fonts/sdf_MetronLight24"
  "exact text" 1
  "text valign" center
+ "text halign" left
  text ""
 }
-ImageWidgetClass VictimPrefixIcon
+TextWidgetClass VictimPrefix
 {
  ignorepointer 1
- position 0 11
- size 24 24
+ position 0 7
+ size 64 18
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+ItemPreviewWidgetClass GunPreview
+{
+ ignorepointer 1
+ position 170 1
+ size 132 30
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ mode blend
+ color 1 1 1 1
+}
+ImageWidgetClass KillerPrefixIcon
+{
+ ignorepointer 1
+ position 0 8
+ size 16 16
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -137,20 +158,18 @@ ImageWidgetClass VictimPrefixIcon
  mode blend
  stretch 1
 }
-TextWidgetClass VictimPrefix
+ImageWidgetClass VictimPrefixIcon
 {
  ignorepointer 1
- position 0 11
- size 90 24
+ position 0 8
+ size 16 16
  hexactpos 1
  vexactpos 1
  hexactsize 1
  vexactsize 1
  color 1 1 1 1
- font "gui/fonts/sdf_MetronLight24"
- "exact text" 1
- "text valign" center
- text ""
+ mode blend
+ stretch 1
 }
  }
 }

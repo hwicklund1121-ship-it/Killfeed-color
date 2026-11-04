@@ -16,9 +16,7 @@ modded class PlayerBase
         if (!g_Game.IsServer() || !GetIdentity() || !IsAlive())
             return 0;
         m_GRZKillstreak++;
-        if (m_GRZKillstreak % 10 == 0)
-            return m_GRZKillstreak;
-        return 0;
+        return m_GRZKillstreak;
     }
 
     override void EEKilled(Object killer)
@@ -114,7 +112,10 @@ modded class PlayerBase
                     message.VictimStyle = message.VictimStyle.Clone();
                 if (!message.VictimStyle.IsValid())
                     message.VictimStyle = new GRZNameStyle;
-                Print("[GRZ Killfeed 0.1.27] Live kill RPC received.");
+                // Appended field: older server payloads have no streak count.
+                if (!ctx.Read(message.Streak))
+                    message.Streak = 0;
+                Print("[GRZ Killfeed 0.1.28] Live kill RPC received.");
                 string error;
                 GRZKillfeedGunData gun;
                 if (message.WeaponJson.Length() <= 16384 && JsonFileLoader<GRZKillfeedGunData>.LoadData(message.WeaponJson, gun, error) && gun && gun.IsValid())
@@ -135,6 +136,28 @@ modded class PlayerBase
 
     protected bool GRZReadStyle(ParamsReadContext ctx, GRZNameStyle style, bool requireValid = true)
     {
-        return ctx.Read(style.ColorA) && ctx.Read(style.ColorB) && ctx.Read(style.AnimationMode) && ctx.Read(style.Speed) && ctx.Read(style.PrefixIcon) && ctx.Read(style.PrefixWord) && ctx.Read(style.PrefixAnimation.ColorA) && ctx.Read(style.PrefixAnimation.ColorB) && ctx.Read(style.PrefixAnimation.AnimationMode) && ctx.Read(style.PrefixAnimation.Speed) && (!requireValid || style.IsValid());
+        if (!ctx.Read(style.ColorA))
+            return false;
+        if (!ctx.Read(style.ColorB))
+            return false;
+        if (!ctx.Read(style.AnimationMode))
+            return false;
+        if (!ctx.Read(style.Speed))
+            return false;
+        if (!ctx.Read(style.PrefixIcon))
+            return false;
+        if (!ctx.Read(style.PrefixWord))
+            return false;
+        if (!ctx.Read(style.PrefixAnimation.ColorA))
+            return false;
+        if (!ctx.Read(style.PrefixAnimation.ColorB))
+            return false;
+        if (!ctx.Read(style.PrefixAnimation.AnimationMode))
+            return false;
+        if (!ctx.Read(style.PrefixAnimation.Speed))
+            return false;
+        if (requireValid && !style.IsValid())
+            return false;
+        return true;
     }
 }

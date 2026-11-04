@@ -116,9 +116,16 @@ def main():
     player = files["scripts/4_World/GRZ_Killfeed/GRZKillfeedPlayer.c"].decode()
     assert 'GRZKillfeedRPC.STREAK' in player
     assert 'g_Game.IsServer() || sender || this != PlayerBase.Cast(g_Game.GetPlayer())' in player
-    assert 'm_GRZKillstreak % 10 == 0' in player
+    assert 'return m_GRZKillstreak;' in player
+    assert 'milestone > 0 && milestone % 10 == 0' in server
+    assert 'rpc.Write(milestone);' in server and 'ctx.Read(message.Streak)' in player
     assert 'GRZResetKillstreak();' in player
     assert 'AnnounceMilestone(killer, milestone)' in server
+    kill_server = server.split('static void PlayerKilled', 1)[1]
+    assert kill_server.index('killer.GRZRecordKill()') < kill_server.index('rpc.Write(milestone)')
+    assert kill_server.index('WriteStyle(rpc, victimStyle)') < kill_server.index('rpc.Write(milestone)')
+    assert 'TryLoadStyles(backup)' in server and 'styles.invalid.json' in server
+    assert 'DeleteFile(STYLES)' not in server
     assert 'rpc.Write(DisplayName(victim))' in server and 'return "BOT";' in server
     assert '!victim.GetIdentity()' not in server
     assert 'command != "/killfeed test"' in text and 'static void TestLocal()' in text
@@ -169,7 +176,9 @@ def main():
     assert "hexactsize 0" in root and "vexactsize 0" in root
     assert "g_Game.GetWorkspace().GetScreenSize(width, height)" in menu
     assert "GRZKillfeedClient.ReleaseMenu();" in mission
-    assert "size 720 46" in row
+    assert "size 620 32" in row
+    assert "TextWidgetClass StreakCount" in row
+    assert '"X" + message.Streak.ToString()' in mission
     assert "current.UseLocalPreview();" in mission
     assert "if (!Allowed(identity)" in server
     assert "GunWidget.SetItem(null)" in mission and "g_Game.ObjectDelete(PreviewGun)" in mission
@@ -177,8 +186,8 @@ def main():
         for prefix in ["Swatch", "SwatchFill", "SwatchBorder", "SwatchLabel"]:
             assert prefix + str(index) in declared
     assert "animation.ColorA = i;" in menu and "animation.ColorB = i;" in menu
-    assert "row.Killer.SetTextExactSize(22)" in mission
-    assert "row.Victim.SetTextExactSize(22)" in mission
+    assert "row.Killer.SetTextExactSize(18)" in mission
+    assert "row.Victim.SetTextExactSize(18)" in mission
     focus = files["scripts/3_Game/GRZ_Killfeed/GRZKillfeedFocus.c"].decode()
     assert "override void OnDeactivateMessage()" in focus
     assert "GRZKillfeedBus.AppDeactivated.Invoke();" in focus
