@@ -1,0 +1,24 @@
+Standalone SFG.pbo configuration
+
+Use config.cpp at the ROOT of the extracted SFG source folder. Include the existing data, proxy and scripts folders from your original SFG.pbo. This download contains config/prefix files only, not the models or textures.
+
+Set the PBO virtual prefix to:
+UAVWEAPONS\SFG50\SFG
+
+The matching internal layout is:
+config.cpp
+data\SFG50.p3d
+data\sfg50.rvmat
+data\sfg50_co.paa
+...other existing data textures/materials/audio...
+proxy\suppressor.p3d
+scripts\4_World\Animations.c
+scripts\4_World\Weapons\sfg50.c
+
+The suppressor/proxy/slot definitions are included in the supplied root config. Omit the old proxy\config.cpp when rebuilding to avoid duplicate declarations. The gun has one camo selection, so it now has one texture/material override; the separate suppressor uses its own texture/material. Original weapon stats, 10x2 size, BC_Ammo_20mm requirement, recoil and animation scripts remain. The existing ammo addon must still be loaded.
+
+Rebuild SFG.pbo, then replace it on BOTH game and server and restart both. Existing spawn IDs: UAV_SFG50 and UAV_SFG_Sup.
+
+This is an SFG-only root config. It is not a replacement for the combined UAVWEAPONS pack's root config. In a combined pack, the final virtual model path still needs to be UAVWEAPONS\SFG50\SFG\data\SFG50.p3d; the outer prefix and internal folders must match that path. Correcting config text alone cannot repair a mismatched combined-PBO mount or missing assets.
+
+Static checks confirm balanced config blocks and all 12 internal model/material/texture references resolve against the uploaded SFG files. DayZ compilation, duplicate-addon behavior with the combined pack and in-game model visibility remain untested.
