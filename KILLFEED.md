@@ -151,3 +151,8 @@ The installer/PBO update does not replace these profile files. To revoke a
 player's custom prefix/style access, stop the server, remove their SteamID from
 profiles/GRZ_Killfeed/config.json AllowedSteamIds, and restart. Their saved
 selection remains on disk but is no longer applied while access is revoked.
+
+Version 0.1.29: streak count sits immediately after the killer name, separated
+by 4 pixels. Weapon, victim and distance follow at 8-pixel gaps. Text is measured
+after applying prefixes and truncation, and the grey row resizes to its contents,
+removing the former empty name columns and the far-right streak column.

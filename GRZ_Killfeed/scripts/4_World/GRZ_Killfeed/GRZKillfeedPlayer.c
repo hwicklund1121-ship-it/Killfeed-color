@@ -115,7 +115,7 @@ modded class PlayerBase
                 // Appended field: older server payloads have no streak count.
                 if (!ctx.Read(message.Streak))
                     message.Streak = 0;
-                Print("[GRZ Killfeed 0.1.28] Live kill RPC received.");
+                Print("[GRZ Killfeed 0.1.29] Live kill RPC received.");
                 string error;
                 GRZKillfeedGunData gun;
                 if (message.WeaponJson.Length() <= 16384 && JsonFileLoader<GRZKillfeedGunData>.LoadData(message.WeaponJson, gun, error) && gun && gun.IsValid())

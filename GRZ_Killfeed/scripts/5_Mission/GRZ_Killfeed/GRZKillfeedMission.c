@@ -334,30 +334,40 @@ modded class MissionGameplay
         row.VictimPrefix = TextWidget.Cast(row.Root.FindAnyWidget("VictimPrefix"));
         row.KillerPrefixIcon = ImageWidget.Cast(row.Root.FindAnyWidget("KillerPrefixIcon"));
         row.VictimPrefixIcon = ImageWidget.Cast(row.Root.FindAnyWidget("VictimPrefixIcon"));
-        // Slim reference-style grey row with close, consistent column spacing.
-        GRZLayoutName(row.Killer, row.KillerPrefix, row.KillerPrefixIcon, GRZShortName(message.Killer), message.KillerStyle, 12);
-        int gunLeft = 170;
-        int gunWidth = 132;
-        int victimLeft = 310;
-        GRZLayoutName(row.Victim, row.VictimPrefix, row.VictimPrefixIcon, GRZShortName(message.Victim), message.VictimStyle, victimLeft);
+        // Lay out actual measured text widths instead of reserving empty columns.
+        int killerWidth = GRZLayoutName(row.Killer, row.KillerPrefix, row.KillerPrefixIcon, GRZShortName(message.Killer), message.KillerStyle, 10);
+        int cursor = 10 + killerWidth;
+        TextWidget streakLabel = TextWidget.Cast(row.Root.FindAnyWidget("StreakCount"));
+        streakLabel.SetTextExactSize(16);
+        streakLabel.SetOutline(0, 0x00000000);
+        if (message.Streak > 0)
+        {
+            GRZFitName(streakLabel, "X" + message.Streak.ToString(), 60);
+            int streakWidth, streakHeight;
+            streakLabel.GetTextSize(streakWidth, streakHeight);
+            streakLabel.SetPos(cursor + 4, 5);
+            streakLabel.SetSize(streakWidth + 2, 22);
+            cursor += 4 + streakWidth + 2;
+        }
+        else
+            streakLabel.Show(false);
+        int gunLeft = cursor + 8;
+        int gunWidth = 112;
+        int victimLeft = gunLeft + gunWidth + 8;
+        int victimWidth = GRZLayoutName(row.Victim, row.VictimPrefix, row.VictimPrefixIcon, GRZShortName(message.Victim), message.VictimStyle, victimLeft);
         row.Root.FindAnyWidget("GunPreview").SetPos(gunLeft, 1);
         row.Root.FindAnyWidget("GunPreview").SetSize(gunWidth, 30);
         TextWidget detail = TextWidget.Cast(row.Root.FindAnyWidget("Detail"));
-        int distanceLeft = 468;
+        int distanceLeft = victimLeft + victimWidth + 8;
         detail.SetPos(distanceLeft, 5);
         detail.SetText(message.Distance.ToString() + "m");
         detail.SetTextExactSize(14);
         detail.SetOutline(0, 0x00000000);
         GRZFitName(detail, message.Distance.ToString() + "m", 68);
-        detail.SetSize(70, 22);
-        TextWidget streakLabel = TextWidget.Cast(row.Root.FindAnyWidget("StreakCount"));
-        streakLabel.SetTextExactSize(16);
-        streakLabel.SetOutline(0, 0x00000000);
-        if (message.Streak > 0)
-            GRZFitName(streakLabel, "X" + message.Streak.ToString(), 60);
-        else
-            streakLabel.Show(false);
-        row.Width = 620;
+        int distanceWidth, distanceHeight;
+        detail.GetTextSize(distanceWidth, distanceHeight);
+        detail.SetSize(distanceWidth + 2, 22);
+        row.Width = distanceLeft + distanceWidth + 12;
         row.Root.SetSize(row.Width, 32);
         row.Root.FindAnyWidget("Backing").SetSize(row.Width, 32);
         row.WeaponFallback = TextWidget.Cast(row.Root.FindAnyWidget("WeaponFallback"));
@@ -381,7 +391,7 @@ modded class MissionGameplay
         GRZPositionRows();
         // Keep script-heavy modded weapon initialization outside row delivery.
         g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(row.CreateGunPreview, 1, false);
-        Print(string.Format("[GRZ Killfeed 0.1.28] Row added: killerEffect=%1 victimEffect=%2 prefixIcon=%3; preview deferred.", message.KillerStyle.AnimationMode, message.VictimStyle.AnimationMode, message.KillerStyle.PrefixIcon));
+        Print(string.Format("[GRZ Killfeed 0.1.29] Row added: killerEffect=%1 victimEffect=%2 prefixIcon=%3; preview deferred.", message.KillerStyle.AnimationMode, message.VictimStyle.AnimationMode, message.KillerStyle.PrefixIcon));
     }
 
     protected void GRZReceiveStreak(string playerName, int count)

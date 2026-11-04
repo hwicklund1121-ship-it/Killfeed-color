@@ -178,6 +178,11 @@ def main():
     assert "GRZKillfeedClient.ReleaseMenu();" in mission
     assert "size 620 32" in row
     assert "TextWidgetClass StreakCount" in row
+    assert 'streakLabel.SetPos(cursor + 4, 5)' in mission
+    assert 'int victimLeft = gunLeft + gunWidth + 8' in mission
+    assert 'int distanceLeft = victimLeft + victimWidth + 8' in mission
+    assert 'row.Width = distanceLeft + distanceWidth + 12' in mission
+    assert 'int gunLeft = 170' not in mission
     assert '"X" + message.Streak.ToString()' in mission
     assert "current.UseLocalPreview();" in mission
     assert "if (!Allowed(identity)" in server
