@@ -67,7 +67,7 @@ def main():
         'Sky Colors: GREY added after WHITE under Options > Game; clouds retained and saved selections preserved.\n'
         'Killfeed: compact translucent row; killer, weapon, victim, distance; no outlines. Existing animations/prefixes stay active.\n'
         'No sway: removes breathing/horizontal aiming wander while preserving recoil.\n'
-        'Aim Control TEST: 10% ADS recoil and hipfire/ADS aim-point alignment for supported hitscan shots. Native scope-entry timing and camera movement are restored. Read GRZ-AimControl-TEST.md.\n'
+        'Aim Control TEST: 10% ADS recoil and hipfire/ADS aim-point alignment for supported hitscan shots. Fast 0.08s scope transitions and reduced reticle lag are restored while native weapon-ready checks remain; the forced early-ADS bypass stays removed. Read GRZ-AimControl-TEST.md.\n'
         'Hitscan is an EXPERIMENTAL damage-path replacement. Read GRZ-Hitscan-TEST.md for supported guns, native visual effects and duplicate-hit tests.\n'
         'Your generated inventory override is NOT included: it must be built with your own installed/custom gun definitions.\n'
         'Package and static source checks passed. Enforce compilation and in-game tests remain outstanding.\n'

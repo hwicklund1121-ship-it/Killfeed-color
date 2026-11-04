@@ -18,6 +18,7 @@ def main():
     script = (source / 'scripts/4_World/grzaimcontrol.c').read_text()
     if args.reference_scripts:
         for method, filename in [
+            ('OnCameraChange', '4_world/entities/manbase/dayzplayer/dayzplayercameras.c'),
             ('OnUpdate', '4_world/entities/manbase/dayzplayer/dayzplayercameraironsights.c'),
             ('StdFovUpdate', '4_world/entities/manbase/dayzplayer/dayzplayercamera_base.c'),
             ('GetRecoilModifier', '4_world/classes/recoilbase/recoilbase.c'),

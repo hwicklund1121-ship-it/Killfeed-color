@@ -1,8 +1,31 @@
-// Aim/recoil controls only. Native scope-entry timing and camera movement are retained.
+// Fast scope transitions retain native weapon-ready checks; no forced early ADS.
+modded class DayZPlayerCameras
+{
+    override static float OnCameraChange(DayZPlayer pPlayer, int pFrom, int pTo)
+    {
+        float nativeTime = super.OnCameraChange(pPlayer, pFrom, pTo);
+        if (!pPlayer || !Weapon_Base.Cast(pPlayer.GetEntityInHands()))
+            return nativeTime;
+        bool aimingFrom = pFrom == DAYZCAMERA_IRONSIGHTS || pFrom == DAYZCAMERA_OPTICS;
+        bool aimingTo = pTo == DAYZCAMERA_IRONSIGHTS || pTo == DAYZCAMERA_OPTICS;
+        bool normalFrom = pFrom == DAYZCAMERA_1ST || pFrom == DAYZCAMERA_3RD_ERC || pFrom == DAYZCAMERA_3RD_CRO || pFrom == DAYZCAMERA_3RD_PRO || pFrom == DAYZCAMERA_3RD_ERC_RAISED || pFrom == DAYZCAMERA_3RD_CRO_RAISED || pFrom == DAYZCAMERA_3RD_PRO_RAISED;
+        bool normalTo = pTo == DAYZCAMERA_1ST || pTo == DAYZCAMERA_3RD_ERC || pTo == DAYZCAMERA_3RD_CRO || pTo == DAYZCAMERA_3RD_PRO || pTo == DAYZCAMERA_3RD_ERC_RAISED || pTo == DAYZCAMERA_3RD_CRO_RAISED || pTo == DAYZCAMERA_3RD_PRO_RAISED;
+        if ((aimingTo && (normalFrom || aimingFrom)) || (aimingFrom && normalTo))
+            return Math.Min(nativeTime, 0.08);
+        return nativeTime;
+    }
+}
+
 modded class DayZPlayerCameraIronsights
 {
     override void OnUpdate(float pDt, out DayZPlayerCameraResult pOutResult)
     {
+        if (m_weaponUsed)
+        {
+            m_dynamicsStrength = 0;
+            m_movementAmplitudeX = 0;
+            m_movementAmplitudeY = 0;
+        }
         super.OnUpdate(pDt, pOutResult);
         if (m_weaponUsed)
             pOutResult.m_fShootFromCamera = 1.0;
