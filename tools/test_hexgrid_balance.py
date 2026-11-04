@@ -37,7 +37,7 @@ with ZipFile(ROOT / 'downloads/GRZ-Customs.zip') as archive:
     assert scalar(body(body(armour, 'Projectile'), 'Health'), 'damage') == HEALTH_MULTIPLIER
     assert scalar(body(body(config, 'GlobalHealth'), 'Health'), 'hitpoints') == VEST_HITPOINTS
     assert scalar(body(body(armour, 'Projectile'), 'Shock'), 'damage') == 0.1
-    _, custom = read_pbo(archive.read('@GRZ_Customs/Addons/GRZ_Customs_Hexgrid.pbo'))
+    _, custom = read_pbo(archive.read('@GRZ_Customs/Addons/GRZ_Customs.pbo'))
     assert 'class GRZ_GunRunnerZ_Hexgrid: HEXGRID_Base' in custom['config.cpp'].decode()
     assert 'DamageSystem' not in custom['config.cpp'].decode()
     assert not any(path.lower().endswith('.cpp') and b'class CfgAmmo' in data for path, data in base.items())

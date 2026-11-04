@@ -6,3 +6,6 @@ __pycache__/
 
 # Large VPP PBO is reproducibly restored from the supplied ZIP.
 /packaging/admin-addons/@VPPAdminTools/Addons/VPPAdminTools.pbo
+
+# Consolidated Customs PBO exceeds GitHub per-file limit; distributed inside versioned ZIPs.
+/downloads/GRZ_Customs.pbo

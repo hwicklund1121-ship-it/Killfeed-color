@@ -167,20 +167,24 @@ class CfgVehicles
         extras[source.name + '.pbo'] = addon
         extra_report[source.name] = {'sha256': hashlib.sha256(addon).hexdigest(),
                                     'prefix': extension['prefix'], 'files': len(contents)}
-    report = {'version': '0.1.8', 'hexgrid_armour': armour_report(), 'gunwrap_variants': wrap_count, 'included_reskins': ['Gunrunnerz HEXGRID', 'Blakes Kit (without kit HEXGRID)', 'GRZ_Tracksuit_Pants', 'GRZ_Gunwraps'],
+    from consolidate_customs import consolidate
+    consolidated, consolidated_report = consolidate([pbo] + list(extras.values()))
+    extras = {'GRZ_Customs.pbo': consolidated}
+    extra_report = {'GRZ_Customs': consolidated_report}
+    (output / 'GRZ_Customs.pbo').write_bytes(consolidated)
+    report = {'version': '0.1.9', 'hexgrid_armour': armour_report(), 'gunwrap_variants': wrap_count, 'included_reskins': ['Gunrunnerz HEXGRID', 'Blakes Kit (without kit HEXGRID)', 'GRZ_Tracksuit_Pants', 'GRZ_Gunwraps'],
               'additional_addons': extra_report,
               'item_class': 'GRZ_GunRunnerZ_Hexgrid', 'base_item_class': 'HEXGRID_Base',
               'display_name': 'GunRunnerZ Hexgrid', 'description': 'Made By Blake',
               'base_pbo_sha256': hashlib.sha256(base_pbo).hexdigest(), 'original_sha256': hashlib.sha256(original).hexdigest(),
-              'pbo_sha256': hashlib.sha256(pbo).hexdigest(), 'prefix': prefix,
+              'pbo_sha256': hashlib.sha256(consolidated).hexdigest(), 'prefix': 'GRZ_Customs',
               'verified_internal_resources': checked, 'maps': maps}
     (ROOT / 'GRZ-CUSTOMS-MANIFEST.json').write_text(json.dumps(report, indent=2) + '\n')
     with ZipFile(output / 'GRZ-Customs.zip', 'w', ZIP_DEFLATED) as archive:
         archive.writestr('@GRZ_Customs/Addons/HEXGRID.pbo', base_pbo)
-        archive.writestr('@GRZ_Customs/Addons/GRZ_Customs_Hexgrid.pbo', pbo)
         for name, addon in extras.items():
             archive.writestr('@GRZ_Customs/Addons/' + name, addon)
-        archive.writestr('@GRZ_Customs/mod.cpp', 'name = "GRZ Customs";\nauthor = "GRZ";\nversion = "0.1.8";\n')
+        archive.writestr('@GRZ_Customs/mod.cpp', 'name = "GRZ Customs";\nauthor = "GRZ";\nversion = "0.1.9";\n')
         archive.write(ROOT / 'GRZ-CUSTOMS.md', 'INSTALL.md')
         archive.write(ROOT / 'GRZ-CUSTOMS-MANIFEST.json', '@GRZ_Customs/MANIFEST.json')
         archive.write(ROOT / 'GRZ-GUNWRAPS-ITEMS.json', '@GRZ_Customs/GUNWRAPS-ITEMS.json')
@@ -193,7 +197,6 @@ class CfgVehicles
     with ZipFile(output / 'GRZ-Customs.zip') as archive:
         assert archive.testzip() is None
         assert archive.read('@GRZ_Customs/Addons/HEXGRID.pbo') == base_pbo
-        assert archive.read('@GRZ_Customs/Addons/GRZ_Customs_Hexgrid.pbo') == pbo
         for name, addon in extras.items():
             assert archive.read('@GRZ_Customs/Addons/' + name) == addon
     (output / ('GRZ-Customs-' + report['version'] + '.zip')).write_bytes((output / 'GRZ-Customs.zip').read_bytes())

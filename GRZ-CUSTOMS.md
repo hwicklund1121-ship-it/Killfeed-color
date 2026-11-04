@@ -1,4 +1,22 @@
-GRZ Customs 0.1.8
+GRZ Customs 0.1.9
+
+Current pack layout: two PBOs only. HEXGRID.pbo contains the original repaired
+HEXGRID models/base class and shared armour tuning. GRZ_Customs.pbo contains one
+root CfgPatches/CfgVehicles config for all 55 additive reskins and their assets,
+mounted consistently under GRZ_Customs. Spawn class names are retained.
+
+The installer backs up and removes the four obsolete split reskin PBOs before
+copying the consolidated addon into both client and server mod folders. Run the
+new installer rather than copying over files and leaving duplicate definitions.
+Keep the helmet and SK dependencies loaded on both sides.
+
+A small startup check writes GRZ_Customs_registration.txt into the server/client
+profile directory and prints the number of registered custom item classes. A
+successful config check reads Registered 55/55 custom items. This is a runtime
+config diagnostic; it does not alter inventories, spawn items or grant admin.
+If the script itself cannot load, no report is written and its compile error
+will appear in the script log. Packaging tests cannot establish an in-game fix.
+
 
 Fix: custom HEXGRID and tracksuit configs no longer declare any DamageSystem,
 GlobalHealth or Health blocks. Their native damage settings are inherited.
@@ -50,14 +68,14 @@ Two separate spawnable items are available:
   "Made By Blake", with the supplied custom colour and normal maps.
 
 HEXGRID.pbo supplies the original model and item, with its broken mount repaired.
-GRZ_Customs_Hexgrid.pbo adds the new item through inheritance, with its own
+The consolidated GRZ_Customs.pbo adds the new item through inheritance, with its own
 texture/material paths. Original geometry, animation script and cargo are retained. Shared armour and
 durability are balanced as described below. Damage settings and damage-level materials are inherited from the original vest.
 
 Installation
 
 Recommended: extract the entire ZIP, close DayZ and the server, and run
-Install-GRZCustoms.cmd. This copies and verifies all five PBOs in the default
+Install-GRZCustoms.cmd. This copies and verifies both PBOs in the default
 Steam game/server folders, backs up duplicates from @GRZ_Local, and adds
 @GRZ_Customs to the existing server BAT -mod argument. Existing BAT settings
 are preserved. If installed under Program Files, run as administrator if Windows

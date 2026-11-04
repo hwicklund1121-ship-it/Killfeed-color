@@ -16,12 +16,13 @@ $source = Join-Path $PSScriptRoot '@GRZ_Customs'
 $manifestPath = Join-Path $source 'MANIFEST.json'
 if (!(Test-Path $manifestPath)) { throw 'Missing pack manifest. Extract the entire new ZIP first.' }
 $manifest = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
-if ($manifest.version -ne '0.1.8') { throw "This installer needs GRZ Customs 0.1.8; this folder contains $($manifest.version). Extract the latest ZIP into a NEW folder." }
-Write-Host "Installing GRZ Customs $($manifest.version) - shared HEXGRID armour balanced."
-$names = @('HEXGRID.pbo','GRZ_Customs_Hexgrid.pbo','Blakes_Kit.pbo','GRZ_Tracksuit_Pants.pbo','GRZ_Gunwraps.pbo')
+if ($manifest.version -ne '0.1.9') { throw "This installer needs GRZ Customs 0.1.9; this folder contains $($manifest.version). Extract the latest ZIP into a NEW folder." }
+Write-Host "Installing GRZ Customs $($manifest.version) - consolidated additive item pack."
+$names = @('HEXGRID.pbo','GRZ_Customs.pbo')
+$obsolete = @('GRZ_Customs_Hexgrid.pbo','Blakes_Kit.pbo','GRZ_Tracksuit_Pants.pbo','GRZ_Gunwraps.pbo')
 $expectedHashes = @{
     'HEXGRID.pbo' = $manifest.base_pbo_sha256
-    'GRZ_Customs_Hexgrid.pbo' = $manifest.pbo_sha256
+    'GRZ_Customs.pbo' = $manifest.pbo_sha256
 }
 foreach ($addon in $manifest.additional_addons.PSObject.Properties) {
     $expectedHashes[$addon.Name + '.pbo'] = $addon.Value.sha256
@@ -61,7 +62,7 @@ foreach ($target in @($ServerPath,$GamePath)) {
         Copy-Item -LiteralPath $destination -Destination $backup -Recurse
     }
     # Move duplicates of the five included addons outside active mod folders.
-    foreach ($name in $names) {
+    foreach ($name in @($names + $obsolete)) {
         $old = Join-Path $target "@GRZ_Local\Addons\$name"
         if (Test-Path $old) {
             $oldBackup = Join-Path $backup 'Old-GRZ-Local-Addons'
@@ -70,14 +71,31 @@ foreach ($target in @($ServerPath,$GamePath)) {
             Get-ChildItem -LiteralPath (Split-Path $old) -Filter "$name.*.bisign" | Move-Item -Destination $oldBackup
         }
     }
+    foreach ($name in $obsolete) {
+        $old = Join-Path $destination "Addons\$name"
+        if (Test-Path $old) {
+            $oldBackup = Join-Path $backup 'Old-Customs-Addons'
+            New-Item -ItemType Directory -Path $oldBackup -Force | Out-Null
+            Move-Item -LiteralPath $old -Destination $oldBackup
+            Get-ChildItem -LiteralPath (Split-Path $old) -Filter "$name.*.bisign" | Move-Item -Destination $oldBackup
+        }
+    }
     New-Item -ItemType Directory -Path $destination -Force | Out-Null
-    Copy-Item -Path (Join-Path $source '*') -Destination $destination -Recurse -Force
+    New-Item -ItemType Directory -Path (Join-Path $destination 'Addons') -Force | Out-Null
+    foreach ($name in $names) {
+        Copy-Item -LiteralPath (Join-Path $source "Addons\$name") -Destination (Join-Path $destination "Addons\$name") -Force
+    }
+    foreach ($name in @('mod.cpp','MANIFEST.json','GUNWRAPS-ITEMS.json')) {
+        if (Test-Path (Join-Path $source $name)) {
+            Copy-Item -LiteralPath (Join-Path $source $name) -Destination (Join-Path $destination $name) -Force
+        }
+    }
     foreach ($name in $names) {
         $expected = (Get-FileHash (Join-Path $source "Addons\$name")).Hash
         $actual = (Get-FileHash (Join-Path $destination "Addons\$name")).Hash
         if ($expected -ne $actual) { throw "Copy verification failed: $target $name" }
     }
-    Write-Host "Verified all five Customs PBOs in $target"
+    Write-Host "Verified both Customs PBOs in $target"
 }
 if ($updated -ne $original) {
     Copy-Item -LiteralPath $bat -Destination "$bat.before-customs-$stamp.bak"
@@ -86,4 +104,5 @@ if ($updated -ne $original) {
 Write-Host 'Server BAT includes @GRZ_Customs in -mod. Existing server options preserved.'
 Write-Host 'CLIENT: DayZ Launcher > Mods > Local mod > select the DayZ game folder @GRZ_Customs, then CHECK it.'
 Write-Host 'Also load the helmet and SK mods on both sides. Start the server using its updated BAT.'
-Write-Host 'Search VPP for GRZ_Tracksuit_Pants or GRZ_Gunwraps_Red. Their vanilla bases need no SK/helmet addon.'
+Write-Host 'Registration report: profiles\GRZ_Customs_registration.txt on the server.'
+Write-Host 'Search VPP for GRZ_Tracksuit_Pants or GRZ_Gunwraps_Red. The complete pack requires the helmet and SK addons.'

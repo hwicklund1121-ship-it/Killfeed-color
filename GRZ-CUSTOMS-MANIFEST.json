@@ -1,5 +1,5 @@
 {
-  "version": "0.1.8",
+  "version": "0.1.9",
   "hexgrid_armour": {
     "health_multiplier": 0.045,
     "vest_hitpoints": 10000,
@@ -35,20 +35,67 @@
     "GRZ_Gunwraps"
   ],
   "additional_addons": {
-    "Blakes_Kit": {
-      "sha256": "2ff87f243be487294be03a425599e0cb5b1952502fb9c7a8349b6976092b63db",
-      "prefix": "Blakes_Kit",
-      "files": 18
-    },
-    "GRZ_Gunwraps": {
-      "sha256": "dac06a866f87c1eed9e3dde000c6a34b941e7b5d4816897b1fb952c3d143feb8",
-      "prefix": "GRZ_Gunwraps",
-      "files": 49
-    },
-    "GRZ_Tracksuit_Pants": {
-      "sha256": "7f7a7bab6af39b645f4dcf75dfcf7971dcfd5f9841fea5b0fe11c8e97abed91c",
-      "prefix": "GRZ_Tracksuit_Pants",
-      "files": 4
+    "GRZ_Customs": {
+      "prefix": "GRZ_Customs",
+      "sha256": "92a56b7622da40f0d1057f2d25d5bfac81be5a1b83b15e40e866cf69f4da1716",
+      "files": 73,
+      "item_classes": [
+        "GRZ_GunRunnerZ_Hexgrid",
+        "blake_SurgicalGloves",
+        "blake_jean",
+        "blake_helment",
+        "blake_sneakers",
+        "blake_Tshirt",
+        "GRZ_Gunwraps_Black",
+        "GRZ_Gunwraps_White",
+        "GRZ_Gunwraps_Grey",
+        "GRZ_Gunwraps_Charcoal",
+        "GRZ_Gunwraps_Silver",
+        "GRZ_Gunwraps_Red",
+        "GRZ_Gunwraps_DarkRed",
+        "GRZ_Gunwraps_Crimson",
+        "GRZ_Gunwraps_Orange",
+        "GRZ_Gunwraps_Amber",
+        "GRZ_Gunwraps_Yellow",
+        "GRZ_Gunwraps_Gold",
+        "GRZ_Gunwraps_Lime",
+        "GRZ_Gunwraps_Green",
+        "GRZ_Gunwraps_DarkGreen",
+        "GRZ_Gunwraps_Olive",
+        "GRZ_Gunwraps_Mint",
+        "GRZ_Gunwraps_Teal",
+        "GRZ_Gunwraps_Cyan",
+        "GRZ_Gunwraps_Turquoise",
+        "GRZ_Gunwraps_SkyBlue",
+        "GRZ_Gunwraps_Blue",
+        "GRZ_Gunwraps_DarkBlue",
+        "GRZ_Gunwraps_Navy",
+        "GRZ_Gunwraps_Purple",
+        "GRZ_Gunwraps_Violet",
+        "GRZ_Gunwraps_Lavender",
+        "GRZ_Gunwraps_Magenta",
+        "GRZ_Gunwraps_Pink",
+        "GRZ_Gunwraps_HotPink",
+        "GRZ_Gunwraps_Rose",
+        "GRZ_Gunwraps_Brown",
+        "GRZ_Gunwraps_Tan",
+        "GRZ_Gunwraps_Beige",
+        "GRZ_Gunwraps_Cream",
+        "GRZ_Gunwraps_Maroon",
+        "GRZ_Gunwraps_Red_Black",
+        "GRZ_Gunwraps_White_Black",
+        "GRZ_Gunwraps_Blue_Black",
+        "GRZ_Gunwraps_Pink_Black",
+        "GRZ_Gunwraps_Purple_Black",
+        "GRZ_Gunwraps_Gold_Black",
+        "GRZ_Gunwraps_Red_White",
+        "GRZ_Gunwraps_Blue_White",
+        "GRZ_Gunwraps_Pink_White",
+        "GRZ_Gunwraps_Cyan_Purple",
+        "GRZ_Gunwraps_Red_Blue",
+        "GRZ_Gunwraps_Rainbow",
+        "GRZ_Tracksuit_Pants"
+      ]
     }
   },
   "item_class": "GRZ_GunRunnerZ_Hexgrid",
@@ -57,8 +104,8 @@
   "description": "Made By Blake",
   "base_pbo_sha256": "79c274f9483ccf492025c7b1a6f53c94c3319120de44abb3291137c309162c8c",
   "original_sha256": "f53d9e1a6e1d2675a8ef990c05d6b2af72cc47d09d961dd684e33961f8f4fa6e",
-  "pbo_sha256": "58f3487f5ff3233494f921243337395b08c77bbf0293b9b98d4b63b769d2b4d3",
-  "prefix": "GRZ_Customs_Hexgrid",
+  "pbo_sha256": "92a56b7622da40f0d1057f2d25d5bfac81be5a1b83b15e40e866cf69f4da1716",
+  "prefix": "GRZ_Customs",
   "verified_internal_resources": 11,
   "maps": {
     "HEXGRID_co.paa": {
