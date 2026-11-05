@@ -1,4 +1,4 @@
-GRZ Loadout 0.2.3 — Made By Blake
+GRZ Loadout 0.2.4 — Made By Blake
 
 INSTALL
 Copy GRZ_Loadout.pbo into @GRZ_Local/Addons on BOTH game and server.
@@ -25,7 +25,8 @@ Click a slot to list all matching vanilla and installed custom clothing.
 Clothing list names include colour/variant suffixes inferred from class and texture filenames, e.g. [Black] or [Red / White / Checked].
 Skins without identifiable colour names use [Custom] for GRZ/Blake items or [Default] for other items. Use the mouse wheel over the item list to browse and preview clothing on the body without clicking.
 Each wheel event selects the next/previous visible row; double-click keeps that choice.
-Single-clicking only highlights a row; it does not apply a preview.
+Preview follows the highlighted list row, including native selection changes; double-click is only required to keep an item.
+Wheel and double-click callbacks are registered directly on the list widget and unregistered when the menu closes.
 Save & Apply ignores temporary previews and applies only kept selections.
 Changing tabs or removing an item clears temporary previews. Character selection follows the same click/keep behavior.
 Remove Item clears the selected preview slot. Select Character lists all available DayZ survivor characters.

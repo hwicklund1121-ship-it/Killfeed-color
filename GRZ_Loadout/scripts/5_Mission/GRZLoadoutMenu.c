@@ -18,6 +18,7 @@ class GRZLoadoutMenu : UIScriptedMenu
  protected string m_TryOnCharacter;
  protected int m_TryOnSlot = -1;
  protected bool m_PopulatingClothing;
+ protected int m_LastPreviewRow = -1;
  protected ref array<int> m_ClothingFiltered = new array<int>;
  protected ref array<string> m_ClothingChoices = new array<string>;
  protected bool m_Saving;
@@ -28,6 +29,11 @@ class GRZLoadoutMenu : UIScriptedMenu
   layoutRoot = g_Game.GetWorkspace().CreateWidgets("GRZ_Loadout/gui/layouts/loadout.layout");
   m_CharacterPreview = PlayerPreviewWidget.Cast(layoutRoot.FindAnyWidget("CharacterPreview"));
   m_ClothingList = TextListboxWidget.Cast(layoutRoot.FindAnyWidget("ClothingList"));
+  if (WidgetEventHandler.GetInstance())
+  {
+   WidgetEventHandler.GetInstance().RegisterOnMouseWheel(m_ClothingList, this, "GRZListWheel");
+   WidgetEventHandler.GetInstance().RegisterOnDoubleClick(m_ClothingList, this, "OnDoubleClick");
+  }
   m_Preview = ItemPreviewWidget.Cast(layoutRoot.FindAnyWidget("GunPreview"));
   ImageWidget logo = ImageWidget.Cast(layoutRoot.FindAnyWidget("Logo"));
   logo.LoadImageFile(0, "GRZ_Loadout/data/logo.paa");
@@ -52,6 +58,8 @@ class GRZLoadoutMenu : UIScriptedMenu
 
  override void OnHide()
  {
+  if (m_ClothingList && WidgetEventHandler.GetInstance())
+   WidgetEventHandler.GetInstance().UnregisterWidget(m_ClothingList);
   GRZLoadoutClientData.Changed.Remove(ReceiveCatalogue);
   GRZLoadoutClientData.Result.Remove(ReceiveResult);
   g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(RebuildPreview);
@@ -256,6 +264,7 @@ class GRZLoadoutMenu : UIScriptedMenu
  {
   ClearTryOn();
   m_PopulatingClothing = true;
+  m_LastPreviewRow = -1;
   m_ClothingFiltered.Clear();
   m_ClothingList.ClearItems();
   GRZLoadoutCatalogue catalogue = GRZLoadoutClientData.Catalogue;
@@ -413,6 +422,7 @@ class GRZLoadoutMenu : UIScriptedMenu
   GRZLoadoutCatalogue catalogue = GRZLoadoutClientData.Catalogue;
   if (!catalogue || row < 0)
    return;
+  m_LastPreviewRow = row;
   ClearTryOn();
   if (m_ChoosingCharacter)
   {
@@ -427,32 +437,33 @@ class GRZLoadoutMenu : UIScriptedMenu
   RefreshClothing();
  }
 
+ bool GRZListWheel(Widget w, int x, int y, int wheel)
+ {
+  if (!m_ClothingMode || m_Saving || m_PopulatingClothing || wheel == 0)
+   return false;
+  int count = m_ClothingList.GetNumItems();
+  if (count == 0)
+   return true;
+  int row = m_ClothingList.GetSelectedRow();
+  if (row < 0)
+   row = 0;
+  else if (wheel < 0)
+   row = Math.Min(row + 1, count - 1);
+  else
+   row = Math.Max(row - 1, 0);
+  m_ClothingList.SelectRow(row);
+  m_ClothingList.EnsureVisible(row);
+  PreviewClothingRow(row);
+  return true;
+ }
+
  override bool OnMouseWheel(Widget w, int x, int y, int wheel)
  {
-  if (m_ClothingMode && !m_Saving && !m_PopulatingClothing && wheel != 0)
-  {
-   Widget target = w;
-   while (target && target != m_ClothingList)
-    target = target.GetParent();
-   if (target == m_ClothingList)
-   {
-    int count = m_ClothingList.GetNumItems();
-    if (count == 0)
-     return true;
-    int row = m_ClothingList.GetSelectedRow();
-    if (row < 0)
-     row = 0;
-    else if (wheel < 0)
-     row = Math.Min(row + 1, count - 1);
-    else
-     row = Math.Max(row - 1, 0);
-    m_ClothingList.SelectRow(row);
-    m_ClothingList.EnsureVisible(row);
-    PreviewClothingRow(row);
-    // Consume the wheel event so native scrolling cannot skip the previewed row.
-    return true;
-   }
-  }
+  Widget target = w;
+  while (target && target != m_ClothingList)
+   target = target.GetParent();
+  if (target == m_ClothingList)
+   return GRZListWheel(w, x, y, wheel);
   return super.OnMouseWheel(w, x, y, wheel);
  }
 
@@ -556,6 +567,13 @@ class GRZLoadoutMenu : UIScriptedMenu
  override void Update(float timeslice)
  {
   super.Update(timeslice);
+  // Also follow native highlight changes if the control handles an input itself.
+  if (m_ClothingMode && !m_Saving && !m_PopulatingClothing && m_ClothingList)
+  {
+   int highlighted = m_ClothingList.GetSelectedRow();
+   if (highlighted >= 0 && highlighted != m_LastPreviewRow)
+    PreviewClothingRow(highlighted);
+  }
   PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
   if (!player || !player.IsAlive() || player.IsUnconscious())
   {
