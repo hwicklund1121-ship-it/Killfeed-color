@@ -61,10 +61,10 @@ def main():
     assert 'attacker.GetIdentity());' in server
     visual=files['scripts/5_Mission/GRZ_Hitmarker/GRZHitmarkerVisual.c'].decode()
     assert 'SEffectManager.CreateSound' in visual
-    assert '.Play2D(' not in visual
+    assert '.Play2D(' in visual and 'SetVolumeRelative' in visual
     assert 'SetSoundVolume' in visual and 'Handle.SoundPlay()' in visual
     assert 's_Voices.Count() >= 12' in visual and 'SEffectManager.DestroyEffect(Handle)' in visual
-    assert 'WaveKind.WAVEEFFECTEX' in visual
+    assert 'WaveKind.WAVEUI' in visual and 'WaveKind.WAVEEFFECTEX' not in visual
     assert 'Event_OnSoundWaveStarted.Insert(voice.OnStarted)' in visual
     assert 'Event_OnSoundWaveStarted.Remove(OnStarted)' in visual
     assert 'SetSoundAutodestroy(true)' in visual
@@ -93,7 +93,8 @@ def main():
     cfg=files['config.cpp'].decode()
     assert 'spatial = 0;' in cfg
     for name in ['body_hit','headshot']:
-        assert f'GRZ_Hitmarker/sounds/{name}.ogg' in cfg
+        assert f'GRZ_Hitmarker/sounds/{name}' in cfg
+        assert f'GRZ_Hitmarker/sounds/{name}.ogg' not in cfg
     assert files['$PBOPREFIX$'].decode().strip()=='GRZ_Hitmarker'
     print(f'Hitmarker PBO/ZIP match source ({len(files)-1} files); native options, selectors and RPC fields checked.')
     print('Both WAVs are non-silent mono PCM, 48 kHz, below clipping; native non-spatial playback and volume binding checked.')

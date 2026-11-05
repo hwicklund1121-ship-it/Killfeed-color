@@ -1,4 +1,4 @@
 class GRZHitmarkerAudioStatus
 {
-    static const bool RUST_HEADSHOT_INSTALLED = false;
+    static const bool RUST_HEADSHOT_INSTALLED = true;
 }
