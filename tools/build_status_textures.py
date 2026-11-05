@@ -9,9 +9,10 @@ from PIL import Image, ImageOps
 
 ROOT = Path(__file__).resolve().parents[1]
 
-def encode_paa(image):
+def encode_paa(image, pixel_format='DXT5'):
+    assert pixel_format in ('DXT1', 'DXT5')
     output = io.BytesIO()
-    output.write(struct.pack('<H', 0xFF05))
+    output.write(struct.pack('<H', 0xFF01 if pixel_format == 'DXT1' else 0xFF05))
     output.write(b'GGATSFFO' + struct.pack('<I', 64))
     offset_position = output.tell()
     output.write(bytes(64) + b'\0\0')
@@ -19,9 +20,9 @@ def encode_paa(image):
     while image.width >= 4 and image.height >= 4:
         offsets.append(output.tell())
         dds = io.BytesIO()
-        image.save(dds, format='DDS', pixel_format='DXT5')
+        image.save(dds, format='DDS', pixel_format=pixel_format)
         compressed = dds.getvalue()[128:]
-        assert len(compressed) == image.width * image.height
+        assert len(compressed) == image.width * image.height // (2 if pixel_format == 'DXT1' else 1)
         output.write(struct.pack('<HH', *image.size))
         output.write(len(compressed).to_bytes(3, 'little'))
         output.write(compressed)

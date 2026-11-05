@@ -1,0 +1,20 @@
+{
+  "class": "GRZ_Double_Container",
+  "display_name": "GRZ_Double_Container",
+  "description": "Made By Blake",
+  "model_input_sha256": "449b4ad3488277a0e11760f861153f0fba723bc6df1139395013707fdbac831f",
+  "pbo_sha256": "20dc108bb05168606d923c4343f9a8a4435ae5f459a7a5232091f51398e7d9f1",
+  "bytes": 11705054,
+  "model_resource_remaps": {
+    "dz\\structures\\data\\metal\\basecooler_old_paint_co.paa": "GRZ_Double_Container\\data\\interior_co___________.paa",
+    "dz\\structures\\data\\metal\\metal_white_lightrust_co.paa": "GRZ_Double_Container\\data\\metal_co_______________.paa",
+    "dz\\structures\\industrial\\containers\\data\\containers_colors_04_co.paa": "GRZ_Double_Container\\data\\exterior_co___________________________.paa",
+    "dz\\structures\\industrial\\containers\\data\\containers_interior.rvmat": "GRZ_Double_Container\\data\\interior__________________________.rvmat",
+    "dz\\structures\\industrial\\containers\\data\\containers_new.rvmat": "GRZ_Double_Container\\data\\exterior_____________________.rvmat",
+    "dz\\structures\\industrial\\containers\\data\\containers_new_sides.rvmat": "GRZ_Double_Container\\data\\exterior___________________________.rvmat",
+    "dz\\structures\\industrial\\containers\\data\\containers_new_sides_nodt.rvmat": "GRZ_Double_Container\\data\\exterior________________________________.rvmat",
+    "dz\\structures\\industrial\\containers\\data\\metal_white_lightrust.rvmat": "GRZ_Double_Container\\data\\metal_______________________________.rvmat"
+  },
+  "model_geometry_and_size_preserved": true,
+  "object_type": "Static HouseNoDestruct; no inventory cargo or new door interactions added."
+}
