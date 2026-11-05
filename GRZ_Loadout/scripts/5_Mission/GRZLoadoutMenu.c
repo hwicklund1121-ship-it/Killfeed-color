@@ -20,6 +20,9 @@ class GRZLoadoutMenu : UIScriptedMenu
  protected int m_ClothingSlot;
  protected int m_ClothingIndex;
  protected PlayerPreviewWidget m_CharacterPreview;
+ protected float m_GRZCharacterYaw;
+ protected bool m_GRZCharacterDragging;
+ protected int m_GRZCharacterMouseX;
  protected PlayerBase m_PreviewCharacter;
  protected TextListboxWidget m_ClothingList;
  protected bool m_ChoosingCharacter;
@@ -42,6 +45,7 @@ class GRZLoadoutMenu : UIScriptedMenu
   m_ClothingList = TextListboxWidget.Cast(layoutRoot.FindAnyWidget("ClothingList"));
   if (WidgetEventHandler.GetInstance())
   {
+   WidgetEventHandler.GetInstance().RegisterOnMouseButtonDown(m_CharacterPreview, this, "GRZCharacterMouseDown");
    WidgetEventHandler.GetInstance().RegisterOnMouseWheel(m_ClothingList, this, "GRZListWheel");
    WidgetEventHandler.GetInstance().RegisterOnDoubleClick(m_ClothingList, this, "OnDoubleClick");
   }
@@ -69,6 +73,9 @@ class GRZLoadoutMenu : UIScriptedMenu
 
  override void OnHide()
  {
+  m_GRZCharacterDragging = false;
+  if (m_CharacterPreview && WidgetEventHandler.GetInstance())
+   WidgetEventHandler.GetInstance().UnregisterWidget(m_CharacterPreview);
   g_Game.GetMission().RemoveActiveInputExcludes({"menu"}, true);
   if (m_ClothingList && WidgetEventHandler.GetInstance())
    WidgetEventHandler.GetInstance().UnregisterWidget(m_ClothingList);
@@ -242,6 +249,7 @@ class GRZLoadoutMenu : UIScriptedMenu
  {
   ClearTryOn();
   m_ClothingMode = clothing;
+  m_GRZCharacterDragging = false;
   string gunWidgets[12] = {"Calibre20", "Calibre50", "Calibre408", "GunPreview", "GunPrevious", "GunNext", "GunName", "GunCount", "WrapHeading", "WrapPrevious", "WrapNext", "WrapName"};
   for (int i = 0; i < 12; i++)
    layoutRoot.FindAnyWidget(gunWidgets[i]).Show(!clothing);
@@ -369,7 +377,7 @@ class GRZLoadoutMenu : UIScriptedMenu
   }
   m_CharacterPreview.SetPlayer(m_PreviewCharacter);
   m_CharacterPreview.SetModelPosition("0 0 0.605");
-  m_CharacterPreview.SetModelOrientation("0 0 0");
+  m_CharacterPreview.SetModelOrientation(Vector(0, m_GRZCharacterYaw, 0));
   m_CharacterPreview.Refresh();
  }
 
@@ -582,9 +590,42 @@ class GRZLoadoutMenu : UIScriptedMenu
   return super.OnClick(w, x, y, button);
  }
 
+ // Match native inventory preview rotation: horizontal mouse motion changes model yaw.
+ bool GRZCharacterMouseDown(Widget w, int x, int y, int button)
+ {
+  if (w != m_CharacterPreview || button != MouseState.LEFT || !m_ClothingMode || m_Saving)
+   return false;
+  int mouseY;
+  GetMousePos(m_GRZCharacterMouseX, mouseY);
+  m_GRZCharacterDragging = true;
+  return true;
+ }
+
+ protected void GRZUpdateCharacterRotation()
+ {
+  if (!m_GRZCharacterDragging) return;
+  if (!m_ClothingMode || m_Saving || !m_CharacterPreview || !m_PreviewCharacter)
+  {
+   m_GRZCharacterDragging = false;
+   return;
+  }
+  int mouseX;
+  int mouseY;
+  GetMousePos(mouseX, mouseY);
+  float delta = Math.Clamp(mouseX - m_GRZCharacterMouseX, -80, 80);
+  m_GRZCharacterMouseX = mouseX;
+  m_GRZCharacterYaw = m_GRZCharacterYaw + delta * 0.5;
+  while (m_GRZCharacterYaw >= 360) m_GRZCharacterYaw = m_GRZCharacterYaw - 360;
+  while (m_GRZCharacterYaw < 0) m_GRZCharacterYaw = m_GRZCharacterYaw + 360;
+  m_CharacterPreview.SetModelOrientation(Vector(0, m_GRZCharacterYaw, 0));
+  if (!(GetMouseState(MouseState.LEFT) & 0x80000000))
+   m_GRZCharacterDragging = false;
+ }
+
  override void Update(float timeslice)
  {
   super.Update(timeslice);
+  GRZUpdateCharacterRotation();
   // Also follow native highlight changes if the control handles an input itself.
   if (m_ClothingMode && !m_Saving && !m_PopulatingClothing && m_ClothingList)
   {

@@ -684,7 +684,7 @@ PlayerPreviewWidgetClass CharacterPreview
  vexactpos 0
  hexactsize 0
  vexactsize 0
- ignorepointer 1
+ ignorepointer 0
  color 1 1 1 1
 }
 ButtonWidgetClass SlotHat
@@ -1136,6 +1136,22 @@ TextListboxWidgetClass ClothingList
  vexactsize 0
  color 1 1 1 1
  font "gui/fonts/sdf_MetronLight16"
+}
+TextWidgetClass CharacterRotateHint
+{
+ position 0.21 0.8
+ size 0.39 0.04
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.75 0.75 0.78 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "DRAG CHARACTER TO ROTATE"
 }
 ButtonWidgetClass RemoveClothing
 {
