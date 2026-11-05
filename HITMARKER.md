@@ -1,6 +1,6 @@
 # GRZ Hitmarker
 
-Separate DayZ PC mod, development version 0.1.7. Install on the server and every client. Settings live in **Options > Game > GRZ HITMARKER**, appended to the existing game settings list, using native left/right option selectors. The existing General, Gunrunnerz FOV, HUD and Chat sections remain intact. No slash command or VIP access is needed.
+Separate DayZ PC mod, development version 0.1.8. Install on the server and every client. Settings live in **Options > Game > GRZ HITMARKER**, appended to the existing game settings list, using native left/right option selectors. The existing General, Gunrunnerz FOV, HUD and Chat sections remain intact. No slash command or VIP access is needed.
 
 Controls: show hitmarkers, show damage info, hitmarker sound, highlight kills, normal-hit color, headshot color, size (25–150%, default 50%) and volume (0–100%, default 100%). Colors include white, red, orange, yellow, green, blue, indigo, violet, cyan, pink, grey and black. Compact rows use a 45%-opaque black background. A boxed, marker-only live preview sits at the bottom right; all test buttons are removed. Changing body or head color shows that color in the preview. The marker consists of exactly four short diagonal line segments, drawn on a canvas with a fine outline and a clear center. Press the normal Options Apply button to save; Cancel/Revert restores saved selections and Defaults restores the hitmarker defaults. Client preferences are saved in `$profile:GRZ_Hitmarker/settings.json`.
 
@@ -8,9 +8,13 @@ The centered X briefly appears only for confirmed hits against players, infected
 
 ## Sound
 
-Body and head hits use client-only 2D UI-channel audio with non-spatial sound sets. Primary playback uses SoundScene.Play2D, WAVEUI and per-voice relative volume; an EffectSound fallback also uses WAVEUI. It does not change global sound settings. Headshots use the uploaded Rust headshot MP3, converted to mono 48 kHz WAV/OGG with controlled peaks. The original short generated body-hit sound is retained. Sound toggles and the 0–100% hitmarker volume still apply, along with DayZ's master/UI audio levels. Voices are retained through playback, capped at twelve, cleaned up on completion/timeout, and stopped when the mission ends. Startup callbacks and confirmed-hit settings are logged to the client script log. Actual audibility must be checked in DayZ.
+The supplied Rust headshot clip is installed. Native game samples are mono 44.1 kHz Vorbis OGG with unique `body_hit018` and `headshot018` basenames; these basenames have no competing WAV file. Original 48 kHz WAV intermediates remain for conversion checks.
 
-To install the supplied clip, use `python3 tools/build_hitmarker_audio.py --headshot /path/clip.wav` (ffmpeg required). It converts to mono 48 kHz PCM WAV and OGG Vorbis, controls loudness/peaks, and marks the clip installed. ffmpeg is also required to generate the default game-ready OGG files. It does not fetch game assets. Rebuild afterward. Running the audio script with no arguments restores the original temporary sounds.
+Version 0.1.8 replaces the raw 2D player that never reported starting in the supplied client log. It uses native `EffectSound.SoundPlayEx` at the current camera on `WAVEEFFECTEX`, matching the standard effects channel. EffectSound retains its builder and parameters during asynchronous loading and validates the sample header. Each voice owns its EffectSound until completion or timeout. Sound sets explicitly define frequencyFactor=1, volumeFactor=1, volumeRandomizer=0 and soundShadersLimit=1, with spatial/doppler/loop disabled. The camera position is refreshed during playback, and shader gain stays flat over the supported range. Options Sound/Volume still control feedback; normal game sound must be audible. No global audio slider is changed.
+
+The client script log records the first confirmed body/head hits and first successful sound starts, or reports invalid configuration, failed playback or a three-second startup timeout. Audibility is not verified without running DayZ.
+
+To import a headshot clip, run `python3 tools/build_hitmarker_audio.py --headshot /path/clip.wav` (ffmpeg required), then rebuild. Running the audio script with no arguments restores the original temporary sounds.
 
 ## Build and validation
 
@@ -19,7 +23,3 @@ Run `python3 tools/build_hitmarker_layouts.py` after changing layout definitions
 In-game checks: Options > Game section visibility/scrolling alongside GRZ Movement; Apply/Cancel/Defaults/persistence; body and head hit sounds at several volumes; 25/50/150% size; body/head shots on armored/unarmored players, infected and animals; kill versus unconscious state; corpse/self/scenery filtering; no feedback on another shooter's client; HUD hiding and mission cleanup. Confirm damage-callback ordering on the installed DayZ version. Other mods that omit `super` in damage hooks can require compatibility changes.
 
 Development PBO is unsigned. The local server bundle uses signature checking disabled. The same updated PBO is required on server and clients. RPC ID 1647280201 must remain unique.
-
-Audio update 0.1.7: primary playback uses SoundScene.Play2D with WAVEUI and per-voice relative volume. The effect-manager fallback also uses WAVEUI. Sound-shader sample paths are extensionless, matching native DayZ conventions. The supplied headshot recording is installed; the existing body-hit tone is retained. Hit/damage/RPC logic is unchanged. Check Options > Game > GRZ HITMARKER: sound on, volume above zero. Master/UI audio must also be audible. Native runtime audibility still needs an in-game check.
-
-Audio 0.1.7 positions the emitter at the current camera and uses a flat million-metre shader range to prevent location-based culling. New sound-set names avoid collisions with the previous definitions. Invalid client sound sets now log an explicit error. This addresses an audio configuration risk; audibility is not verified without DayZ.

@@ -61,15 +61,16 @@ def main():
     assert 'attacker.GetIdentity());' in server
     visual=files['scripts/5_Mission/GRZ_Hitmarker/GRZHitmarkerVisual.c'].decode()
     assert 'SEffectManager.CreateSound' in visual
-    assert '.Play2D(' in visual and 'SetVolumeRelative' in visual
-    assert 'sound.SetPosition(g_Game.GetCurrentCameraPosition())' in visual
-    assert 'if (!params.IsValid())' in visual
-    assert 'SetSoundVolume' in visual and 'Handle.SoundPlay()' in visual
+    assert '.Play2D(' not in visual
+    assert 'ref EffectSound Handle;' in visual
+    assert 'SoundPlayEx(params)' in visual and 'if (!params.IsValid())' in visual
+    assert 'SetSoundVolume' in visual and 'SetSoundMaxVolume' in visual
     assert 's_Voices.Count() >= 12' in visual and 'SEffectManager.DestroyEffect(Handle)' in visual
-    assert 'WaveKind.WAVEUI' in visual and 'WaveKind.WAVEEFFECTEX' not in visual
+    assert 'WaveKind.WAVEEFFECTEX' in visual and 'WaveKind.WAVEUI' not in visual
+    assert 'SetPosition(g_Game.GetCurrentCameraPosition())' in visual
     assert 'Event_OnSoundWaveStarted.Insert(voice.OnStarted)' in visual
     assert 'Event_OnSoundWaveStarted.Remove(OnStarted)' in visual
-    assert 'SetSoundAutodestroy(true)' in visual
+    assert 'SetSoundAutodestroy(false)' in visual
     assert 'HUD_HIDE_FLAGS' in visual and 'GRZHitmarkerBus.Hits.Remove' in visual
     assert "CanvasWidget" in visual and visual.count("DrawSegment(") == 5
     assert "SetRotation" not in visual
@@ -94,14 +95,17 @@ def main():
         assert files[f'sounds/{name}.ogg'].startswith(b'OggS')
     cfg=files['config.cpp'].decode()
     assert 'spatial = 0;' in cfg
+    assert cfg.count('frequencyFactor = 1;') == 2
     assert cfg.count('range = 1000000;') == 2
-    assert 'GRZ_HitmarkerBody017_SoundSet' in cfg and 'GRZ_HitmarkerHead017_SoundSet' in cfg
+    assert 'GRZ_HitmarkerBody018_SoundSet' in cfg and 'GRZ_HitmarkerHead018_SoundSet' in cfg
     for name in ['body_hit','headshot']:
-        assert f'GRZ_Hitmarker/sounds/{name}' in cfg
+        assert f'GRZ_Hitmarker/sounds/{name}018' in cfg
+        assert files[f'sounds/{name}018.ogg'].startswith(b'OggS')
+        assert f'sounds/{name}018.wav' not in files
         assert f'GRZ_Hitmarker/sounds/{name}.ogg' not in cfg
     assert files['$PBOPREFIX$'].decode().strip()=='GRZ_Hitmarker'
     print(f'Hitmarker PBO/ZIP match source ({len(files)-1} files); native options, selectors and RPC fields checked.')
-    print('Both WAVs are non-silent mono PCM, 48 kHz, below clipping; native non-spatial playback and volume binding checked.')
+    print('Both WAVs are non-silent mono PCM, 48 kHz, below clipping; native effect playback and volume binding checked. OGG-only game sample paths verified.')
     print('Static checks only: DayZ compilation, option layout, hit callback ordering and sound mixing require in-game tests.')
 
 

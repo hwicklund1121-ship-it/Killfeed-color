@@ -36,13 +36,13 @@ magazine-fed guns. Clothing is restored first. Choice survives server restarts;
 reconnecting does not duplicate equipment. Preview-only choices are not saved.
 GRZ_CleanArena: bodies and gear are removed after THREE seconds; drops blocked.
 GRZ_DeathScreen: RESPAWN remains available after corpse deletion.
-GRZ_Hitmarker 0.1.7: listener-positioned playback, flat long-range shaders,
-unique sound-set names and invalid-sound-set logging. Supplied Rust headshot
+GRZ_Hitmarker 0.1.8: replaces the raw 2D voice with native EffectSound playback,
+explicit nonzero playback frequency and OGG-only mono 44.1 kHz samples. Supplied Rust headshot
 clip retained. Sound ON and volume above zero in Options > Game > GRZ HITMARKER.
 
 Static/package checks passed. DayZ compilation and gameplay untested.
 If sound is still silent, send the CLIENT script log and RPT after one body
-hit and one headshot; look for [GRZ Hitmarker 0.1.7] messages.
+hit and one headshot; look for [GRZ Hitmarker 0.1.8] messages.
 '''
 with ZipFile(out / 'GRZ-Arena-Feedback-Fix.zip', 'w', ZIP_DEFLATED) as z:
     for addon in ('GRZ_MapRotation','GRZ_Hitmarker','GRZ_CleanArena','GRZ_DeathScreen','GRZ_Loadout'):

@@ -61,6 +61,8 @@ def main():
         synthesize(SOUNDS/'headshot.wav',True)
     for name in ['body_hit', 'headshot']:
         subprocess.run(['ffmpeg','-v','error','-y','-i',str(SOUNDS/(name+'.wav')),'-c:a','libvorbis','-q:a','6',str(SOUNDS/(name+'.ogg'))],check=True)
+        # Unique OGG-only basename avoids WAV/OGG resolution ambiguity.
+        subprocess.run(['ffmpeg','-v','error','-y','-i',str(SOUNDS/(name+'.wav')),'-ar','44100','-ac','1','-c:a','libvorbis','-q:a','6',str(SOUNDS/(name+'018.ogg'))],check=True)
     flag = 'true' if imported else 'false'
     STATUS.write_text('class GRZHitmarkerAudioStatus\n{\n    static const bool RUST_HEADSHOT_INSTALLED = '+flag+';\n}\n')
     print('Headshot audio: '+('user-supplied clip' if imported else 'original temporary sound; Rust clip not installed'))
