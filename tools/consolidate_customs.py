@@ -75,7 +75,7 @@ class GRZCustomsRegistration
         array<string> items = new array<string>;
 ITEM_NAMES
         int loaded;
-        string report = "GRZ Customs 0.2.0 registration check\\n";
+        string report = "GRZ Customs 0.2.1 registration check\\n";
         foreach (string itemName : items)
         {
             string path = itemName;
@@ -111,7 +111,7 @@ modded class MissionGameplay
     }
 }
 '''.replace('ITEM_NAMES', names)).encode()
-    assert len(classes) == len(set(classes)) == 55
+    assert len(classes) == len(set(classes)) == 58
     mounted = {'grz_customs/' + name.lower() for name in files}
     for name, data in files.items():
         if name.endswith(('.cpp', '.rvmat')):

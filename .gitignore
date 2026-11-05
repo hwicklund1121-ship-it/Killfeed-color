@@ -9,3 +9,5 @@ __pycache__/
 
 # Consolidated Customs PBO exceeds GitHub per-file limit; distributed inside versioned ZIPs.
 /downloads/GRZ_Customs.pbo
+
+/downloads/GRZ-Customs-0.2.1.zip

@@ -172,7 +172,7 @@ class CfgVehicles
     extras = {'GRZ_Customs.pbo': consolidated}
     extra_report = {'GRZ_Customs': consolidated_report}
     (output / 'GRZ_Customs.pbo').write_bytes(consolidated)
-    report = {'version': '0.2.0', 'hexgrid_armour': armour_report(), 'gunwrap_variants': wrap_count, 'included_reskins': ['Gunrunnerz HEXGRID', 'Blakes Kit (without kit HEXGRID)', 'GRZ_Tracksuit_Pants', 'GRZ_Gunwraps', 'rvk M100'],
+    report = {'version': '0.2.1', 'hexgrid_armour': armour_report(), 'gunwrap_variants': wrap_count, 'included_reskins': ['Gunrunnerz HEXGRID', 'Blakes Kit (without kit HEXGRID)', 'GRZ_Tracksuit_Pants', 'GRZ_Gunwraps', 'rvk M100', 'Xims kit'],
               'additional_addons': extra_report,
               'item_class': 'GRZ_GunRunnerZ_Hexgrid', 'base_item_class': 'HEXGRID_Base',
               'display_name': 'GunRunnerZ Hexgrid', 'description': 'Made By Blake',
@@ -184,7 +184,7 @@ class CfgVehicles
         archive.writestr('@GRZ_Customs/Addons/HEXGRID.pbo', base_pbo)
         for name, addon in extras.items():
             archive.writestr('@GRZ_Customs/Addons/' + name, addon)
-        archive.writestr('@GRZ_Customs/mod.cpp', 'name = "GRZ Customs";\nauthor = "GRZ";\nversion = "0.2.0";\n')
+        archive.writestr('@GRZ_Customs/mod.cpp', 'name = "GRZ Customs";\nauthor = "GRZ";\nversion = "0.2.1";\n')
         archive.write(ROOT / 'GRZ-CUSTOMS.md', 'INSTALL.md')
         archive.write(ROOT / 'GRZ-CUSTOMS-MANIFEST.json', '@GRZ_Customs/MANIFEST.json')
         archive.write(ROOT / 'GRZ-GUNWRAPS-ITEMS.json', '@GRZ_Customs/GUNWRAPS-ITEMS.json')

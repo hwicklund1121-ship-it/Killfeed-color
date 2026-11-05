@@ -16,7 +16,7 @@ $source = Join-Path $PSScriptRoot '@GRZ_Customs'
 $manifestPath = Join-Path $source 'MANIFEST.json'
 if (!(Test-Path $manifestPath)) { throw 'Missing pack manifest. Extract the entire new ZIP first.' }
 $manifest = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
-if ($manifest.version -ne '0.2.0') { throw "This installer needs GRZ Customs 0.2.0; this folder contains $($manifest.version). Extract the latest ZIP into a NEW folder." }
+if ($manifest.version -ne '0.2.1') { throw "This installer needs GRZ Customs 0.2.1; this folder contains $($manifest.version). Extract the latest ZIP into a NEW folder." }
 Write-Host "Installing GRZ Customs $($manifest.version) - consolidated additive item pack."
 $names = @('HEXGRID.pbo','GRZ_Customs.pbo')
 $obsolete = @('GRZ_Customs_Hexgrid.pbo','Blakes_Kit.pbo','GRZ_Tracksuit_Pants.pbo','GRZ_Gunwraps.pbo')
@@ -103,6 +103,6 @@ if ($updated -ne $original) {
 }
 Write-Host 'Server BAT includes @GRZ_Customs in -mod. Existing server options preserved.'
 Write-Host 'CLIENT: DayZ Launcher > Mods > Local mod > select the DayZ game folder @GRZ_Customs, then CHECK it.'
-Write-Host 'Also load the helmet, SK and original M100 weapon mods on both sides. Start the server using its updated BAT.'
+Write-Host 'Also load the helmet, SK, Pitstop AirForce and original M100 weapon mods on both sides. Start the server using its updated BAT.'
 Write-Host 'Registration report: profiles\GRZ_Customs_registration.txt on the server.'
 Write-Host 'Search VPP for GRZ_Tracksuit_Pants or GRZ_Gunwraps_Red. The complete pack requires the helmet and SK addons.'

@@ -1,0 +1,68 @@
+{
+  "shoes_co.paa": {
+    "source": "shoes png/sneakers_red_co.paa_NNN2_Base_color.png",
+    "size": [
+      4096,
+      4096
+    ],
+    "format": "DXT1",
+    "source_sha256": "dd37f789f0516fe56a6b4f304863ccdc4ed35f46e39816c8147d4fd84d182f73",
+    "paa_sha256": "f69aec93bbd67aec1e498a83e6eb383476019ba86566ca522d831497d74a3f74",
+    "paa_bytes": 11184971
+  },
+  "shoes_nohq.paa": {
+    "source": "norm shoes/sneakers_red_co.paa_NNN2_Normal.png",
+    "size": [
+      4096,
+      4096
+    ],
+    "format": "DXT5",
+    "source_sha256": "81be4b52d9458b7535f59386a71025adc2b096a7dbe57afc9a2bbce6766860b2",
+    "paa_sha256": "61e926d5e4c05a452e9cf9dd6e5f2314f247821c7d5277f31036f94946cca2c4",
+    "paa_bytes": 10005584
+  },
+  "pants_co.paa": {
+    "source": "png pants/tracksuit_pants_blue_co.paa_NNN3239_Base_color.png",
+    "size": [
+      4096,
+      4096
+    ],
+    "format": "DXT1",
+    "source_sha256": "1675c63bdc6432b04caa9e1d6945079c05a5bc7ee080e5bb73de389c8181dee1",
+    "paa_sha256": "dff998b6fd7e038ada5d5267016ab43b2df8ecc5a92a5cd1900ebbdc5ce90318",
+    "paa_bytes": 11184971
+  },
+  "pants_nohq.paa": {
+    "source": "pants norm/tracksuit_pants_blue_co.paa_NNN3239_Normal.png",
+    "size": [
+      4096,
+      4096
+    ],
+    "format": "DXT5",
+    "source_sha256": "82b12f51be42fe5292a594d41b9daf6568386c3641942f522d13e4eb91a6c5a0",
+    "paa_sha256": "e9ea1d731cc5721cf705536f49e549426840fcc6faafd3c60d32322bf3bd8677",
+    "paa_bytes": 9669742
+  },
+  "hexgrid_co.paa": {
+    "source": "hex png/hexgrid_co.paa_NNN2_Base_color.png",
+    "size": [
+      4096,
+      4096
+    ],
+    "format": "DXT1",
+    "source_sha256": "8bab2ae46793c970371379f09efa31fd382d779b5a8a3883746d1fbb228bd3c9",
+    "paa_sha256": "c008502b8e703246ac3e380c57830e0c4dc3556d4bd91d70711ac9252b05115a",
+    "paa_bytes": 11184971
+  },
+  "hexgrid_nohq.paa": {
+    "source": "hex norm/hexgrid_co.paa_NNN2_Normal.png",
+    "size": [
+      4096,
+      4096
+    ],
+    "format": "DXT5",
+    "source_sha256": "4d17b83ac366d161aa410c4165de4f9a8b5f525fd4baa8c9b5348c4c20799e87",
+    "paa_sha256": "813403043fd27f3caba1b7bfdcd45360b3b56697d6da05549604eb36ab78307b",
+    "paa_bytes": 5682689
+  }
+}

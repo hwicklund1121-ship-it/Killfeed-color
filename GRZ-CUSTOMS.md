@@ -1,8 +1,8 @@
-GRZ Customs 0.2.0
+GRZ Customs 0.2.1
 
 Current pack layout: two PBOs only. HEXGRID.pbo contains the original repaired
 HEXGRID models/base class and shared armour tuning. GRZ_Customs.pbo contains one
-root CfgPatches/CfgVehicles/CfgWeapons config for 55 clothing/wrap reskins and rvk M100 and their assets,
+root CfgPatches/CfgVehicles/CfgWeapons config for 58 clothing/wrap reskins and rvk M100 and their assets,
 mounted consistently under GRZ_Customs. Spawn class names are retained.
 
 The installer backs up and removes the four obsolete split reskin PBOs before
@@ -12,7 +12,7 @@ Keep the helmet and SK dependencies loaded on both sides.
 
 A small startup check writes GRZ_Customs_registration.txt into the server/client
 profile directory and prints the number of registered custom item classes. A
-successful config check reads Registered 56/56 custom items. This is a runtime
+successful config check reads Registered 59/59 custom items. This is a runtime
 config diagnostic; it does not alter inventories, spawn items or grant admin.
 If the script itself cannot load, no report is written and its compile error
 will appear in the script log. Packaging tests cannot establish an in-game fix.
@@ -149,3 +149,19 @@ Health remains 5000 with reskin materials kept at all original health thresholds
 This item belongs in the loadout's 20mm section because it inherits VULCAN ammo.
 Keep the original M100 weapon pack loaded on both client and server.
 Native-size texture conversion, PBO/config/resource checks only; rendering and spawning need in-game testing.
+
+Xims kit
+
+XIMS_Tracksuit pants: GRZ_XIMS_Tracksuit_Pants_BlackWhite, based on vanilla TrackSuitPants_ColorBase.
+XIMS AirForces: GRZ_XIMS_AirForces_White, based on installed PITSTOP_AirForce_Base (requires PITSTOP_AirForce1).
+XIMS Hexgrid: GRZ_XIMS_Hexgrid_BlackWhite, based on the balanced HEXGRID_Base.
+Original items remain available. All six supplied Xims maps are converted at native 4096x4096.
+XIMS HEXGRID has no damage/armour override, so it inherits the same 0.045 projectile-health multiplier and 10000 vest HP.
+Calculated covered-torso lethal counts remain .408 third hit, .50 second hit, VULCAN first hit; range, hit zone and other gear can change actual results.
+
+Distribution update
+
+The complete 0.2.1 pack exceeds the repository file-size limit. Use GRZ-Customs-Xims-Update.zip on the installed 0.1.9 or 0.2.0 pack.
+It rebuilds the identical full GRZ_Customs.pbo from verified existing bytes plus the new assets, updates both installations with backups, and preserves the server BAT.
+Run Update-GRZCustoms.cmd after extracting that ZIP; see XIMS-KIT-INSTALL.md.
+The older full-pack download remains the 0.2.0 base installer; 0.2.1 is distributed as the update ZIP.
