@@ -7,7 +7,15 @@ UAV_Bullet_VULCAN) and uses a unique suppressor proxy. Existing volume, distance
 curves/ranges, recoil and other weapon stats remain as supplied.
 
 The server adds UAV_SFG_Sup after gun initialization and saved-game loading.
+Admin/debug spawning also queues the attachment check. UAV_SFG_Sup uses scope 1
+and is omitted from the public units list, hiding it from normal scope-2 item
+spawn menus while allowing the gun script to create it as an attachment. Admin
+tools/scripts that explicitly force-create non-public classes can bypass a menu
+filter; this is not a server ban on the class being created.
 The suppressor slot is locked and CanReleaseAttachment rejects its removal.
+CanDisplayAttachmentSlot hides only UAV_SFG_Suppressor from inventory; the
+underlying attachment remains mounted and visible on the weapon. Other
+attachment slots keep their normal inventory behaviour.
 Already attached suppressors are retained, including their condition; ruined
 suppressors are not automatically healed. Existing ammo in an old gun is not
 converted; unload it or spawn a fresh gun for the VULCAN test. The UAV VULCAN

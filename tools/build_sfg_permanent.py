@@ -32,11 +32,15 @@ config = config.replace('class Proxysuppressor:', 'class Proxysfg_muzzle:')
 config = config.replace('\\proxy\\suppressor.p3d', '\\proxy\\sfg_muzzle.p3d')
 config, chamber_edits = re.subn(r'chamberableFrom\[\]\s*=\s*\{[^}]*\};', 'chamberableFrom[] = {"UAV_Ammo_VULCAN"};', config)
 assert chamber_edits == 1
+config, scope_edits = re.subn(r'(class\s+UAV_SFG_Sup\s*:\s*SFG_Suppressor_Base\s*\{\s*)scope\s*=\s*\d+;', lambda match: match[1] + 'scope = 1;', config)
+assert scope_edits == 1
+config = config.replace('units[] = {"UAV_SFG_Sup"};', 'units[] = {};')
 files['config.cpp'] = config.encode()
 # The supplied root already includes the complete suppressor definitions.
 files.pop('proxy/config.cpp', None)
 script_path = 'scripts/4_World/Weapons/sfg50.c'
 script = files[script_path].decode('utf-8-sig')
+script = re.sub(r"(?m)^\s*''\s*$", '', script)
 if 'GRZEnsurePermanentSuppressor' not in script:
     end = script.rfind('};')
     assert end >= 0
@@ -103,6 +107,28 @@ if 'GRZEnsurePermanentSuppressor' not in script:
         super.EEDelete(parent);
     }
 ''' + script[end:]
+if 'override bool CanDisplayAttachmentSlot(int slot_id)' not in script:
+    end = script.rfind('};')
+    assert end >= 0
+    script = script[:end] + '''
+    override bool CanDisplayAttachmentSlot(int slot_id)
+    {
+        if (slot_id == InventorySlots.GetSlotIdFromString("UAV_SFG_Suppressor"))
+            return false;
+        return super.CanDisplayAttachmentSlot(slot_id);
+    }
+''' + script[end:]
+assert 'return super.CanDisplayAttachmentSlot(slot_id);' in script
+if 'override void OnDebugSpawn()' not in script:
+    end = script.rfind('};')
+    script = script[:end] + '''
+    override void OnDebugSpawn()
+    {
+        super.OnDebugSpawn();
+        GRZQueuePermanentSuppressor();
+    }
+''' + script[end:]
+assert not re.search(r"(?m)^\s*'{1,2}\s*$", script)
 files[script_path] = script.encode()
 assert files['proxy/sfg_muzzle.p3d'] == original.get('proxy/suppressor.p3d', original.get('proxy/sfg_muzzle.p3d'))
 assert 'class Proxysfg_muzzle:' in config and 'class Proxysuppressor:' not in config
@@ -127,7 +153,7 @@ with tempfile.TemporaryDirectory(prefix='sfg-permanent-check-') as directory:
         target.write_bytes(data)
     packed = build(source)
 assert read_pbo(packed)[1] == files
-report = {'chamberable_pile': 'UAV_Ammo_VULCAN', 'fired_projectile': 'UAV_Bullet_VULCAN',
+report = {'suppressor_scope': 1, 'hidden_from_spawn_menu': True, 'hidden_inventory_slot': 'UAV_SFG_Suppressor', 'chamberable_pile': 'UAV_Ammo_VULCAN', 'fired_projectile': 'UAV_Bullet_VULCAN',
           'permanent_suppressor_class': 'UAV_SFG_Sup', 'slot': 'UAV_SFG_Suppressor',
           'unique_proxy_class': 'Proxysfg_muzzle', 'equal_length_model_reference_edits': edits,
           'validation_pbo_sha256': hashlib.sha256(packed).hexdigest(),

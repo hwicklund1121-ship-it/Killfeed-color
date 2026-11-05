@@ -1,11 +1,14 @@
 {
+  "suppressor_scope": 1,
+  "hidden_from_spawn_menu": true,
+  "hidden_inventory_slot": "UAV_SFG_Suppressor",
   "chamberable_pile": "UAV_Ammo_VULCAN",
   "fired_projectile": "UAV_Bullet_VULCAN",
   "permanent_suppressor_class": "UAV_SFG_Sup",
   "slot": "UAV_SFG_Suppressor",
   "unique_proxy_class": "Proxysfg_muzzle",
-  "equal_length_model_reference_edits": 4,
-  "validation_pbo_sha256": "cc728a6ecea3089dec46aed74a0fea2bf05295e6b0b34dcf15b2737b1f59fc85",
+  "equal_length_model_reference_edits": 0,
+  "validation_pbo_sha256": "43b6b3037fbd57af95e2f70d4d70806588b9f51a1bc6bf043ca0fc622fb837f1",
   "audio_sha256": {
     "data/SFG_Close.ogg": "4e194bf7bcdf2fe57eb11ad0b6fb0e5b48fcb035cc66e66cfcb5375f831ed0cf",
     "data/SFG_Mid.ogg": "804da1721cb4513d95cd5dee6243a02dfafc773d5912a183efc0e2e7d18cd77b",
