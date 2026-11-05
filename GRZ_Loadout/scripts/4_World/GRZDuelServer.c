@@ -320,6 +320,9 @@ class GRZDuelServer
   vector position = match.Map.SpawnB;
   float facing = match.Map.FacingB;
   if (sideA) { position = match.Map.SpawnA; facing = match.Map.FacingA; }
+  // Configured DZE arenas use natural ground. Preserve explicit Y for future roof maps.
+  if (match.Map.GroundSpawns)
+   position[1] = g_Game.SurfaceY(position[0], position[2]) + 0.2;
   p.SetPosition(position);
   p.SetOrientation(Vector(facing, 0, 0));
  }

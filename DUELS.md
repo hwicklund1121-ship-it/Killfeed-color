@@ -117,3 +117,9 @@ map rotation during a duel, return to active arena and rating/stat persistence.
 Actual duel rounds additionally require your configured, built arenas.
 
 Loadout 0.3.2 adds BAG selection and native mouse/keyboard/gamepad menu focus to keep the gameplay camera still. Rotation 0.1.3 adds server-authorized !skip: the next arena starts after a 30-second top-screen warning. Configure AdminSteamIds in profiles/GRZ_MapRotation/config.json; the shipped allowlist is empty. Duel participants remain in their duel.
+
+## Configured DZE arenas
+
+`GRZ-Duels-Arenas-Update.zip` supplies the five enabled maps from GRZ_BBC_DM_3.dze: 100 Meters (Vybor field), Shipment (Cherno apartments), Long Range 1v1 (NWAF municipal clock-tower build), Cargo Containers (near VMC), and Castle 1v1 (between Cherno and Elektro). Its dedicated installer installs `duel-config.json` into the server's GRZ_Duels profile and replaces the known older DZE, with backups. Existing ratings and main rotation settings are preserved.
+
+Both spawn sides face their opponent. GroundSpawns resolves Y from live Chernarus terrain each round; keep it false for future rooftop arenas with explicitly measured Y. The 100 Meters spawns are 100 metres apart horizontally. The included black-and-white planning preview marks sides A/B. Positions were derived from placed geometry; verify both sides in game, including modded object collision, before public matches.

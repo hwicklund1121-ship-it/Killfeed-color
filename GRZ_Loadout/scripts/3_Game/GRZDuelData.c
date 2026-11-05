@@ -13,6 +13,7 @@ class GRZDuelMap
  string Id;
  string Name;
  bool Enabled;
+ bool GroundSpawns;
  vector Center;
  float Radius = 100;
  vector SpawnA;

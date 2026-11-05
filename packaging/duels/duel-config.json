@@ -1,0 +1,129 @@
+{
+  "Enabled": true,
+  "ChallengeSeconds": 60,
+  "CountdownSeconds": 5,
+  "RespawnWaitSeconds": 90,
+  "RoundSeconds": 180,
+  "Maps": [
+    {
+      "Id": "100_meters",
+      "Name": "100 Meters",
+      "Enabled": true,
+      "GroundSpawns": true,
+      "Center": [
+        2905.75,
+        0,
+        8505.95
+      ],
+      "Radius": 80,
+      "SpawnA": [
+        2876.217,
+        0,
+        8546.296
+      ],
+      "SpawnB": [
+        2935.283,
+        0,
+        8465.604
+      ],
+      "FacingA": 143.797,
+      "FacingB": 323.797
+    },
+    {
+      "Id": "shipment",
+      "Name": "Shipment",
+      "Enabled": true,
+      "GroundSpawns": true,
+      "Center": [
+        5508.0,
+        0,
+        2718.5
+      ],
+      "Radius": 70,
+      "SpawnA": [
+        5485,
+        0,
+        2720
+      ],
+      "SpawnB": [
+        5531,
+        0,
+        2717
+      ],
+      "FacingA": 93.731,
+      "FacingB": 273.731
+    },
+    {
+      "Id": "long_range_1v1",
+      "Name": "Long Range 1v1",
+      "Enabled": true,
+      "GroundSpawns": true,
+      "Center": [
+        4306.5,
+        0,
+        10689.0
+      ],
+      "Radius": 185,
+      "SpawnA": [
+        4229,
+        0,
+        10813
+      ],
+      "SpawnB": [
+        4384,
+        0,
+        10565
+      ],
+      "FacingA": 147.995,
+      "FacingB": 327.995
+    },
+    {
+      "Id": "cargo_containers",
+      "Name": "Cargo Containers",
+      "Enabled": true,
+      "GroundSpawns": true,
+      "Center": [
+        4775.0,
+        0,
+        8318.5
+      ],
+      "Radius": 65,
+      "SpawnA": [
+        4737,
+        0,
+        8321
+      ],
+      "SpawnB": [
+        4813,
+        0,
+        8316
+      ],
+      "FacingA": 93.764,
+      "FacingB": 273.764
+    },
+    {
+      "Id": "castle_1v1",
+      "Name": "Castle 1v1",
+      "Enabled": true,
+      "GroundSpawns": true,
+      "Center": [
+        7511.5,
+        0,
+        3430.0
+      ],
+      "Radius": 85,
+      "SpawnA": [
+        7498,
+        0,
+        3387
+      ],
+      "SpawnB": [
+        7525,
+        0,
+        3473
+      ],
+      "FacingA": 17.43,
+      "FacingB": 197.43
+    }
+  ]
+}
