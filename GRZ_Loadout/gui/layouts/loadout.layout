@@ -1003,7 +1003,7 @@ TextWidgetClass ClothingListTitle
  "exact text" 1
  "text valign" center
  "text halign" left
- text "Click to preview / double-click to keep"
+ text "Scroll to preview / double-click to keep"
 }
 PanelWidgetClass ClothingListBackground
 {

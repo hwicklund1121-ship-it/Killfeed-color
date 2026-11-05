@@ -1,4 +1,4 @@
-GRZ Loadout 0.2.1 — Made By Blake
+GRZ Loadout 0.2.2 — Made By Blake
 
 INSTALL
 Copy GRZ_Loadout.pbo into @GRZ_Local/Addons on BOTH game and server.
@@ -21,7 +21,9 @@ New gun is loaded, compatible scope and chosen wrap attached, plus TEN FULL loos
 Magazine-fed guns also get SIX full spare magazines.
 Non-weapon items and clothing are kept. Items attached to removed guns are removed with those guns.
 Clothing tab: full character preview; left tabs HAT/MASK/SHIRT/BELT/PANTS/GLOVE/VEST/SHOES.
-Click a slot to list all matching vanilla and installed custom clothing. Single-click previews clothing on the body temporarily; double-click keeps the selection.
+Click a slot to list all matching vanilla and installed custom clothing. Use the mouse wheel over the item list to browse and preview clothing on the body without clicking.
+Each wheel event selects the next/previous visible row; double-click keeps that choice.
+Single-clicking only highlights a row; it does not apply a preview.
 Save & Apply ignores temporary previews and applies only kept selections.
 Changing tabs or removing an item clears temporary previews. Character selection follows the same click/keep behavior.
 Remove Item clears the selected preview slot. Select Character lists all available DayZ survivor characters.

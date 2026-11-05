@@ -62,7 +62,7 @@ def layout():
     for index,(name,label) in enumerate([('SlotHat','HAT'),('SlotMask','MASK'),('SlotShirt','SHIRT'),('SlotBelt','BELT'),('SlotPants','PANTS'),('SlotGlove','GLOVE'),('SlotVest','VEST'),('SlotShoes','SHOES')]):
         wardrobe += button(name,label,.027,.015+index*.105,.16,.087)
     wardrobe += button('SelectCharacter','SELECT CHARACTER',.62,.015,.35,.085)
-    wardrobe += text('ClothingListTitle','Click to preview / double-click to keep',.62,.115,.35,.055,16)
+    wardrobe += text('ClothingListTitle','Scroll to preview / double-click to keep',.62,.115,.35,.055,16)
     wardrobe += panel('ClothingListBackground',.62,.18,.35,.66,'0.065 0.065 0.075 1')
     wardrobe += widget('TextListboxWidgetClass','ClothingList',.62,.18,.35,.66,'color 1 1 1 1\n font "gui/fonts/sdf_MetronLight16"')
     wardrobe += button('RemoveClothing','REMOVE ITEM',.25,.85,.32,.08)
@@ -85,7 +85,7 @@ with ZipFile(args.logo_zip) as archive:
 (source / 'data/logo.paa').write_bytes(encode_paa(logo.resize((2048,512),Image.Resampling.LANCZOS), alpha_flags=True))
 pbo = build(source)
 (root / 'downloads/GRZ_Loadout.pbo').write_bytes(pbo)
-notes = '''GRZ Loadout 0.2.1 — Made By Blake
+notes = '''GRZ Loadout 0.2.2 — Made By Blake
 
 INSTALL
 Copy GRZ_Loadout.pbo into @GRZ_Local/Addons on BOTH game and server.
@@ -108,7 +108,9 @@ New gun is loaded, compatible scope and chosen wrap attached, plus TEN FULL loos
 Magazine-fed guns also get SIX full spare magazines.
 Non-weapon items and clothing are kept. Items attached to removed guns are removed with those guns.
 Clothing tab: full character preview; left tabs HAT/MASK/SHIRT/BELT/PANTS/GLOVE/VEST/SHOES.
-Click a slot to list all matching vanilla and installed custom clothing. Single-click previews clothing on the body temporarily; double-click keeps the selection.
+Click a slot to list all matching vanilla and installed custom clothing. Use the mouse wheel over the item list to browse and preview clothing on the body without clicking.
+Each wheel event selects the next/previous visible row; double-click keeps that choice.
+Single-clicking only highlights a row; it does not apply a preview.
 Save & Apply ignores temporary previews and applies only kept selections.
 Changing tabs or removing an item clears temporary previews. Character selection follows the same click/keep behavior.
 Remove Item clears the selected preview slot. Select Character lists all available DayZ survivor characters.
@@ -156,6 +158,6 @@ Unsigned development build; sign with your own server key if required.
 with ZipFile(root / 'downloads/GRZ_Loadout.zip','w',ZIP_DEFLATED) as archive:
     archive.writestr('GRZ_Loadout.pbo',pbo)
     archive.writestr('INSTALL.txt',notes)
-manifest=dict(version='0.2.1',ammo_stacks=10,open_key='comma',replace='all carried guns and ammo',logo_original_size=logo.size,logo_source_sha256=hashlib.sha256(original).hexdigest(),pbo_sha256=hashlib.sha256(pbo).hexdigest())
+manifest=dict(version='0.2.2',ammo_stacks=10,open_key='comma',replace='all carried guns and ammo',logo_original_size=logo.size,logo_source_sha256=hashlib.sha256(original).hexdigest(),pbo_sha256=hashlib.sha256(pbo).hexdigest())
 (root / 'downloads/GRZ-LOADOUT-MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n')
 print('Built GRZ_Loadout.pbo:',len(pbo),'bytes')

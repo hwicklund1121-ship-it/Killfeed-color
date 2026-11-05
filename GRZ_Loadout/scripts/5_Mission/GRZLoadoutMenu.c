@@ -292,9 +292,9 @@ class GRZLoadoutMenu : UIScriptedMenu
  protected void RefreshClothing()
  {
   layoutRoot.FindAnyWidget("Save").Enable(!m_Saving && GRZLoadoutClientData.Catalogue);
-  string title = "Click to preview / double-click to keep";
+  string title = "Scroll to preview / double-click to keep";
   if (m_ChoosingCharacter)
-   title = "Click to preview / double-click to keep";
+   title = "Scroll to preview / double-click to keep";
   Text("ClothingListTitle", title);
   layoutRoot.FindAnyWidget("RemoveClothing").Enable(!m_ChoosingCharacter);
   string names[8] = {"SlotHat", "SlotMask", "SlotShirt", "SlotBelt", "SlotPants", "SlotGlove", "SlotVest", "SlotShoes"};
@@ -408,28 +408,52 @@ class GRZLoadoutMenu : UIScriptedMenu
   m_TryOnSlot = -1;
  }
 
- override bool OnItemSelected(Widget w, int x, int y, int row, int column, int oldRow, int oldColumn)
+ protected void PreviewClothingRow(int row)
  {
-  if (m_ClothingMode && !m_Saving && !m_PopulatingClothing && w == m_ClothingList)
+  GRZLoadoutCatalogue catalogue = GRZLoadoutClientData.Catalogue;
+  if (!catalogue || row < 0)
+   return;
+  ClearTryOn();
+  if (m_ChoosingCharacter)
   {
-   GRZLoadoutCatalogue catalogue = GRZLoadoutClientData.Catalogue;
-   if (!catalogue || row < 0)
-    return true;
-   ClearTryOn();
-   if (m_ChoosingCharacter)
-   {
-    if (row < catalogue.Characters.Count())
-     m_TryOnCharacter = catalogue.Characters[row];
-   }
-   else if (row < m_ClothingFiltered.Count())
-   {
-    m_TryOnSlot = m_ClothingSlot;
-    m_TryOnType = catalogue.Clothing[m_ClothingFiltered[row]].Type;
-   }
-   RefreshClothing();
-   return true;
+   if (row < catalogue.Characters.Count())
+    m_TryOnCharacter = catalogue.Characters[row];
   }
-  return super.OnItemSelected(w, x, y, row, column, oldRow, oldColumn);
+  else if (row < m_ClothingFiltered.Count())
+  {
+   m_TryOnSlot = m_ClothingSlot;
+   m_TryOnType = catalogue.Clothing[m_ClothingFiltered[row]].Type;
+  }
+  RefreshClothing();
+ }
+
+ override bool OnMouseWheel(Widget w, int x, int y, int wheel)
+ {
+  if (m_ClothingMode && !m_Saving && !m_PopulatingClothing && wheel != 0)
+  {
+   Widget target = w;
+   while (target && target != m_ClothingList)
+    target = target.GetParent();
+   if (target == m_ClothingList)
+   {
+    int count = m_ClothingList.GetNumItems();
+    if (count == 0)
+     return true;
+    int row = m_ClothingList.GetSelectedRow();
+    if (row < 0)
+     row = 0;
+    else if (wheel < 0)
+     row = Math.Min(row + 1, count - 1);
+    else
+     row = Math.Max(row - 1, 0);
+    m_ClothingList.SelectRow(row);
+    m_ClothingList.EnsureVisible(row);
+    PreviewClothingRow(row);
+    // Consume the wheel event so native scrolling cannot skip the previewed row.
+    return true;
+   }
+  }
+  return super.OnMouseWheel(w, x, y, wheel);
  }
 
  override bool OnDoubleClick(Widget w, int x, int y, int button)
