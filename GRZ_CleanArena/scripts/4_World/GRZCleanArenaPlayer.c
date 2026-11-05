@@ -18,9 +18,9 @@ modded class PlayerBase
             g_Game.RPCSingleParam(this, 763510, new Param1<bool>(true), true, GetIdentity());
         if (!g_Game.IsDedicatedServer() && IsPlayerSelected())
             ShowDeadScreen(true, 0);
-        // Leave the complete damage/killfeed/hitmarker callback chain first.
+        // Allow the death animation to finish before removing the body and gear.
         if (g_Game.IsServer())
-            g_Game.GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(GRZCleanDeadPlayer, 250, false);
+            g_Game.GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(GRZCleanDeadPlayer, 3000, false);
     }
 
     override void OnRPC(PlayerIdentity sender, int rpc_type, ParamsReadContext ctx)
