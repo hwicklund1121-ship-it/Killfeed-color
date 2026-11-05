@@ -86,6 +86,7 @@ class GRZDuelMenu : UIScriptedMenu
  override Widget Init()
  {
   layoutRoot = g_Game.GetWorkspace().CreateWidgets("GRZ_Loadout/gui/layouts/duels.layout");
+  GRZLoadoutPanelTextures.Apply(layoutRoot);
   m_Players = TextListboxWidget.Cast(layoutRoot.FindAnyWidget("Players"));
   m_Maps = TextListboxWidget.Cast(layoutRoot.FindAnyWidget("Maps"));
   ImageWidget logo = ImageWidget.Cast(layoutRoot.FindAnyWidget("Logo"));
@@ -288,7 +289,11 @@ modded class MissionGameplay
  }
  void GRZDuelNotice(string message)
  {
-  if (!m_GRZDuelHud) m_GRZDuelHud = g_Game.GetWorkspace().CreateWidgets("GRZ_Loadout/gui/layouts/duel-notice.layout");
+  if (!m_GRZDuelHud)
+  {
+   m_GRZDuelHud = g_Game.GetWorkspace().CreateWidgets("GRZ_Loadout/gui/layouts/duel-notice.layout");
+   GRZLoadoutPanelTextures.Apply(m_GRZDuelHud);
+  }
   if (m_GRZDuelHud)
   {
    TextWidget text = TextWidget.Cast(m_GRZDuelHud.FindAnyWidget("DuelMessage"));

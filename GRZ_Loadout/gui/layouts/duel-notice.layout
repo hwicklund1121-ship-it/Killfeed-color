@@ -20,7 +20,7 @@ FrameWidgetClass NoticeBox
  ignorepointer 1
  color 0 0 0 0
  {
-PanelWidgetClass NoticeBackground
+ImageWidgetClass NoticeBackground
 {
  position 0 0
  size 1 1
@@ -29,6 +29,8 @@ PanelWidgetClass NoticeBackground
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.03 0.03 0.04 0.94
 }
 TextWidgetClass DuelMessage
@@ -60,7 +62,7 @@ FrameWidgetClass ScoreBox
  ignorepointer 1
  color 0 0 0 0
  {
-PanelWidgetClass ScoreBackground
+ImageWidgetClass ScoreBackground
 {
  position 0 0
  size 1 1
@@ -69,6 +71,8 @@ PanelWidgetClass ScoreBackground
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.03 0.03 0.04 0.9
 }
 TextWidgetClass DuelScore

@@ -18,7 +18,7 @@ FrameWidgetClass MenuPanel
  vexactsize 0
  color 0 0 0 0
  {
-PanelWidgetClass MenuBackground
+ImageWidgetClass MenuBackground
 {
  position 0 0
  size 1 1
@@ -27,9 +27,11 @@ PanelWidgetClass MenuBackground
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- color 0.025 0.025 0.03 0.98
+ mode blend
+ stretch 1
+ color 0 0 0 0.8
 }
-PanelWidgetClass AccentTop
+ImageWidgetClass AccentTop
 {
  position 0 0
  size 1 0.004
@@ -38,6 +40,8 @@ PanelWidgetClass AccentTop
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 1 1 1 1
 }
 ImageWidgetClass Logo
@@ -79,7 +83,7 @@ ButtonWidgetClass Close
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass CloseFill
+ImageWidgetClass CloseFill
 {
  position 0 0
  size 1 1
@@ -88,6 +92,8 @@ PanelWidgetClass CloseFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass CloseLabel
@@ -118,7 +124,7 @@ ButtonWidgetClass LoadoutTab
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass LoadoutTabFill
+ImageWidgetClass LoadoutTabFill
 {
  position 0 0
  size 1 1
@@ -127,6 +133,8 @@ PanelWidgetClass LoadoutTabFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.96 0.96 0.96 1
 }
 TextWidgetClass LoadoutTabLabel
@@ -157,7 +165,7 @@ ButtonWidgetClass ClothingTab
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass ClothingTabFill
+ImageWidgetClass ClothingTabFill
 {
  position 0 0
  size 1 1
@@ -166,6 +174,8 @@ PanelWidgetClass ClothingTabFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass ClothingTabLabel
@@ -196,7 +206,7 @@ ButtonWidgetClass DuelsTab
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass DuelsTabFill
+ImageWidgetClass DuelsTabFill
 {
  position 0 0
  size 1 1
@@ -205,6 +215,8 @@ PanelWidgetClass DuelsTabFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass DuelsTabLabel
@@ -225,7 +237,7 @@ TextWidgetClass DuelsTabLabel
 }
  }
 }
-PanelWidgetClass Divider
+ImageWidgetClass Divider
 {
  position 0.027 0.268
  size 0.946 0.0015
@@ -234,6 +246,8 @@ PanelWidgetClass Divider
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.22 0.22 0.24 1
 }
 ButtonWidgetClass Calibre20
@@ -246,7 +260,7 @@ ButtonWidgetClass Calibre20
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass Calibre20Fill
+ImageWidgetClass Calibre20Fill
 {
  position 0 0
  size 1 1
@@ -255,6 +269,8 @@ PanelWidgetClass Calibre20Fill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass Calibre20Label
@@ -275,7 +291,7 @@ TextWidgetClass Calibre20Label
 }
  }
 }
-PanelWidgetClass Calibre20Line
+ImageWidgetClass Calibre20Line
 {
  position 0.29 0.355
  size 0.14 0.003
@@ -284,6 +300,8 @@ PanelWidgetClass Calibre20Line
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 1 1 1 1
 }
 ButtonWidgetClass Calibre50
@@ -296,7 +314,7 @@ ButtonWidgetClass Calibre50
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass Calibre50Fill
+ImageWidgetClass Calibre50Fill
 {
  position 0 0
  size 1 1
@@ -305,6 +323,8 @@ PanelWidgetClass Calibre50Fill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass Calibre50Label
@@ -325,7 +345,7 @@ TextWidgetClass Calibre50Label
 }
  }
 }
-PanelWidgetClass Calibre50Line
+ImageWidgetClass Calibre50Line
 {
  position 0.445 0.355
  size 0.14 0.003
@@ -334,6 +354,8 @@ PanelWidgetClass Calibre50Line
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 1 1 1 1
 }
 ButtonWidgetClass Calibre408
@@ -346,7 +368,7 @@ ButtonWidgetClass Calibre408
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass Calibre408Fill
+ImageWidgetClass Calibre408Fill
 {
  position 0 0
  size 1 1
@@ -355,6 +377,8 @@ PanelWidgetClass Calibre408Fill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass Calibre408Label
@@ -375,7 +399,7 @@ TextWidgetClass Calibre408Label
 }
  }
 }
-PanelWidgetClass Calibre408Line
+ImageWidgetClass Calibre408Line
 {
  position 0.6 0.355
  size 0.14 0.003
@@ -384,9 +408,11 @@ PanelWidgetClass Calibre408Line
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 1 1 1 1
 }
-PanelWidgetClass PreviewBackground
+ImageWidgetClass PreviewBackground
 {
  position 0.075 0.39
  size 0.85 0.315
@@ -395,6 +421,8 @@ PanelWidgetClass PreviewBackground
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.055 0.055 0.065 1
 }
 ItemPreviewWidgetClass GunPreview
@@ -419,7 +447,7 @@ ButtonWidgetClass GunPrevious
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass GunPreviousFill
+ImageWidgetClass GunPreviousFill
 {
  position 0 0
  size 1 1
@@ -428,6 +456,8 @@ PanelWidgetClass GunPreviousFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass GunPreviousLabel
@@ -458,7 +488,7 @@ ButtonWidgetClass GunNext
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass GunNextFill
+ImageWidgetClass GunNextFill
 {
  position 0 0
  size 1 1
@@ -467,6 +497,8 @@ PanelWidgetClass GunNextFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass GunNextLabel
@@ -545,7 +577,7 @@ ButtonWidgetClass WrapPrevious
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass WrapPreviousFill
+ImageWidgetClass WrapPreviousFill
 {
  position 0 0
  size 1 1
@@ -554,6 +586,8 @@ PanelWidgetClass WrapPreviousFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass WrapPreviousLabel
@@ -600,7 +634,7 @@ ButtonWidgetClass WrapNext
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass WrapNextFill
+ImageWidgetClass WrapNextFill
 {
  position 0 0
  size 1 1
@@ -609,6 +643,8 @@ PanelWidgetClass WrapNextFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass WrapNextLabel
@@ -661,7 +697,7 @@ ButtonWidgetClass SlotHat
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass SlotHatFill
+ImageWidgetClass SlotHatFill
 {
  position 0 0
  size 1 1
@@ -670,6 +706,8 @@ PanelWidgetClass SlotHatFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass SlotHatLabel
@@ -700,7 +738,7 @@ ButtonWidgetClass SlotMask
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass SlotMaskFill
+ImageWidgetClass SlotMaskFill
 {
  position 0 0
  size 1 1
@@ -709,6 +747,8 @@ PanelWidgetClass SlotMaskFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass SlotMaskLabel
@@ -739,7 +779,7 @@ ButtonWidgetClass SlotShirt
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass SlotShirtFill
+ImageWidgetClass SlotShirtFill
 {
  position 0 0
  size 1 1
@@ -748,6 +788,8 @@ PanelWidgetClass SlotShirtFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass SlotShirtLabel
@@ -778,7 +820,7 @@ ButtonWidgetClass SlotBelt
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass SlotBeltFill
+ImageWidgetClass SlotBeltFill
 {
  position 0 0
  size 1 1
@@ -787,6 +829,8 @@ PanelWidgetClass SlotBeltFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass SlotBeltLabel
@@ -817,7 +861,7 @@ ButtonWidgetClass SlotPants
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass SlotPantsFill
+ImageWidgetClass SlotPantsFill
 {
  position 0 0
  size 1 1
@@ -826,6 +870,8 @@ PanelWidgetClass SlotPantsFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass SlotPantsLabel
@@ -856,7 +902,7 @@ ButtonWidgetClass SlotGlove
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass SlotGloveFill
+ImageWidgetClass SlotGloveFill
 {
  position 0 0
  size 1 1
@@ -865,6 +911,8 @@ PanelWidgetClass SlotGloveFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass SlotGloveLabel
@@ -895,7 +943,7 @@ ButtonWidgetClass SlotVest
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass SlotVestFill
+ImageWidgetClass SlotVestFill
 {
  position 0 0
  size 1 1
@@ -904,6 +952,8 @@ PanelWidgetClass SlotVestFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass SlotVestLabel
@@ -934,7 +984,7 @@ ButtonWidgetClass SlotShoes
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass SlotShoesFill
+ImageWidgetClass SlotShoesFill
 {
  position 0 0
  size 1 1
@@ -943,6 +993,8 @@ PanelWidgetClass SlotShoesFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass SlotShoesLabel
@@ -973,7 +1025,7 @@ ButtonWidgetClass SlotBag
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass SlotBagFill
+ImageWidgetClass SlotBagFill
 {
  position 0 0
  size 1 1
@@ -982,6 +1034,8 @@ PanelWidgetClass SlotBagFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass SlotBagLabel
@@ -1012,7 +1066,7 @@ ButtonWidgetClass SelectCharacter
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass SelectCharacterFill
+ImageWidgetClass SelectCharacterFill
 {
  position 0 0
  size 1 1
@@ -1021,6 +1075,8 @@ PanelWidgetClass SelectCharacterFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass SelectCharacterLabel
@@ -1057,7 +1113,7 @@ TextWidgetClass ClothingListTitle
  "text halign" left
  text "Scroll to preview / double-click to keep"
 }
-PanelWidgetClass ClothingListBackground
+ImageWidgetClass ClothingListBackground
 {
  position 0.62 0.18
  size 0.35 0.66
@@ -1066,6 +1122,8 @@ PanelWidgetClass ClothingListBackground
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.065 0.065 0.075 1
 }
 TextListboxWidgetClass ClothingList
@@ -1089,7 +1147,7 @@ ButtonWidgetClass RemoveClothing
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass RemoveClothingFill
+ImageWidgetClass RemoveClothingFill
 {
  position 0 0
  size 1 1
@@ -1098,6 +1156,8 @@ PanelWidgetClass RemoveClothingFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass RemoveClothingLabel
@@ -1130,7 +1190,7 @@ ButtonWidgetClass Save
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass SaveFill
+ImageWidgetClass SaveFill
 {
  position 0 0
  size 1 1
@@ -1139,6 +1199,8 @@ PanelWidgetClass SaveFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.96 0.96 0.96 1
 }
 TextWidgetClass SaveLabel

@@ -37,6 +37,7 @@ class GRZLoadoutMenu : UIScriptedMenu
  override Widget Init()
  {
   layoutRoot = g_Game.GetWorkspace().CreateWidgets("GRZ_Loadout/gui/layouts/loadout.layout");
+  GRZLoadoutPanelTextures.Apply(layoutRoot);
   m_CharacterPreview = PlayerPreviewWidget.Cast(layoutRoot.FindAnyWidget("CharacterPreview"));
   m_ClothingList = TextListboxWidget.Cast(layoutRoot.FindAnyWidget("ClothingList"));
   if (WidgetEventHandler.GetInstance())

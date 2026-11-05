@@ -17,6 +17,7 @@ class GRZLeaderboardMenu : UIScriptedMenu
  override Widget Init()
  {
   layoutRoot = g_Game.GetWorkspace().CreateWidgets("GRZ_Loadout/gui/layouts/leaderboard.layout");
+  GRZLoadoutPanelTextures.Apply(layoutRoot);
   ImageWidget logo = ImageWidget.Cast(layoutRoot.FindAnyWidget("Logo"));
   logo.LoadImageFile(0,"GRZ_Loadout/data/logo.paa"); logo.SetImage(0);
   logo.SetFlags(WidgetFlags.SOURCEALPHA | WidgetFlags.BLEND);

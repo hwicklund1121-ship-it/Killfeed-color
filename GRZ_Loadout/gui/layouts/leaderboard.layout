@@ -18,7 +18,7 @@ FrameWidgetClass MenuPanel
  vexactsize 0
  color 0 0 0 0
  {
-PanelWidgetClass Background
+ImageWidgetClass Background
 {
  position 0 0
  size 1 1
@@ -27,9 +27,11 @@ PanelWidgetClass Background
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- color 0.025 0.025 0.03 0.98
+ mode blend
+ stretch 1
+ color 0 0 0 0.8
 }
-PanelWidgetClass WhiteAccent
+ImageWidgetClass WhiteAccent
 {
  position 0 0
  size 1 0.004
@@ -38,6 +40,8 @@ PanelWidgetClass WhiteAccent
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 1 1 1 1
 }
 ImageWidgetClass Logo
@@ -79,7 +83,7 @@ ButtonWidgetClass Close
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass CloseFill
+ImageWidgetClass CloseFill
 {
  position 0 0
  size 1 1
@@ -88,6 +92,8 @@ PanelWidgetClass CloseFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.09 0.09 0.11 1
 }
 TextWidgetClass CloseLabel
@@ -145,7 +151,7 @@ ButtonWidgetClass SortKills
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass SortKillsFill
+ImageWidgetClass SortKillsFill
 {
  position 0 0
  size 1 1
@@ -154,6 +160,8 @@ PanelWidgetClass SortKillsFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.09 0.09 0.11 1
 }
 TextWidgetClass SortKillsLabel
@@ -184,7 +192,7 @@ ButtonWidgetClass SortKD
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass SortKDFill
+ImageWidgetClass SortKDFill
 {
  position 0 0
  size 1 1
@@ -193,6 +201,8 @@ PanelWidgetClass SortKDFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.09 0.09 0.11 1
 }
 TextWidgetClass SortKDLabel
@@ -223,7 +233,7 @@ ButtonWidgetClass SortElo
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass SortEloFill
+ImageWidgetClass SortEloFill
 {
  position 0 0
  size 1 1
@@ -232,6 +242,8 @@ PanelWidgetClass SortEloFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.09 0.09 0.11 1
 }
 TextWidgetClass SortEloLabel
@@ -358,7 +370,7 @@ FrameWidgetClass Row0
  vexactsize 0
  color 0 0 0 0
  {
-PanelWidgetClass RowBackground0
+ImageWidgetClass RowBackground0
 {
  position 0 0
  size 1 1
@@ -367,6 +379,8 @@ PanelWidgetClass RowBackground0
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.055 0.055 0.065 1
 }
 TextWidgetClass Position0
@@ -488,7 +502,7 @@ FrameWidgetClass Row1
  vexactsize 0
  color 0 0 0 0
  {
-PanelWidgetClass RowBackground1
+ImageWidgetClass RowBackground1
 {
  position 0 0
  size 1 1
@@ -497,6 +511,8 @@ PanelWidgetClass RowBackground1
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.035 0.035 0.045 1
 }
 TextWidgetClass Position1
@@ -618,7 +634,7 @@ FrameWidgetClass Row2
  vexactsize 0
  color 0 0 0 0
  {
-PanelWidgetClass RowBackground2
+ImageWidgetClass RowBackground2
 {
  position 0 0
  size 1 1
@@ -627,6 +643,8 @@ PanelWidgetClass RowBackground2
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.055 0.055 0.065 1
 }
 TextWidgetClass Position2
@@ -748,7 +766,7 @@ FrameWidgetClass Row3
  vexactsize 0
  color 0 0 0 0
  {
-PanelWidgetClass RowBackground3
+ImageWidgetClass RowBackground3
 {
  position 0 0
  size 1 1
@@ -757,6 +775,8 @@ PanelWidgetClass RowBackground3
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.035 0.035 0.045 1
 }
 TextWidgetClass Position3
@@ -878,7 +898,7 @@ FrameWidgetClass Row4
  vexactsize 0
  color 0 0 0 0
  {
-PanelWidgetClass RowBackground4
+ImageWidgetClass RowBackground4
 {
  position 0 0
  size 1 1
@@ -887,6 +907,8 @@ PanelWidgetClass RowBackground4
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.055 0.055 0.065 1
 }
 TextWidgetClass Position4
@@ -1008,7 +1030,7 @@ FrameWidgetClass Row5
  vexactsize 0
  color 0 0 0 0
  {
-PanelWidgetClass RowBackground5
+ImageWidgetClass RowBackground5
 {
  position 0 0
  size 1 1
@@ -1017,6 +1039,8 @@ PanelWidgetClass RowBackground5
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.035 0.035 0.045 1
 }
 TextWidgetClass Position5
@@ -1138,7 +1162,7 @@ FrameWidgetClass Row6
  vexactsize 0
  color 0 0 0 0
  {
-PanelWidgetClass RowBackground6
+ImageWidgetClass RowBackground6
 {
  position 0 0
  size 1 1
@@ -1147,6 +1171,8 @@ PanelWidgetClass RowBackground6
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.055 0.055 0.065 1
 }
 TextWidgetClass Position6
@@ -1268,7 +1294,7 @@ FrameWidgetClass Row7
  vexactsize 0
  color 0 0 0 0
  {
-PanelWidgetClass RowBackground7
+ImageWidgetClass RowBackground7
 {
  position 0 0
  size 1 1
@@ -1277,6 +1303,8 @@ PanelWidgetClass RowBackground7
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.035 0.035 0.045 1
 }
 TextWidgetClass Position7
@@ -1398,7 +1426,7 @@ FrameWidgetClass Row8
  vexactsize 0
  color 0 0 0 0
  {
-PanelWidgetClass RowBackground8
+ImageWidgetClass RowBackground8
 {
  position 0 0
  size 1 1
@@ -1407,6 +1435,8 @@ PanelWidgetClass RowBackground8
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.055 0.055 0.065 1
 }
 TextWidgetClass Position8
@@ -1528,7 +1558,7 @@ FrameWidgetClass Row9
  vexactsize 0
  color 0 0 0 0
  {
-PanelWidgetClass RowBackground9
+ImageWidgetClass RowBackground9
 {
  position 0 0
  size 1 1
@@ -1537,6 +1567,8 @@ PanelWidgetClass RowBackground9
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.035 0.035 0.045 1
 }
 TextWidgetClass Position9
@@ -1658,7 +1690,7 @@ FrameWidgetClass Row10
  vexactsize 0
  color 0 0 0 0
  {
-PanelWidgetClass RowBackground10
+ImageWidgetClass RowBackground10
 {
  position 0 0
  size 1 1
@@ -1667,6 +1699,8 @@ PanelWidgetClass RowBackground10
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.055 0.055 0.065 1
 }
 TextWidgetClass Position10
@@ -1788,7 +1822,7 @@ FrameWidgetClass Row11
  vexactsize 0
  color 0 0 0 0
  {
-PanelWidgetClass RowBackground11
+ImageWidgetClass RowBackground11
 {
  position 0 0
  size 1 1
@@ -1797,6 +1831,8 @@ PanelWidgetClass RowBackground11
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.035 0.035 0.045 1
 }
 TextWidgetClass Position11
@@ -1918,7 +1954,7 @@ FrameWidgetClass Row12
  vexactsize 0
  color 0 0 0 0
  {
-PanelWidgetClass RowBackground12
+ImageWidgetClass RowBackground12
 {
  position 0 0
  size 1 1
@@ -1927,6 +1963,8 @@ PanelWidgetClass RowBackground12
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.055 0.055 0.065 1
 }
 TextWidgetClass Position12
@@ -2048,7 +2086,7 @@ FrameWidgetClass Row13
  vexactsize 0
  color 0 0 0 0
  {
-PanelWidgetClass RowBackground13
+ImageWidgetClass RowBackground13
 {
  position 0 0
  size 1 1
@@ -2057,6 +2095,8 @@ PanelWidgetClass RowBackground13
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.035 0.035 0.045 1
 }
 TextWidgetClass Position13
@@ -2178,7 +2218,7 @@ FrameWidgetClass Row14
  vexactsize 0
  color 0 0 0 0
  {
-PanelWidgetClass RowBackground14
+ImageWidgetClass RowBackground14
 {
  position 0 0
  size 1 1
@@ -2187,6 +2227,8 @@ PanelWidgetClass RowBackground14
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.055 0.055 0.065 1
 }
 TextWidgetClass Position14
@@ -2308,7 +2350,7 @@ FrameWidgetClass Row15
  vexactsize 0
  color 0 0 0 0
  {
-PanelWidgetClass RowBackground15
+ImageWidgetClass RowBackground15
 {
  position 0 0
  size 1 1
@@ -2317,6 +2359,8 @@ PanelWidgetClass RowBackground15
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.035 0.035 0.045 1
 }
 TextWidgetClass Position15
@@ -2438,7 +2482,7 @@ FrameWidgetClass Row16
  vexactsize 0
  color 0 0 0 0
  {
-PanelWidgetClass RowBackground16
+ImageWidgetClass RowBackground16
 {
  position 0 0
  size 1 1
@@ -2447,6 +2491,8 @@ PanelWidgetClass RowBackground16
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.055 0.055 0.065 1
 }
 TextWidgetClass Position16
@@ -2568,7 +2614,7 @@ FrameWidgetClass Row17
  vexactsize 0
  color 0 0 0 0
  {
-PanelWidgetClass RowBackground17
+ImageWidgetClass RowBackground17
 {
  position 0 0
  size 1 1
@@ -2577,6 +2623,8 @@ PanelWidgetClass RowBackground17
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.035 0.035 0.045 1
 }
 TextWidgetClass Position17
@@ -2698,7 +2746,7 @@ FrameWidgetClass Row18
  vexactsize 0
  color 0 0 0 0
  {
-PanelWidgetClass RowBackground18
+ImageWidgetClass RowBackground18
 {
  position 0 0
  size 1 1
@@ -2707,6 +2755,8 @@ PanelWidgetClass RowBackground18
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.055 0.055 0.065 1
 }
 TextWidgetClass Position18
@@ -2828,7 +2878,7 @@ FrameWidgetClass Row19
  vexactsize 0
  color 0 0 0 0
  {
-PanelWidgetClass RowBackground19
+ImageWidgetClass RowBackground19
 {
  position 0 0
  size 1 1
@@ -2837,6 +2887,8 @@ PanelWidgetClass RowBackground19
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.035 0.035 0.045 1
 }
 TextWidgetClass Position19
@@ -2958,7 +3010,7 @@ ButtonWidgetClass Previous
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass PreviousFill
+ImageWidgetClass PreviousFill
 {
  position 0 0
  size 1 1
@@ -2967,6 +3019,8 @@ PanelWidgetClass PreviousFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.09 0.09 0.11 1
 }
 TextWidgetClass PreviousLabel
@@ -3013,7 +3067,7 @@ ButtonWidgetClass Next
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass NextFill
+ImageWidgetClass NextFill
 {
  position 0 0
  size 1 1
@@ -3022,6 +3076,8 @@ PanelWidgetClass NextFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.09 0.09 0.11 1
 }
 TextWidgetClass NextLabel

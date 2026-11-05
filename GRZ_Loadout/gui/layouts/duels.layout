@@ -18,7 +18,7 @@ FrameWidgetClass MenuPanel
  vexactsize 0
  color 0 0 0 0
  {
-PanelWidgetClass Background
+ImageWidgetClass Background
 {
  position 0 0
  size 1 1
@@ -27,9 +27,11 @@ PanelWidgetClass Background
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- color 0.025 0.025 0.03 0.98
+ mode blend
+ stretch 1
+ color 0 0 0 0.8
 }
-PanelWidgetClass WhiteAccent
+ImageWidgetClass WhiteAccent
 {
  position 0 0
  size 1 0.004
@@ -38,6 +40,8 @@ PanelWidgetClass WhiteAccent
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 1 1 1 1
 }
 ImageWidgetClass Logo
@@ -79,7 +83,7 @@ ButtonWidgetClass Close
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass CloseFill
+ImageWidgetClass CloseFill
 {
  position 0 0
  size 1 1
@@ -88,6 +92,8 @@ PanelWidgetClass CloseFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.09 0.09 0.11 1
 }
 TextWidgetClass CloseLabel
@@ -161,7 +167,7 @@ ButtonWidgetClass Best1
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass Best1Fill
+ImageWidgetClass Best1Fill
 {
  position 0 0
  size 1 1
@@ -170,6 +176,8 @@ PanelWidgetClass Best1Fill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.09 0.09 0.11 1
 }
 TextWidgetClass Best1Label
@@ -200,7 +208,7 @@ ButtonWidgetClass Best3
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass Best3Fill
+ImageWidgetClass Best3Fill
 {
  position 0 0
  size 1 1
@@ -209,6 +217,8 @@ PanelWidgetClass Best3Fill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.09 0.09 0.11 1
 }
 TextWidgetClass Best3Label
@@ -239,7 +249,7 @@ ButtonWidgetClass Best5
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass Best5Fill
+ImageWidgetClass Best5Fill
 {
  position 0 0
  size 1 1
@@ -248,6 +258,8 @@ PanelWidgetClass Best5Fill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.09 0.09 0.11 1
 }
 TextWidgetClass Best5Label
@@ -300,7 +312,7 @@ TextWidgetClass MapsTitle
  "text halign" left
  text "DUEL MAPS"
 }
-PanelWidgetClass PlayersBack
+ImageWidgetClass PlayersBack
 {
  position 0.03 0.32
  size 0.45 0.34
@@ -309,6 +321,8 @@ PanelWidgetClass PlayersBack
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.07 0.07 0.08 1
 }
 TextListboxWidgetClass Players
@@ -322,7 +336,7 @@ TextListboxWidgetClass Players
  color 1 1 1 1
  font "gui/fonts/sdf_MetronLight16"
 }
-PanelWidgetClass MapsBack
+ImageWidgetClass MapsBack
 {
  position 0.52 0.32
  size 0.45 0.34
@@ -331,6 +345,8 @@ PanelWidgetClass MapsBack
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.07 0.07 0.08 1
 }
 TextListboxWidgetClass Maps
@@ -413,7 +429,7 @@ ButtonWidgetClass Accept
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass AcceptFill
+ImageWidgetClass AcceptFill
 {
  position 0 0
  size 1 1
@@ -422,6 +438,8 @@ PanelWidgetClass AcceptFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.09 0.09 0.11 1
 }
 TextWidgetClass AcceptLabel
@@ -452,7 +470,7 @@ ButtonWidgetClass Decline
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass DeclineFill
+ImageWidgetClass DeclineFill
 {
  position 0 0
  size 1 1
@@ -461,6 +479,8 @@ PanelWidgetClass DeclineFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.09 0.09 0.11 1
 }
 TextWidgetClass DeclineLabel
@@ -491,7 +511,7 @@ ButtonWidgetClass Forfeit
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass ForfeitFill
+ImageWidgetClass ForfeitFill
 {
  position 0 0
  size 1 1
@@ -500,6 +520,8 @@ PanelWidgetClass ForfeitFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.09 0.09 0.11 1
 }
 TextWidgetClass ForfeitLabel
@@ -530,7 +552,7 @@ ButtonWidgetClass SendChallenge
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass SendChallengeFill
+ImageWidgetClass SendChallengeFill
 {
  position 0 0
  size 1 1
@@ -539,6 +561,8 @@ PanelWidgetClass SendChallengeFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0.09 0.09 0.11 1
 }
 TextWidgetClass SendChallengeLabel

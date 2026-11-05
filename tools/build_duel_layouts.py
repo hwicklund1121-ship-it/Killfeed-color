@@ -6,7 +6,7 @@ out=root/'GRZ_Loadout/gui/layouts'
 def widget(kind,name,x,y,w,h,props='',children=''):
  return f'{kind} {name}\n{{\n position {x} {y}\n size {w} {h}\n hexactpos 0\n vexactpos 0\n hexactsize 0\n vexactsize 0\n {props}\n'+(' {\n'+children+' }\n' if children else '')+'}\n'
 def panel(name,x,y,w,h,color):
- return widget('PanelWidgetClass',name,x,y,w,h,f'ignorepointer 1\n color {color}')
+ return widget('ImageWidgetClass',name,x,y,w,h,f'ignorepointer 1\n mode blend\n stretch 1\n color {color}')
 def text(name,value,x,y,w,h,size=20,color='1 1 1 1',center=False):
  if size == 20: size = 24
  return widget('TextWidgetClass',name,x,y,w,h,f'ignorepointer 1\n color {color}\n font "gui/fonts/sdf_MetronLight{size}"\n "exact text" 1\n "text valign" center\n "text halign" '+('center' if center else 'left')+f'\n text "{value}"')
@@ -15,7 +15,7 @@ def canvas(name,x,y,w,h):
 def button(name,label,x,y,w,h):
  return widget('ButtonWidgetClass',name,x,y,w,h,'color 1 1 1 1',panel(name+'Fill',0,0,1,1,'0.09 0.09 0.11 1')+text(name+'Label',label,0,0,1,1,20,center=True))
 def base(title):
- return panel('Background',0,0,1,1,'0.025 0.025 0.03 0.98')+panel('WhiteAccent',0,0,1,.004,'1 1 1 1')+widget('ImageWidgetClass','Logo',.025,.02,.245,.105,'ignorepointer 1\n color 1 1 1 1\n mode blend\n stretch 1')+text('Title',title,.33,.04,.56,.055,24)+button('Close','X',.94,.025,.04,.055)
+ return panel('Background',0,0,1,1,'0 0 0 0.8')+panel('WhiteAccent',0,0,1,.004,'1 1 1 1')+widget('ImageWidgetClass','Logo',.025,.02,.245,.105,'ignorepointer 1\n color 1 1 1 1\n mode blend\n stretch 1')+text('Title',title,.33,.04,.56,.055,24)+button('Close','X',.94,.025,.04,.055)
 def frame(name,children):
  return widget('FrameWidgetClass',name,0,0,1,1,'color 0 0 0 0',widget('FrameWidgetClass','MenuPanel',.07,.065,.86,.87,'color 0 0 0 0',children))
 c=base('CHALLENGE A PLAYER')

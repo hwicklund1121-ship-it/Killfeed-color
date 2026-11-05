@@ -26,7 +26,7 @@ def widget(kind, name, x, y, w, h, props='', children=''):
 '''+ (' {\n'+children+' }\n' if children else '')+'}\n'
 
 def panel(name,x,y,w,h,color):
-    return widget('PanelWidgetClass',name,x,y,w,h,f'ignorepointer 1\n color {color}')
+    return widget('ImageWidgetClass',name,x,y,w,h,f'ignorepointer 1\n mode blend\n stretch 1\n color {color}')
 
 def text(name,value,x,y,w,h,size=24,color='1 1 1 1',center=False):
     return widget('TextWidgetClass',name,x,y,w,h,
@@ -39,7 +39,7 @@ def button(name,label,x,y,w,h,white=False):
     return widget('ButtonWidgetClass',name,x,y,w,h,'color 1 1 1 1',children)
 
 def layout():
-    children = panel('MenuBackground',0,0,1,1,'0.025 0.025 0.03 0.98')
+    children = panel('MenuBackground',0,0,1,1,'0 0 0 0.8')
     children += panel('AccentTop',0,0,1,.004,'1 1 1 1')
     children += widget('ImageWidgetClass','Logo',.027,.022,.245,.13,'ignorepointer 1\n color 1 1 1 1\n mode blend\n stretch 1')
     children += text('Heading','BUILD YOUR LOADOUT',.31,.053,.55,.06,24,'0.75 0.75 0.78 1')
@@ -86,6 +86,7 @@ with ZipFile(args.logo_zip) as archive:
         raise SystemExit('Expected one logo PNG')
     original = archive.read(names[0])
     logo = Image.open(io.BytesIO(original)).convert('RGBA')
+(source / 'data/solid_white.paa').write_bytes(encode_paa(Image.new('RGBA', (16,16), (255,255,255,255)), alpha_flags=True))
 (source / 'data/logo.paa').write_bytes(encode_paa(logo.resize((2048,512),Image.Resampling.LANCZOS), alpha_flags=True))
 pbo = build(source)
 (root / 'downloads/GRZ_Loadout.pbo').write_bytes(pbo)
