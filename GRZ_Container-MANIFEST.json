@@ -1,0 +1,18 @@
+{
+  "class": "GRZ_Container",
+  "display_name": "GRZ_Container",
+  "description": "Made By Blake",
+  "model_input_sha256": "f3eebb74caa737ebf001ec680844fe9420551e2b950995597e4f729c8bd1b405",
+  "pbo_sha256": "379fda5c9c6d239ae1bd2e2169e0d56839dee0a717f11f57db01bf865781c445",
+  "bytes": 11411221,
+  "model_resource_remaps": {
+    "dz\\structures\\data\\metal\\basecooler_old_paint_co.paa": "GRZ_Container\\data\\interior_co__________________.paa",
+    "dz\\structures\\industrial\\containers\\data\\containers_colors_04_co.paa": "GRZ_Container\\data\\exterior_co__________________________________.paa",
+    "dz\\structures\\industrial\\containers\\data\\containers_interior.rvmat": "GRZ_Container\\data\\interior_________________________________.rvmat",
+    "dz\\structures\\industrial\\containers\\data\\containers_new.rvmat": "GRZ_Container\\data\\exterior____________________________.rvmat",
+    "dz\\structures\\industrial\\containers\\data\\containers_new_sides.rvmat": "GRZ_Container\\data\\exterior__________________________________.rvmat",
+    "dz\\structures\\industrial\\containers\\data\\containers_new_sides_nodt.rvmat": "GRZ_Container\\data\\exterior_______________________________________.rvmat"
+  },
+  "model_geometry_and_size_preserved": true,
+  "object_type": "Static HouseNoDestruct; no inventory cargo or new door interactions added."
+}
