@@ -7,12 +7,14 @@ import secrets
 import time
 from dataclasses import dataclass
 from datetime import datetime, timezone
+from pathlib import Path
 
 import discord
 from discord import app_commands
 from dotenv import load_dotenv
 
 from protection import Protection
+from recovery import PlanStore, Rebuilder, collect_deleted, current_record
 
 load_dotenv()
 log = logging.getLogger("recovery")
@@ -43,6 +45,9 @@ class RecoveryBot(discord.Client):
         self.cleanup_lock = asyncio.Lock()
         self.policy = Protection()
         self.interventions = {}
+        self.rebuild_pending = {}
+        self.recovery_store = PlanStore(Path(__file__).resolve().parent / "recovery_data")
+        self.rebuilder = Rebuilder(self.recovery_store, log)
 
     async def setup_hook(self):
         guild = discord.Object(id=GUILD_ID)
@@ -58,7 +63,7 @@ class RecoveryBot(discord.Client):
         me = guild.me
         if me:
             perms = me.guild_permissions
-            for name in ("manage_channels", "view_audit_log", "kick_members"):
+            for name in ("manage_channels", "view_audit_log", "kick_members", "view_channel", "send_messages", "attach_files"):
                 if not getattr(perms, name):
                     log.error("Missing permission: %s", name)
 
@@ -194,6 +199,118 @@ async def protection_status(interaction: discord.Interaction):
         "Server owner, this bot and TRUSTED_USER_IDS are exempt. Protection needs View Audit Log and Kick Members. "
         "It cannot kick accounts whose highest role is at or above its own, and cannot stop actions before they happen. "
         "No roles or role assignments are changed.", ephemeral=True)
+
+
+
+@bot.tree.command(name="rebuild_preview", description="Owner: review deleting current channels and recovering old ones from audit logs.")
+@app_commands.guild_only()
+@app_commands.check(owner_only)
+async def rebuild_preview(interaction: discord.Interaction, hours: app_commands.Range[int, 1, 1080] = 24, deleted_by_id: str = ""):
+    if bot.cleanup_lock.locked():
+        await interaction.response.send_message("A cleanup/rebuild is already running.", ephemeral=True)
+        return
+    if deleted_by_id and not deleted_by_id.isdigit():
+        await interaction.response.send_message("deleted_by_id must be the attacker's numeric user/bot ID, or left empty.", ephemeral=True)
+        return
+    bot.rebuild_pending.pop(interaction.user.id, None)
+    await interaction.response.defer(ephemeral=True, thinking=True)
+    try:
+        old, skipped = await collect_deleted(interaction.guild, hours, int(deleted_by_id) if deleted_by_id else None, bot.user.id)
+        current = await interaction.guild.fetch_channels()
+        snapshot = [current_record(c) for c in current]
+        # Preserve surviving categories that the old channels explicitly reference.
+        old_ids = {r['old_id'] for r in old}
+        needed_parents = {r.get('parent_id') for r in old}
+        for record in snapshot:
+            if record['kind'] == 4 and record['old_id'] in needed_parents and record['old_id'] not in old_ids:
+                old.append(record)
+        old.sort(key=lambda r: (r['kind'] != 4, r.get('position') or 0, r['old_id']))
+        if len(old) > 500:
+            raise ValueError("More than 500 channels/categories in the plan. Narrow the incident window.")
+        code = secrets.token_hex(6)
+        plan = dict(code=code, guild_id=GUILD_ID, owner_id=interaction.guild.owner_id,
+                    created_at=datetime.now(timezone.utc).isoformat(), approved=False,
+                    phase='prepared', old=old, current=snapshot,
+                    current_ids=[c.id for c in current], restored={}, notes=[])
+        bot.recovery_store.save(plan)  # Full local snapshot BEFORE any deletion.
+        bot.rebuild_pending[interaction.user.id] = (code, time.monotonic() + 600)
+        lines = ['CURRENT CHANNELS TO DELETE:']
+        lines.extend(f"{r['old_id']} | type={r['kind']} | {r['name']}" for r in snapshot)
+        lines.append('\nOLD CHANNELS/CATEGORIES TO RECREATE:')
+        lines.extend(f"{r['old_id']} | type={r['kind']} | {r['name']} | parent={r.get('parent_id')} | permissions={'recorded' if r.get('permissions_known') else 'UNKNOWN: private fallback'} | deleted_by={r.get('deleted_by')}" for r in old)
+        lines.extend(['', f'Skipped incomplete/unsupported audit entries: {skipped}',
+                      'Missing category links/settings cannot be invented. Messages/files/old IDs cannot be recovered.',
+                      'Review the deletion window/actor carefully: old spam can also appear in the audit log.'])
+        text = (f"**REBUILD PREVIEW**: delete **{len(current)} current channels/categories**, then recreate **{len(old)} old channels/categories**. Roles stay.\n"
+                "Review the attached lists. A local JSON backup/plan has been saved in recovery_data.\n"
+                "Incomplete permissions will be restored private for owner review. Existing channels are not deleted until you confirm.\n"
+                f"Within 10 minutes: `/rebuild_confirm server_id:{GUILD_ID} confirmation:{code}`\n"
+                "If these aren't the right old channels, rerun this preview with fewer hours or deleted_by_id set to the attacker.")
+        await interaction.edit_original_response(content=text, attachments=[discord.File(io.BytesIO('\n'.join(lines).encode()), filename='rebuild-preview.txt')])
+    except ValueError as exc:
+        await interaction.edit_original_response(content=str(exc))
+
+
+@bot.tree.command(name="rebuild_confirm", description="Owner: execute the reviewed delete-current/recreate-old channel plan.")
+@app_commands.guild_only()
+@app_commands.check(owner_only)
+async def rebuild_confirm(interaction: discord.Interaction, server_id: str, confirmation: str):
+    pending = bot.rebuild_pending.get(interaction.user.id)
+    if (server_id != str(GUILD_ID) or not pending or pending[1] <= time.monotonic()
+            or not secrets.compare_digest(pending[0], confirmation)):
+        await interaction.response.send_message("Wrong/expired confirmation. Run /rebuild_preview again.", ephemeral=True)
+        return
+    if bot.cleanup_lock.locked():
+        await interaction.response.send_message("Another operation is running.", ephemeral=True)
+        return
+    await interaction.response.defer(ephemeral=True, thinking=True)
+    async with bot.cleanup_lock:
+        plan = bot.recovery_store.load(confirmation)
+        current = await interaction.guild.fetch_channels()
+        if {c.id for c in current} != set(plan['current_ids']):
+            await interaction.edit_original_response(content="Channels changed after the preview. Run /rebuild_preview again; nothing was deleted.")
+            return
+        bot.rebuild_pending.pop(interaction.user.id, None)
+        plan['approved'] = True
+        bot.recovery_store.save(plan)
+        await interaction.edit_original_response(content=f"Starting rebuild {confirmation}. This channel will be deleted. Progress is in the bot console. If interrupted, use /rebuild_resume with this plan ID.")
+        try:
+            await bot.rebuilder.run(interaction.guild, plan)
+        except ValueError as exc:
+            log.error("Rebuild paused: %s", exc)
+            try:
+                await interaction.edit_original_response(content=str(exc))
+            except discord.HTTPException:
+                pass
+
+
+@bot.tree.command(name="rebuild_resume", description="Owner: resume an already-confirmed rebuild plan after an interruption.")
+@app_commands.guild_only()
+@app_commands.check(owner_only)
+async def rebuild_resume(interaction: discord.Interaction, plan_id: str):
+    if bot.cleanup_lock.locked():
+        await interaction.response.send_message("Another operation is running.", ephemeral=True)
+        return
+    try:
+        plan = bot.recovery_store.load(plan_id)
+    except (ValueError, FileNotFoundError):
+        await interaction.response.send_message("Plan not found. Keep the original recovery_data folder.", ephemeral=True)
+        return
+    if not plan.get('approved') or plan['guild_id'] != GUILD_ID or plan['owner_id'] != interaction.user.id:
+        await interaction.response.send_message("That plan was not confirmed by this server owner.", ephemeral=True)
+        return
+    await interaction.response.defer(ephemeral=True, thinking=True)
+    async with bot.cleanup_lock:
+        plan = bot.recovery_store.load(plan_id)
+        await interaction.edit_original_response(content="Resuming the confirmed plan. Only its original deletion list is eligible; restored channel IDs are tracked. See the bot console.")
+        try:
+            await bot.rebuilder.run(interaction.guild, plan)
+        except ValueError as exc:
+            log.error("Rebuild paused: %s", exc)
+            try:
+                await interaction.edit_original_response(content=str(exc))
+            except discord.HTTPException:
+                pass
 
 
 @bot.tree.error

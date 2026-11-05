@@ -3,7 +3,7 @@ from pathlib import Path
 from zipfile import ZipFile, ZIP_DEFLATED
 root = Path(__file__).resolve().parents[1]
 source = root / 'discord-recovery-bot'
-names = ['bot.py','protection.py','test_bot.py','requirements.txt','README.md','Start-Bot.cmd','.env.example','.gitignore']
+names = ['bot.py','protection.py','test_bot.py','recovery.py','test_recovery.py','requirements.txt','README.md','Start-Bot.cmd','.env.example','.gitignore']
 output = root / 'downloads/GRZ-Discord-Recovery-Bot.zip'
 with ZipFile(output,'w',ZIP_DEFLATED) as z:
     for name in names:

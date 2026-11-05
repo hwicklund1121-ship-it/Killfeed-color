@@ -9,6 +9,7 @@ from unittest.mock import AsyncMock, patch
 os.environ['SERVER_ID']='123456789012345678'
 os.environ['DISCORD_BOT_TOKEN']='not-a-real-token'
 os.environ['TRUSTED_USER_IDS']='77'
+os.environ['AUTO_KICK']='true'
 import discord
 import bot as module
 from protection import Protection

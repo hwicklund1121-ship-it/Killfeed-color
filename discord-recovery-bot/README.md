@@ -1,22 +1,33 @@
 # Discord Recovery Bot
 
-Deletes reviewed channels/categories in ONE configured server. Never edits/deletes roles or changes anyone's role assignments. Only the Discord server owner can command cleanup. No real Discord server was accessed while building this package.
+Rebuilds ONE configured server by deleting its current channels and recreating old channels from Discord audit-log metadata. Standalone channel cleanup is also available. Never edits/deletes roles or changes anyone's role assignments. Only the Discord server owner can command cleanup. No real Discord server was accessed while building this package.
 
 ## Windows setup
 
 1. Install Python 3.11 or newer from python.org.
 2. Create an application and Bot at https://discord.com/developers/applications . Copy its bot token into your LOCAL `.env`, never into chat or screenshots. `Start-Bot.cmd` creates `.env` from the example on first run.
 3. Set `SERVER_ID` in `.env`. Enable Discord Settings > Advanced > Developer Mode, then right-click your server > Copy Server ID.
-4. In the Developer Portal's Installation/OAuth2 URL generator, select **bot** and **applications.commands**. Request **Manage Channels**, **View Audit Log**, and **Kick Members**. Administrator and Manage Roles are NOT needed. Invite it to your server.
+4. In the Developer Portal's Installation/OAuth2 URL generator, select **bot** and **applications.commands**. Request **Manage Channels**, **View Audit Log**, and **Kick Members**, **View Channels**, **Send Messages**, and **Attach Files**. Administrator and Manage Roles are NOT needed. Invite it to your server.
 5. Move the bot role above the bots/accounts it must be able to kick. Channel permission overwrites must allow it to manage the channels being cleaned.
 6. Add legitimate moderation/builder bots to `TRUSTED_USER_IDS` before running it, or protection may kick them during bulk actions. Owner and this bot are always exempt. Leave `AUTO_KICK=true` for active protection; false is monitor-only.
 7. Run `Start-Bot.cmd` and keep its window running. Message Content/Server Members privileged intents are not required. The code enables guild moderation events; audit events also require View Audit Log permission.
 
-## Delete channels, keep roles
+## Rebuild: delete CURRENT channels, recreate OLD ones, keep roles
 
-As server OWNER, run `/cleanup_preview`. Review the attached channel list. Run `/cleanup_confirm` with its server ID and confirmation code within two minutes. The confirmation is single-use. Only listed channels are deleted; roles stay. Deleting parent channels also removes their messages and threads. This cannot be undone by this bot.
+Keep one temporary text channel available to run commands. If you already used the old cleanup command, create a temporary channel manually first. Use these commands as the Discord SERVER OWNER:
 
-The command channel is deleted last. Completion and failed channel IDs appear in the bot console, since the interaction channel may no longer exist. After cleanup, create a new channel manually in Discord to use slash commands again. Failed deletions can be retried using a new preview. Discord can block deletion of required Community channels; disable Community in server settings first if those also need to go.
+1. `/rebuild_preview hours:24` scans recent channel deletions and saves a local snapshot of current channel settings in `recovery_data/`. It does not delete anything. To isolate the attack, optionally set `deleted_by_id` to the attacker's numeric user/bot ID, and adjust hours from 1 to 1080 (45 days).
+2. Read the attached **current channels to delete** and **old channels to recreate** lists. Make sure the old list contains your original channels rather than deleted spam. Rerun the preview with a narrower window or attacker ID if necessary. By default, deletion entries from this recovery bot are excluded; selecting its ID explicitly includes them.
+3. Run `/rebuild_confirm server_id:YOUR_SERVER_ID confirmation:CODE` using the values from the preview within 10 minutes. This is single-use. If the current channel IDs changed after preview, it refuses deletion and requires a fresh preview.
+4. The bot creates a private temporary progress channel before wiping the reviewed current channels. It checks permissions first and refuses to proceed without a non-empty recovery list. Required Community channels must be unprotected by disabling Community manually before the wipe can proceed. If that disables old announcement/forum/stage/media types, first let ordinary channels recover, re-enable Community using the recreated rules/updates channels, then resume the same plan for remaining channel types.
+5. It recreates categories first, then text, announcement, voice, stage, forum and media channels where supported by the server. Existing roles and role assignments are never modified. It copies recorded channel permission overwrites only onto existing roles/members. Incomplete permissions, missing referenced roles, or permission bits the bot cannot grant cause a PRIVATE channel for owner review, rather than an accidental public channel.
+6. Progress, the plan ID, private fallbacks and failures appear in the bot console. Keep that window running. Messages in the original command channel disappear during deletion. The temporary progress channel is removed after complete success.
+
+**If interrupted:** keep `recovery_data/` and run `/rebuild_resume plan_id:CODE`. This continues the already-confirmed original deletion list if necessary, then the pending restores. It does not add new channels to the deletion list. It tracks created IDs and reconciles matching bot creation audit entries after an interrupted journal write to reduce duplicate restores. Do not rerun a fresh rebuild over partially restored channels unless you intend to delete them too.
+
+Audit logs are retained for about 45 days and do not contain messages, attachments or full channel backups. Names/types are required for recovery. Category membership, ordering, permission overwrites and other settings are restored only where recorded; missing category links leave channels uncategorized. Forum tags/threads/posts, original IDs, links, webhook tokens and missing roles cannot be reconstructed. News/stage/forum/media creation can fail if the server no longer supports those channel types. Discord permissions, channel limits and API failures can cause partial recovery. Current-channel snapshots are metadata backups, not message backups. Nothing has been run on your server by the package author.
+
+For intentional standalone removal without restoration, `/cleanup_preview` followed by `/cleanup_confirm` remains available. Use the rebuild flow above for recovery.
 
 ## Anti-nuke protection
 
@@ -42,4 +53,4 @@ Protection is reactive: it cannot prevent the first actions, restore deleted dat
 
 ## Verification
 
-After installing requirements, run `python -m unittest -v test_bot.py`. Tests use mocks, never real Discord connections. They cover owner restrictions, confirmation, snapshot-only deletion, channel order, exemptions, duplicate/expired audit events and kick hierarchy. Not tested against a live Discord server.
+After installing requirements, run `python -m unittest discover -v -p "test_*.py"`. Tests use mocks, never real Discord connections. They cover owner restrictions, confirmation, snapshot-only deletion, channel order, exemptions, duplicate/expired audit events and kick hierarchy. Not tested against a live Discord server.
