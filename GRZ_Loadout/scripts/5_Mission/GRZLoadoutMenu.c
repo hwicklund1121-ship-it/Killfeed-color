@@ -6,24 +6,38 @@ class GRZLoadoutMenu : UIScriptedMenu
  protected int m_Category;
  protected int m_GunIndex;
  protected int m_WrapIndex;
+ protected bool m_ClothingMode;
+ protected int m_ClothingSlot;
+ protected int m_ClothingIndex;
+ protected PlayerPreviewWidget m_CharacterPreview;
+ protected PlayerBase m_PreviewCharacter;
+ protected TextListboxWidget m_ClothingList;
+ protected bool m_ChoosingCharacter;
+ protected string m_CharacterType;
+ protected ref array<int> m_ClothingFiltered = new array<int>;
+ protected ref array<string> m_ClothingChoices = new array<string>;
  protected bool m_Saving;
  protected float m_SaveElapsed;
 
  override Widget Init()
  {
   layoutRoot = g_Game.GetWorkspace().CreateWidgets("GRZ_Loadout/gui/layouts/loadout.layout");
+  m_CharacterPreview = PlayerPreviewWidget.Cast(layoutRoot.FindAnyWidget("CharacterPreview"));
+  m_ClothingList = TextListboxWidget.Cast(layoutRoot.FindAnyWidget("ClothingList"));
   m_Preview = ItemPreviewWidget.Cast(layoutRoot.FindAnyWidget("GunPreview"));
   ImageWidget logo = ImageWidget.Cast(layoutRoot.FindAnyWidget("Logo"));
   logo.LoadImageFile(0, "GRZ_Loadout/data/logo.paa");
   logo.SetImage(0);
   logo.SetFlags(WidgetFlags.SOURCEALPHA | WidgetFlags.BLEND);
-  layoutRoot.FindAnyWidget("ClothingTab").Enable(false);
+  for (int clothingSlot = 0; clothingSlot < GRZLoadoutClothingSlots.Names.Count(); clothingSlot++)
+   m_ClothingChoices.Insert("");
   GRZLoadoutClientData.Changed.Insert(ReceiveCatalogue);
   GRZLoadoutClientData.Result.Insert(ReceiveResult);
   Text("Status", "Loading available guns from server...");
   PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
   if (player)
   {
+   m_CharacterType = player.GetType();
    ScriptRPC rpc = new ScriptRPC;
    rpc.Send(player, GRZLoadoutRPC.REQUEST, true, null);
   }
@@ -60,7 +74,17 @@ class GRZLoadoutMenu : UIScriptedMenu
  void ReceiveCatalogue()
  {
   m_GunIndex = 0;
-  FilterGuns();
+  GRZLoadoutCatalogue received = GRZLoadoutClientData.Catalogue;
+  if (received && received.SavedOutfit && received.SavedOutfit.Choices.Count() == m_ClothingChoices.Count())
+  {
+   m_CharacterType = received.SavedOutfit.Character;
+   for (int savedSlot = 0; savedSlot < m_ClothingChoices.Count(); savedSlot++)
+    m_ClothingChoices[savedSlot] = received.SavedOutfit.Choices[savedSlot];
+  }
+  if (m_ClothingMode)
+   FilterClothing();
+  else
+   FilterGuns();
   Text("Status", "");
  }
 
@@ -106,6 +130,11 @@ class GRZLoadoutMenu : UIScriptedMenu
 
  protected void RefreshChoices()
  {
+  if (m_ClothingMode)
+  {
+   RefreshClothing();
+   return;
+  }
   if (!m_Saving)
    Text("Status", "");
   GRZLoadoutGun gun = CurrentGun();
@@ -142,6 +171,11 @@ class GRZLoadoutMenu : UIScriptedMenu
 
  protected void DisposePreview()
  {
+  if (m_CharacterPreview)
+   m_CharacterPreview.SetPlayer(null);
+  if (m_PreviewCharacter && g_Game)
+   g_Game.ObjectDelete(m_PreviewCharacter);
+  m_PreviewCharacter = null;
   if (m_Preview)
    m_Preview.SetItem(null);
   if (m_PreviewGun && g_Game)
@@ -152,6 +186,11 @@ class GRZLoadoutMenu : UIScriptedMenu
  void RebuildPreview()
  {
   DisposePreview();
+  if (m_ClothingMode)
+  {
+   PreviewClothing();
+   return;
+  }
   GRZLoadoutGun gun = CurrentGun();
   if (!gun || !m_Preview)
    return;
@@ -175,6 +214,199 @@ class GRZLoadoutMenu : UIScriptedMenu
   m_Preview.SetModelOrientation("0 0 0");
  }
 
+ protected void SelectPage(bool clothing)
+ {
+  m_ClothingMode = clothing;
+  string gunWidgets[12] = {"Calibre20", "Calibre50", "Calibre408", "GunPreview", "GunPrevious", "GunNext", "GunName", "GunCount", "WrapHeading", "WrapPrevious", "WrapNext", "WrapName"};
+  for (int i = 0; i < 12; i++)
+   layoutRoot.FindAnyWidget(gunWidgets[i]).Show(!clothing);
+  string lines[3] = {"Calibre20Line", "Calibre50Line", "Calibre408Line"};
+  foreach (string line : lines)
+   layoutRoot.FindAnyWidget(line).Show(false);
+  layoutRoot.FindAnyWidget("PreviewBackground").Show(!clothing);
+  layoutRoot.FindAnyWidget("ClothingPanel").Show(clothing);
+  int light = ARGB(255, 245, 245, 245);
+  int dark = ARGB(255, 22, 22, 24);
+  if (clothing)
+  {
+   layoutRoot.FindAnyWidget("LoadoutTabFill").SetColor(dark);
+   layoutRoot.FindAnyWidget("LoadoutTabLabel").SetColor(light);
+   layoutRoot.FindAnyWidget("ClothingTabFill").SetColor(light);
+   layoutRoot.FindAnyWidget("ClothingTabLabel").SetColor(dark);
+   Text("SaveLabel", "SAVE & APPLY");
+   FilterClothing();
+  }
+  else
+  {
+   layoutRoot.FindAnyWidget("LoadoutTabFill").SetColor(light);
+   layoutRoot.FindAnyWidget("LoadoutTabLabel").SetColor(dark);
+   layoutRoot.FindAnyWidget("ClothingTabFill").SetColor(dark);
+   layoutRoot.FindAnyWidget("ClothingTabLabel").SetColor(light);
+   Text("SaveLabel", "SAVE LOADOUT");
+   RefreshChoices();
+  }
+ }
+
+ protected void FilterClothing()
+ {
+  m_ClothingFiltered.Clear();
+  m_ClothingList.ClearItems();
+  GRZLoadoutCatalogue catalogue = GRZLoadoutClientData.Catalogue;
+  if (catalogue)
+  {
+   if (m_ChoosingCharacter)
+   {
+    foreach (string character : catalogue.Characters)
+    {
+     string label = character;
+     label.Replace("SurvivorM_", "");
+     label.Replace("SurvivorF_", "");
+     m_ClothingList.AddItem(label, null, 0);
+    }
+   }
+   else
+   {
+    string slot = GRZLoadoutClothingSlots.Names[m_ClothingSlot];
+    for (int i = 0; i < catalogue.Clothing.Count(); i++)
+    {
+     GRZLoadoutClothing item = catalogue.Clothing[i];
+     if (item && item.Slot == slot)
+     {
+      m_ClothingFiltered.Insert(i);
+      m_ClothingList.AddItem(item.Name, null, 0);
+     }
+    }
+   }
+  }
+  RefreshClothing();
+ }
+
+ protected void RefreshClothing()
+ {
+  layoutRoot.FindAnyWidget("Save").Enable(!m_Saving && GRZLoadoutClientData.Catalogue);
+  string title = "Double-click clothing to equip";
+  if (m_ChoosingCharacter)
+   title = "Double-click a character";
+  Text("ClothingListTitle", title);
+  layoutRoot.FindAnyWidget("RemoveClothing").Enable(!m_ChoosingCharacter);
+  string names[8] = {"SlotHat", "SlotMask", "SlotShirt", "SlotBelt", "SlotPants", "SlotGlove", "SlotVest", "SlotShoes"};
+  int indices[8] = {0, 1, 3, 9, 6, 5, 4, 7};
+  for (int i = 0; i < 8; i++)
+  {
+   int color = ARGB(255, 25, 25, 28);
+   if (!m_ChoosingCharacter && indices[i] == m_ClothingSlot)
+    color = ARGB(255, 85, 85, 90);
+   layoutRoot.FindAnyWidget(names[i] + "Fill").SetColor(color);
+  }
+  g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(RebuildPreview);
+  g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(RebuildPreview, 1, false);
+ }
+
+ protected void PreviewClothing()
+ {
+  PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
+  if (!player || m_CharacterType == "")
+   return;
+  int flags = ECE_LOCAL | ECE_NOLIFETIME | ECE_KEEPHEIGHT | ECE_NOSURFACEALIGN | ECE_NOPERSISTENCY_WORLD | ECE_NOPERSISTENCY_CHAR;
+  m_PreviewCharacter = PlayerBase.Cast(g_Game.CreateObjectEx(m_CharacterType, "0 -1000 0", flags));
+  if (!m_PreviewCharacter)
+  {
+   Text("Status", "Character preview could not be created.");
+   return;
+  }
+  // Only preview clones are dressed here; the real inventory changes on Save.
+  for (int i = 0; i < m_ClothingChoices.Count(); i++)
+  {
+   string type = m_ClothingChoices[i];
+   if (type == "__REMOVE__")
+    continue;
+   if (type == "")
+   {
+    EntityAI current = player.FindAttachmentBySlotName(GRZLoadoutClothingSlots.Names[i]);
+    if (current)
+     type = current.GetType();
+   }
+   if (type != "")
+   {
+    int slot = InventorySlots.GetSlotIdFromString(GRZLoadoutClothingSlots.Names[i]);
+    if (!m_PreviewCharacter.GetInventory().CreateAttachmentEx(type, slot))
+     Text("Status", "Some selected clothing cannot be worn together. Choose a different combination.");
+   }
+  }
+  m_CharacterPreview.SetPlayer(m_PreviewCharacter);
+  m_CharacterPreview.SetModelPosition("0 0 0.605");
+  m_CharacterPreview.SetModelOrientation("0 0 0");
+  m_CharacterPreview.Refresh();
+ }
+
+ protected bool ClothingClick(string name)
+ {
+  string names[8] = {"SlotHat", "SlotMask", "SlotShirt", "SlotBelt", "SlotPants", "SlotGlove", "SlotVest", "SlotShoes"};
+  int indices[8] = {0, 1, 3, 9, 6, 5, 4, 7};
+  for (int i = 0; i < 8; i++)
+  {
+   if (name == names[i])
+   {
+    m_ClothingSlot = indices[i];
+    m_ChoosingCharacter = false;
+    FilterClothing();
+    return true;
+   }
+  }
+  if (name == "SelectCharacter")
+  {
+   m_ChoosingCharacter = true;
+   FilterClothing();
+   return true;
+  }
+  if (name == "RemoveClothing")
+  {
+   m_ClothingChoices[m_ClothingSlot] = "__REMOVE__";
+   Text("Status", "");
+   RefreshClothing();
+   return true;
+  }
+  if (name == "Save")
+  {
+   PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
+   if (player && player.IsAlive())
+   {
+    ScriptRPC rpc = new ScriptRPC;
+    rpc.Write(m_ClothingChoices);
+    rpc.Write(m_CharacterType);
+    rpc.Send(player, GRZLoadoutRPC.SAVE_CLOTHING, true, null);
+    m_Saving = true;
+    m_SaveElapsed = 0;
+    layoutRoot.FindAnyWidget("Save").Enable(false);
+    Text("Status", "Saving and applying outfit...");
+   }
+   return true;
+  }
+  return false;
+ }
+
+ override bool OnDoubleClick(Widget w, int x, int y, int button)
+ {
+  if (m_ClothingMode && !m_Saving && w == m_ClothingList && button == MouseState.LEFT)
+  {
+   GRZLoadoutCatalogue catalogue = GRZLoadoutClientData.Catalogue;
+   int row = m_ClothingList.GetSelectedRow();
+   if (!catalogue || row < 0)
+    return true;
+   if (m_ChoosingCharacter)
+   {
+    if (row < catalogue.Characters.Count())
+     m_CharacterType = catalogue.Characters[row];
+   }
+   else if (row < m_ClothingFiltered.Count())
+    m_ClothingChoices[m_ClothingSlot] = catalogue.Clothing[m_ClothingFiltered[row]].Type;
+   Text("Status", "");
+   RefreshClothing();
+   return true;
+  }
+  return super.OnDoubleClick(w, x, y, button);
+ }
+
  override bool OnClick(Widget w, int x, int y, int button)
  {
   if (button != MouseState.LEFT)
@@ -186,6 +418,13 @@ class GRZLoadoutMenu : UIScriptedMenu
    return true;
   }
   if (m_Saving)
+   return true;
+  if (name == "ClothingTab" || name == "LoadoutTab")
+  {
+   SelectPage(name == "ClothingTab");
+   return true;
+  }
+  if (m_ClothingMode && ClothingClick(name))
    return true;
   if (name == "Calibre20" || name == "Calibre50" || name == "Calibre408")
   {

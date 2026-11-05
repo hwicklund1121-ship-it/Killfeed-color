@@ -5,6 +5,8 @@ class GRZLoadoutRPC
  static const int SAVE = 763282;
  static const int RESULT = 763283;
  static const int MENU = 763284;
+ static const int SAVE_CLOTHING = 763285;
+ static const int CLOTHING_PAGE = 763286;
 };
 
 class GRZLoadoutGun
@@ -17,10 +19,31 @@ class GRZLoadoutGun
  int Category;
 };
 
+class GRZLoadoutClothing
+{
+ string Type;
+ string Name;
+ string Slot;
+};
+
+class GRZLoadoutClothingSlots
+{
+ static ref array<string> Names = {"Headgear", "Mask", "Eyewear", "Body", "Vest", "Gloves", "Legs", "Feet", "Back", "Hips", "Armband"};
+};
+
+class GRZSavedOutfit
+{
+ string Character;
+ ref array<string> Choices = new array<string>;
+};
+
 class GRZLoadoutCatalogue
 {
  ref array<ref GRZLoadoutGun> Guns = new array<ref GRZLoadoutGun>;
  ref array<string> Wraps = new array<string>;
+ ref array<ref GRZLoadoutClothing> Clothing = new array<ref GRZLoadoutClothing>;
+ ref array<string> Characters = new array<string>;
+ ref GRZSavedOutfit SavedOutfit;
  int AmmoStacks = 10;
  
 };
@@ -29,6 +52,7 @@ class GRZLoadoutSettings
 {
  bool Enabled = true;
  bool AutoDiscover = true;
+ bool AllInstalledClothing = true;
  int AmmoStacks = 10;
  
  int SaveCooldownSeconds = 5;

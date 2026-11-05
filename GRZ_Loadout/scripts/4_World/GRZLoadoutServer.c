@@ -211,6 +211,7 @@ class GRZLoadoutServer
   else
    JsonFileLoader<GRZLoadoutSettings>.JsonSaveFile(path, Settings);
   Catalogue = new GRZLoadoutCatalogue;
+  Catalogue.Characters = g_Game.ListAvailableCharacters();
   Catalogue.AmmoStacks = Math.Clamp(Settings.AmmoStacks, 1, 30);
   if (!Settings.Enabled)
    return;
@@ -243,6 +244,7 @@ class GRZLoadoutServer
     }
    }
   }
+  GRZLoadoutClothingServer.Discover(Catalogue, Settings.AllInstalledClothing);
   // Native wraps and installed GRZ/custom gun wraps, never full ghillie suits.
   Catalogue.Wraps.Insert("");
   count = g_Game.ConfigGetChildrenCount("CfgVehicles");
@@ -493,7 +495,7 @@ modded class PlayerBase
 
  override void OnRPC(PlayerIdentity sender, int rpc_type, ParamsReadContext ctx)
  {
-  if (rpc_type == GRZLoadoutRPC.REQUEST || rpc_type == GRZLoadoutRPC.SAVE)
+  if (rpc_type == GRZLoadoutRPC.REQUEST || rpc_type == GRZLoadoutRPC.SAVE || rpc_type == GRZLoadoutRPC.SAVE_CLOTHING)
   {
    if (!g_Game.IsServer() || !sender || !GetIdentity())
     return;
@@ -507,14 +509,55 @@ modded class PlayerBase
      return;
     m_GRZLoadoutLastRequest = now;
     ScriptRPC catalogueReply = new ScriptRPC;
-    catalogueReply.Write(GRZLoadoutServer.Catalogue);
+    GRZLoadoutCatalogue personal = new GRZLoadoutCatalogue;
+    personal.Guns = GRZLoadoutServer.Catalogue.Guns;
+    personal.Wraps = GRZLoadoutServer.Catalogue.Wraps;
+    personal.Characters = GRZLoadoutServer.Catalogue.Characters;
+    personal.AmmoStacks = GRZLoadoutServer.Catalogue.AmmoStacks;
+    personal.SavedOutfit = GRZOutfitStore.Load(sender);
+    catalogueReply.Write(personal);
     catalogueReply.Send(this, GRZLoadoutRPC.CATALOGUE, true, sender);
+    array<ref GRZLoadoutClothing> page = new array<ref GRZLoadoutClothing>;
+    int clothesCount = GRZLoadoutServer.Catalogue.Clothing.Count();
+    for (int clothingIndex = 0; clothingIndex < clothesCount; clothingIndex++)
+    {
+     page.Insert(GRZLoadoutServer.Catalogue.Clothing[clothingIndex]);
+     if (page.Count() == 40 || clothingIndex == clothesCount - 1)
+     {
+      ScriptRPC clothingReply = new ScriptRPC;
+      clothingReply.Write(page);
+      clothingReply.Write(clothingIndex == clothesCount - 1);
+      clothingReply.Send(this, GRZLoadoutRPC.CLOTHING_PAGE, true, sender);
+      page.Clear();
+     }
+    }
     return;
    }
    int cooldown = Math.Clamp(GRZLoadoutServer.Settings.SaveCooldownSeconds, 1, 300) * 1000;
    if (now - m_GRZLoadoutLastSave < cooldown)
    {
     GRZLoadoutServer.Reply(this, "Please wait before saving another loadout.");
+    return;
+   }
+   if (rpc_type == GRZLoadoutRPC.SAVE_CLOTHING)
+   {
+    array<string> clothing;
+    if (!ctx.Read(clothing))
+     return;
+    string character;
+    if (!ctx.Read(character))
+     return;
+    if (GRZLoadoutServer.Catalogue.Characters.Find(character) < 0)
+     return;
+    m_GRZLoadoutLastSave = now;
+    if (GRZLoadoutClothingServer.Equip(this, clothing))
+    {
+     GRZSavedOutfit saved = GRZOutfitStore.Snapshot(this, character);
+     if (GRZOutfitStore.Save(sender, saved))
+      GRZLoadoutServer.Reply(this, "Outfit applied and saved for respawn. Character changes on next respawn.");
+     else
+      GRZLoadoutServer.Reply(this, "Clothing applied, but saving failed. Check the server profile folder.");
+    }
     return;
    }
    string gun;
@@ -525,6 +568,22 @@ modded class PlayerBase
     return;
    m_GRZLoadoutLastSave = now;
    GRZLoadoutServer.Equip(this, gun, wrap);
+   return;
+  }
+  if (rpc_type == GRZLoadoutRPC.CLOTHING_PAGE)
+  {
+   if (g_Game.IsServer() || this != g_Game.GetPlayer() || !GRZLoadoutClientData.Catalogue)
+    return;
+   array<ref GRZLoadoutClothing> receivedPage;
+   bool lastPage;
+   if (!ctx.Read(receivedPage))
+    return;
+   if (!ctx.Read(lastPage) || !receivedPage)
+    return;
+   foreach (GRZLoadoutClothing clothingEntry : receivedPage)
+    GRZLoadoutClientData.Catalogue.Clothing.Insert(clothingEntry);
+   if (lastPage)
+    GRZLoadoutClientData.Changed.Invoke();
    return;
   }
   if (rpc_type == GRZLoadoutRPC.CATALOGUE || rpc_type == GRZLoadoutRPC.RESULT)

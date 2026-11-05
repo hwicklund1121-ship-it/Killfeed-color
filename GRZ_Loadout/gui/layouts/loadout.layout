@@ -161,7 +161,7 @@ ButtonWidgetClass ClothingTab
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass ClothingFill
+PanelWidgetClass ClothingTabFill
 {
  position 0 0
  size 1 1
@@ -171,9 +171,9 @@ PanelWidgetClass ClothingFill
  vexactsize 0
  ignorepointer 1
  style rover_sim_colorable
- color 0.06 0.06 0.07 1
+ color 0.085 0.085 0.095 1
 }
-TextWidgetClass ClothingLabel
+TextWidgetClass ClothingTabLabel
 {
  position 0 0
  size 1 1
@@ -182,12 +182,12 @@ TextWidgetClass ClothingLabel
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- color 0.42 0.42 0.44 1
- font "gui/fonts/sdf_MetronLight16"
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
  "exact text" 1
  "text valign" center
  "text halign" center
- text "CLOTHING - SOON"
+ text "CLOTHING"
 }
  }
 }
@@ -604,6 +604,469 @@ TextWidgetClass WrapNextLabel
  "text valign" center
  "text halign" center
  text ">"
+}
+ }
+}
+FrameWidgetClass ClothingPanel
+{
+ position 0 0.29
+ size 1 0.52
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ visible 0
+ color 0 0 0 0
+ {
+PlayerPreviewWidgetClass CharacterPreview
+{
+ position 0.21 0.02
+ size 0.39 0.79
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+}
+ButtonWidgetClass SlotHat
+{
+ position 0.027 0.015
+ size 0.16 0.087
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass SlotHatFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.085 0.085 0.095 1
+}
+TextWidgetClass SlotHatLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "HAT"
+}
+ }
+}
+ButtonWidgetClass SlotMask
+{
+ position 0.027 0.12
+ size 0.16 0.087
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass SlotMaskFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.085 0.085 0.095 1
+}
+TextWidgetClass SlotMaskLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "MASK"
+}
+ }
+}
+ButtonWidgetClass SlotShirt
+{
+ position 0.027 0.22499999999999998
+ size 0.16 0.087
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass SlotShirtFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.085 0.085 0.095 1
+}
+TextWidgetClass SlotShirtLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "SHIRT"
+}
+ }
+}
+ButtonWidgetClass SlotBelt
+{
+ position 0.027 0.33
+ size 0.16 0.087
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass SlotBeltFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.085 0.085 0.095 1
+}
+TextWidgetClass SlotBeltLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "BELT"
+}
+ }
+}
+ButtonWidgetClass SlotPants
+{
+ position 0.027 0.435
+ size 0.16 0.087
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass SlotPantsFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.085 0.085 0.095 1
+}
+TextWidgetClass SlotPantsLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "PANTS"
+}
+ }
+}
+ButtonWidgetClass SlotGlove
+{
+ position 0.027 0.54
+ size 0.16 0.087
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass SlotGloveFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.085 0.085 0.095 1
+}
+TextWidgetClass SlotGloveLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "GLOVE"
+}
+ }
+}
+ButtonWidgetClass SlotVest
+{
+ position 0.027 0.645
+ size 0.16 0.087
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass SlotVestFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.085 0.085 0.095 1
+}
+TextWidgetClass SlotVestLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "VEST"
+}
+ }
+}
+ButtonWidgetClass SlotShoes
+{
+ position 0.027 0.75
+ size 0.16 0.087
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass SlotShoesFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.085 0.085 0.095 1
+}
+TextWidgetClass SlotShoesLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "SHOES"
+}
+ }
+}
+ButtonWidgetClass SelectCharacter
+{
+ position 0.62 0.015
+ size 0.35 0.085
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass SelectCharacterFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.085 0.085 0.095 1
+}
+TextWidgetClass SelectCharacterLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "SELECT CHARACTER"
+}
+ }
+}
+TextWidgetClass ClothingListTitle
+{
+ position 0.62 0.115
+ size 0.35 0.055
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text "Double-click clothing to equip"
+}
+PanelWidgetClass ClothingListBackground
+{
+ position 0.62 0.18
+ size 0.35 0.66
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.065 0.065 0.075 1
+}
+TextListboxWidgetClass ClothingList
+{
+ position 0.62 0.18
+ size 0.35 0.66
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+}
+ButtonWidgetClass RemoveClothing
+{
+ position 0.25 0.85
+ size 0.32 0.08
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass RemoveClothingFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.085 0.085 0.095 1
+}
+TextWidgetClass RemoveClothingLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "REMOVE ITEM"
+}
+ }
 }
  }
 }

@@ -1,4 +1,4 @@
-GRZ Loadout 0.1.3 — Made By Blake
+GRZ Loadout 0.2.0 — Made By Blake
 
 INSTALL
 Copy GRZ_Loadout.pbo into @GRZ_Local/Addons on BOTH game and server.
@@ -20,7 +20,20 @@ Save replaces EVERY carried gun and ALL magazines/ammo, including cargo.
 New gun is loaded, compatible scope and chosen wrap attached, plus TEN FULL loose ammo stacks.
 Magazine-fed guns also get SIX full spare magazines.
 Non-weapon items and clothing are kept. Items attached to removed guns are removed with those guns.
-Clothing tab is a disabled placeholder for later work.
+Clothing tab: full character preview; left tabs HAT/MASK/SHIRT/BELT/PANTS/GLOVE/VEST/SHOES.
+Click a slot to list all matching vanilla and installed custom clothing. Double-click a list item to dress the preview.
+Remove Item clears the selected preview slot. Select Character lists all available DayZ survivor characters.
+Save & Apply equips the clothing now and saves the outfit/character per player for future new-character spawns.
+Character body selection takes effect on next respawn; it does not kill/recreate a living player.
+Outfits persist in $profile:GRZ_Loadout/players/<SteamID>.json with pending-write verification and backups.
+Contents are moved to the new clothing or other worn cargo. If they do not fit, the swap cancels and restores old gear.
+No old clothing is deleted before the successful transfer. Nested containers retain their contents.
+Removed clothing is also emptied safely before deletion. Guns/ammo inside clothing are preserved.
+Backpack, eyewear and armband are kept and included in the saved snapshot, with no extra sidebar tabs.
+Clothing saves are separate from weapon loadout saves.
+Custom mission scripts overriding CreateCharacter without super can bypass the survivor-body selection hook.
+Custom respawn/equipment scripts running after this addon may override saved clothing and require integration.
+AllInstalledClothing defaults true; set false in server config to restrict names to GRZ_ and blake_.
 
 SERVER
 First menu request creates profiles/GRZ_Loadout/config.json using your actual -profiles path.
@@ -43,7 +56,7 @@ New gun goes into hands; all ten stacks must fit in clothing/backpack cargo.
 If any move fails, new items are deleted and original gear locations are restored.
 If another mod prevents restoration, preserved old items fall beside the owner and a script error is logged.
 Only after all new items fit are the old guns/ammo deleted.
-No persistent saved choices or automatic grants on respawn yet; Save equips the current selection.
+Weapon selections are not yet saved for respawn; saved clothing outfits are applied on new-character spawns.
 Preview entities are local-only and deleted on change/close. No hit/damage/recoil callbacks changed.
 
 VALIDATION
