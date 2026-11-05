@@ -1,0 +1,19 @@
+{
+  "source_zip_sha256": "e1ae1b1c4c57fe09ef4c30e5f8b187171733f1521d5789010162c6bb7ee3d2d1",
+  "source_recording_sha256": "275d424dcb4a4427582d082a4cbb7caf5a5755aab603135c99dc94a6e5afe671",
+  "runtime_audio": "NOREEN50/ULR/data/NOREEN50_Shot.ogg",
+  "replacement_audio_sha256": "9345f905e8c3921a8d2b9a4fdf04589cf5692a020a24eec6370572c76b356d62",
+  "replaced_sample_references": 9,
+  "sample_rate": 44100,
+  "channels": 1,
+  "unchanged_files": [
+    "NOREEN50/Scripts/4_World/Animations.c",
+    "NOREEN50/Scripts/4_World/firearms/rifle/NOREEN.c",
+    "NOREEN50/ULR/data/Base_co.paa",
+    "NOREEN50/ULR/data/Base_nohq.paa",
+    "NOREEN50/ULR/data/Base_smdi.paa",
+    "NOREEN50/ULR/data/Noreen.p3d",
+    "NOREEN50/ULR/data/base.rvmat",
+    "NOREEN50/config.cpp"
+  ]
+}
