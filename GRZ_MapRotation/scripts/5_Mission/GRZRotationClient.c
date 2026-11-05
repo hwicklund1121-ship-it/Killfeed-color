@@ -38,7 +38,9 @@ class GRZRotationClient
   if (ManualRequest)
   {
    ManualRequest = false;
-   if (data.Enabled && data.Voting)
+   if (!data.Enabled)
+    ShowNotice(data.Status, 0);
+   else if (data.Voting)
     PendingMenu = true;
    else
     ShowNotice("Voting is closed. It opens near the end of the round.", 0);

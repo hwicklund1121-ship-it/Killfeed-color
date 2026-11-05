@@ -43,6 +43,7 @@ class GRZRotationState
 class GRZRotationSnapshot
 {
  bool Enabled;
+ string Status;
  bool Voting;
  int RoundId;
  int Remaining;

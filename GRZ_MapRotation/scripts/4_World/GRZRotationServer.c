@@ -12,6 +12,11 @@ class GRZRotationServer
  static bool VoteLocked;
  static int NextIndex = -1;
  static int LastBroadcast;
+ static string Status = "Arena rotation is starting.";
+ static int RejectedWater;
+ static int RejectedSlope;
+ static int RejectedBoundary;
+ static int RejectedCollision;
 
  static bool Inside(vector position, GRZRotationArena arena)
  {
@@ -35,7 +40,10 @@ class GRZRotationServer
  static bool SafeSpawn(GRZRotationPoint point, GRZRotationArena arena, out vector position)
  {
   if (g_Game.SurfaceIsSea(point.X, point.Z) || g_Game.SurfaceIsPond(point.X, point.Z))
+  {
+   RejectedWater++;
    return false;
+  }
   float ground = g_Game.SurfaceY(point.X, point.Z);
   vector from = Vector(point.X, ground + 2.2, point.Z);
   vector to = Vector(point.X, ground - 0.5, point.Z);
@@ -46,28 +54,52 @@ class GRZRotationServer
   position = Vector(point.X, ground + 0.15, point.Z);
   if (DayZPhysics.RaycastRV(from, to, contact, normal, component, hits, null, null, false, false, ObjIntersectGeom))
   {
+   // RaycastRV returns true for terrain too, but contactDir is ONLY
+   // defined for object hits. A terrain hit leaves it zero, so the old
+   // normal[1] check rejected every otherwise-valid bare-ground spawn.
+   bool objectContact = false;
+   foreach (Object hitObject : hits)
+   {
+    if (hitObject)
+     objectContact = true;
+   }
+   if (!objectContact)
+    normal = g_Game.SurfaceGetNormal(point.X, point.Z);
    if (normal[1] < 0.65)
+   {
+    RejectedSlope++;
     return false;
+   }
    position = contact + "0 0.15 0";
   }
   else
   {
    vector terrainNormal = g_Game.SurfaceGetNormal(point.X, point.Z);
    if (terrainNormal[1] < 0.65)
+   {
+    RejectedSlope++;
     return false;
+   }
   }
   if (!Inside(position, arena))
+  {
+   RejectedBoundary++;
    return false;
+  }
   array<Object> exclude = new array<Object>;
   vector boxCenter = position + "0 1.05 0";
   if (g_Game.IsBoxCollidingGeometry(boxCenter, "0 0 0", "0.75 1.7 0.75", ObjIntersectView, ObjIntersectGeom, exclude))
+  {
+   RejectedCollision++;
    return false;
+  }
   return true;
  }
 
  static void Init()
  {
   Enabled = false;
+  Status = "Arena rotation is disabled. Check the server script log for [GRZ Rotation].";
   Votes.Clear();
   string directory = "$profile:GRZ_MapRotation";
   MakeDirectory(directory);
@@ -118,6 +150,10 @@ class GRZRotationServer
     return;
    }
    ids.Insert(arena.Id);
+   RejectedWater = 0;
+   RejectedSlope = 0;
+   RejectedBoundary = 0;
+   RejectedCollision = 0;
    arena.SafeSpawns = new array<vector>;
    foreach (GRZRotationPoint candidate : arena.SpawnCandidates)
    {
@@ -125,10 +161,12 @@ class GRZRotationServer
     if (SafeSpawn(candidate, arena, safe))
      arena.SafeSpawns.Insert(safe);
    }
-   Print(string.Format("[GRZ Rotation] %1: %2 runtime-checked spawn positions.", arena.Name, arena.SafeSpawns.Count()));
+   Print(string.Format("[GRZ Rotation 0.1.1] %1: %2 runtime-checked spawn positions.", arena.Name, arena.SafeSpawns.Count()));
+   Print(string.Format("[GRZ Rotation] Rejected: water=%1 slope=%2 boundary=%3 collision=%4", RejectedWater, RejectedSlope, RejectedBoundary, RejectedCollision));
    if (arena.SafeSpawns.Count() < 2)
    {
-    Error("[GRZ Rotation] Fewer than two valid spawn positions. Fix the arena geometry/spawn config; rotation disabled.");
+    Status = "Arena rotation disabled: " + arena.Name + " has fewer than two valid spawn positions.";
+    Print("[GRZ Rotation] " + Status);
     return;
    }
   }
@@ -142,6 +180,8 @@ class GRZRotationServer
   if (savedIndex >= 0)
    ActiveIndex = savedIndex;
   Enabled = true;
+  Status = "";
+  Print("[GRZ Rotation 0.1.1] Enabled: " + Settings.Arenas[ActiveIndex].Name);
   BeginRound();
   g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).Remove(Tick);
   g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(Tick, 250, true);
@@ -173,6 +213,7 @@ class GRZRotationServer
    return;
   GRZRotationSnapshot data = new GRZRotationSnapshot;
   data.Enabled = Enabled;
+  data.Status = Status;
   if (Enabled)
   {
    data.Voting = Voting;
@@ -465,7 +506,7 @@ modded class PlayerBase
   }
   if (rpc_type == GRZRotationRPC.SNAPSHOT || rpc_type == GRZRotationRPC.NOTICE)
   {
-   if (g_Game.IsServer() || this != g_Game.GetPlayer())
+   if (g_Game.IsServer() || this != PlayerBase.Cast(g_Game.GetPlayer()))
     return;
    if (rpc_type == GRZRotationRPC.SNAPSHOT)
    {

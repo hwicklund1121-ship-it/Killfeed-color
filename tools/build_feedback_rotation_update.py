@@ -11,6 +11,7 @@ payload = build(root / 'GRZ_MapRotation')
 (out / 'GRZ_MapRotation.pbo').write_bytes(payload)
 p = root / 'GRZ-MAP-ROTATION-MANIFEST.json'
 manifest = json.loads(p.read_text())
+manifest['version'] = '0.1.1'
 manifest['pbo_sha256'] = hashlib.sha256(payload).hexdigest()
 p.write_text(json.dumps(manifest, indent=2)+'\n')
 archive = out / 'GRZ-MapRotation.zip'
@@ -26,7 +27,8 @@ notes = '''Close DayZ and the server. Copy all FIVE PBOs to @GRZ_Local/Addons
 in BOTH DayZ and DayZServer, replacing the existing versions. Restart both.
 Do not replace or delete your profile config or DZE.
 
-GRZ_MapRotation: fresh respawns now register for arena placement and the
+GRZ_MapRotation 0.1.1: fixes terrain raycasts rejecting valid spawn points.
+Fresh respawns register for arena placement and the
 five-second outside-boundary countdown. Existing ready callbacks are deduplicated.
 GRZ_Loadout 0.2.5: Save a weapon once after installing. Fresh respawns restore
 that gun/wrap, compatible scope, ten ammo stacks and six spare magazines for
