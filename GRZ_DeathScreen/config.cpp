@@ -5,7 +5,7 @@ class CfgPatches
         units[] = {};
         weapons[] = {};
         requiredVersion = 0.1;
-        requiredAddons[] = {"DZ_Data", "DZ_Scripts"};
+        requiredAddons[] = {"DZ_Data", "DZ_Scripts", "GRZ_Loadout"};
     };
 };
 class CfgMods
@@ -15,7 +15,7 @@ class CfgMods
         dir = "GRZ_DeathScreen";
         name = "GRZ Death Screen";
         author = "Blake";
-        version = "0.2.0";
+        version = "0.2.1";
         type = "mod";
         dependencies[] = {"World", "Mission"};
         class defs

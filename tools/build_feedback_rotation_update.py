@@ -42,8 +42,9 @@ that gun/wrap, compatible scope, ten ammo stacks and six spare magazines for
 magazine-fed guns. Clothing is restored first. Choice survives server restarts;
 reconnecting does not duplicate equipment. Preview-only choices are not saved.
 GRZ_CleanArena: bodies and gear are removed after THREE seconds; drops blocked.
-GRZ_DeathScreen 0.2.0: body view 2 seconds, then 0.8-second artwork fade.
-Gameplay HUD hidden while dead; RESPAWN appears after the fade.
+GRZ_DeathScreen 0.2.1: body view 2 seconds, then 0.8-second artwork fade.
+Gameplay HUD hidden while dead; right-side RESPAWN opens Custom / Random.
+Both keep saved clothes and weapon. Random changes only the character model.
 GRZ_CustomHud 0.1.19: status/stamina/weapon panels require a living player.
 Duel auto-respawn waits 3 seconds so the death transition can finish.
 GRZ_Hitmarker 0.1.9: native 3D processor/attenuation curve and camera-positioned

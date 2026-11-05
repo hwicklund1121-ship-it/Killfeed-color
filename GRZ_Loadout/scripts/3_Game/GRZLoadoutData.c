@@ -73,3 +73,9 @@ class GRZSavedWeapon
  string Weapon;
  string Wrap;
 };
+
+class GRZRespawnChoiceRPC
+{
+ static const int CHOOSE = 763630;
+ static const int ACK = 763631;
+};

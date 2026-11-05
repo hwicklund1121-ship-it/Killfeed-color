@@ -1,30 +1,30 @@
 FrameWidgetClass GRZDeathArtwork
 {
- visible 0
  position 0 0
  size 1 1
  hexactpos 0
  vexactpos 0
  hexactsize 0
  vexactsize 0
- color 0 0 0 0
+ visible 0
+ color 1 1 1 1
  {
 ImageWidgetClass DeathPicture
 {
- ignorepointer 1
  position 0 0
  size 1 1
  hexactpos 0
  vexactpos 0
  hexactsize 0
  vexactsize 0
+ ignorepointer 1
  color 1 1 1 1
  mode blend
  stretch 1
 }
 ButtonWidgetClass RespawnButton
 {
- position 0.41 0.84
+ position 0.79 0.84
  size 0.18 0.065
  hexactpos 0
  vexactpos 0
@@ -32,43 +32,170 @@ ButtonWidgetClass RespawnButton
  vexactsize 0
  color 1 1 1 1
  {
-PanelWidgetClass RespawnBorder
+ImageWidgetClass RespawnButtonFill
 {
- ignorepointer 1
  position 0 0
  size 1 1
  hexactpos 0
  vexactpos 0
  hexactsize 0
  vexactsize 0
- color 1 1 1 1
-}
-PanelWidgetClass RespawnFill
-{
  ignorepointer 1
- position 0.006 0.04
- size 0.988 0.92
- hexactpos 0
- vexactpos 0
- hexactsize 0
- vexactsize 0
- color 0.025 0.025 0.025 0.96
+ mode blend
+ stretch 1
+ color 0 0 0 0.85
 }
-TextWidgetClass RespawnLabel
+TextWidgetClass RespawnButtonLabel
 {
- ignorepointer 1
  position 0 0
  size 1 1
  hexactpos 0
  vexactpos 0
  hexactsize 0
  vexactsize 0
+ ignorepointer 1
  color 1 1 1 1
  font "gui/fonts/sdf_MetronLight24"
  "exact text" 1
  "text valign" center
  "text halign" center
  text "RESPAWN"
+}
+ }
+}
+FrameWidgetClass SpawnChoices
+{
+ position 0.75 0.69
+ size 0.22 0.24
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ visible 0
+ color 1 1 1 1
+ {
+ButtonWidgetClass SpawnCustomButton
+{
+ position 0 0
+ size 1 0.28
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+ImageWidgetClass SpawnCustomButtonFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ mode blend
+ stretch 1
+ color 0 0 0 0.85
+}
+TextWidgetClass SpawnCustomButtonLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "SPAWN CUSTOM"
+}
+ }
+}
+ButtonWidgetClass SpawnRandomButton
+{
+ position 0 0.36
+ size 1 0.28
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+ImageWidgetClass SpawnRandomButtonFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ mode blend
+ stretch 1
+ color 0 0 0 0.85
+}
+TextWidgetClass SpawnRandomButtonLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "SPAWN RANDOM"
+}
+ }
+}
+ButtonWidgetClass SpawnBackButton
+{
+ position 0 0.72
+ size 1 0.28
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+ImageWidgetClass SpawnBackButtonFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ mode blend
+ stretch 1
+ color 0 0 0 0.85
+}
+TextWidgetClass SpawnBackButtonLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "BACK"
+}
+ }
 }
  }
 }

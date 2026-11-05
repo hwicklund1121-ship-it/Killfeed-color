@@ -1,8 +1,11 @@
-GRZ Death Screen 0.2.0 — Made By Blake
+GRZ Death Screen 0.2.1 — Made By Blake
 
 Copy GRZ_DeathScreen.pbo into @GRZ_Local/Addons on both game and server.
 Restart both and enable @GRZ_Local in the client launcher.
-Uses the supplied artwork; no new text is added.
+Uses the supplied artwork and a right-side RESPAWN button. Click to choose SPAWN CUSTOM or SPAWN RANDOM.
+Both restore saved clothes and gun in the active arena; random changes only the character model.
+The server acknowledges this one-time choice before native respawn; saved settings stay unchanged.
+Requires the paired GRZ_Loadout update on both server and client.
 Shows the death camera for 2 seconds, then fades the artwork in over 0.8 seconds.
 Repeated death/cleanup notifications do not restart the transition.
 The respawn button and mouse focus activate when the fade finishes.

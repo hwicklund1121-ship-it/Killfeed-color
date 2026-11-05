@@ -2,11 +2,15 @@ class GRZDeathScreenButtons : ScriptedWidgetEventHandler
 {
     override bool OnClick(Widget w, int x, int y, int button)
     {
-        if (button == MouseState.LEFT && w.GetName() == "RespawnButton")
+        if (button != MouseState.LEFT) return false;
+        MissionGameplay mission = MissionGameplay.Cast(g_Game.GetMission());
+        if (!mission) return false;
+        string name = w.GetName();
+        if (name == "RespawnButton") { mission.GRZShowSpawnChoices(true); return true; }
+        if (name == "SpawnBackButton") { mission.GRZShowSpawnChoices(false); return true; }
+        if (name == "SpawnCustomButton" || name == "SpawnRandomButton")
         {
-            MissionGameplay mission = MissionGameplay.Cast(g_Game.GetMission());
-            if (mission)
-                mission.GRZRequestDeathRespawn();
+            mission.GRZChooseDeathRespawn(name == "SpawnRandomButton");
             return true;
         }
         return false;
@@ -29,6 +33,10 @@ modded class InGameMenu
 modded class MissionGameplay
 {
     protected Widget m_GRZDeathArtwork;
+    protected bool m_GRZSpawnChoicesVisible;
+    protected bool m_GRZSpawnChoicePending;
+    protected int m_GRZSpawnRequestId;
+    protected int m_GRZSpawnRequestAt;
     protected ref GRZDeathScreenButtons m_GRZDeathButtons;
     protected bool m_GRZDeathMouseFocus;
     protected Widget m_GRZDeathHiddenHud;
@@ -39,6 +47,7 @@ modded class MissionGameplay
     {
         super.OnInit();
         GRZDeathScreenState.Reset();
+        DayZGame.Event_OnRPC.Insert(GRZReceiveDeathSpawnAck);
     }
 
     protected void GRZDeathFocus(bool enabled)
@@ -87,6 +96,34 @@ modded class MissionGameplay
         }
     }
 
+    void GRZShowSpawnChoices(bool show)
+    {
+        if (m_GRZSpawnChoicePending || !GRZDeathScreenState.Visible || GRZDeathScreenState.Alpha() < 0.999) return;
+        m_GRZSpawnChoicesVisible = show;
+    }
+
+    void GRZChooseDeathRespawn(bool randomCharacter)
+    {
+        if (!m_GRZSpawnChoicesVisible || m_GRZSpawnChoicePending || !GRZDeathScreenState.Visible || IsPlayerRespawning()) return;
+        m_GRZSpawnChoicePending = true;
+        m_GRZSpawnRequestAt = g_Game.GetTime();
+        m_GRZSpawnRequestId++;
+        ScriptRPC request = new ScriptRPC;
+        request.Write(m_GRZSpawnRequestId);
+        request.Write(randomCharacter);
+        request.Send(null, GRZRespawnChoiceRPC.CHOOSE, true, null);
+    }
+
+    void GRZReceiveDeathSpawnAck(PlayerIdentity sender, Object target, int rpcType, ParamsReadContext ctx)
+    {
+        if (g_Game.IsServer() || target || rpcType != GRZRespawnChoiceRPC.ACK || !m_GRZSpawnChoicePending) return;
+        int requestId;
+        bool allowed;
+        if (!ctx.Read(requestId) || !ctx.Read(allowed) || requestId != m_GRZSpawnRequestId) return;
+        m_GRZSpawnChoicePending = false;
+        if (allowed) GRZRequestDeathRespawn();
+    }
+
     void GRZRequestDeathRespawn()
     {
         PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
@@ -111,7 +148,11 @@ modded class MissionGameplay
         {
             GRZDeathScreenState.Reset();
             showArtwork = false;
+            m_GRZSpawnChoicesVisible = false;
+            m_GRZSpawnChoicePending = false;
         }
+        if (m_GRZSpawnChoicePending && g_Game.GetTime() - m_GRZSpawnRequestAt > 5000)
+            m_GRZSpawnChoicePending = false;
         GRZDeathHideHud(GRZDeathScreenState.Visible || IsPlayerRespawning() || (player && !player.IsAlive()));
         float alpha = GRZDeathScreenState.Alpha();
         bool ready = alpha >= 0.999;
@@ -128,6 +169,17 @@ modded class MissionGameplay
                 picture.LoadImageFile(0, "GRZ_DeathScreen/data/death.paa");
                 picture.SetImage(0);
             }
+            string fills[4] = {"RespawnButtonFill", "SpawnCustomButtonFill", "SpawnRandomButtonFill", "SpawnBackButtonFill"};
+            foreach (string fillName : fills)
+            {
+                ImageWidget fill = ImageWidget.Cast(m_GRZDeathArtwork.FindAnyWidget(fillName));
+                if (fill)
+                {
+                    fill.LoadImageFile(0, "GRZ_DeathScreen/data/solid_white.paa");
+                    fill.SetImage(0);
+                    fill.SetFlags(WidgetFlags.SOURCEALPHA | WidgetFlags.BLEND);
+                }
+            }
             m_GRZDeathButtons = new GRZDeathScreenButtons;
             m_GRZDeathArtwork.SetHandler(m_GRZDeathButtons);
         }
@@ -138,8 +190,14 @@ modded class MissionGameplay
             Widget respawn = m_GRZDeathArtwork.FindAnyWidget("RespawnButton");
             if (respawn)
             {
-                respawn.Show(ready);
+                respawn.Show(ready && !m_GRZSpawnChoicesVisible);
                 respawn.Enable(ready);
+            }
+            Widget choices = m_GRZDeathArtwork.FindAnyWidget("SpawnChoices");
+            if (choices)
+            {
+                choices.Show(ready && m_GRZSpawnChoicesVisible);
+                choices.Enable(!m_GRZSpawnChoicePending);
             }
         }
         GRZDeathFocus(showArtwork && ready);
@@ -147,6 +205,7 @@ modded class MissionGameplay
 
     override void OnMissionFinish()
     {
+        DayZGame.Event_OnRPC.Remove(GRZReceiveDeathSpawnAck);
         GRZDeathScreenState.Reset();
         GRZDeathFocus(false);
         GRZDeathHideHud(false);

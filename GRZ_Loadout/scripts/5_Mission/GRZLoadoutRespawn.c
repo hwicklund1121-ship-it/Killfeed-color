@@ -1,10 +1,75 @@
+class GRZRespawnCharacterChoice
+{
+ bool RandomCharacter;
+ int Expires;
+};
+
 modded class MissionServer
 {
+ protected ref map<string, ref GRZRespawnCharacterChoice> m_GRZRespawnChoices = new map<string, ref GRZRespawnCharacterChoice>;
+
+ override void OnInit()
+ {
+  super.OnInit();
+  DayZGame.Event_OnRPC.Insert(GRZReceiveRespawnChoice);
+ }
+
+ void GRZReceiveRespawnChoice(PlayerIdentity sender, Object target, int rpcType, ParamsReadContext ctx)
+ {
+  if (!g_Game.IsServer() || rpcType != GRZRespawnChoiceRPC.CHOOSE || !sender || target) return;
+  int requestId;
+  bool randomCharacter;
+  if (!ctx.Read(requestId) || !ctx.Read(randomCharacter) || requestId < 1) return;
+  bool allowed = true;
+  array<Man> players = new array<Man>;
+  g_Game.GetPlayers(players);
+  foreach (Man man : players)
+  {
+   PlayerBase player = PlayerBase.Cast(man);
+   if (player && player.GetIdentity() && player.GetIdentity().GetId() == sender.GetId() && player.IsAlive())
+    allowed = false;
+  }
+  for (int i = m_GRZRespawnChoices.Count() - 1; i >= 0; i--)
+  {
+   string key = m_GRZRespawnChoices.GetKey(i);
+   GRZRespawnCharacterChoice existing = m_GRZRespawnChoices.Get(key);
+   if (!existing || existing.Expires < g_Game.GetTime()) m_GRZRespawnChoices.Remove(key);
+  }
+  if (allowed)
+  {
+   GRZRespawnCharacterChoice choice = new GRZRespawnCharacterChoice;
+   choice.RandomCharacter = randomCharacter;
+   choice.Expires = g_Game.GetTime() + 60000;
+   m_GRZRespawnChoices.Set(sender.GetId(), choice);
+  }
+  ScriptRPC ack = new ScriptRPC;
+  ack.Write(requestId);
+  ack.Write(allowed);
+  ack.Send(null, GRZRespawnChoiceRPC.ACK, true, sender);
+ }
+
+ override void OnMissionFinish()
+ {
+  DayZGame.Event_OnRPC.Remove(GRZReceiveRespawnChoice);
+  m_GRZRespawnChoices.Clear();
+  super.OnMissionFinish();
+ }
+
  override PlayerBase CreateCharacter(PlayerIdentity identity, vector pos, ParamsReadContext ctx, string characterName)
  {
   GRZSavedOutfit saved = GRZOutfitStore.Load(identity);
   if (saved)
    characterName = saved.Character;
+  if (identity)
+  {
+   GRZRespawnCharacterChoice choice = m_GRZRespawnChoices.Get(identity.GetId());
+   m_GRZRespawnChoices.Remove(identity.GetId());
+   if (choice && choice.RandomCharacter && choice.Expires >= g_Game.GetTime())
+   {
+    array<string> characters = g_Game.ListAvailableCharacters();
+    if (characters && characters.Count() > 0) characterName = characters.GetRandomElement();
+   }
+  }
   return super.CreateCharacter(identity, pos, ctx, characterName);
  }
 
