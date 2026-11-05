@@ -47,7 +47,7 @@ modded class LoadingScreen
         if (!IsLoading())
             return;
         m_GRZSlideElapsed += timeslice;
-        if (m_GRZSlideElapsed >= 10.0)
+        if (m_GRZSlideElapsed >= 5.0)
         {
             m_GRZSlideElapsed = 0;
             m_GRZSlideIndex = (m_GRZSlideIndex + 1) % 3;

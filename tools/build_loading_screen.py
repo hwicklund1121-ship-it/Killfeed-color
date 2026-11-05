@@ -35,7 +35,7 @@ import re
 loads = '\n'.join(f'        m_ImageBackground.LoadImageFile({i}, "GRZ_LoadingScreen/data/loading_{i+1}.paa");' for i in range(len(names)))
 script = re.sub(r'        m_ImageBackground.LoadImageFile[^\n]+(?:\n        m_ImageBackground.LoadImageFile[^\n]+)*', lambda _: loads, script)
 script = re.sub(r'Math.RandomInt\(0, \d+\)', f'Math.RandomInt(0, {len(names)})', script)
-script = script.replace('>= 5.0', '>= 10.0')
+script = re.sub(r'>= (?:5|10)\.0', '>= 5.0', script)
 script = script.replace('m_GRZSlideIndex = 1 - m_GRZSlideIndex;', f'm_GRZSlideIndex = (m_GRZSlideIndex + 1) % {len(names)};')
 script_path.write_text(script)
 for old in (source / 'data').glob('loading_*.paa'):
@@ -47,14 +47,14 @@ pbo.write_bytes(build(source))
 notes = ('GRZ rotating loading screens — Made By Blake\n\n'
          'Copy GRZ_LoadingScreen.pbo into @GRZ_Local/Addons on BOTH client and server.\n'
          'Restart both. The client must load @GRZ_Local in the launcher.\n'
-         'Supplied artworks rotate every 10 seconds; first slide is random.\n'
+         'Supplied artworks rotate every 5 seconds; first slide is random.\n'
          'Short loads may finish before the second slide appears.\n'
          'Script updates can pause during blocking engine loading operations.\n'
          'Native progress bar retained. Artwork is converted, not redrawn.\n'
          'Unsigned PBO; sign with your server key if signature verification is enabled.\n'
          'Checked against DayZ 1.30 script signatures; not compiled or tested in DayZ.\n')
 (root / 'LOADING-SCREEN.md').write_text(notes)
-(output / 'GRZ-LOADING-SCREEN-MANIFEST.json').write_text(json.dumps(dict(slides=manifest, interval_seconds=10, pbo_sha256=hashlib.sha256(pbo.read_bytes()).hexdigest()), indent=2)+'\n')
+(output / 'GRZ-LOADING-SCREEN-MANIFEST.json').write_text(json.dumps(dict(slides=manifest, interval_seconds=5, pbo_sha256=hashlib.sha256(pbo.read_bytes()).hexdigest()), indent=2)+'\n')
 with ZipFile(output / 'GRZ_LoadingScreen.zip', 'w', ZIP_DEFLATED) as archive:
     archive.write(pbo, 'GRZ_LoadingScreen.pbo')
     archive.writestr('INSTALL.txt', notes)

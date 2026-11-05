@@ -28,6 +28,6 @@
       "texture": "data/loading_3.paa"
     }
   ],
-  "interval_seconds": 10,
-  "pbo_sha256": "0e620b22cfd7242b737c33d018e3e1c2fa2862a095519b56f55c4acc19390133"
+  "interval_seconds": 5,
+  "pbo_sha256": "fa021f0d432cfeafb2d57a17ab9eabe5a5c950206df287c605946e94af7ded2e"
 }
