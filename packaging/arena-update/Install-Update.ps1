@@ -2,7 +2,8 @@ param(
  [Parameter(Mandatory=$true)][ValidatePattern('^\d{17}$')][string]$SteamId,
  [string]$ServerPath = "${env:ProgramFiles(x86)}\Steam\steamapps\common\DayZServer",
  [string]$GamePath = "${env:ProgramFiles(x86)}\Steam\steamapps\common\DayZ",
- [string]$ProfilePath = ''
+ [string]$ProfilePath = '',
+ [string]$MissionName = 'dayzOffline.chernarusplus'
 )
 $ErrorActionPreference = 'Stop'
 if (Get-Process -Name DayZ_x64,DayZServer_x64 -ErrorAction SilentlyContinue) { throw 'Close DayZ and stop the server first.' }
@@ -24,11 +25,32 @@ foreach ($package in $manifest.pbo.PSObject.Properties) {
   $changes += [pscustomobject]@{Source=$source; Target=(Join-Path $target ('@GRZ_Local/Addons/' + $package.Name + '.pbo')); Existed=$false; Backup=''}
  }
 }
+$mission = Join-Path $ServerPath ('mpmissions/' + $MissionName)
+if (!(Test-Path -LiteralPath $mission)) { throw "Mission folder not found: $mission" }
+$editor = Join-Path $mission 'EditorFiles'
+foreach ($entry in ,@('GRZ_BBC_DM_3.dze',(Join-Path $editor 'GRZ_BBC_DM_3.dze'))) {
+ $source = Join-Path $PSScriptRoot $entry[0]
+ $expected = $manifest.files.PSObject.Properties[$entry[0]].Value
+ if ((Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash.ToLowerInvariant() -ne $expected) { throw "Invalid configuration or DZE: $source" }
+ $changes += [pscustomobject]@{Source=$source; Target=$entry[1]; Existed=$false; Backup=''}
+}
 $backup = Join-Path $ServerPath ('GRZ-update-backup-' + [guid]::NewGuid().ToString('N'))
 New-Item -ItemType Directory -Path $backup | Out-Null
 Copy-Item -LiteralPath $configPath -Destination (Join-Path $backup 'config.json')
 $done = @()
+$movedMaps = @()
 try {
+ if (Test-Path -LiteralPath $editor) {
+  foreach ($old in @(Get-ChildItem -LiteralPath $editor -Filter '*.dze' -File -Recurse)) {
+   if ($old.FullName -eq (Join-Path $editor 'GRZ_BBC_DM_3.dze')) { continue }
+   $oldHash = (Get-FileHash -LiteralPath $old.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+   if ($old.Name -in @('GRZ_BBC_DM_2.dze','GRZ_BBC_DM_3.dze') -or $oldHash -in $manifest.previous_map_hashes -or $oldHash -eq $manifest.files.'GRZ_BBC_DM_3.dze') {
+    $saved = Join-Path $backup ([guid]::NewGuid().ToString('N') + '.dze')
+    Move-Item -LiteralPath $old.FullName -Destination $saved
+    $movedMaps += [pscustomobject]@{Original=$old.FullName; Saved=$saved}
+   }
+  }
+ }
  foreach ($change in $changes) {
   $change.Existed = Test-Path -LiteralPath $change.Target
   $change.Backup = Join-Path $backup ([guid]::NewGuid().ToString('N') + '.pbo')
@@ -44,8 +66,9 @@ try {
   if ($change.Existed) { Copy-Item -LiteralPath $change.Backup -Destination $change.Target -Force }
   elseif (Test-Path -LiteralPath $change.Target) { Remove-Item -LiteralPath $change.Target }
  }
+ foreach ($moved in $movedMaps) { Move-Item -LiteralPath $moved.Saved -Destination $moved.Original -Force }
  Copy-Item -LiteralPath (Join-Path $backup 'config.json') -Destination $configPath -Force
  throw
 }
-Write-Host 'Installed on client and server. Admin !skip is enabled with a 30-second top-screen warning. Restart both.'
+Write-Host 'Installed updated DZE, respawn screen and loadout PBOs. Existing arena settings, ratings and loadouts preserved. Restart server and client.'
 Write-Host "Backup: $backup"

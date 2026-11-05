@@ -6,7 +6,7 @@ from build_pbo import build
 from inspect_grz_dze import read
 r=Path(__file__).resolve().parents[1];p=r/'packaging/duels'
 old=json.loads((r/'GRZ-MAP-ROTATION-MANIFEST.json').read_text())
-m={'maps_configured':True,'maps':[a['Name'] for a in json.loads((p/'duel-config.json').read_text())['Maps']],'pbo':{},'files':{},'previous_map_hashes':[old['original_map_sha256'],old['sanitized_map_sha256']]}
+m={'maps_configured':True,'maps':[a['Name'] for a in json.loads((p/'duel-config.json').read_text())['Maps']],'pbo':{},'files':{},'previous_map_hashes':[old['original_map_sha256'],old['sanitized_map_sha256']]+json.loads((p/'previous-map-hashes.json').read_text())}
 with ZipFile(r/'downloads/GRZ-Duels-Arenas-Update.zip','w',ZIP_DEFLATED) as z:
  for addon in ['GRZ_Loadout','GRZ_MapRotation','GRZ_DeathScreen','GRZ_CustomHud']:
   data=build(r/addon);m['pbo'][addon]={'sha256':hashlib.sha256(data).hexdigest()};z.writestr(addon+'.pbo',data)
