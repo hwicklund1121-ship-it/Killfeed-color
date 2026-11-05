@@ -280,7 +280,7 @@ class GRZLoadoutMenu : UIScriptedMenu
      if (item && item.Slot == slot)
      {
       m_ClothingFiltered.Insert(i);
-      m_ClothingList.AddItem(item.Name, null, 0);
+      m_ClothingList.AddItem(GRZClothingLabels.Label(item.Type, item.Name), null, 0);
      }
     }
    }

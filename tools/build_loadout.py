@@ -85,7 +85,7 @@ with ZipFile(args.logo_zip) as archive:
 (source / 'data/logo.paa').write_bytes(encode_paa(logo.resize((2048,512),Image.Resampling.LANCZOS), alpha_flags=True))
 pbo = build(source)
 (root / 'downloads/GRZ_Loadout.pbo').write_bytes(pbo)
-notes = '''GRZ Loadout 0.2.2 — Made By Blake
+notes = '''GRZ Loadout 0.2.3 — Made By Blake
 
 INSTALL
 Copy GRZ_Loadout.pbo into @GRZ_Local/Addons on BOTH game and server.
@@ -108,7 +108,9 @@ New gun is loaded, compatible scope and chosen wrap attached, plus TEN FULL loos
 Magazine-fed guns also get SIX full spare magazines.
 Non-weapon items and clothing are kept. Items attached to removed guns are removed with those guns.
 Clothing tab: full character preview; left tabs HAT/MASK/SHIRT/BELT/PANTS/GLOVE/VEST/SHOES.
-Click a slot to list all matching vanilla and installed custom clothing. Use the mouse wheel over the item list to browse and preview clothing on the body without clicking.
+Click a slot to list all matching vanilla and installed custom clothing.
+Clothing list names include colour/variant suffixes inferred from class and texture filenames, e.g. [Black] or [Red / White / Checked].
+Skins without identifiable colour names use [Custom] for GRZ/Blake items or [Default] for other items. Use the mouse wheel over the item list to browse and preview clothing on the body without clicking.
 Each wheel event selects the next/previous visible row; double-click keeps that choice.
 Single-clicking only highlights a row; it does not apply a preview.
 Save & Apply ignores temporary previews and applies only kept selections.
@@ -158,6 +160,6 @@ Unsigned development build; sign with your own server key if required.
 with ZipFile(root / 'downloads/GRZ_Loadout.zip','w',ZIP_DEFLATED) as archive:
     archive.writestr('GRZ_Loadout.pbo',pbo)
     archive.writestr('INSTALL.txt',notes)
-manifest=dict(version='0.2.2',ammo_stacks=10,open_key='comma',replace='all carried guns and ammo',logo_original_size=logo.size,logo_source_sha256=hashlib.sha256(original).hexdigest(),pbo_sha256=hashlib.sha256(pbo).hexdigest())
+manifest=dict(version='0.2.3',ammo_stacks=10,open_key='comma',replace='all carried guns and ammo',logo_original_size=logo.size,logo_source_sha256=hashlib.sha256(original).hexdigest(),pbo_sha256=hashlib.sha256(pbo).hexdigest())
 (root / 'downloads/GRZ-LOADOUT-MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n')
 print('Built GRZ_Loadout.pbo:',len(pbo),'bytes')

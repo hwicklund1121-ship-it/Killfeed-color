@@ -1,5 +1,5 @@
 {
-  "version": "0.2.2",
+  "version": "0.2.3",
   "ammo_stacks": 10,
   "open_key": "comma",
   "replace": "all carried guns and ammo",
@@ -8,5 +8,5 @@
     724
   ],
   "logo_source_sha256": "6564dc53cdb2c2e7aeddf810b4be0680f4679f535036ecaece2189def601ecf9",
-  "pbo_sha256": "b58cbdec4a3f41c6b57023b01b2fd88dec174c64e3fd7ace314f71419dafb186"
+  "pbo_sha256": "0bf1930e39419f407dd161f53105ef9502ac1ce69573cdd99ec2ad3e9ba4cc2b"
 }
