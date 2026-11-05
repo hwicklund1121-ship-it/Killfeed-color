@@ -63,13 +63,50 @@ class GRZLoadoutServer
   return false;
  }
 
+ static bool ScopeFits(string weapon, string scope)
+ {
+  if (g_Game.ConfigGetInt("CfgVehicles " + scope + " scope") != 2)
+   return false;
+  if (!g_Game.IsKindOf(scope, "ItemOptics"))
+   return false;
+  array<string> mounts = new array<string>;
+  array<string> slots = new array<string>;
+  g_Game.ConfigGetTextArray("CfgWeapons " + weapon + " attachments", mounts);
+  g_Game.ConfigGetTextArray("CfgVehicles " + scope + " inventorySlot", slots);
+  foreach (string slot : slots)
+  {
+   if (mounts.Find(slot) >= 0)
+    return true;
+  }
+  return false;
+ }
+
+ static string FindScope(string weapon)
+ {
+  array<string> preferred = {"HuntingOptic", "ACOGOptic", "PSO1Optic", "KashtanOptic", "PUScopeOptic"};
+  foreach (string optic : preferred)
+  {
+   if (ScopeFits(weapon, optic))
+    return optic;
+  }
+  int count = g_Game.ConfigGetChildrenCount("CfgVehicles");
+  for (int i = 0; i < count; i++)
+  {
+   string type;
+   g_Game.ConfigGetChildName("CfgVehicles", i, type);
+   if (ScopeFits(weapon, type))
+    return type;
+  }
+  return "";
+ }
+
  static bool ValidGun(GRZLoadoutGun entry)
  {
   if (!entry || entry.Category < 0 || entry.Category > 2)
    return false;
   if (ExcludedGun(entry.Type))
    return false;
-  if (!g_Game.IsKindOf(entry.Type, "Rifle_Base") && !g_Game.IsKindOf(entry.Type, "Pistol_Base"))
+  if (!g_Game.IsKindOf(entry.Type, "BoltActionRifle_Base") && !g_Game.IsKindOf(entry.Type, "BoltActionRifle_InnerMagazine_Base"))
    return false;
   if (g_Game.ConfigGetInt("CfgWeapons " + entry.Type + " scope") != 2)
    return false;
@@ -88,6 +125,7 @@ class GRZLoadoutServer
    if (pileBullet == "" || pileBullet != magazineBullet)
     return false;
   }
+  entry.ScopeType = FindScope(entry.Type);
   if (entry.Name == "")
    g_Game.ConfigGetText("CfgWeapons " + entry.Type + " displayName", entry.Name);
   if (entry.Name == "")
@@ -300,6 +338,15 @@ class GRZLoadoutServer
    return;
   }
   staged.Insert(gun);
+  if (selected.ScopeType != "")
+  {
+   if (!gun.GetInventory().CreateAttachment(selected.ScopeType))
+   {
+    DeleteStaged(staged);
+    Reply(player, "Scope attachment failed. Your inventory was kept.");
+    return;
+   }
+  }
   if (wrapType != "")
   {
    EntityAI wrap = gun.GetInventory().CreateAttachment(wrapType);
@@ -342,6 +389,21 @@ class GRZLoadoutServer
    DeleteStaged(staged);
    Reply(player, "Ammo creation failed. Your inventory was kept.");
    return;
+  }
+  if (selected.MagazineType != "")
+  {
+   for (int spareIndex = 0; spareIndex < 6; spareIndex++)
+   {
+    Magazine spareMagazine = Magazine.Cast(g_Game.CreateObjectEx(selected.MagazineType, stagingPosition, flags));
+    if (!spareMagazine)
+    {
+     DeleteStaged(staged);
+     Reply(player, "Magazine creation failed. Your inventory was kept.");
+     return;
+    }
+    staged.Insert(spareMagazine);
+    spareMagazine.ServerSetAmmoCount(spareMagazine.GetAmmoMax());
+   }
   }
   // Select topmost weapon/ammo entities so attachments are not moved twice.
   array<EntityAI> inventory = new array<EntityAI>;

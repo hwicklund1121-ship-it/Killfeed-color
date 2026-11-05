@@ -162,6 +162,8 @@ class GRZLoadoutMenu : UIScriptedMenu
    Text("Status", "This gun's preview model could not be loaded.");
    return;
   }
+  if (gun.ScopeType != "")
+   m_PreviewGun.GetInventory().CreateAttachment(gun.ScopeType);
   string wrap = CurrentWrap();
   if (wrap != "" && !m_PreviewGun.GetInventory().CreateAttachment(wrap))
    Text("Status", "This gun does not accept the selected wrap. Choose another wrap.");

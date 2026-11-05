@@ -13,6 +13,7 @@ class GRZLoadoutGun
  string Name;
  string Ammo;
  string MagazineType;
+ string ScopeType;
  int Category;
 };
 
