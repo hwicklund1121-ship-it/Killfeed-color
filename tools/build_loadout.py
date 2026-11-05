@@ -85,7 +85,7 @@ with ZipFile(args.logo_zip) as archive:
 (source / 'data/logo.paa').write_bytes(encode_paa(logo.resize((2048,512),Image.Resampling.LANCZOS), alpha_flags=True))
 pbo = build(source)
 (root / 'downloads/GRZ_Loadout.pbo').write_bytes(pbo)
-notes = '''GRZ Loadout 0.2.5 — Made By Blake
+notes = '''GRZ Loadout 0.2.6 — Made By Blake
 
 INSTALL
 Copy GRZ_Loadout.pbo into @GRZ_Local/Addons on BOTH game and server.
@@ -93,6 +93,7 @@ Restart both. Enable @GRZ_Local in the client launcher. Press comma (,).
 The key is rebindable in DayZ Controls > GRZ Loadout.
 
 FEATURES
+Fresh respawns remove default soda cans, glow sticks and starter fruit before applying saved gear.
 Large dark menu, transparent GunRunnerZ logo at top left, white accents.
 Only bolt-action rifle config families are included; semi-auto guns are excluded.
 AS50 and Barrett families excluded by class, display name and model path.
@@ -164,6 +165,6 @@ Unsigned development build; sign with your own server key if required.
 with ZipFile(root / 'downloads/GRZ_Loadout.zip','w',ZIP_DEFLATED) as archive:
     archive.writestr('GRZ_Loadout.pbo',pbo)
     archive.writestr('INSTALL.txt',notes)
-manifest=dict(version='0.2.5',ammo_stacks=10,open_key='comma',replace='all carried guns and ammo',logo_original_size=logo.size,logo_source_sha256=hashlib.sha256(original).hexdigest(),pbo_sha256=hashlib.sha256(pbo).hexdigest())
+manifest=dict(version='0.2.6',ammo_stacks=10,open_key='comma',replace='all carried guns and ammo',logo_original_size=logo.size,logo_source_sha256=hashlib.sha256(original).hexdigest(),pbo_sha256=hashlib.sha256(pbo).hexdigest())
 (root / 'downloads/GRZ-LOADOUT-MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n')
 print('Built GRZ_Loadout.pbo:',len(pbo),'bytes')

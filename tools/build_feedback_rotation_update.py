@@ -30,7 +30,8 @@ Do not replace or delete your profile config or DZE.
 GRZ_MapRotation 0.1.1: fixes terrain raycasts rejecting valid spawn points.
 Fresh respawns register for arena placement and the
 five-second outside-boundary countdown. Existing ready callbacks are deduplicated.
-GRZ_Loadout 0.2.5: Save a weapon once after installing. Fresh respawns restore
+GRZ_Loadout 0.2.6: Removes starter soda, glow sticks and fruit on fresh spawns.
+Save a weapon once after installing. Fresh respawns restore
 that gun/wrap, compatible scope, ten ammo stacks and six spare magazines for
 magazine-fed guns. Clothing is restored first. Choice survives server restarts;
 reconnecting does not duplicate equipment. Preview-only choices are not saved.

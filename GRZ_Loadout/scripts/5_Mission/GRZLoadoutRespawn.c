@@ -22,10 +22,27 @@ modded class MissionServer
    return;
   // Restore clothing/cargo space first, then run the existing transactional
   // gun grant. Reconnects use ClientReady and do not receive duplicate gear.
+  GRZRemoveStarterItems(player);
   GRZApplySavedClothing(player);
   GRZSavedWeapon weapon = GRZWeaponStore.Load(player.GetIdentity());
   if (weapon && !GRZLoadoutServer.Equip(player, weapon.Weapon, weapon.Wrap, false))
    Print("[GRZ Loadout] Saved weapon could not be restored; spawn gear preserved.");
+ }
+
+ void GRZRemoveStarterItems(PlayerBase player)
+ {
+  // Called only for a newly created character, after native starter gear.
+  // Clear these before dressing/granting the saved loadout to free cargo.
+  array<EntityAI> items = new array<EntityAI>;
+  player.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, items);
+  for (int i = items.Count() - 1; i >= 0; i--)
+  {
+   EntityAI item = items[i];
+   if (!item || item == player)
+    continue;
+   if (item.IsKindOf("SodaCan_ColorBase") || item.IsKindOf("Chemlight_ColorBase") || item.IsKindOf("Pear") || item.IsKindOf("Apple") || item.IsKindOf("Plum"))
+    g_Game.ObjectDelete(item);
+  }
  }
 
  void GRZApplySavedClothing(PlayerBase player)

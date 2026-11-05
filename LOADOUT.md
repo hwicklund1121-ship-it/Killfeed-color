@@ -1,4 +1,4 @@
-GRZ Loadout 0.2.5 — Made By Blake
+GRZ Loadout 0.2.6 — Made By Blake
 
 INSTALL
 Copy GRZ_Loadout.pbo into @GRZ_Local/Addons on BOTH game and server.
@@ -6,6 +6,7 @@ Restart both. Enable @GRZ_Local in the client launcher. Press comma (,).
 The key is rebindable in DayZ Controls > GRZ Loadout.
 
 FEATURES
+Fresh respawns remove default soda cans, glow sticks and starter fruit before applying saved gear.
 Large dark menu, transparent GunRunnerZ logo at top left, white accents.
 Only bolt-action rifle config families are included; semi-auto guns are excluded.
 AS50 and Barrett families excluded by class, display name and model path.
