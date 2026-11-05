@@ -86,5 +86,49 @@
     "source_sha256": "4d17b83ac366d161aa410c4165de4f9a8b5f525fd4baa8c9b5348c4c20799e87",
     "paa_sha256": "813403043fd27f3caba1b7bfdcd45360b3b56697d6da05549604eb36ab78307b",
     "paa_bytes": 5682689
+  },
+  "handgrip_co.paa": {
+    "source": "png/handgrip_co.paa_NNN1178_Base_color.png",
+    "size": [
+      4096,
+      4096
+    ],
+    "format": "DXT1",
+    "source_sha256": "cb7ae328ce29f77dc726b94644b0776b5420f05f719c0a5c8c238f81eb74d8d3",
+    "paa_sha256": "cfc6264f596f1b9b7969b125cefd22e75a3687d2a80b0caa86fd73d90ebdce36",
+    "paa_bytes": 11184971
+  },
+  "handgrip_nohq.paa": {
+    "source": "norm/handgrip_co.paa_NNN1178_Normal.png",
+    "size": [
+      4096,
+      4096
+    ],
+    "format": "DXT5",
+    "source_sha256": "07151a0c29b2ebe475ac0241f775cd24a90ea9472ff8112a92df8773d5bfa792",
+    "paa_sha256": "0e316347b646e363eb765418eeb0f979c86455a5b0accaeeda055b2bc6d93403",
+    "paa_bytes": 11483693
+  },
+  "stock_co.paa": {
+    "source": "png/stock_co.paa_NNN560_Base_color.png",
+    "size": [
+      4096,
+      4096
+    ],
+    "format": "DXT1",
+    "source_sha256": "ee2da2e2de51cccaa9fc153177af75fb246b13e7c694ede61d0cd30808b7d033",
+    "paa_sha256": "3bb5c04b002bffaf40ce29224d57344d0e17073af32531d13a3485ce1d5b1045",
+    "paa_bytes": 11184971
+  },
+  "stock_nohq.paa": {
+    "source": "norm/stock_co.paa_NNN560_Normal.png",
+    "size": [
+      4096,
+      4096
+    ],
+    "format": "DXT5",
+    "source_sha256": "18c41fa15be0082bc40eeed8030e108ef16a79e4d00baad9147b094e3c311396",
+    "paa_sha256": "4efc2f1a644355cf904554c4a717894d0915403f2e0eb35009ed4a1dda4bfb45",
+    "paa_bytes": 12214423
   }
 }

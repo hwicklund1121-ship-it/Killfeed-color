@@ -39,7 +39,8 @@ with ZipFile(ROOT / 'downloads/GRZ-Customs.zip') as archive:
     assert scalar(body(body(armour, 'Projectile'), 'Shock'), 'damage') == 0.1
     _, custom = read_pbo(archive.read('@GRZ_Customs/Addons/GRZ_Customs.pbo'))
     assert 'class GRZ_GunRunnerZ_Hexgrid: HEXGRID_Base' in custom['config.cpp'].decode()
-    assert 'DamageSystem' not in custom['config.cpp'].decode()
+    custom_config = custom['config.cpp'].decode().replace('class GRZ_GunRunnerZ_Hexgrid: HEXGRID_Base', 'class GRZ_GunRunnerZ_Hexgrid')
+    assert 'DamageSystem' not in body(custom_config, 'GRZ_GunRunnerZ_Hexgrid')
     assert not any(path.lower().endswith('.cpp') and b'class CfgAmmo' in data for path, data in base.items())
     assert base == read_pbo((ROOT / 'downloads/HEXGRID.pbo').read_bytes())[1]
 

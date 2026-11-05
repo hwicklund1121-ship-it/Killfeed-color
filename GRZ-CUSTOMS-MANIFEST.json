@@ -1,5 +1,5 @@
 {
-  "version": "0.1.9",
+  "version": "0.2.0",
   "hexgrid_armour": {
     "health_multiplier": 0.045,
     "vest_hitpoints": 10000,
@@ -32,13 +32,14 @@
     "Gunrunnerz HEXGRID",
     "Blakes Kit (without kit HEXGRID)",
     "GRZ_Tracksuit_Pants",
-    "GRZ_Gunwraps"
+    "GRZ_Gunwraps",
+    "rvk M100"
   ],
   "additional_addons": {
     "GRZ_Customs": {
       "prefix": "GRZ_Customs",
-      "sha256": "92a56b7622da40f0d1057f2d25d5bfac81be5a1b83b15e40e866cf69f4da1716",
-      "files": 73,
+      "sha256": "fddf98f36bf41c13fab8e3dc045b545deffd44ed509df3b22c941fe61b5c4f26",
+      "files": 91,
       "item_classes": [
         "GRZ_GunRunnerZ_Hexgrid",
         "blake_SurgicalGloves",
@@ -95,7 +96,11 @@
         "GRZ_Gunwraps_Red_Blue",
         "GRZ_Gunwraps_Rainbow",
         "GRZ_Tracksuit_Pants"
-      ]
+      ],
+      "weapon_classes": [
+        "GRZ_RVK_M100"
+      ],
+      "total_items": 56
     }
   },
   "item_class": "GRZ_GunRunnerZ_Hexgrid",
@@ -104,7 +109,7 @@
   "description": "Made By Blake",
   "base_pbo_sha256": "79c274f9483ccf492025c7b1a6f53c94c3319120de44abb3291137c309162c8c",
   "original_sha256": "f53d9e1a6e1d2675a8ef990c05d6b2af72cc47d09d961dd684e33961f8f4fa6e",
-  "pbo_sha256": "92a56b7622da40f0d1057f2d25d5bfac81be5a1b83b15e40e866cf69f4da1716",
+  "pbo_sha256": "fddf98f36bf41c13fab8e3dc045b545deffd44ed509df3b22c941fe61b5c4f26",
   "prefix": "GRZ_Customs",
   "verified_internal_resources": 11,
   "maps": {

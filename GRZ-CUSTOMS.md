@@ -1,8 +1,8 @@
-GRZ Customs 0.1.9
+GRZ Customs 0.2.0
 
 Current pack layout: two PBOs only. HEXGRID.pbo contains the original repaired
 HEXGRID models/base class and shared armour tuning. GRZ_Customs.pbo contains one
-root CfgPatches/CfgVehicles config for all 55 additive reskins and their assets,
+root CfgPatches/CfgVehicles/CfgWeapons config for 55 clothing/wrap reskins and rvk M100 and their assets,
 mounted consistently under GRZ_Customs. Spawn class names are retained.
 
 The installer backs up and removes the four obsolete split reskin PBOs before
@@ -12,7 +12,7 @@ Keep the helmet and SK dependencies loaded on both sides.
 
 A small startup check writes GRZ_Customs_registration.txt into the server/client
 profile directory and prints the number of registered custom item classes. A
-successful config check reads Registered 55/55 custom items. This is a runtime
+successful config check reads Registered 56/56 custom items. This is a runtime
 config diagnostic; it does not alter inventories, spawn items or grant admin.
 If the script itself cannot load, no report is written and its compile error
 will appear in the script log. Packaging tests cannot establish an in-game fix.
@@ -137,3 +137,15 @@ other clothing and damage-altering mods can change outcomes. Other ammunition
 also receives this native vest protection. No scripts replace native damage,
 hitmarker or killfeed callbacks. This does not change BC_Ammo_20mm or other
 20mm definitions; the supplied 20mm config specifically defines VULCAN.
+
+rvk M100
+
+Separate spawnable weapon: GRZ_RVK_M100. Display name: rvk M100. Description: designed by blake.
+Inherits UAV_Snipex_M100_Tan from the installed original M100 weapon addon (CfgPatches UAV_M100).
+The original M100 remains available. No new weapon script or replacement of original M100 config is required.
+Six supplied colour and six normal textures are converted at 4096x4096 and assigned to camo through camo6.
+Custom Super materials use supplied normals with restrained procedural specular defaults; original material files were not supplied.
+Health remains 5000 with reskin materials kept at all original health thresholds. Other stats, including existing UAV_Ammo_VULCAN chambering, are inherited.
+This item belongs in the loadout's 20mm section because it inherits VULCAN ammo.
+Keep the original M100 weapon pack loaded on both client and server.
+Native-size texture conversion, PBO/config/resource checks only; rendering and spawning need in-game testing.

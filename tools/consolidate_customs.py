@@ -15,6 +15,7 @@ def consolidate(addons):
         sources.append((extension['prefix'], files))
     mapping = {prefix: 'GRZ_Customs/' + prefix.replace('\\', '/').split('/')[-1] for prefix, _ in sources}
     files, parents, classes, dependencies, definitions = {}, set(), [], set(), []
+    weapon_parents, weapon_classes, weapon_definitions = set(), [], []
     for prefix, entries in sources:
         config = entries['config.cpp'].decode('utf-8-sig')
         _, opening, closing, _ = section(config, 'CfgVehicles')
@@ -23,6 +24,13 @@ def consolidate(addons):
         vehicles = re.sub(r'\bclass\s+\w+\s*;', '', vehicles)
         classes.extend(re.findall(r'\bclass\s+(\w+)\s*:', vehicles))
         definitions.append(vehicles)
+        if re.search(r'class\s+CfgWeapons\s*\{', config):
+            _, wo, wc, _ = section(config, 'CfgWeapons')
+            weapons = config[wo+1:wc]
+            weapon_parents.update(re.findall(r'class\s+(\w+)\s*;', weapons))
+            weapons = re.sub(r'\bclass\s+\w+\s*;', '', weapons)
+            weapon_classes.extend(re.findall(r'\bclass\s+(\w+)\s*:', weapons))
+            weapon_definitions.append(weapons)
         for value in re.findall(r'requiredAddons\[\]\s*=\s*\{([^}]+)\}', config):
             dependencies.update(re.findall(r'"([^"]+)"', value))
         for name, data in entries.items():
@@ -32,14 +40,17 @@ def consolidate(addons):
             assert target not in files
             files[target] = data
     units = ','.join('"' + name + '"' for name in classes)
+    weapon_units = ','.join('"' + name + '"' for name in weapon_classes)
     required = ','.join('"' + name + '"' for name in sorted(dependencies))
-    config = ('class CfgPatches { class GRZ_Customs_Items { units[] = {' + units + '}; weapons[] = {}; '
+    config = ('class CfgPatches { class GRZ_Customs_Items { units[] = {' + units + '}; weapons[] = {' + weapon_units + '}; '
               'requiredVersion = 0.1; requiredAddons[] = {' + required + '}; }; };\n'
               'class CfgMods { class GRZ_Customs { dir = "GRZ_Customs"; name = "GRZ Customs"; type = "mod"; '
               'dependencies[] = {"Mission"}; class defs { class missionScriptModule { value = ""; '
               'files[] = {"GRZ_Customs/scripts/5_Mission"}; }; }; }; };\n'
               'class CfgVehicles {\n' + ''.join('class ' + p + ';\n' for p in sorted(parents)) +
               '\n'.join(definitions) + '\n};\n')
+    if weapon_definitions:
+        config += 'class CfgWeapons {\n' + ''.join('class ' + p + ';\n' for p in sorted(weapon_parents)) + '\n'.join(weapon_definitions) + '\n};\n'
     files['config.cpp'] = config.encode()
     # Only text references move; original binary artwork is untouched.
     for name, data in list(files.items()):
@@ -51,7 +62,7 @@ def consolidate(addons):
                     text = text.replace(old.replace('/', separator) + separator,
                                         new.replace('/', separator) + separator)
             files[name] = text.encode()
-    names = '\n'.join('        items.Insert("' + name + '");' for name in classes)
+    names = '\n'.join('        items.Insert("' + path + '");' for path in ['CfgVehicles ' + name for name in classes] + ['CfgWeapons ' + name for name in weapon_classes])
     files['scripts/5_Mission/GRZCustomsRegistration.c'] = ('''
 class GRZCustomsRegistration
 {
@@ -64,10 +75,10 @@ class GRZCustomsRegistration
         array<string> items = new array<string>;
 ITEM_NAMES
         int loaded;
-        string report = "GRZ Customs 0.1.9 registration check\\n";
+        string report = "GRZ Customs 0.2.0 registration check\\n";
         foreach (string itemName : items)
         {
-            string path = "CfgVehicles " + itemName;
+            string path = itemName;
             if (g_Game.ConfigIsExisting(path) && g_Game.ConfigGetInt(path + " scope") == 2)
                 loaded++;
             else
@@ -117,4 +128,4 @@ modded class MissionGameplay
         pbo = build(source)
     assert read_pbo(pbo)[1] == files
     return pbo, {'prefix': 'GRZ_Customs', 'sha256': hashlib.sha256(pbo).hexdigest(),
-                 'files': len(files), 'item_classes': classes}
+                 'files': len(files), 'item_classes': classes, 'weapon_classes': weapon_classes, 'total_items': len(classes)+len(weapon_classes)}
