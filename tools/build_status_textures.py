@@ -26,7 +26,15 @@ def encode_paa(image, pixel_format='DXT5', alpha_flags=False):
         image.save(dds, format='DDS', pixel_format=pixel_format)
         compressed = dds.getvalue()[128:]
         assert len(compressed) == image.width * image.height // (2 if pixel_format == 'DXT1' else 1)
-        output.write(struct.pack('<HH', *image.size))
+        stored_width = image.width
+        if len(compressed) > 0xFFFFFF:
+            import lzokay
+            raw = compressed
+            compressed = lzokay.compress(raw)
+            assert lzokay.decompress(compressed, len(raw)) == raw
+            assert len(compressed) <= 0xFFFFFF
+            stored_width |= 0x8000
+        output.write(struct.pack('<HH', stored_width, image.height))
         output.write(len(compressed).to_bytes(3, 'little'))
         output.write(compressed)
         image = image.resize((image.width // 2, image.height // 2), Image.Resampling.LANCZOS)

@@ -1,0 +1,90 @@
+{
+  "barrel_co.paa": {
+    "source": "New folder/barrel_co.paa_NNN2_Base_color.png",
+    "size": [
+      4096,
+      4096
+    ],
+    "format": "DXT1",
+    "source_sha256": "c87494f2c52627543516346fc47dea51d130fd7dee1f5b8ac19987f90f9db70d",
+    "paa_sha256": "705d162eb2549717135db7bc99becefd2537e3a4742d442ea8a5abbf81469951",
+    "paa_bytes": 11184971
+  },
+  "barrel_nohq.paa": {
+    "source": "New folder/barrel_co.paa_NNN2_Normal.png",
+    "size": [
+      4096,
+      4096
+    ],
+    "format": "DXT5",
+    "source_sha256": "a5e66f5efe1b989cf1b3ea4c4c1243fc95b4a16b65167f6475bc5fe302a5407d",
+    "paa_sha256": "ebf8e611b303978618a52eec94ec04dc6e19fd6902c9f09bd6a990843743a3cc",
+    "paa_bytes": 11832471
+  },
+  "bolt_co.paa": {
+    "source": "New folder/bolt_co.paa_NNN1973_Base_color.png",
+    "size": [
+      4096,
+      4096
+    ],
+    "format": "DXT1",
+    "source_sha256": "820f001afca514099c3941bea49fe4f3d659950b9abee1c72975d66784c8aae6",
+    "paa_sha256": "c171a055a0706f192406cabd3f78bd00c62acdf75143aeb36ed6a56c6171466a",
+    "paa_bytes": 11184971
+  },
+  "bolt_nohq.paa": {
+    "source": "New folder/bolt_co.paa_NNN1973_Normal.png",
+    "size": [
+      4096,
+      4096
+    ],
+    "format": "DXT5",
+    "source_sha256": "a18b6b724015bdc89529b7e5b228d743940a5a499660f1b2f9aefb170e51c17b",
+    "paa_sha256": "d71a082ed921697cf92a54053386b17c03642c4e99e0414031a32bb76eaa03b8",
+    "paa_bytes": 10260051
+  },
+  "grip_co.paa": {
+    "source": "grip/grip_co.paa_NNN442_Base_color.png",
+    "size": [
+      4096,
+      4096
+    ],
+    "format": "DXT1",
+    "source_sha256": "bfd469b5a956bf2e0bb62274582c16e85e3ddca1773a426568e9a6a0e3fe9449",
+    "paa_sha256": "16f18851fb7f0805160ae32c241ad89f42e1b3d69d74043db59f0e4f26755cf6",
+    "paa_bytes": 11184971
+  },
+  "grip_nohq.paa": {
+    "source": "grip/grip_co.paa_NNN442_Normal.png",
+    "size": [
+      4096,
+      4096
+    ],
+    "format": "DXT5",
+    "source_sha256": "4d17b83ac366d161aa410c4165de4f9a8b5f525fd4baa8c9b5348c4c20799e87",
+    "paa_sha256": "813403043fd27f3caba1b7bfdcd45360b3b56697d6da05549604eb36ab78307b",
+    "paa_bytes": 5682689
+  },
+  "muzzle_co.paa": {
+    "source": "muzzle/muzzle_co.paa_NNN118_Base_color.png",
+    "size": [
+      4096,
+      4096
+    ],
+    "format": "DXT1",
+    "source_sha256": "820f001afca514099c3941bea49fe4f3d659950b9abee1c72975d66784c8aae6",
+    "paa_sha256": "c171a055a0706f192406cabd3f78bd00c62acdf75143aeb36ed6a56c6171466a",
+    "paa_bytes": 11184971
+  },
+  "muzzle_nohq.paa": {
+    "source": "muzzle/muzzle_co.paa_NNN118_Normal.png",
+    "size": [
+      4096,
+      4096
+    ],
+    "format": "DXT5",
+    "source_sha256": "4d17b83ac366d161aa410c4165de4f9a8b5f525fd4baa8c9b5348c4c20799e87",
+    "paa_sha256": "813403043fd27f3caba1b7bfdcd45360b3b56697d6da05549604eb36ab78307b",
+    "paa_bytes": 5682689
+  }
+}
