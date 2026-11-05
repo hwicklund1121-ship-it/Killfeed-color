@@ -338,6 +338,12 @@ class GRZLoadoutServer
    return;
   }
   staged.Insert(gun);
+  if (!GRZLoadoutAttachments.EnsurePermanentSFGSuppressor(gun, true))
+  {
+   DeleteStaged(staged);
+   Reply(player, "SFG suppressor is missing or incompatible. Update the SFG weapon pack. Your inventory was kept.");
+   return;
+  }
   if (selected.ScopeType != "")
   {
    if (!gun.GetInventory().CreateAttachment(selected.ScopeType))

@@ -6,7 +6,7 @@ firing clips are removed. The root config also chambers UAV_Ammo_VULCAN (the pil
 UAV_Bullet_VULCAN) and uses a unique suppressor proxy. Existing volume, distance
 curves/ranges, recoil and other weapon stats remain as supplied.
 
-The server adds UAV_SFG_Sup after gun initialization and saved-game loading.
+The server attempts to add UAV_SFG_Sup immediately on gun initialization and saved-game loading, retrying if inventory initialization is incomplete.
 Admin/debug spawning also queues the attachment check. UAV_SFG_Sup uses scope 1
 and is omitted from the public units list, hiding it from normal scope-2 item
 spawn menus while allowing the gun script to create it as an attachment. Admin

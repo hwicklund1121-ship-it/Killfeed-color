@@ -1,4 +1,4 @@
-GRZ Loadout 0.1.2 — Made By Blake
+GRZ Loadout 0.1.3 — Made By Blake
 
 INSTALL
 Copy GRZ_Loadout.pbo into @GRZ_Local/Addons on BOTH game and server.
@@ -9,6 +9,8 @@ FEATURES
 Large dark menu, transparent GunRunnerZ logo at top left, white accents.
 Only bolt-action rifle config families are included; semi-auto guns are excluded.
 AS50 and Barrett families excluded by class, display name and model path.
+The SFG permanent suppressor is explicitly attached in the local preview and server grant.
+If the SFG suppressor cannot be attached, Save fails before removing existing gear.
 Compatible scope is selected from the gun mount slots and included in preview and equipped gun.
 Magazine-fed guns also receive six full spare magazines in cargo, plus the loaded magazine on the gun.
 Permanent ammo-count and inventory-replacement captions removed; operational status/errors remain.

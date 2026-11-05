@@ -8,7 +8,7 @@
   "slot": "UAV_SFG_Suppressor",
   "unique_proxy_class": "Proxysfg_muzzle",
   "equal_length_model_reference_edits": 0,
-  "validation_pbo_sha256": "43b6b3037fbd57af95e2f70d4d70806588b9f51a1bc6bf043ca0fc622fb837f1",
+  "validation_pbo_sha256": "66b8014c5d612a95c7c077a7c0cd5e8a66ae891382487a3241ad4d4f4fe4ad13",
   "audio_sha256": {
     "data/SFG_Close.ogg": "4e194bf7bcdf2fe57eb11ad0b6fb0e5b48fcb035cc66e66cfcb5375f831ed0cf",
     "data/SFG_Mid.ogg": "804da1721cb4513d95cd5dee6243a02dfafc773d5912a183efc0e2e7d18cd77b",

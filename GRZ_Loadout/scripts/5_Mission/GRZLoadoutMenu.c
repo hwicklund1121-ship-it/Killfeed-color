@@ -162,6 +162,8 @@ class GRZLoadoutMenu : UIScriptedMenu
    Text("Status", "This gun's preview model could not be loaded.");
    return;
   }
+  if (!GRZLoadoutAttachments.EnsurePermanentSFGSuppressor(m_PreviewGun, false))
+   Text("Status", "SFG suppressor preview could not be attached. Check the SFG weapon pack.");
   if (gun.ScopeType != "")
    m_PreviewGun.GetInventory().CreateAttachment(gun.ScopeType);
   string wrap = CurrentWrap();

@@ -128,6 +128,10 @@ if 'override void OnDebugSpawn()' not in script:
         GRZQueuePermanentSuppressor();
     }
 ''' + script[end:]
+# Try immediately for spawned guns; existing retries still handle inventory initialization.
+script = script.replace(
+    'g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(GRZEnsurePermanentSuppressor, 100, false);',
+    'GRZEnsurePermanentSuppressor();')
 assert not re.search(r"(?m)^\s*'{1,2}\s*$", script)
 files[script_path] = script.encode()
 assert files['proxy/sfg_muzzle.p3d'] == original.get('proxy/suppressor.p3d', original.get('proxy/sfg_muzzle.p3d'))
