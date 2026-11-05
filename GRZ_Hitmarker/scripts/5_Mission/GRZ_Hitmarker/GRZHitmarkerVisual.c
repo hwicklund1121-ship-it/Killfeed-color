@@ -151,10 +151,10 @@ class GRZHitmarkerAudio
 
     static void ReportStarted(string key, float volume)
     {
-        bool head = key == "GRZ_HitmarkerHead_SoundSet";
+        bool head = key == "GRZ_HitmarkerHead017_SoundSet";
         if ((head && s_LoggedHeadStart) || (!head && s_LoggedBodyStart))
             return;
-        Print(string.Format("[GRZ Hitmarker 0.1.6] Audio started (UI channel): %1 volume=%2 gameSoundVolume=%3", key, volume, g_Game.GetSoundScene().GetSoundVolume()));
+        Print(string.Format("[GRZ Hitmarker 0.1.7] Audio started (UI channel): %1 volume=%2 gameSoundVolume=%3", key, volume, g_Game.GetSoundScene().GetSoundVolume()));
         if (head)
             s_LoggedHeadStart = true;
         else
@@ -165,17 +165,25 @@ class GRZHitmarkerAudio
     {
         if (g_Game.IsDedicatedServer() || !g_Game.IsAppActive() || volume <= 0)
             return;
-        string soundSet = "GRZ_HitmarkerBody_SoundSet";
+        string soundSet = "GRZ_HitmarkerBody017_SoundSet";
         if (head)
-            soundSet = "GRZ_HitmarkerHead_SoundSet";
+            soundSet = "GRZ_HitmarkerHead017_SoundSet";
         GRZHitmarkerSoundVoice voice = new GRZHitmarkerSoundVoice;
         voice.SoundKey = soundSet;
         voice.RelativeVolume = Math.Clamp(volume / 100.0, 0, 1);
         SoundParams params = new SoundParams(soundSet);
+        if (!params.IsValid())
+        {
+            Print("[GRZ Hitmarker 0.1.7] Invalid sound set: " + soundSet + ". Check the CLIENT has the updated PBO.");
+            return;
+        }
         SoundObjectBuilder builder = new SoundObjectBuilder(params);
         SoundObject sound = builder.BuildSoundObject();
         if (sound)
         {
+            // Keep the emitter at the listener, not the world origin. Engine
+            // range checks must not discard feedback at distant arena positions.
+            sound.SetPosition(g_Game.GetCurrentCameraPosition());
             sound.SetKind(WaveKind.WAVEUI);
             voice.Wave = g_Game.GetSoundScene().Play2D(sound, builder);
         }
@@ -188,6 +196,7 @@ class GRZHitmarkerAudio
                 events.Event_OnSoundWaveEnded.Insert(voice.OnWaveEnded);
                 events.Event_OnSoundWaveStopped.Insert(voice.OnWaveEnded);
             }
+            voice.Wave.SetVolume(1);
             voice.Wave.SetVolumeRelative(voice.RelativeVolume);
             voice.Wave.Loop(false);
             voice.Wave.Play();
@@ -296,7 +305,7 @@ modded class MissionGameplay
         GRZHitmarkerSettings settings = GRZHitmarkerStore.Current();
         if ((hit.IsHeadHit && !m_GRZLoggedHeadAudio) || (!hit.IsHeadHit && !m_GRZLoggedBodyAudio))
         {
-            Print(string.Format("[GRZ Hitmarker 0.1.6] Confirmed hit: head=%1 soundEnabled=%2 volume=%3", hit.IsHeadHit, settings.PlaySound, settings.VolumePercent));
+            Print(string.Format("[GRZ Hitmarker 0.1.7] Confirmed hit: head=%1 soundEnabled=%2 volume=%3", hit.IsHeadHit, settings.PlaySound, settings.VolumePercent));
             if (hit.IsHeadHit)
                 m_GRZLoggedHeadAudio = true;
             else

@@ -52,3 +52,5 @@ DZE v8 parsed against Dabs Framework's public field definitions; all placed/hidd
 Private author/credit metadata removed from the packaged DZE; object data remains unchanged.
 Static PBO, config, geometry, timeline and installer checks only. Enforce compilation, physics, teleport sync, audio and multiplayer voting require DayZ 1.30 testing.
 Unsigned development PBO; sign using your server key if signature verification is enabled.
+
+Respawn update: PlayerBase.OnConnect now schedules arena placement for both fresh characters and existing characters. This covers missions that replace CreateCharacter without calling super. Duplicate ready callbacks are ignored. Leaving the boundary shows a five-second teleport countdown, which clears when the player returns inside.

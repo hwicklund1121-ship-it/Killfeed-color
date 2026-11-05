@@ -1,6 +1,6 @@
 # GRZ Hitmarker
 
-Separate DayZ PC mod, development version 0.1.6. Install on the server and every client. Settings live in **Options > Game > GRZ HITMARKER**, appended to the existing game settings list, using native left/right option selectors. The existing General, Gunrunnerz FOV, HUD and Chat sections remain intact. No slash command or VIP access is needed.
+Separate DayZ PC mod, development version 0.1.7. Install on the server and every client. Settings live in **Options > Game > GRZ HITMARKER**, appended to the existing game settings list, using native left/right option selectors. The existing General, Gunrunnerz FOV, HUD and Chat sections remain intact. No slash command or VIP access is needed.
 
 Controls: show hitmarkers, show damage info, hitmarker sound, highlight kills, normal-hit color, headshot color, size (25–150%, default 50%) and volume (0–100%, default 100%). Colors include white, red, orange, yellow, green, blue, indigo, violet, cyan, pink, grey and black. Compact rows use a 45%-opaque black background. A boxed, marker-only live preview sits at the bottom right; all test buttons are removed. Changing body or head color shows that color in the preview. The marker consists of exactly four short diagonal line segments, drawn on a canvas with a fine outline and a clear center. Press the normal Options Apply button to save; Cancel/Revert restores saved selections and Defaults restores the hitmarker defaults. Client preferences are saved in `$profile:GRZ_Hitmarker/settings.json`.
 
@@ -20,4 +20,6 @@ In-game checks: Options > Game section visibility/scrolling alongside GRZ Moveme
 
 Development PBO is unsigned. The local server bundle uses signature checking disabled. The same updated PBO is required on server and clients. RPC ID 1647280201 must remain unique.
 
-Audio update 0.1.6: primary playback uses SoundScene.Play2D with WAVEUI and per-voice relative volume. The effect-manager fallback also uses WAVEUI. Sound-shader sample paths are extensionless, matching native DayZ conventions. The supplied headshot recording is installed; the existing body-hit tone is retained. Hit/damage/RPC logic is unchanged. Check Options > Game > GRZ HITMARKER: sound on, volume above zero. Master/UI audio must also be audible. Native runtime audibility still needs an in-game check.
+Audio update 0.1.7: primary playback uses SoundScene.Play2D with WAVEUI and per-voice relative volume. The effect-manager fallback also uses WAVEUI. Sound-shader sample paths are extensionless, matching native DayZ conventions. The supplied headshot recording is installed; the existing body-hit tone is retained. Hit/damage/RPC logic is unchanged. Check Options > Game > GRZ HITMARKER: sound on, volume above zero. Master/UI audio must also be audible. Native runtime audibility still needs an in-game check.
+
+Audio 0.1.7 positions the emitter at the current camera and uses a flat million-metre shader range to prevent location-based culling. New sound-set names avoid collisions with the previous definitions. Invalid client sound sets now log an explicit error. This addresses an audio configuration risk; audibility is not verified without DayZ.

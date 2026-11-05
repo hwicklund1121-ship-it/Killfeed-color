@@ -319,7 +319,7 @@ class GRZRotationServer
 
  static void PlayerReady(PlayerBase player)
  {
-  if (!player || !player.GetIdentity())
+  if (!player || !player.GetIdentity() || !player.IsAlive() || player.m_GRZRotationReady)
    return;
   player.m_GRZRotationReady = true;
   if (Enabled)
@@ -395,7 +395,7 @@ class GRZRotationServer
    else if (player.m_GRZOutsideLastCount != Settings.OutsideSeconds - elapsed)
    {
     player.m_GRZOutsideLastCount = Settings.OutsideSeconds - elapsed;
-    Notice(player, string.Format("Outside arena — returning in %1 seconds.", player.m_GRZOutsideLastCount), 0);
+    Notice(player, string.Format("Outside arena — teleporting back in %1 seconds.", player.m_GRZOutsideLastCount), 0);
    }
   }
   if (g_Game.GetTime() - LastBroadcast >= 5000)
@@ -421,6 +421,16 @@ modded class PlayerBase
  int m_GRZVehicleExitTime = -10000;
  protected int m_GRZRotationRequestTime = -10000;
  protected int m_GRZRotationVoteTime = -10000;
+
+ // Native MissionServer invokes PlayerBase.OnConnect for both ClientNew
+ // (fresh respawns) and ClientReady (existing characters), even when the
+ // mission overrides CreateCharacter without calling super.
+ override void OnConnect()
+ {
+  super.OnConnect();
+  if (g_Game.IsServer())
+   g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(GRZRotationServer.PlayerReady, 1500, false, this);
+ }
 
  override void OnRPC(PlayerIdentity sender, int rpc_type, ParamsReadContext ctx)
  {

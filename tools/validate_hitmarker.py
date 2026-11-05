@@ -62,6 +62,8 @@ def main():
     visual=files['scripts/5_Mission/GRZ_Hitmarker/GRZHitmarkerVisual.c'].decode()
     assert 'SEffectManager.CreateSound' in visual
     assert '.Play2D(' in visual and 'SetVolumeRelative' in visual
+    assert 'sound.SetPosition(g_Game.GetCurrentCameraPosition())' in visual
+    assert 'if (!params.IsValid())' in visual
     assert 'SetSoundVolume' in visual and 'Handle.SoundPlay()' in visual
     assert 's_Voices.Count() >= 12' in visual and 'SEffectManager.DestroyEffect(Handle)' in visual
     assert 'WaveKind.WAVEUI' in visual and 'WaveKind.WAVEEFFECTEX' not in visual
@@ -92,6 +94,8 @@ def main():
         assert files[f'sounds/{name}.ogg'].startswith(b'OggS')
     cfg=files['config.cpp'].decode()
     assert 'spatial = 0;' in cfg
+    assert cfg.count('range = 1000000;') == 2
+    assert 'GRZ_HitmarkerBody017_SoundSet' in cfg and 'GRZ_HitmarkerHead017_SoundSet' in cfg
     for name in ['body_hit','headshot']:
         assert f'GRZ_Hitmarker/sounds/{name}' in cfg
         assert f'GRZ_Hitmarker/sounds/{name}.ogg' not in cfg
