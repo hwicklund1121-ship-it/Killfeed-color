@@ -1,5 +1,15 @@
 class GRZLoadoutMenu : UIScriptedMenu
 {
+ override void OnShow()
+ {
+  super.OnShow();
+  g_Game.GetMission().AddActiveInputExcludes({"menu"});
+ }
+ override bool UseMouse() { return true; }
+ override bool UseKeyboard() { return true; }
+ override bool UseGamepad() { return true; }
+
+
  protected ItemPreviewWidget m_Preview;
  protected EntityAI m_PreviewGun;
  protected ref array<int> m_Filtered = new array<int>;
@@ -58,6 +68,7 @@ class GRZLoadoutMenu : UIScriptedMenu
 
  override void OnHide()
  {
+  g_Game.GetMission().RemoveActiveInputExcludes({"menu"}, true);
   if (m_ClothingList && WidgetEventHandler.GetInstance())
    WidgetEventHandler.GetInstance().UnregisterWidget(m_ClothingList);
   GRZLoadoutClientData.Changed.Remove(ReceiveCatalogue);
@@ -306,9 +317,9 @@ class GRZLoadoutMenu : UIScriptedMenu
    title = "Scroll to preview / double-click to keep";
   Text("ClothingListTitle", title);
   layoutRoot.FindAnyWidget("RemoveClothing").Enable(!m_ChoosingCharacter);
-  string names[8] = {"SlotHat", "SlotMask", "SlotShirt", "SlotBelt", "SlotPants", "SlotGlove", "SlotVest", "SlotShoes"};
-  int indices[8] = {0, 1, 3, 9, 6, 5, 4, 7};
-  for (int i = 0; i < 8; i++)
+  string names[9] = {"SlotHat", "SlotMask", "SlotShirt", "SlotBelt", "SlotPants", "SlotGlove", "SlotVest", "SlotShoes", "SlotBag"};
+  int indices[9] = {0, 1, 3, 9, 6, 5, 4, 7, 8};
+  for (int i = 0; i < 9; i++)
   {
    int color = ARGB(255, 25, 25, 28);
    if (!m_ChoosingCharacter && indices[i] == m_ClothingSlot)
@@ -363,9 +374,9 @@ class GRZLoadoutMenu : UIScriptedMenu
 
  protected bool ClothingClick(string name)
  {
-  string names[8] = {"SlotHat", "SlotMask", "SlotShirt", "SlotBelt", "SlotPants", "SlotGlove", "SlotVest", "SlotShoes"};
-  int indices[8] = {0, 1, 3, 9, 6, 5, 4, 7};
-  for (int i = 0; i < 8; i++)
+  string names[9] = {"SlotHat", "SlotMask", "SlotShirt", "SlotBelt", "SlotPants", "SlotGlove", "SlotVest", "SlotShoes", "SlotBag"};
+  int indices[9] = {0, 1, 3, 9, 6, 5, 4, 7, 8};
+  for (int i = 0; i < 9; i++)
   {
    if (name == names[i])
    {

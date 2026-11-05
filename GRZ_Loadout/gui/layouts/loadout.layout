@@ -963,6 +963,45 @@ TextWidgetClass SlotShoesLabel
 }
  }
 }
+ButtonWidgetClass SlotBag
+{
+ position 0.027 0.855
+ size 0.16 0.087
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass SlotBagFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.085 0.085 0.095 1
+}
+TextWidgetClass SlotBagLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "BAG"
+}
+ }
+}
 ButtonWidgetClass SelectCharacter
 {
  position 0.62 0.015

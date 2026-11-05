@@ -55,7 +55,7 @@ assert rotation.count('player.m_GRZDuelMatch != ""') >= 2
 assert 'GRZDuelHooks.ReturnToArena.Insert(ReturnFromDuel)' in rotation
 assert '"GRZ_Loadout"' in (root/'GRZ_MapRotation/config.cpp').read_text()
 assert 'GameRespawn(false);' in menu and 'ForceDisable(blockFire)' in menu
-assert 'g_Game.GetTime() - m_GRZDuelDeadSince >= 1000' in menu
+assert 'g_Game.GetTime() - m_GRZDuelDeadSince >= 3000' in menu
 assert 'data.AutoRespawn || data.PendingId' in menu
 assert 'int Sort;' in data and 'int MyElo = 800;' in data
 assert 'cache.Rows[i]' in board_server and 'start + 20' in board_server

@@ -5,6 +5,7 @@ class GRZRotationRPC
  static const int SNAPSHOT = 763502;
  static const int NOTICE = 763503;
  static const int MENU = 763504;
+ static const int SKIP = 763505;
 };
 class GRZRotationPoint
 {
@@ -27,6 +28,7 @@ class GRZRotationSettings
  int PopupSeconds = 30;
  int OutsideSeconds = 5;
  string StartArena = "nwaf";
+ ref array<string> AdminSteamIds = new array<string>;
  ref array<ref GRZRotationArena> Arenas = new array<ref GRZRotationArena>;
 };
 class GRZRotationChoice

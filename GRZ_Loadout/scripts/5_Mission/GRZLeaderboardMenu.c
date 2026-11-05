@@ -1,5 +1,15 @@
 class GRZLeaderboardMenu : UIScriptedMenu
 {
+ override void OnShow()
+ {
+  super.OnShow();
+  g_Game.GetMission().AddActiveInputExcludes({"menu"});
+ }
+ override bool UseMouse() { return true; }
+ override bool UseKeyboard() { return true; }
+ override bool UseGamepad() { return true; }
+
+
  protected int m_Page;
  protected int m_Sort;
  protected int m_LastSent = -10000;
@@ -93,6 +103,7 @@ class GRZLeaderboardMenu : UIScriptedMenu
  }
  override void OnHide()
  {
+  g_Game.GetMission().RemoveActiveInputExcludes({"menu"}, true);
   GRZLeaderboardBus.Changed.Remove(Receive);
   super.OnHide();
  }

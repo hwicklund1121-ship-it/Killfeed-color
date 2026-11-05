@@ -15,6 +15,7 @@ class CfgMods
         dir = "GRZ_DeathScreen";
         name = "GRZ Death Screen";
         author = "Blake";
+        version = "0.2.0";
         type = "mod";
         dependencies[] = {"World", "Mission"};
         class defs

@@ -12,6 +12,7 @@ class GRZRotationServer
  static bool VoteLocked;
  static int NextIndex = -1;
  static int LastBroadcast;
+ static int ManualSkipAt;
  static string Status = "Arena rotation is starting.";
  static int RejectedWater;
  static int RejectedSlope;
@@ -191,11 +192,14 @@ class GRZRotationServer
 
  static int Remaining()
  {
+  if (ManualSkipAt > 0)
+   return Math.Max(0, (ManualSkipAt - g_Game.GetTime() + 999) / 1000);
   return Math.Max(0, Settings.RoundSeconds - (g_Game.GetTime() - RoundStart) / 1000);
  }
 
  static void BeginRound()
  {
+  ManualSkipAt = 0;
   RoundId++;
   RoundStart = g_Game.GetTime();
   Voting = false;
@@ -259,7 +263,11 @@ class GRZRotationServer
   array<Man> players = new array<Man>;
   g_Game.GetPlayers(players);
   foreach (Man man : players)
-   Notice(PlayerBase.Cast(man), message, sound);
+  {
+   PlayerBase recipient = PlayerBase.Cast(man);
+   if (recipient && recipient.IsAlive() && recipient.m_GRZDuelMatch == "")
+    Notice(recipient, message, sound);
+  }
  }
 
  static void Broadcast()
@@ -380,23 +388,47 @@ class GRZRotationServer
   }
  }
 
+ static void RequestSkip(PlayerBase player)
+ {
+  if (!Enabled || !player || !player.GetIdentity())
+   return;
+  if (!Settings.AdminSteamIds || Settings.AdminSteamIds.Find(player.GetIdentity().GetPlainId()) < 0)
+  {
+   Notice(player, "Only configured admins can skip maps.", 0);
+   return;
+  }
+  if (ManualSkipAt > 0)
+  {
+   Notice(player, "A map skip is already scheduled.", 0);
+   return;
+  }
+  NextIndex = (ActiveIndex + 1) % Settings.Arenas.Count();
+  Voting = false;
+  VoteLocked = true;
+  VoteWarning = true;
+  ChangeWarning = true;
+  ManualSkipAt = g_Game.GetTime() + 30000;
+  BroadcastNotice("An admin skipped the map. You'll be teleported in 30 seconds.", 2);
+  Broadcast();
+ }
+
  static void Tick()
  {
   if (!Enabled)
    return;
   int remaining = Remaining();
-  if (!VoteWarning && remaining <= Settings.VoteSeconds + 30)
+  if (ManualSkipAt == 0 && !VoteWarning && remaining <= Settings.VoteSeconds + 30)
   {
    VoteWarning = true;
    BroadcastNotice("Map voting opens in 30 seconds.", 2);
   }
-  if (!Voting && !VoteLocked && remaining <= Settings.VoteSeconds)
+  if (ManualSkipAt == 0 && !Voting && !VoteLocked && remaining <= Settings.VoteSeconds)
   {
    Voting = true;
    BroadcastNotice("Map voting is open. Type !vote to vote or change your vote.", 1);
    Broadcast();
   }
-  if (!ChangeWarning && remaining <= 30)
+  if (ManualSkipAt == 0 && !ChangeWarning && remaining <= 30)
   {
    ChangeWarning = true;
    NextIndex = Winner();
@@ -486,12 +518,17 @@ modded class PlayerBase
 
  override void OnRPC(PlayerIdentity sender, int rpc_type, ParamsReadContext ctx)
  {
-  if (rpc_type == GRZRotationRPC.REQUEST || rpc_type == GRZRotationRPC.VOTE)
+  if (rpc_type == GRZRotationRPC.REQUEST || rpc_type == GRZRotationRPC.VOTE || rpc_type == GRZRotationRPC.SKIP)
   {
    if (!g_Game.IsServer() || !sender || !GetIdentity())
     return;
    if (sender.GetId() != GetIdentity().GetId())
     return;
+   if (rpc_type == GRZRotationRPC.SKIP)
+   {
+    GRZRotationServer.RequestSkip(this);
+    return;
+   }
    int now = g_Game.GetTime();
    if (rpc_type == GRZRotationRPC.REQUEST)
    {

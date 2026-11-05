@@ -183,7 +183,8 @@ modded class IngameHud
         GRZHide(m_VehicleHudPanels);
         GRZHide(m_WalkieTalkie);
 
-        bool show = !GetHudVisibility().IsContextFlagActive(IngameHudVisibility.HUD_HIDE_FLAGS);
+        PlayerBase grzPlayer = PlayerBase.Cast(g_Game.GetPlayer());
+        bool show = grzPlayer && grzPlayer.IsAlive() && !GetHudVisibility().IsContextFlagActive(IngameHudVisibility.HUD_HIDE_FLAGS);
         m_GRZStatusPanel.Show(show);
         float x, y, width, height;
         m_HudPanelWidget.GetScreenPos(x, y);

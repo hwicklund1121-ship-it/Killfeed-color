@@ -19,7 +19,6 @@ PanelWidgetClass NoticeBackground
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 0 0 0 0.85
 }
 TextWidgetClass Message

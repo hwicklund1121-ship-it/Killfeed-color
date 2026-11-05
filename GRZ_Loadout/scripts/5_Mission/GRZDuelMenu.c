@@ -61,6 +61,16 @@ class GRZDuelPaint
 };
 class GRZDuelMenu : UIScriptedMenu
 {
+ override void OnShow()
+ {
+  super.OnShow();
+  g_Game.GetMission().AddActiveInputExcludes({"menu"});
+ }
+ override bool UseMouse() { return true; }
+ override bool UseKeyboard() { return true; }
+ override bool UseGamepad() { return true; }
+
+
  protected TextListboxWidget m_Players;
  protected TextListboxWidget m_Maps;
  protected ref array<string> m_PlayerIds = new array<string>;
@@ -224,6 +234,7 @@ class GRZDuelMenu : UIScriptedMenu
  }
  override void OnHide()
  {
+  g_Game.GetMission().RemoveActiveInputExcludes({"menu"}, true);
   GRZDuelClientBus.Changed.Remove(Receive);
   super.OnHide();
  }
@@ -290,6 +301,8 @@ modded class MissionGameplay
   if (m_GRZDuelHud && g_Game.GetTime() >= m_GRZDuelNoticeUntil) m_GRZDuelHud.Show(false);
   GRZDuelSnapshot data = GRZDuelClientBus.Data;
   if (!data || !g_Game.IsAppActive()) return;
+  PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
+  bool alive = player && player.IsAlive();
   bool blockFire = data.InMatch && data.Phase != 2;
   if (blockFire != m_GRZDuelFireBlocked)
   {
@@ -308,12 +321,11 @@ modded class MissionGameplay
    Widget noticeBox = m_GRZDuelHud.FindAnyWidget("NoticeBox");
    Widget scoreBox = m_GRZDuelHud.FindAnyWidget("ScoreBox");
    if (noticeBox) noticeBox.Show(g_Game.GetTime() < m_GRZDuelNoticeUntil);
-   if (scoreBox) scoreBox.Show(data.InMatch);
+   if (scoreBox) scoreBox.Show(data.InMatch && alive);
    TextWidget score = TextWidget.Cast(m_GRZDuelHud.FindAnyWidget("DuelScore"));
    if (score) score.SetText(data.MapName + " | YOU " + data.ScoreSelf.ToString() + " - " + data.ScoreOpponent.ToString() + " " + data.Opponent);
-   m_GRZDuelHud.Show(data.InMatch || g_Game.GetTime() < m_GRZDuelNoticeUntil);
+   m_GRZDuelHud.Show(alive && (data.InMatch || g_Game.GetTime() < m_GRZDuelNoticeUntil));
   }
-  PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
   m_GRZDuelHeartbeat += timeslice;
   if (m_GRZDuelHeartbeat >= 5 && player && player.IsAlive() && (data.InMatch || data.AutoRespawn || data.PendingId != ""))
   {
@@ -323,7 +335,7 @@ modded class MissionGameplay
   if (data.AutoRespawn && (!player || !player.IsAlive()) && !IsPlayerRespawning())
   {
    if (m_GRZDuelDeadSince < 0) m_GRZDuelDeadSince = g_Game.GetTime();
-   if (g_Game.GetTime() - m_GRZDuelDeadSince >= 1000)
+   if (g_Game.GetTime() - m_GRZDuelDeadSince >= 3000)
    {
     UIScriptedMenu current = g_Game.GetUIManager().GetMenu();
     if (current && (current.GetID() == GRZDuelRPC.MENU || current.GetID() == GRZLeaderboardRPC.MENU || current.GetID() == GRZLoadoutRPC.MENU)) current.Close();

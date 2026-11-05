@@ -37,7 +37,7 @@ modded class ItemActionsWidget
         GRZHideStockBranch(details);
         if (m_ItemLeft)
             m_ItemLeft.Show(false);
-        bool show = m_EntityInHands != null && m_Player && !m_Player.GetItemAccessor().IsItemInHandsHidden();
+        bool show = m_EntityInHands != null && m_Player && m_Player.IsAlive() && !m_Player.GetItemAccessor().IsItemInHandsHidden();
         m_GRZWeaponPanel.Show(show);
         if (!show)
             return;

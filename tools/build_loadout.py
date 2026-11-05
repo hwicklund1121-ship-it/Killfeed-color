@@ -62,7 +62,7 @@ def layout():
     children += text('WrapName','No wrap',.24,.808,.42,.05,16,center=True)
     children += button('WrapNext','>',.67,.807,.04,.05)
     wardrobe = widget('PlayerPreviewWidgetClass','CharacterPreview',.21,.02,.39,.79,'ignorepointer 1\n color 1 1 1 1')
-    for index,(name,label) in enumerate([('SlotHat','HAT'),('SlotMask','MASK'),('SlotShirt','SHIRT'),('SlotBelt','BELT'),('SlotPants','PANTS'),('SlotGlove','GLOVE'),('SlotVest','VEST'),('SlotShoes','SHOES')]):
+    for index,(name,label) in enumerate([('SlotHat','HAT'),('SlotMask','MASK'),('SlotShirt','SHIRT'),('SlotBelt','BELT'),('SlotPants','PANTS'),('SlotGlove','GLOVE'),('SlotVest','VEST'),('SlotShoes','SHOES'),('SlotBag','BAG')]):
         wardrobe += button(name,label,.027,.015+index*.105,.16,.087)
     wardrobe += button('SelectCharacter','SELECT CHARACTER',.62,.015,.35,.085)
     wardrobe += text('ClothingListTitle','Scroll to preview / double-click to keep',.62,.115,.35,.055,16)
@@ -89,7 +89,7 @@ with ZipFile(args.logo_zip) as archive:
 (source / 'data/logo.paa').write_bytes(encode_paa(logo.resize((2048,512),Image.Resampling.LANCZOS), alpha_flags=True))
 pbo = build(source)
 (root / 'downloads/GRZ_Loadout.pbo').write_bytes(pbo)
-notes = '''GRZ Loadout 0.3.0 — Made By Blake
+notes = '''GRZ Loadout 0.3.2 — Made By Blake
 
 INSTALL
 Copy GRZ_Loadout.pbo into @GRZ_Local/Addons on BOTH game and server.
@@ -178,6 +178,6 @@ Unsigned development build; sign with your own server key if required.
 with ZipFile(root / 'downloads/GRZ_Loadout.zip','w',ZIP_DEFLATED) as archive:
     archive.writestr('GRZ_Loadout.pbo',pbo)
     archive.writestr('INSTALL.txt',notes)
-manifest=dict(version='0.3.0',ammo_stacks=10,open_key='comma',replace='all carried guns and ammo',logo_original_size=logo.size,logo_source_sha256=hashlib.sha256(original).hexdigest(),pbo_sha256=hashlib.sha256(pbo).hexdigest())
+manifest=dict(version='0.3.2',ammo_stacks=10,open_key='comma',replace='all carried guns and ammo',logo_original_size=logo.size,logo_source_sha256=hashlib.sha256(original).hexdigest(),pbo_sha256=hashlib.sha256(pbo).hexdigest())
 (root / 'downloads/GRZ-LOADOUT-MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n')
 print('Built GRZ_Loadout.pbo:',len(pbo),'bytes')

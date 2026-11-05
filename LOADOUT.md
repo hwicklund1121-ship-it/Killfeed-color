@@ -1,4 +1,4 @@
-GRZ Loadout 0.3.0 — Made By Blake
+GRZ Loadout 0.3.2 — Made By Blake
 
 INSTALL
 Copy GRZ_Loadout.pbo into @GRZ_Local/Addons on BOTH game and server.

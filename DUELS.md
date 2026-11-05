@@ -1,4 +1,4 @@
-GRZ Loadout 0.3.0 — Duels and Server Leaderboard
+GRZ Loadout 0.3.1 — Duels and Server Leaderboard
 
 INSTALL
 Stop both DayZ and the server. Replace BOTH GRZ_Loadout.pbo and
@@ -35,7 +35,7 @@ First to 1, 2 or 3 round wins decides BO1, BO3 or BO5. Both players are put on
 their respective side before each round. A visible 5,4,3,2,1 countdown precedes
 GO; damage is server-blocked and local firing input disabled until GO.
 Health, shock, blood and damage zones are reset between rounds.
-Player deaths use the native respawn flow automatically, then re-equip the
+Player deaths allow the 3-second death-camera/fade transition, then use the native respawn flow automatically, then re-equip the
 current duel kit and return to the same side. The match has a 90-second
 respawn/gear-preparation grace period. Normal arena rotation/boundary checks
 skip duel participants, and its voting popup is suppressed during a duel.
@@ -115,3 +115,5 @@ has been performed. Test two accounts, both respawns, BO1/3/5, accept/decline/
 expiry, disconnect, simultaneous kill, inventory space, all weapon attachments,
 map rotation during a duel, return to active arena and rating/stat persistence.
 Actual duel rounds additionally require your configured, built arenas.
+
+Loadout 0.3.2 adds BAG selection and native mouse/keyboard/gamepad menu focus to keep the gameplay camera still. Rotation 0.1.3 adds server-authorized !skip: the next arena starts after a 30-second top-screen warning. Configure AdminSteamIds in profiles/GRZ_MapRotation/config.json; the shipped allowlist is empty. Duel participants remain in their duel.

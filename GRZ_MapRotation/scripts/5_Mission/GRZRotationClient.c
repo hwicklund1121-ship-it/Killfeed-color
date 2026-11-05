@@ -48,6 +48,14 @@ class GRZRotationClient
   Updated.Invoke();
  }
 
+ static void RequestSkip()
+ {
+  PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
+  if (!player) return;
+  ScriptRPC rpc = new ScriptRPC;
+  rpc.Send(player, GRZRotationRPC.SKIP, true, null);
+ }
+
  static void RequestMenu()
  {
   PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
@@ -302,6 +310,12 @@ modded class ChatInputMenu
    {
     string command = edit.GetText().Trim();
     command.ToLower();
+    if (command == "!skip")
+    {
+     Close();
+     GRZRotationClient.RequestSkip();
+     return true;
+    }
     if (command == "!vote")
     {
      Close();
