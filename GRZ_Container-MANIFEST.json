@@ -2,10 +2,37 @@
   "class": "GRZ_Container",
   "display_name": "GRZ_Container",
   "description": "Made By Blake",
-  "model_input_sha256": "f3eebb74caa737ebf001ec680844fe9420551e2b950995597e4f729c8bd1b405",
-  "pbo_sha256": "379fda5c9c6d239ae1bd2e2169e0d56839dee0a717f11f57db01bf865781c445",
-  "bytes": 11411221,
-  "model_resource_remaps": {
+  "visual_model": {
+    "source": "1A.fbx",
+    "visual_meshes": 709,
+    "visual_vertices": 6996,
+    "triangles": 5878,
+    "material_triangles": {
+      "exterior": 4821,
+      "metal": 1020,
+      "interior": 37
+    },
+    "uv_roundtrip_max_error": 0.0,
+    "bounds_m": [
+      [
+        -1.238027811050415,
+        1.2338507175445557
+      ],
+      [
+        -3.239914894104004,
+        3.084134578704834
+      ],
+      [
+        -0.03371618688106537,
+        2.638808488845825
+      ]
+    ],
+    "physics_lods_from_1mo": 6,
+    "format": "Editable MLOD P3D, not binarized ODOL. DayZ runtime validation required."
+  },
+  "pbo_sha256": "d45a03d88aa2b44af2244072a78216df59f103d35d1662d142e00c469191b5cc",
+  "source_fbx_sha256": "5c85d95ebedfd5526c55f8badf9cc68d31eb32560be19f7c37ff30680cc760bc",
+  "legacy_model_resource_remaps": {
     "dz\\structures\\data\\metal\\basecooler_old_paint_co.paa": "GRZ_Container\\data\\interior_co__________________.paa",
     "dz\\structures\\industrial\\containers\\data\\containers_colors_04_co.paa": "GRZ_Container\\data\\exterior_co__________________________________.paa",
     "dz\\structures\\industrial\\containers\\data\\containers_interior.rvmat": "GRZ_Container\\data\\interior_________________________________.rvmat",
@@ -13,6 +40,5 @@
     "dz\\structures\\industrial\\containers\\data\\containers_new_sides.rvmat": "GRZ_Container\\data\\exterior__________________________________.rvmat",
     "dz\\structures\\industrial\\containers\\data\\containers_new_sides_nodt.rvmat": "GRZ_Container\\data\\exterior_______________________________________.rvmat"
   },
-  "model_geometry_and_size_preserved": true,
-  "object_type": "Static HouseNoDestruct; no inventory cargo or new door interactions added."
+  "runtime_tested": false
 }
