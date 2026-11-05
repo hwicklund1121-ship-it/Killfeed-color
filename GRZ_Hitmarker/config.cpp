@@ -15,7 +15,7 @@ class CfgMods
         dir = "GRZ_Hitmarker";
         name = "GRZ Hitmarker";
         author = "GRZ";
-        version = "0.1.8";
+        version = "0.1.9";
         type = "mod";
         dependencies[] = {"Game", "World", "Mission"};
         class defs
@@ -28,44 +28,48 @@ class CfgMods
 };
 class CfgSoundShaders
 {
-    class GRZ_HitmarkerBody018_Shader
+    class GRZ_HitmarkerBody019_Shader
     {
-        samples[] = {{"GRZ_Hitmarker/sounds/body_hit018", 1}};
+        samples[] = {{"GRZ_Hitmarker\sounds\body_hit018", 1}};
         volume = 1;
-        range = 1000000;
-        rangeCurve[] = {{0, 1}, {1000000, 1}};
+        range = 100;
+        rangeCurve[] = {{0, 1}, {100, 1}};
     };
-    class GRZ_HitmarkerHead018_Shader
+    class GRZ_HitmarkerHead019_Shader
     {
-        samples[] = {{"GRZ_Hitmarker/sounds/headshot018", 1}};
+        samples[] = {{"GRZ_Hitmarker\sounds\headshot018", 1}};
         volume = 1;
-        range = 1000000;
-        rangeCurve[] = {{0, 1}, {1000000, 1}};
+        range = 100;
+        rangeCurve[] = {{0, 1}, {100, 1}};
     };
 };
 class CfgSoundSets
 {
-    class GRZ_HitmarkerBody018_SoundSet
+    class GRZ_HitmarkerBody019_SoundSet
     {
-        soundShaders[] = {"GRZ_HitmarkerBody018_Shader"};
+        soundShaders[] = {"GRZ_HitmarkerBody019_Shader"};
         volumeFactor = 1;
         frequencyFactor = 1;
         volumeRandomizer = 0;
         soundShadersLimit = 1;
         frequencyRandomizer = 0;
-        spatial = 0;
+        sound3DProcessingType = "character3DProcessingType";
+        volumeCurve = "characterAttenuationCurve";
+        spatial = 1;
         doppler = 0;
         loop = 0;
     };
-    class GRZ_HitmarkerHead018_SoundSet
+    class GRZ_HitmarkerHead019_SoundSet
     {
-        soundShaders[] = {"GRZ_HitmarkerHead018_Shader"};
+        soundShaders[] = {"GRZ_HitmarkerHead019_Shader"};
         volumeFactor = 1;
         frequencyFactor = 1;
         volumeRandomizer = 0;
         soundShadersLimit = 1;
         frequencyRandomizer = 0;
-        spatial = 0;
+        sound3DProcessingType = "character3DProcessingType";
+        volumeCurve = "characterAttenuationCurve";
+        spatial = 1;
         doppler = 0;
         loop = 0;
     };

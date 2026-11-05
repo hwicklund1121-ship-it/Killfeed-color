@@ -21,6 +21,25 @@ def main():
         z.write(pbo,'@GRZ_Hitmarker/Addons/GRZ_Hitmarker.pbo')
         z.write(root/'packaging/GRZ_Hitmarker/mod.cpp','@GRZ_Hitmarker/mod.cpp')
         z.write(root/'HITMARKER.md','@GRZ_Hitmarker/INSTALL.md')
+    with ZipFile(output/'GRZ-Hitmarker-Audio-Fix.zip','w',ZIP_DEFLATED) as z:
+        z.write(pbo,'GRZ_Hitmarker.pbo')
+        z.writestr('INSTALL.txt', '''GRZ Hitmarker Audio 0.1.9
+
+Stop DayZ and the server. Replace GRZ_Hitmarker.pbo in @GRZ_Local/Addons
+on BOTH the game and server. Restart both. Keep only one active copy.
+
+This version explicitly configures the native 3D processor and attenuation
+curve, matching EffectSound.Play3D. The local emitter follows the camera.
+It uses native backslash sample paths and the supplied Rust headshot clip.
+Sound and volume remain under Options > Game > GRZ HITMARKER.
+
+The previous 0.1.8 client log confirmed hits at Sound ON / volume 100 but
+neither sample started. Version 0.1.9 logs the resolved processor/curve,
+sample availability and decoded duration on a timeout.
+
+API, audio-format and package checks passed. No in-game audibility test
+has been performed. Unsigned development PBO.
+''')
     print(f'Built {pbo.name}: {pbo.stat().st_size} bytes.')
 
 

@@ -94,12 +94,14 @@ def main():
     for name in ['body_hit','headshot']:
         assert files[f'sounds/{name}.ogg'].startswith(b'OggS')
     cfg=files['config.cpp'].decode()
-    assert 'spatial = 0;' in cfg
+    assert cfg.count('spatial = 1;') == 2
+    assert cfg.count('sound3DProcessingType = "character3DProcessingType";') == 2
+    assert cfg.count('volumeCurve = "characterAttenuationCurve";') == 2
     assert cfg.count('frequencyFactor = 1;') == 2
-    assert cfg.count('range = 1000000;') == 2
-    assert 'GRZ_HitmarkerBody018_SoundSet' in cfg and 'GRZ_HitmarkerHead018_SoundSet' in cfg
+    assert cfg.count('range = 100;') == 2
+    assert 'GRZ_HitmarkerBody019_SoundSet' in cfg and 'GRZ_HitmarkerHead019_SoundSet' in cfg
     for name in ['body_hit','headshot']:
-        assert f'GRZ_Hitmarker/sounds/{name}018' in cfg
+        assert f'GRZ_Hitmarker\\sounds\\{name}018' in cfg
         assert files[f'sounds/{name}018.ogg'].startswith(b'OggS')
         assert f'sounds/{name}018.wav' not in files
         assert f'GRZ_Hitmarker/sounds/{name}.ogg' not in cfg
