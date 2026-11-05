@@ -1,0 +1,13 @@
+{
+  "weapon": "UAV_CS5_BLACK",
+  "category": ".50 cal",
+  "ammo_pile": "UAV_Ammo_50CAL",
+  "bullet": "UAV_Bullet_50CAL",
+  "magazine": "CS5_Magazine_10RND",
+  "magazine_capacity": 10,
+  "changed_files": [
+    "CS5/CS5/config.cpp"
+  ],
+  "unchanged_files": 26,
+  "zip_sha256": "1b352707a93cc82ca155c682fa62454102f9b86d3775633753da39ef84214d20"
+}
