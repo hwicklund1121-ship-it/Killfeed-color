@@ -14,6 +14,10 @@ class GRZLoadoutMenu : UIScriptedMenu
  protected TextListboxWidget m_ClothingList;
  protected bool m_ChoosingCharacter;
  protected string m_CharacterType;
+ protected string m_TryOnType;
+ protected string m_TryOnCharacter;
+ protected int m_TryOnSlot = -1;
+ protected bool m_PopulatingClothing;
  protected ref array<int> m_ClothingFiltered = new array<int>;
  protected ref array<string> m_ClothingChoices = new array<string>;
  protected bool m_Saving;
@@ -216,6 +220,7 @@ class GRZLoadoutMenu : UIScriptedMenu
 
  protected void SelectPage(bool clothing)
  {
+  ClearTryOn();
   m_ClothingMode = clothing;
   string gunWidgets[12] = {"Calibre20", "Calibre50", "Calibre408", "GunPreview", "GunPrevious", "GunNext", "GunName", "GunCount", "WrapHeading", "WrapPrevious", "WrapNext", "WrapName"};
   for (int i = 0; i < 12; i++)
@@ -249,6 +254,8 @@ class GRZLoadoutMenu : UIScriptedMenu
 
  protected void FilterClothing()
  {
+  ClearTryOn();
+  m_PopulatingClothing = true;
   m_ClothingFiltered.Clear();
   m_ClothingList.ClearItems();
   GRZLoadoutCatalogue catalogue = GRZLoadoutClientData.Catalogue;
@@ -278,15 +285,16 @@ class GRZLoadoutMenu : UIScriptedMenu
     }
    }
   }
+  m_PopulatingClothing = false;
   RefreshClothing();
  }
 
  protected void RefreshClothing()
  {
   layoutRoot.FindAnyWidget("Save").Enable(!m_Saving && GRZLoadoutClientData.Catalogue);
-  string title = "Double-click clothing to equip";
+  string title = "Click to preview / double-click to keep";
   if (m_ChoosingCharacter)
-   title = "Double-click a character";
+   title = "Click to preview / double-click to keep";
   Text("ClothingListTitle", title);
   layoutRoot.FindAnyWidget("RemoveClothing").Enable(!m_ChoosingCharacter);
   string names[8] = {"SlotHat", "SlotMask", "SlotShirt", "SlotBelt", "SlotPants", "SlotGlove", "SlotVest", "SlotShoes"};
@@ -305,10 +313,13 @@ class GRZLoadoutMenu : UIScriptedMenu
  protected void PreviewClothing()
  {
   PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
-  if (!player || m_CharacterType == "")
+  string previewCharacter = m_CharacterType;
+  if (m_TryOnCharacter != "")
+   previewCharacter = m_TryOnCharacter;
+  if (!player || previewCharacter == "")
    return;
   int flags = ECE_LOCAL | ECE_NOLIFETIME | ECE_KEEPHEIGHT | ECE_NOSURFACEALIGN | ECE_NOPERSISTENCY_WORLD | ECE_NOPERSISTENCY_CHAR;
-  m_PreviewCharacter = PlayerBase.Cast(g_Game.CreateObjectEx(m_CharacterType, "0 -1000 0", flags));
+  m_PreviewCharacter = PlayerBase.Cast(g_Game.CreateObjectEx(previewCharacter, "0 -1000 0", flags));
   if (!m_PreviewCharacter)
   {
    Text("Status", "Character preview could not be created.");
@@ -318,6 +329,8 @@ class GRZLoadoutMenu : UIScriptedMenu
   for (int i = 0; i < m_ClothingChoices.Count(); i++)
   {
    string type = m_ClothingChoices[i];
+   if (i == m_TryOnSlot)
+    type = m_TryOnType;
    if (type == "__REMOVE__")
     continue;
    if (type == "")
@@ -361,6 +374,7 @@ class GRZLoadoutMenu : UIScriptedMenu
   }
   if (name == "RemoveClothing")
   {
+   ClearTryOn();
    m_ClothingChoices[m_ClothingSlot] = "__REMOVE__";
    Text("Status", "");
    RefreshClothing();
@@ -368,6 +382,8 @@ class GRZLoadoutMenu : UIScriptedMenu
   }
   if (name == "Save")
   {
+   ClearTryOn();
+   RefreshClothing();
    PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
    if (player && player.IsAlive())
    {
@@ -385,6 +401,37 @@ class GRZLoadoutMenu : UIScriptedMenu
   return false;
  }
 
+ protected void ClearTryOn()
+ {
+  m_TryOnType = "";
+  m_TryOnCharacter = "";
+  m_TryOnSlot = -1;
+ }
+
+ override bool OnItemSelected(Widget w, int x, int y, int row, int column, int oldRow, int oldColumn)
+ {
+  if (m_ClothingMode && !m_Saving && !m_PopulatingClothing && w == m_ClothingList)
+  {
+   GRZLoadoutCatalogue catalogue = GRZLoadoutClientData.Catalogue;
+   if (!catalogue || row < 0)
+    return true;
+   ClearTryOn();
+   if (m_ChoosingCharacter)
+   {
+    if (row < catalogue.Characters.Count())
+     m_TryOnCharacter = catalogue.Characters[row];
+   }
+   else if (row < m_ClothingFiltered.Count())
+   {
+    m_TryOnSlot = m_ClothingSlot;
+    m_TryOnType = catalogue.Clothing[m_ClothingFiltered[row]].Type;
+   }
+   RefreshClothing();
+   return true;
+  }
+  return super.OnItemSelected(w, x, y, row, column, oldRow, oldColumn);
+ }
+
  override bool OnDoubleClick(Widget w, int x, int y, int button)
  {
   if (m_ClothingMode && !m_Saving && w == m_ClothingList && button == MouseState.LEFT)
@@ -400,6 +447,7 @@ class GRZLoadoutMenu : UIScriptedMenu
    }
    else if (row < m_ClothingFiltered.Count())
     m_ClothingChoices[m_ClothingSlot] = catalogue.Clothing[m_ClothingFiltered[row]].Type;
+   ClearTryOn();
    Text("Status", "");
    RefreshClothing();
    return true;

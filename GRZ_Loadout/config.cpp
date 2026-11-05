@@ -15,7 +15,7 @@ class CfgMods
   dir = "GRZ_Loadout";
   name = "GRZ Loadout";
   author = "Blake";
-  version = "0.2.0";
+  version = "0.2.1";
   type = "mod";
   inputs = "GRZ_Loadout/inputs.xml";
   dependencies[] = {"Game", "World", "Mission"};
