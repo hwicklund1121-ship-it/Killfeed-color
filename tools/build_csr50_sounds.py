@@ -5,6 +5,7 @@ import json
 import re
 import subprocess
 import tempfile
+import array
 from pathlib import Path, PurePosixPath
 from zipfile import ZipFile, ZIP_DEFLATED
 from repair_hexgrid import section
@@ -33,6 +34,19 @@ with tempfile.TemporaryDirectory(prefix='grz-csr-audio-') as directory:
     for layer,filter_chain in filters.items():
         output=Path(directory)/f'CSR50_{layer}.ogg'
         subprocess.run(['ffmpeg','-v','error','-y','-i',str(recording),'-ac','1','-ar','44100','-af',filter_chain,'-c:a','libvorbis','-q:a','7',str(output)],check=True)
+        # Vorbis reconstruction can overshoot even a limited input transient.
+        # Measure decoded float peaks and re-encode with additional headroom.
+        headroom_gain = 1.0
+        for attempt in range(4):
+            decoded = subprocess.check_output(['ffmpeg','-v','error','-i',str(output),'-f','f32le','-ac','1','-'])
+            samples = array.array('f')
+            samples.frombytes(decoded)
+            peak = max(abs(value) for value in samples)
+            if peak <= 0.95:
+                break
+            headroom_gain *= 0.90 / peak
+            subprocess.run(['ffmpeg','-v','error','-y','-i',str(recording),'-ac','1','-ar','44100','-af',filter_chain+f',volume={headroom_gain:.9f}','-c:a','libvorbis','-q:a','7',str(output)],check=True)
+        assert peak <= 0.95, (layer, peak)
         info=json.loads(subprocess.check_output(['ffprobe','-v','error','-show_streams','-show_format','-of','json',str(output)]))
         stream=info['streams'][0]
         assert stream['channels']==1 and stream['sample_rate']=='44100' and stream['codec_name']=='vorbis'
@@ -45,7 +59,7 @@ with tempfile.TemporaryDirectory(prefix='grz-csr-audio-') as directory:
         updated,count=re.subn(r'samples\[\]\s*=\s*\{.*?\};',lambda _: 'samples[] = {{"'+sample_path+'",1}};',old_section,flags=re.S)
         assert count==1
         config=config[:start]+updated+config[end:]
-        report[layer]=dict(filter=filter_chain,channels=1,sample_rate=44100,duration_seconds=float(info['format']['duration']),sha256=hashlib.sha256(files[name]).hexdigest())
+        report[layer]=dict(filter=filter_chain,headroom_gain=headroom_gain,decoded_peak=peak,channels=1,sample_rate=44100,duration_seconds=float(info['format']['duration']),sha256=hashlib.sha256(files[name]).hexdigest())
 files[config_name]=config.encode()
 old_audio='CSR50/CSR50/data/CSR50_Shot.ogg'
 files.pop(old_audio)

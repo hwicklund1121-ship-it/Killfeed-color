@@ -3,24 +3,30 @@
   "layers": {
     "Close": {
       "filter": "volume=0.82,alimiter=limit=0.95:level=false:latency=true",
+      "headroom_gain": 0.7234661070652616,
+      "decoded_peak": 0.9119824171066284,
       "channels": 1,
       "sample_rate": 44100,
       "duration_seconds": 3.670227,
-      "sha256": "024efe935f2283242e5cb214d77b0e733fd5155852fa27ec1dba46be43aaed84"
+      "sha256": "a46954b6b8a9998d2e9a5ae34d7008f388a64ea2c7d6551fe2cb5028c214de45"
     },
     "Mid": {
       "filter": "highpass=f=55,lowpass=f=5200,aecho=0.88:1:23|51|89:0.12|0.08|0.04,alimiter=limit=0.95:level=false:latency=true",
+      "headroom_gain": 0.6434443819160336,
+      "decoded_peak": 0.907477855682373,
       "channels": 1,
       "sample_rate": 44100,
       "duration_seconds": 3.759206,
-      "sha256": "95ca753515733ee428c22dee9f65b53e4e18688ad23e302ceb6052366abe66f7"
+      "sha256": "ac10d5faa7e317e451075f192ccbf185b65b2031ed327a79755fe30607fe2e62"
     },
     "Far": {
       "filter": "highpass=f=80,lowpass=f=2300,aecho=0.82:1:37|79|127|181:0.20|0.14|0.09|0.05,lowpass=f=2600,alimiter=limit=0.95:level=false:latency=true",
+      "headroom_gain": 0.6840930357812572,
+      "decoded_peak": 0.9462690949440002,
       "channels": 1,
       "sample_rate": 44100,
       "duration_seconds": 3.851224,
-      "sha256": "5bc10688b05aa26a0054acc0ecea81d62c598bd086d76a8de7a51c3410da2ee5"
+      "sha256": "74222094bc8236ebb686a81da05316f1737b33cb57e434ece84dab55344afc4f"
     }
   },
   "config_changes": "three samples arrays only",
