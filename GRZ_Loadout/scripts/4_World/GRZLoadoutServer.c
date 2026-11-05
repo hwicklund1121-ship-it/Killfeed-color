@@ -41,9 +41,33 @@ class GRZLoadoutServer
   return category;
  }
 
+ static bool ExcludedGun(string type)
+ {
+  string display;
+  string model;
+  g_Game.ConfigGetText("CfgWeapons " + type + " displayName", display);
+  g_Game.ConfigGetText("CfgWeapons " + type + " model", model);
+  string identity = type + " " + display + " " + model;
+  identity.ToLower();
+  identity.Replace("_", "");
+  identity.Replace("-", "");
+  identity.Replace(" ", "");
+  if (identity.Contains("as50"))
+   return true;
+  if (identity.Contains("barrett") || identity.Contains("barret"))
+   return true;
+  if (identity.Contains("m82") || identity.Contains("m107"))
+   return true;
+  if (identity.Contains("m95") || identity.Contains("m99"))
+   return true;
+  return false;
+ }
+
  static bool ValidGun(GRZLoadoutGun entry)
  {
   if (!entry || entry.Category < 0 || entry.Category > 2)
+   return false;
+  if (ExcludedGun(entry.Type))
    return false;
   if (!g_Game.IsKindOf(entry.Type, "Rifle_Base") && !g_Game.IsKindOf(entry.Type, "Pistol_Base"))
    return false;

@@ -1,4 +1,4 @@
-GRZ Loadout 0.1.0 — Made By Blake
+GRZ Loadout 0.1.1 — Made By Blake
 
 INSTALL
 Copy GRZ_Loadout.pbo into @GRZ_Local/Addons on BOTH game and server.
@@ -6,7 +6,9 @@ Restart both. Enable @GRZ_Local in the client launcher. Press comma (,).
 The key is rebindable in DayZ Controls > GRZ Loadout.
 
 FEATURES
-Large dark menu, supplied GunRunnerZ logo at top left, white accents.
+Large dark menu, transparent GunRunnerZ logo at top left, white accents.
+AS50 and Barrett families excluded by class, display name and model path.
+Permanent ammo-count and inventory-replacement captions removed; operational status/errors remain.
 Loadout tab: 20mm / .50 cal / .408, previous/next arrows, local 3D preview.
 Gun-wrap arrows include None and installed GhillieAtt_ColorBase subclasses.
 Save replaces EVERY carried gun and ALL magazines/ammo, including cargo.

@@ -607,22 +607,6 @@ TextWidgetClass WrapNextLabel
 }
  }
 }
-TextWidgetClass AmmoInfo
-{
- position 0.027 0.878
- size 0.6 0.035
- hexactpos 0
- vexactpos 0
- hexactsize 0
- vexactsize 0
- ignorepointer 1
- color 0.75 0.75 0.78 1
- font "gui/fonts/sdf_MetronLight16"
- "exact text" 1
- "text valign" center
- "text halign" left
- text "10 full ammo stacks + loaded gun"
-}
 ButtonWidgetClass Save
 {
  position 0.75 0.812
@@ -677,7 +661,7 @@ TextWidgetClass Status
  "exact text" 1
  "text valign" center
  "text halign" left
- text "Connecting to server..."
+ text ""
 }
  }
 }

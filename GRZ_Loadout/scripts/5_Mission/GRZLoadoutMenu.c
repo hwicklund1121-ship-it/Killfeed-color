@@ -16,6 +16,7 @@ class GRZLoadoutMenu : UIScriptedMenu
   ImageWidget logo = ImageWidget.Cast(layoutRoot.FindAnyWidget("Logo"));
   logo.LoadImageFile(0, "GRZ_Loadout/data/logo.paa");
   logo.SetImage(0);
+  logo.SetFlags(WidgetFlags.SOURCEALPHA | WidgetFlags.BLEND);
   layoutRoot.FindAnyWidget("ClothingTab").Enable(false);
   GRZLoadoutClientData.Changed.Insert(ReceiveCatalogue);
   GRZLoadoutClientData.Result.Insert(ReceiveResult);
@@ -60,7 +61,7 @@ class GRZLoadoutMenu : UIScriptedMenu
  {
   m_GunIndex = 0;
   FilterGuns();
-  Text("Status", "Choose your gun and wrap. Save replaces all guns and ammo.");
+  Text("Status", "");
  }
 
  void ReceiveResult(string message)
@@ -106,7 +107,7 @@ class GRZLoadoutMenu : UIScriptedMenu
  protected void RefreshChoices()
  {
   if (!m_Saving)
-   Text("Status", "Save replaces every gun and all ammo. Clothing is kept.");
+   Text("Status", "");
   GRZLoadoutGun gun = CurrentGun();
   string name = "No guns installed in this section";
   if (gun)
@@ -125,9 +126,6 @@ class GRZLoadoutMenu : UIScriptedMenu
     wrapName = wrap;
   }
   Text("WrapName", wrapName);
-  Text("AmmoInfo", "10 full ammo stacks + loaded gun");
-  if (GRZLoadoutClientData.Catalogue)
-   Text("AmmoInfo", string.Format("%1 full ammo stacks + loaded gun", GRZLoadoutClientData.Catalogue.AmmoStacks));
   string tabs[3] = {"Calibre20", "Calibre50", "Calibre408"};
   for (int i = 0; i < 3; i++)
   {

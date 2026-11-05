@@ -9,13 +9,16 @@ from PIL import Image, ImageOps
 
 ROOT = Path(__file__).resolve().parents[1]
 
-def encode_paa(image, pixel_format='DXT5'):
+def encode_paa(image, pixel_format='DXT5', alpha_flags=False):
     assert pixel_format in ('DXT1', 'DXT5')
     output = io.BytesIO()
     output.write(struct.pack('<H', 0xFF01 if pixel_format == 'DXT1' else 0xFF05))
     output.write(b'GGATSFFO' + struct.pack('<I', 64))
     offset_position = output.tell()
-    output.write(bytes(64) + b'\0\0')
+    output.write(bytes(64))
+    if alpha_flags:
+        output.write(b'GGATGALF' + struct.pack('<II', 4, 2))
+    output.write(b'\0\0')
     offsets = []
     while image.width >= 4 and image.height >= 4:
         offsets.append(output.tell())

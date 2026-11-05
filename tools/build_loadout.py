@@ -58,9 +58,8 @@ def layout():
     children += button('WrapPrevious','<',.19,.807,.04,.05)
     children += text('WrapName','No wrap',.24,.808,.42,.05,16,center=True)
     children += button('WrapNext','>',.67,.807,.04,.05)
-    children += text('AmmoInfo','10 full ammo stacks + loaded gun',.027,.878,.6,.035,16,'0.75 0.75 0.78 1')
     children += button('Save','SAVE LOADOUT',.75,.812,.223,.10,True)
-    children += text('Status','Connecting to server...',.027,.935,.946,.04,16,'0.75 0.75 0.78 1')
+    children += text('Status','',.027,.935,.946,.04,16,'0.75 0.75 0.78 1')
     content = widget('FrameWidgetClass','MenuPanel',.07,.065,.86,.87,'color 0 0 0 0',children)
     return widget('FrameWidgetClass','GRZLoadoutRoot',0,0,1,1,'color 0 0 0 0',content)
 
@@ -74,10 +73,10 @@ with ZipFile(args.logo_zip) as archive:
         raise SystemExit('Expected one logo PNG')
     original = archive.read(names[0])
     logo = Image.open(io.BytesIO(original)).convert('RGBA')
-(source / 'data/logo.paa').write_bytes(encode_paa(logo.resize((2048,512),Image.Resampling.LANCZOS)))
+(source / 'data/logo.paa').write_bytes(encode_paa(logo.resize((2048,512),Image.Resampling.LANCZOS), alpha_flags=True))
 pbo = build(source)
 (root / 'downloads/GRZ_Loadout.pbo').write_bytes(pbo)
-notes = '''GRZ Loadout 0.1.0 — Made By Blake
+notes = '''GRZ Loadout 0.1.1 — Made By Blake
 
 INSTALL
 Copy GRZ_Loadout.pbo into @GRZ_Local/Addons on BOTH game and server.
@@ -85,7 +84,9 @@ Restart both. Enable @GRZ_Local in the client launcher. Press comma (,).
 The key is rebindable in DayZ Controls > GRZ Loadout.
 
 FEATURES
-Large dark menu, supplied GunRunnerZ logo at top left, white accents.
+Large dark menu, transparent GunRunnerZ logo at top left, white accents.
+AS50 and Barrett families excluded by class, display name and model path.
+Permanent ammo-count and inventory-replacement captions removed; operational status/errors remain.
 Loadout tab: 20mm / .50 cal / .408, previous/next arrows, local 3D preview.
 Gun-wrap arrows include None and installed GhillieAtt_ColorBase subclasses.
 Save replaces EVERY carried gun and ALL magazines/ammo, including cargo.
@@ -125,6 +126,6 @@ Unsigned development build; sign with your own server key if required.
 with ZipFile(root / 'downloads/GRZ_Loadout.zip','w',ZIP_DEFLATED) as archive:
     archive.writestr('GRZ_Loadout.pbo',pbo)
     archive.writestr('INSTALL.txt',notes)
-manifest=dict(version='0.1.0',ammo_stacks=10,open_key='comma',replace='all carried guns and ammo',logo_original_size=logo.size,logo_source_sha256=hashlib.sha256(original).hexdigest(),pbo_sha256=hashlib.sha256(pbo).hexdigest())
+manifest=dict(version='0.1.1',ammo_stacks=10,open_key='comma',replace='all carried guns and ammo',logo_original_size=logo.size,logo_source_sha256=hashlib.sha256(original).hexdigest(),pbo_sha256=hashlib.sha256(pbo).hexdigest())
 (root / 'downloads/GRZ-LOADOUT-MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n')
 print('Built GRZ_Loadout.pbo:',len(pbo),'bytes')
