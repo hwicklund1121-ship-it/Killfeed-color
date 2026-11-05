@@ -1,0 +1,111 @@
+"""Build a self-contained SFG suppressor compatibility patch using the supplied SFG assets."""
+import re
+import hashlib
+import json
+from pathlib import Path
+from zipfile import ZipFile, ZIP_DEFLATED
+from build_pbo import build
+from repair_hexgrid import section, read_pbo, resource_refs
+root = Path(__file__).resolve().parents[1]
+source = root / 'GRZ_SFGPermanent'
+prefix = r'GRZSFGAUTO\SFG50\SFG'
+(source / '$PBOPREFIX$').write_text(prefix+'\n')
+with ZipFile(root / 'downloads/SFG50-SFG-Sounds.zip') as z:
+    files = {n[len('SFG50/SFG/'):]:z.read(n) for n in z.namelist() if n.startswith('SFG50/SFG/') and not n.endswith('/')}
+original_config = files['config.cpp'].decode('utf-8-sig')
+sections = []
+for name in ['CfgVehicles','CfgNonAIVehicles','CfgSlots']:
+    a,_,_,b = section(original_config,name)
+    sections.append(original_config[a:b])
+config = '''class CfgPatches
+{
+ class GRZ_SFGPermanent
+ {
+  units[] = {};
+  weapons[] = {};
+  requiredVersion = 0.1;
+  requiredAddons[] = {"sfg50"};
+ };
+};
+class CfgMods
+{
+ class GRZ_SFGPermanent
+ {
+  name = "GRZ SFG Permanent Suppressor";
+  author = "Blake";
+  type = "mod";
+  dependencies[] = {"World"};
+  class defs
+  {
+   class worldScriptModule
+   {
+    value = "";
+    files[] = {"GRZSFGAUTO/SFG50/SFG/scripts/4_World"};
+   };
+  };
+ };
+};
+class CfgWeapons
+{
+ class BoltActionRifle_InnerMagazine_Base;
+ class sfg50_Base: BoltActionRifle_InnerMagazine_Base
+ {
+  model = "GRZSFGAUTO\\SFG50\\SFG\\data\\SFG50.p3d";
+  attachments[] = {"weaponWrap", "weaponOpticsHunting", "UAV_SFG_Suppressor"};
+ };
+};
+'''+'\n'.join(sections)+'\n'
+config = re.sub('UAVWEAPONS','GRZSFGAUTO',config,flags=re.I)
+(source / 'config.cpp').write_text(config)
+for name,data in files.items():
+    if not name.endswith(('.p3d','.paa','.rvmat')):
+        continue
+    if name.endswith(('.p3d','.rvmat')):
+        converted = re.sub(b'uavweapons',b'GRZSFGAUTO',data,flags=re.I)
+        assert len(converted)==len(data)
+        data=converted
+    path=source/name
+    path.parent.mkdir(parents=True,exist_ok=True)
+    path.write_bytes(data)
+pbo=build(source)
+output=root/'downloads/GRZ_SFGPermanent.pbo'
+output.write_bytes(pbo)
+notes='''GRZ SFG Permanent Suppressor
+
+Copy GRZ_SFGPermanent.pbo into @GRZ_Local/Addons on BOTH game and server.
+Keep the SFG weapon pack and latest GRZ_Loadout.pbo installed. Restart both.
+Spawn a fresh SFG from VPP or save an SFG loadout.
+Requires the original sfg50 weapon addon; does not add a second SFG weapon classname.
+
+Supplies the suppressor config, matching custom slot, visual proxy and required model assets.
+Server attaches UAV_SFG_Sup on initialization, loading and debug spawning, with retries.
+Slot locking and CanReleaseAttachment prevent normal removal. Inventory slot stays hidden.
+Suppressor remains scope 1 so it cannot be selected as an ordinary separate spawn-menu item.
+Corrected visual proxy has a private asset namespace and preserves original geometry bytes.
+The latest loadout creates the same suppressor in its local preview.
+VPP's own local model preview may omit runtime attachments; check the actual spawned gun.
+Does not change weapon ammunition, damage, recoil or sound settings.
+An admin or another server script can still forcibly delete entities; normal player removal is blocked.
+
+Asset references, PBO, ZIP and source checked. Not compiled or tested in DayZ.
+Unsigned build; sign with your own server key if signature verification is enabled.
+'''
+(root/'SFG-PERMANENT-PATCH.md').write_text(notes)
+with ZipFile(root/'downloads/GRZ_SFGPermanent.zip','w',ZIP_DEFLATED) as z:
+    z.writestr('GRZ_SFGPermanent.pbo',pbo)
+    z.writestr('INSTALL.txt',notes)
+ext,packed=read_pbo(pbo)
+assert ext['prefix']==prefix
+mounted={(prefix+'/'+n).replace('\\','/').lower() for n in packed}
+for name,data in packed.items():
+    if name.endswith('.p3d'):refs=resource_refs(data)
+    elif name.endswith(('.cpp','.rvmat')):refs=re.findall(r'"([^"\r\n]+\.(?:p3d|paa|rvmat))"',data.decode(),re.I)
+    else:continue
+    for ref in refs:
+        normalized=ref.replace('\\','/').lstrip('/').lower()
+        if normalized.startswith('grzsfgaauto/'):raise AssertionError('Typo')
+        if normalized.startswith('grzsfgauto/'):
+            assert normalized in mounted,(name,ref)
+assert pbo[-20:]==hashlib.sha1(pbo[:-21]).digest()
+(root/'downloads/GRZ-SFG-PERMANENT-MANIFEST.json').write_text(json.dumps(dict(prefix=prefix,requires='sfg50',suppressor='UAV_SFG_Sup',slot='UAV_SFG_Suppressor',scope=1,sha256=hashlib.sha256(pbo).hexdigest(),files=len(packed)),indent=2)+'\n')
+print('Built',output,len(pbo),'bytes; asset references, equal-length model edits and PBO verified')
