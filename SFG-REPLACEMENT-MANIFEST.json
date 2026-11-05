@@ -1,0 +1,32 @@
+{
+  "input_zip_sha256": "53cd508e48f4ecebc1dcc5905ec5b2b6ec14d37931bbad963e27ed29d8762c23",
+  "validation_pbo_sha256": "9a325bc941c97454ab8a86d3033c26f92e9f8c50cc7fde1f5bf873abd17346ae",
+  "mount": "UAVWEAPONS\\SFG50\\SFG",
+  "replaced_shader_arrays": 6,
+  "removed_old_audio": [
+    "data/sfg50_Shot.ogg",
+    "data/sfgs50_Shot.ogg"
+  ],
+  "new_audio": [
+    "data/SFG_Close.ogg",
+    "data/SFG_Mid.ogg",
+    "data/SFG_Far.ogg"
+  ],
+  "preserved_original_files": [
+    "data/SFG50.p3d",
+    "data/sfg50.rvmat",
+    "data/sfg50_co.paa",
+    "data/sfg50_damage.rvmat",
+    "data/sfg50_destruct.rvmat",
+    "data/sfg50_nohq.paa",
+    "data/sfg50_smdi.paa",
+    "data/suppressor.paa",
+    "data/suppressor.rvmat",
+    "data/suppressor_nohq.paa",
+    "data/suppressor_smdi.paa",
+    "proxy/config.cpp",
+    "proxy/suppressor.p3d",
+    "scripts/4_World/Animations.c",
+    "scripts/4_World/Weapons/sfg50.c"
+  ]
+}
