@@ -1,0 +1,49 @@
+{
+  "version": "0.1.0",
+  "arenas": [
+    {
+      "id": "electro_hill",
+      "name": "Electro Hill",
+      "objects": 154,
+      "boundary_points": 28,
+      "spawn_candidates": 80,
+      "centre": [
+        8997,
+        2562
+      ]
+    },
+    {
+      "id": "nwaf",
+      "name": "NWAF",
+      "objects": 149,
+      "boundary_points": 18,
+      "spawn_candidates": 80,
+      "centre": [
+        4462,
+        10268
+      ]
+    },
+    {
+      "id": "neaf",
+      "name": "NEAF",
+      "objects": 53,
+      "boundary_points": 16,
+      "spawn_candidates": 64,
+      "centre": [
+        12205,
+        12531
+      ]
+    }
+  ],
+  "round_seconds": 1800,
+  "vote_opens_remaining": 120,
+  "vote_locks_remaining": 30,
+  "popup_seconds": 30,
+  "outside_seconds": 5,
+  "pbo_sha256": "33ce9a4b91310d2c44d45901a65a130d533727dafecb04911c217dc4b1d495be",
+  "map_objects": 564,
+  "map_hidden_objects": 6594,
+  "map_author_metadata_removed": true,
+  "original_map_sha256": "d4d0432893f6ab2df57e691a156ff1ce032d06e0b151d411975eb549c13a481a",
+  "sanitized_map_sha256": "867bcc3bc1200b421021b0b52d104247b685c3ac8f9bcb598b09aca638f0f9e8"
+}

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modded_inputs>
+ <inputs>
+  <actions><input name="UAGRZMapVote" loc="GRZ Map vote" /></actions>
+  <sorting name="GRZMapRotation" loc="GRZ Map Rotation"><input name="UAGRZMapVote" /></sorting>
+ </inputs>
+ <preset><input name="UAGRZMapVote"><btn name="kF7" /></input></preset>
+</modded_inputs>
