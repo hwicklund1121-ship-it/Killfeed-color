@@ -12,8 +12,20 @@ modded class MissionServer
  {
   PlayerBase player = super.OnClientNewEvent(identity, pos, ctx);
   if (player)
-   g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(GRZApplySavedClothing, 250, false, player);
+   g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(GRZApplySavedLoadout, 500, false, player);
   return player;
+ }
+
+ void GRZApplySavedLoadout(PlayerBase player)
+ {
+  if (!player || !player.GetIdentity() || !player.IsAlive())
+   return;
+  // Restore clothing/cargo space first, then run the existing transactional
+  // gun grant. Reconnects use ClientReady and do not receive duplicate gear.
+  GRZApplySavedClothing(player);
+  GRZSavedWeapon weapon = GRZWeaponStore.Load(player.GetIdentity());
+  if (weapon && !GRZLoadoutServer.Equip(player, weapon.Weapon, weapon.Wrap, false))
+   Print("[GRZ Loadout] Saved weapon could not be restored; spawn gear preserved.");
  }
 
  void GRZApplySavedClothing(PlayerBase player)

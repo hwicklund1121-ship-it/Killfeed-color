@@ -22,12 +22,16 @@ entries['INSTALL.txt'] = (root / 'MAP-ROTATION.md').read_bytes()
 with ZipFile(archive, 'w', ZIP_DEFLATED) as z:
     for name,data in entries.items():
         z.writestr(name,data)
-notes = '''Close DayZ and the server. Copy all FOUR PBOs to @GRZ_Local/Addons
+notes = '''Close DayZ and the server. Copy all FIVE PBOs to @GRZ_Local/Addons
 in BOTH DayZ and DayZServer, replacing the existing versions. Restart both.
 Do not replace or delete your profile config or DZE.
 
 GRZ_MapRotation: fresh respawns now register for arena placement and the
 five-second outside-boundary countdown. Existing ready callbacks are deduplicated.
+GRZ_Loadout 0.2.5: Save a weapon once after installing. Fresh respawns restore
+that gun/wrap, compatible scope, ten ammo stacks and six spare magazines for
+magazine-fed guns. Clothing is restored first. Choice survives server restarts;
+reconnecting does not duplicate equipment. Preview-only choices are not saved.
 GRZ_CleanArena: bodies and gear are removed after THREE seconds; drops blocked.
 GRZ_DeathScreen: RESPAWN remains available after corpse deletion.
 GRZ_Hitmarker 0.1.7: listener-positioned playback, flat long-range shaders,
@@ -39,7 +43,7 @@ If sound is still silent, send the CLIENT script log and RPT after one body
 hit and one headshot; look for [GRZ Hitmarker 0.1.7] messages.
 '''
 with ZipFile(out / 'GRZ-Arena-Feedback-Fix.zip', 'w', ZIP_DEFLATED) as z:
-    for addon in ('GRZ_MapRotation','GRZ_Hitmarker','GRZ_CleanArena','GRZ_DeathScreen'):
+    for addon in ('GRZ_MapRotation','GRZ_Hitmarker','GRZ_CleanArena','GRZ_DeathScreen','GRZ_Loadout'):
         data = (out / (addon+'.pbo')).read_bytes()
         extensions,files=read_pbo(data)
         assert extensions['prefix']==addon
@@ -49,4 +53,4 @@ with ZipFile(out / 'GRZ-Arena-Feedback-Fix.zip', 'w', ZIP_DEFLATED) as z:
     z.writestr('INSTALL.txt',notes)
 with ZipFile(out / 'GRZ-Arena-Feedback-Fix.zip') as z:
     assert z.testzip() is None
-print('Verified all four PBOs match source; built GRZ-Arena-Feedback-Fix.zip.')
+print('Verified all five PBOs match source; built GRZ-Arena-Feedback-Fix.zip.')

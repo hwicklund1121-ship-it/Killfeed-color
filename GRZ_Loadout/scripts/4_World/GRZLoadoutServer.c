@@ -299,7 +299,7 @@ class GRZLoadoutServer
   }
  }
 
- static void Equip(PlayerBase player, string weaponType, string wrapType)
+ static bool Equip(PlayerBase player, string weaponType, string wrapType, bool remember = true)
  {
   Init();
   bool unavailable = !Settings.Enabled || !player.IsAlive() || player.IsUnconscious();
@@ -308,7 +308,7 @@ class GRZLoadoutServer
   if (unavailable)
   {
    Reply(player, "Loadout unavailable right now.");
-   return;
+   return false;
   }
   GRZLoadoutGun selected;
   foreach (GRZLoadoutGun entry : Catalogue.Guns)
@@ -322,13 +322,13 @@ class GRZLoadoutServer
   if (!selected || Catalogue.Wraps.Find(wrapType) < 0)
   {
    Reply(player, "Selection is not in the server's loadout list.");
-   return;
+   return false;
   }
   EntityAI hands = player.GetHumanInventory().GetEntityInHands();
   if (hands && !Weapon_Base.Cast(hands) && !Magazine.Cast(hands))
   {
    Reply(player, "Put the item in your hands away first.");
-   return;
+   return false;
   }
   vector stagingPosition = player.GetPosition() + "0 -1000 0";
   array<EntityAI> staged = new array<EntityAI>;
@@ -337,14 +337,14 @@ class GRZLoadoutServer
   if (!gun)
   {
    Reply(player, "Gun creation failed. Your inventory was kept.");
-   return;
+   return false;
   }
   staged.Insert(gun);
   if (!GRZLoadoutAttachments.EnsurePermanentSFGSuppressor(gun, true))
   {
    DeleteStaged(staged);
    Reply(player, "SFG suppressor is missing or incompatible. Update the SFG weapon pack. Your inventory was kept.");
-   return;
+   return false;
   }
   if (selected.ScopeType != "")
   {
@@ -352,7 +352,7 @@ class GRZLoadoutServer
    {
     DeleteStaged(staged);
     Reply(player, "Scope attachment failed. Your inventory was kept.");
-    return;
+    return false;
    }
   }
   if (wrapType != "")
@@ -362,7 +362,7 @@ class GRZLoadoutServer
    {
     DeleteStaged(staged);
     Reply(player, "That gun cannot accept this wrap. Your inventory was kept.");
-    return;
+    return false;
    }
   }
   string loadType = selected.Ammo;
@@ -373,7 +373,7 @@ class GRZLoadoutServer
   {
    DeleteStaged(staged);
    Reply(player, "Gun could not chamber its configured ammo. Your inventory was kept.");
-   return;
+   return false;
   }
   bool prepared = true;
   for (int n = 0; n < Catalogue.AmmoStacks; n++)
@@ -396,7 +396,7 @@ class GRZLoadoutServer
   {
    DeleteStaged(staged);
    Reply(player, "Ammo creation failed. Your inventory was kept.");
-   return;
+   return false;
   }
   if (selected.MagazineType != "")
   {
@@ -407,7 +407,7 @@ class GRZLoadoutServer
     {
      DeleteStaged(staged);
      Reply(player, "Magazine creation failed. Your inventory was kept.");
-     return;
+     return false;
     }
     staged.Insert(spareMagazine);
     spareMagazine.ServerSetAmmoCount(spareMagazine.GetAmmoMax());
@@ -440,7 +440,7 @@ class GRZLoadoutServer
    {
     DeleteStaged(staged);
     Reply(player, "Inventory is busy. Your inventory was kept.");
-    return;
+    return false;
    }
    oldItems.Insert(old);
    original.Insert(location);
@@ -459,7 +459,7 @@ class GRZLoadoutServer
     DeleteStaged(staged);
     Restore(player, moved, movedOriginal);
     Reply(player, "Inventory is locked or busy. Old gear restored.");
-    return;
+    return false;
    }
    moved.Insert(oldItems[k]);
    movedOriginal.Insert(original[k]);
@@ -480,11 +480,23 @@ class GRZLoadoutServer
    DeleteStaged(staged);
    Restore(player, moved, movedOriginal);
    Reply(player, "Not enough inventory space. Old gear restored.");
-   return;
+   return false;
   }
   // Commit only after every new item has successfully entered the inventory.
   DeleteStaged(oldItems);
-  Reply(player, "Loadout equipped. Previous guns and ammo removed.");
+  if (remember)
+  {
+   GRZSavedWeapon saved = new GRZSavedWeapon;
+   saved.Weapon = weaponType;
+   saved.Wrap = wrapType;
+   if (!GRZWeaponStore.Save(player.GetIdentity(), saved))
+   {
+    Reply(player, "Loadout equipped, but saving for respawn failed. Check the server profile folder.");
+    return true;
+   }
+  }
+  Reply(player, "Loadout equipped. Your saved selection will be restored on respawn.");
+  return true;
  }
 };
 

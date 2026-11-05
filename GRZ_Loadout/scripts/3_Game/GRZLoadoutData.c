@@ -67,3 +67,9 @@ class GRZLoadoutClientData
  static ref ScriptInvoker Changed = new ScriptInvoker;
  static ref ScriptInvoker Result = new ScriptInvoker;
 };
+
+class GRZSavedWeapon
+{
+ string Weapon;
+ string Wrap;
+};

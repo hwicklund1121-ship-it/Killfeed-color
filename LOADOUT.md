@@ -1,4 +1,4 @@
-GRZ Loadout 0.2.4 — Made By Blake
+GRZ Loadout 0.2.5 — Made By Blake
 
 INSTALL
 Copy GRZ_Loadout.pbo into @GRZ_Local/Addons on BOTH game and server.
@@ -18,6 +18,9 @@ Loadout tab: 20mm / .50 cal / .408, previous/next arrows, local 3D preview.
 Gun-wrap arrows include None and installed GhillieAtt_ColorBase subclasses.
 Save replaces EVERY carried gun and ALL magazines/ammo, including cargo.
 New gun is loaded, compatible scope and chosen wrap attached, plus TEN FULL loose ammo stacks.
+The last successfully applied gun/wrap is saved per player on the server and restored on fresh respawn.
+Saved clothing is restored first for ammo space. Reconnects do not grant duplicate gear.
+After installing this update, Save your weapon selection once to create its persistent record.
 Magazine-fed guns also get SIX full spare magazines.
 Non-weapon items and clothing are kept. Items attached to removed guns are removed with those guns.
 Clothing tab: full character preview; left tabs HAT/MASK/SHIRT/BELT/PANTS/GLOVE/VEST/SHOES.
