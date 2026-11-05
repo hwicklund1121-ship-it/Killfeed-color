@@ -1,0 +1,33 @@
+{
+  "slides": [
+    {
+      "source": "New folder/20230312084126_1.png",
+      "original_size": [
+        1920,
+        1080
+      ],
+      "source_sha256": "019d1b6da0c18ecfa23988fe0ed66fb417a19d70bff522ee011c87c1cfdfd167",
+      "texture": "data/loading_1.paa"
+    },
+    {
+      "source": "New folder/sdsad.png",
+      "original_size": [
+        1920,
+        1080
+      ],
+      "source_sha256": "f1124cd77445df68888e47f2bbb4d014d1b3ebe415c091e0b998e11b4928f8bb",
+      "texture": "data/loading_2.paa"
+    },
+    {
+      "source": "New folder/sss.png",
+      "original_size": [
+        1919,
+        1079
+      ],
+      "source_sha256": "1d4357911a42265e8e9e984cf728d2ce89589bb483beed515514216fcb376bae",
+      "texture": "data/loading_3.paa"
+    }
+  ],
+  "interval_seconds": 10,
+  "pbo_sha256": "0e620b22cfd7242b737c33d018e3e1c2fa2862a095519b56f55c4acc19390133"
+}
