@@ -13,6 +13,8 @@ source=root/'GRZ_Loadout'
 texts={p.relative_to(source).as_posix():p.read_text() for p in source.rglob('*') if p.is_file() and p.suffix in ('.c','.cpp','.layout')}
 for name,s in texts.items():
  assert s.count('{')==s.count('}'),name
+ if name.endswith('.c'):
+  assert not re.search(r'\b[A-Za-z_]\w*-\d',s), (name, 'Separate subtraction from numeric literals for Enforce parsing')
  assert not re.search(r'\b(?:InGameMenu|int|string|float|bool)\s+native\b',s),name
 for p in (root/'GRZ_MapRotation/scripts').rglob('*.c'):
  s=p.read_text(); assert s.count('{')==s.count('}'),str(p)

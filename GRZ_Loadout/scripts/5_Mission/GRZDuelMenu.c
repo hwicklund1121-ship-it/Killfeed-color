@@ -46,7 +46,9 @@ class GRZDuelPaint
    for (int leaf = 0; leaf < 3; leaf++)
    {
     float ly = 0.58 + leaf * 0.09;
-    Line(canvas,s,0.18,ly,0.08,ly-0.08,color); Line(canvas,s,0.82,ly,0.92,ly-0.08,color);
+    float leafEndY = ly - 0.08;
+    Line(canvas, s, 0.18, ly, 0.08, leafEndY, color);
+    Line(canvas, s, 0.82, ly, 0.92, leafEndY, color);
    }
   }
   if (tier >= 7)
