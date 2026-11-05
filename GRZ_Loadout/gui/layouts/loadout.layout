@@ -1,0 +1,685 @@
+FrameWidgetClass GRZLoadoutRoot
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 0
+ {
+FrameWidgetClass MenuPanel
+{
+ position 0.07 0.065
+ size 0.86 0.87
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 0
+ {
+PanelWidgetClass MenuBackground
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.025 0.025 0.03 0.98
+}
+PanelWidgetClass AccentTop
+{
+ position 0 0
+ size 1 0.004
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 1 1 1 1
+}
+ImageWidgetClass Logo
+{
+ position 0.027 0.022
+ size 0.245 0.13
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ mode blend
+ stretch 1
+}
+TextWidgetClass Heading
+{
+ position 0.31 0.053
+ size 0.55 0.06
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.75 0.75 0.78 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text "BUILD YOUR LOADOUT"
+}
+ButtonWidgetClass Close
+{
+ position 0.935 0.035
+ size 0.04 0.055
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass CloseFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.085 0.085 0.095 1
+}
+TextWidgetClass CloseLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "X"
+}
+ }
+}
+ButtonWidgetClass LoadoutTab
+{
+ position 0.027 0.177
+ size 0.18 0.065
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass LoadoutTabFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.96 0.96 0.96 1
+}
+TextWidgetClass LoadoutTabLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.025 0.025 0.03 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "LOADOUT"
+}
+ }
+}
+ButtonWidgetClass ClothingTab
+{
+ position 0.22 0.177
+ size 0.18 0.065
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass ClothingFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.06 0.06 0.07 1
+}
+TextWidgetClass ClothingLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.42 0.42 0.44 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "CLOTHING - SOON"
+}
+ }
+}
+PanelWidgetClass Divider
+{
+ position 0.027 0.268
+ size 0.946 0.0015
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.22 0.22 0.24 1
+}
+ButtonWidgetClass Calibre20
+{
+ position 0.29 0.29
+ size 0.14 0.06
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass Calibre20Fill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.085 0.085 0.095 1
+}
+TextWidgetClass Calibre20Label
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "20MM"
+}
+ }
+}
+PanelWidgetClass Calibre20Line
+{
+ position 0.29 0.355
+ size 0.14 0.003
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 1 1 1 1
+}
+ButtonWidgetClass Calibre50
+{
+ position 0.445 0.29
+ size 0.14 0.06
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass Calibre50Fill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.085 0.085 0.095 1
+}
+TextWidgetClass Calibre50Label
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text ".50 CAL"
+}
+ }
+}
+PanelWidgetClass Calibre50Line
+{
+ position 0.445 0.355
+ size 0.14 0.003
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 1 1 1 1
+}
+ButtonWidgetClass Calibre408
+{
+ position 0.6 0.29
+ size 0.14 0.06
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass Calibre408Fill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.085 0.085 0.095 1
+}
+TextWidgetClass Calibre408Label
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text ".408"
+}
+ }
+}
+PanelWidgetClass Calibre408Line
+{
+ position 0.6 0.355
+ size 0.14 0.003
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 1 1 1 1
+}
+PanelWidgetClass PreviewBackground
+{
+ position 0.075 0.39
+ size 0.85 0.315
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.055 0.055 0.065 1
+}
+ItemPreviewWidgetClass GunPreview
+{
+ position 0.115 0.39
+ size 0.77 0.315
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ mode blend
+ color 1 1 1 1
+}
+ButtonWidgetClass GunPrevious
+{
+ position 0.027 0.51
+ size 0.043 0.075
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass GunPreviousFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.085 0.085 0.095 1
+}
+TextWidgetClass GunPreviousLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "<"
+}
+ }
+}
+ButtonWidgetClass GunNext
+{
+ position 0.93 0.51
+ size 0.043 0.075
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass GunNextFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.085 0.085 0.095 1
+}
+TextWidgetClass GunNextLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text ">"
+}
+ }
+}
+TextWidgetClass GunName
+{
+ position 0.15 0.715
+ size 0.7 0.05
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "SELECT A GUN"
+}
+TextWidgetClass GunCount
+{
+ position 0.43 0.77
+ size 0.14 0.028
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.6 0.6 0.64 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "0 / 0"
+}
+TextWidgetClass WrapHeading
+{
+ position 0.027 0.811
+ size 0.16 0.045
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.65 0.65 0.69 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text "GUN WRAP"
+}
+ButtonWidgetClass WrapPrevious
+{
+ position 0.19 0.807
+ size 0.04 0.05
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass WrapPreviousFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.085 0.085 0.095 1
+}
+TextWidgetClass WrapPreviousLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "<"
+}
+ }
+}
+TextWidgetClass WrapName
+{
+ position 0.24 0.808
+ size 0.42 0.05
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "No wrap"
+}
+ButtonWidgetClass WrapNext
+{
+ position 0.67 0.807
+ size 0.04 0.05
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass WrapNextFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.085 0.085 0.095 1
+}
+TextWidgetClass WrapNextLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text ">"
+}
+ }
+}
+TextWidgetClass AmmoInfo
+{
+ position 0.027 0.878
+ size 0.6 0.035
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.75 0.75 0.78 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text "10 full ammo stacks + loaded gun"
+}
+ButtonWidgetClass Save
+{
+ position 0.75 0.812
+ size 0.223 0.1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass SaveFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ style rover_sim_colorable
+ color 0.96 0.96 0.96 1
+}
+TextWidgetClass SaveLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.025 0.025 0.03 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "SAVE LOADOUT"
+}
+ }
+}
+TextWidgetClass Status
+{
+ position 0.027 0.935
+ size 0.946 0.04
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.75 0.75 0.78 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text "Connecting to server..."
+}
+ }
+}
+ }
+}

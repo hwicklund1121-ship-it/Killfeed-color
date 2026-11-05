@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modded_inputs>
+ <inputs>
+  <actions><input name="UAGRZLoadout" loc="GRZ Loadout menu" /></actions>
+  <sorting name="GRZLoadout" loc="GRZ Loadout"><input name="UAGRZLoadout" /></sorting>
+ </inputs>
+ <preset><input name="UAGRZLoadout"><btn name="kComma" /></input></preset>
+</modded_inputs>
