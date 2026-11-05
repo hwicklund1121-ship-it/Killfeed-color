@@ -1,0 +1,27 @@
+{
+  "source_zip_sha256": "004b3dfbcc1765164ba7526a673bd9ce2520297a5beb66ba3d2f1aa554c579a3",
+  "source_recording_sha256": "275d424dcb4a4427582d082a4cbb7caf5a5755aab603135c99dc94a6e5afe671",
+  "runtime_audio": "ar50a1/ar50/data/AR50_Shot.ogg",
+  "replacement_audio_sha256": "f0c26d2cc3bf847fe6d1f2eee6aac5a172d1e1993d6f56f86b48f4ab451c645e",
+  "replaced_sample_references": 9,
+  "sample_rate": 44100,
+  "channels": 1,
+  "unchanged_files": [
+    "ar50a1/ar50/data/AR50.rvmat",
+    "ar50a1/ar50/data/AR50A1.p3d",
+    "ar50a1/ar50/data/AR50_CO.paa",
+    "ar50a1/ar50/data/AR50_NOHQ.paa",
+    "ar50a1/ar50/data/AR50_SMDI.paa",
+    "ar50a1/ar50/data/AR50_damage.rvmat",
+    "ar50a1/ar50/data/AR50_destruct.rvmat",
+    "ar50a1/ar50/data/MUZZLE.rvmat",
+    "ar50a1/ar50/data/MUZZLE_CO.paa",
+    "ar50a1/ar50/data/MUZZLE_NOHQ.paa",
+    "ar50a1/ar50/data/MUZZLE_SMDI.paa",
+    "ar50a1/ar50/data/MUZZLE_damage.rvmat",
+    "ar50a1/ar50/data/MUZZLE_destruct.rvmat",
+    "ar50a1/config.cpp",
+    "ar50a1/scripts/4_World/entities/firearms/rifle/AR50A1.c",
+    "ar50a1/scripts/4_World/entities/manbase/dayzplayer/dayzplayercfgbase.c"
+  ]
+}
