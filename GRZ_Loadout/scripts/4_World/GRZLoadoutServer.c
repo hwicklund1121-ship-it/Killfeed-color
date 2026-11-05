@@ -299,10 +299,11 @@ class GRZLoadoutServer
   }
  }
 
- static bool Equip(PlayerBase player, string weaponType, string wrapType, bool remember = true)
+ static bool Equip(PlayerBase player, string weaponType, string wrapType, bool remember = true, GRZDuelKit duelKit = null)
  {
   Init();
   bool unavailable = !Settings.Enabled || !player.IsAlive() || player.IsUnconscious();
+  if (remember && player.m_GRZDuelMatch != "") unavailable = true;
   if (player.IsRestrained() || player.IsRaised() || player.GetCommand_Vehicle())
    unavailable = true;
   if (unavailable)
@@ -311,15 +312,16 @@ class GRZLoadoutServer
    return false;
   }
   GRZLoadoutGun selected;
+  if (duelKit) selected = duelKit.Gun;
   foreach (GRZLoadoutGun entry : Catalogue.Guns)
   {
-   if (entry.Type == weaponType)
+   if (!duelKit && entry.Type == weaponType)
    {
     selected = entry;
     break;
    }
   }
-  if (!selected || Catalogue.Wraps.Find(wrapType) < 0)
+  if (!selected || (!duelKit && Catalogue.Wraps.Find(wrapType) < 0))
   {
    Reply(player, "Selection is not in the server's loadout list.");
    return false;
@@ -346,7 +348,13 @@ class GRZLoadoutServer
    Reply(player, "SFG suppressor is missing or incompatible. Update the SFG weapon pack. Your inventory was kept.");
    return false;
   }
-  if (selected.ScopeType != "")
+  if (duelKit && !GRZDuelKits.AddAttachments(gun, duelKit))
+  {
+   DeleteStaged(staged);
+   Reply(player, "Duel attachment creation failed. Your inventory was kept.");
+   return false;
+  }
+  if (!duelKit && selected.ScopeType != "")
   {
    if (!gun.GetInventory().CreateAttachment(selected.ScopeType))
    {
@@ -355,7 +363,7 @@ class GRZLoadoutServer
     return false;
    }
   }
-  if (wrapType != "")
+  if (!duelKit && wrapType != "")
   {
    EntityAI wrap = gun.GetInventory().CreateAttachment(wrapType);
    if (!wrap)
@@ -549,6 +557,11 @@ modded class PlayerBase
    if (now - m_GRZLoadoutLastSave < cooldown)
    {
     GRZLoadoutServer.Reply(this, "Please wait before saving another loadout.");
+    return;
+   }
+   if (m_GRZDuelMatch != "")
+   {
+    GRZLoadoutServer.Reply(this, "Loadout changes are locked during a duel.");
     return;
    }
    if (rpc_type == GRZLoadoutRPC.SAVE_CLOTHING)

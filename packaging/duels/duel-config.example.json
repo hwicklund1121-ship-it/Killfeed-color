@@ -1,0 +1,32 @@
+{
+  "Enabled": true,
+  "ChallengeSeconds": 60,
+  "CountdownSeconds": 5,
+  "RespawnWaitSeconds": 90,
+  "RoundSeconds": 180,
+  "Maps": [
+    {
+      "Id": "duel_arena_1",
+      "Name": "Duel Arena 1",
+      "Enabled": false,
+      "Center": [
+        0,
+        0,
+        0
+      ],
+      "Radius": 100,
+      "SpawnA": [
+        0,
+        0,
+        0
+      ],
+      "SpawnB": [
+        0,
+        0,
+        0
+      ],
+      "FacingA": 0,
+      "FacingB": 180
+    }
+  ]
+}

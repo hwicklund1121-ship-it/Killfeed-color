@@ -1,0 +1,3064 @@
+FrameWidgetClass GRZLeaderboardRoot
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 0
+ {
+FrameWidgetClass MenuPanel
+{
+ position 0.07 0.065
+ size 0.86 0.87
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 0
+ {
+PanelWidgetClass Background
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.025 0.025 0.03 0.98
+}
+PanelWidgetClass WhiteAccent
+{
+ position 0 0
+ size 1 0.004
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+}
+ImageWidgetClass Logo
+{
+ position 0.025 0.02
+ size 0.245 0.105
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ mode blend
+ stretch 1
+}
+TextWidgetClass Title
+{
+ position 0.33 0.04
+ size 0.56 0.055
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text "SERVER LEADERBOARD"
+}
+ButtonWidgetClass Close
+{
+ position 0.94 0.025
+ size 0.04 0.055
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass CloseFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.09 0.09 0.11 1
+}
+TextWidgetClass CloseLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "X"
+}
+ }
+}
+CanvasWidgetClass MyBadge
+{
+ position 0.03 0.13
+ size 0.055 0.07
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+}
+TextWidgetClass MyRank
+{
+ position 0.095 0.14
+ size 0.37 0.055
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text "BRONZE | 800 ELO"
+}
+ButtonWidgetClass SortKills
+{
+ position 0.52 0.145
+ size 0.145 0.055
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass SortKillsFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.09 0.09 0.11 1
+}
+TextWidgetClass SortKillsLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "KILLS"
+}
+ }
+}
+ButtonWidgetClass SortKD
+{
+ position 0.675 0.145
+ size 0.145 0.055
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass SortKDFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.09 0.09 0.11 1
+}
+TextWidgetClass SortKDLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "K/D"
+}
+ }
+}
+ButtonWidgetClass SortElo
+{
+ position 0.83 0.145
+ size 0.145 0.055
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass SortEloFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.09 0.09 0.11 1
+}
+TextWidgetClass SortEloLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "ELO"
+}
+ }
+}
+TextWidgetClass RankHeading
+{
+ position 0.015 0.23
+ size 0.03 0.035
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text "#"
+}
+TextWidgetClass NameHeading
+{
+ position 0.115 0.23
+ size 0.37 0.035
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text "PLAYER"
+}
+TextWidgetClass KillsHeading
+{
+ position 0.53 0.23
+ size 0.08 0.035
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text "KILLS"
+}
+TextWidgetClass DeathsHeading
+{
+ position 0.63 0.23
+ size 0.08 0.035
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text "DEATHS"
+}
+TextWidgetClass KDHeading
+{
+ position 0.73 0.23
+ size 0.08 0.035
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text "K/D"
+}
+TextWidgetClass EloHeading
+{
+ position 0.85 0.23
+ size 0.1 0.035
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text "ELO"
+}
+FrameWidgetClass Row0
+{
+ position 0.01 0.28
+ size 0.98 0.027
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 0
+ {
+PanelWidgetClass RowBackground0
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.055 0.055 0.065 1
+}
+TextWidgetClass Position0
+{
+ position 0.015 0
+ size 0.03 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+CanvasWidgetClass Badge0
+{
+ position 0.055 0.02
+ size 0.04 0.96
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+}
+TextWidgetClass Name0
+{
+ position 0.115 0
+ size 0.37 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Kills0
+{
+ position 0.53 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Deaths0
+{
+ position 0.63 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass KD0
+{
+ position 0.73 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Elo0
+{
+ position 0.85 0
+ size 0.1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+ }
+}
+FrameWidgetClass Row1
+{
+ position 0.01 0.30850000000000005
+ size 0.98 0.027
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 0
+ {
+PanelWidgetClass RowBackground1
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.035 0.035 0.045 1
+}
+TextWidgetClass Position1
+{
+ position 0.015 0
+ size 0.03 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+CanvasWidgetClass Badge1
+{
+ position 0.055 0.02
+ size 0.04 0.96
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+}
+TextWidgetClass Name1
+{
+ position 0.115 0
+ size 0.37 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Kills1
+{
+ position 0.53 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Deaths1
+{
+ position 0.63 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass KD1
+{
+ position 0.73 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Elo1
+{
+ position 0.85 0
+ size 0.1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+ }
+}
+FrameWidgetClass Row2
+{
+ position 0.01 0.337
+ size 0.98 0.027
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 0
+ {
+PanelWidgetClass RowBackground2
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.055 0.055 0.065 1
+}
+TextWidgetClass Position2
+{
+ position 0.015 0
+ size 0.03 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+CanvasWidgetClass Badge2
+{
+ position 0.055 0.02
+ size 0.04 0.96
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+}
+TextWidgetClass Name2
+{
+ position 0.115 0
+ size 0.37 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Kills2
+{
+ position 0.53 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Deaths2
+{
+ position 0.63 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass KD2
+{
+ position 0.73 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Elo2
+{
+ position 0.85 0
+ size 0.1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+ }
+}
+FrameWidgetClass Row3
+{
+ position 0.01 0.36550000000000005
+ size 0.98 0.027
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 0
+ {
+PanelWidgetClass RowBackground3
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.035 0.035 0.045 1
+}
+TextWidgetClass Position3
+{
+ position 0.015 0
+ size 0.03 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+CanvasWidgetClass Badge3
+{
+ position 0.055 0.02
+ size 0.04 0.96
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+}
+TextWidgetClass Name3
+{
+ position 0.115 0
+ size 0.37 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Kills3
+{
+ position 0.53 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Deaths3
+{
+ position 0.63 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass KD3
+{
+ position 0.73 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Elo3
+{
+ position 0.85 0
+ size 0.1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+ }
+}
+FrameWidgetClass Row4
+{
+ position 0.01 0.394
+ size 0.98 0.027
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 0
+ {
+PanelWidgetClass RowBackground4
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.055 0.055 0.065 1
+}
+TextWidgetClass Position4
+{
+ position 0.015 0
+ size 0.03 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+CanvasWidgetClass Badge4
+{
+ position 0.055 0.02
+ size 0.04 0.96
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+}
+TextWidgetClass Name4
+{
+ position 0.115 0
+ size 0.37 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Kills4
+{
+ position 0.53 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Deaths4
+{
+ position 0.63 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass KD4
+{
+ position 0.73 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Elo4
+{
+ position 0.85 0
+ size 0.1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+ }
+}
+FrameWidgetClass Row5
+{
+ position 0.01 0.42250000000000004
+ size 0.98 0.027
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 0
+ {
+PanelWidgetClass RowBackground5
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.035 0.035 0.045 1
+}
+TextWidgetClass Position5
+{
+ position 0.015 0
+ size 0.03 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+CanvasWidgetClass Badge5
+{
+ position 0.055 0.02
+ size 0.04 0.96
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+}
+TextWidgetClass Name5
+{
+ position 0.115 0
+ size 0.37 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Kills5
+{
+ position 0.53 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Deaths5
+{
+ position 0.63 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass KD5
+{
+ position 0.73 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Elo5
+{
+ position 0.85 0
+ size 0.1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+ }
+}
+FrameWidgetClass Row6
+{
+ position 0.01 0.45100000000000007
+ size 0.98 0.027
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 0
+ {
+PanelWidgetClass RowBackground6
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.055 0.055 0.065 1
+}
+TextWidgetClass Position6
+{
+ position 0.015 0
+ size 0.03 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+CanvasWidgetClass Badge6
+{
+ position 0.055 0.02
+ size 0.04 0.96
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+}
+TextWidgetClass Name6
+{
+ position 0.115 0
+ size 0.37 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Kills6
+{
+ position 0.53 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Deaths6
+{
+ position 0.63 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass KD6
+{
+ position 0.73 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Elo6
+{
+ position 0.85 0
+ size 0.1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+ }
+}
+FrameWidgetClass Row7
+{
+ position 0.01 0.47950000000000004
+ size 0.98 0.027
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 0
+ {
+PanelWidgetClass RowBackground7
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.035 0.035 0.045 1
+}
+TextWidgetClass Position7
+{
+ position 0.015 0
+ size 0.03 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+CanvasWidgetClass Badge7
+{
+ position 0.055 0.02
+ size 0.04 0.96
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+}
+TextWidgetClass Name7
+{
+ position 0.115 0
+ size 0.37 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Kills7
+{
+ position 0.53 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Deaths7
+{
+ position 0.63 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass KD7
+{
+ position 0.73 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Elo7
+{
+ position 0.85 0
+ size 0.1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+ }
+}
+FrameWidgetClass Row8
+{
+ position 0.01 0.508
+ size 0.98 0.027
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 0
+ {
+PanelWidgetClass RowBackground8
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.055 0.055 0.065 1
+}
+TextWidgetClass Position8
+{
+ position 0.015 0
+ size 0.03 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+CanvasWidgetClass Badge8
+{
+ position 0.055 0.02
+ size 0.04 0.96
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+}
+TextWidgetClass Name8
+{
+ position 0.115 0
+ size 0.37 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Kills8
+{
+ position 0.53 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Deaths8
+{
+ position 0.63 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass KD8
+{
+ position 0.73 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Elo8
+{
+ position 0.85 0
+ size 0.1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+ }
+}
+FrameWidgetClass Row9
+{
+ position 0.01 0.5365
+ size 0.98 0.027
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 0
+ {
+PanelWidgetClass RowBackground9
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.035 0.035 0.045 1
+}
+TextWidgetClass Position9
+{
+ position 0.015 0
+ size 0.03 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+CanvasWidgetClass Badge9
+{
+ position 0.055 0.02
+ size 0.04 0.96
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+}
+TextWidgetClass Name9
+{
+ position 0.115 0
+ size 0.37 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Kills9
+{
+ position 0.53 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Deaths9
+{
+ position 0.63 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass KD9
+{
+ position 0.73 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Elo9
+{
+ position 0.85 0
+ size 0.1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+ }
+}
+FrameWidgetClass Row10
+{
+ position 0.01 0.5650000000000001
+ size 0.98 0.027
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 0
+ {
+PanelWidgetClass RowBackground10
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.055 0.055 0.065 1
+}
+TextWidgetClass Position10
+{
+ position 0.015 0
+ size 0.03 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+CanvasWidgetClass Badge10
+{
+ position 0.055 0.02
+ size 0.04 0.96
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+}
+TextWidgetClass Name10
+{
+ position 0.115 0
+ size 0.37 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Kills10
+{
+ position 0.53 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Deaths10
+{
+ position 0.63 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass KD10
+{
+ position 0.73 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Elo10
+{
+ position 0.85 0
+ size 0.1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+ }
+}
+FrameWidgetClass Row11
+{
+ position 0.01 0.5935
+ size 0.98 0.027
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 0
+ {
+PanelWidgetClass RowBackground11
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.035 0.035 0.045 1
+}
+TextWidgetClass Position11
+{
+ position 0.015 0
+ size 0.03 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+CanvasWidgetClass Badge11
+{
+ position 0.055 0.02
+ size 0.04 0.96
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+}
+TextWidgetClass Name11
+{
+ position 0.115 0
+ size 0.37 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Kills11
+{
+ position 0.53 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Deaths11
+{
+ position 0.63 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass KD11
+{
+ position 0.73 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Elo11
+{
+ position 0.85 0
+ size 0.1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+ }
+}
+FrameWidgetClass Row12
+{
+ position 0.01 0.6220000000000001
+ size 0.98 0.027
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 0
+ {
+PanelWidgetClass RowBackground12
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.055 0.055 0.065 1
+}
+TextWidgetClass Position12
+{
+ position 0.015 0
+ size 0.03 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+CanvasWidgetClass Badge12
+{
+ position 0.055 0.02
+ size 0.04 0.96
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+}
+TextWidgetClass Name12
+{
+ position 0.115 0
+ size 0.37 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Kills12
+{
+ position 0.53 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Deaths12
+{
+ position 0.63 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass KD12
+{
+ position 0.73 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Elo12
+{
+ position 0.85 0
+ size 0.1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+ }
+}
+FrameWidgetClass Row13
+{
+ position 0.01 0.6505000000000001
+ size 0.98 0.027
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 0
+ {
+PanelWidgetClass RowBackground13
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.035 0.035 0.045 1
+}
+TextWidgetClass Position13
+{
+ position 0.015 0
+ size 0.03 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+CanvasWidgetClass Badge13
+{
+ position 0.055 0.02
+ size 0.04 0.96
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+}
+TextWidgetClass Name13
+{
+ position 0.115 0
+ size 0.37 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Kills13
+{
+ position 0.53 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Deaths13
+{
+ position 0.63 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass KD13
+{
+ position 0.73 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Elo13
+{
+ position 0.85 0
+ size 0.1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+ }
+}
+FrameWidgetClass Row14
+{
+ position 0.01 0.679
+ size 0.98 0.027
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 0
+ {
+PanelWidgetClass RowBackground14
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.055 0.055 0.065 1
+}
+TextWidgetClass Position14
+{
+ position 0.015 0
+ size 0.03 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+CanvasWidgetClass Badge14
+{
+ position 0.055 0.02
+ size 0.04 0.96
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+}
+TextWidgetClass Name14
+{
+ position 0.115 0
+ size 0.37 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Kills14
+{
+ position 0.53 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Deaths14
+{
+ position 0.63 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass KD14
+{
+ position 0.73 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Elo14
+{
+ position 0.85 0
+ size 0.1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+ }
+}
+FrameWidgetClass Row15
+{
+ position 0.01 0.7075
+ size 0.98 0.027
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 0
+ {
+PanelWidgetClass RowBackground15
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.035 0.035 0.045 1
+}
+TextWidgetClass Position15
+{
+ position 0.015 0
+ size 0.03 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+CanvasWidgetClass Badge15
+{
+ position 0.055 0.02
+ size 0.04 0.96
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+}
+TextWidgetClass Name15
+{
+ position 0.115 0
+ size 0.37 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Kills15
+{
+ position 0.53 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Deaths15
+{
+ position 0.63 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass KD15
+{
+ position 0.73 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Elo15
+{
+ position 0.85 0
+ size 0.1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+ }
+}
+FrameWidgetClass Row16
+{
+ position 0.01 0.736
+ size 0.98 0.027
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 0
+ {
+PanelWidgetClass RowBackground16
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.055 0.055 0.065 1
+}
+TextWidgetClass Position16
+{
+ position 0.015 0
+ size 0.03 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+CanvasWidgetClass Badge16
+{
+ position 0.055 0.02
+ size 0.04 0.96
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+}
+TextWidgetClass Name16
+{
+ position 0.115 0
+ size 0.37 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Kills16
+{
+ position 0.53 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Deaths16
+{
+ position 0.63 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass KD16
+{
+ position 0.73 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Elo16
+{
+ position 0.85 0
+ size 0.1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+ }
+}
+FrameWidgetClass Row17
+{
+ position 0.01 0.7645000000000001
+ size 0.98 0.027
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 0
+ {
+PanelWidgetClass RowBackground17
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.035 0.035 0.045 1
+}
+TextWidgetClass Position17
+{
+ position 0.015 0
+ size 0.03 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+CanvasWidgetClass Badge17
+{
+ position 0.055 0.02
+ size 0.04 0.96
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+}
+TextWidgetClass Name17
+{
+ position 0.115 0
+ size 0.37 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Kills17
+{
+ position 0.53 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Deaths17
+{
+ position 0.63 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass KD17
+{
+ position 0.73 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Elo17
+{
+ position 0.85 0
+ size 0.1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+ }
+}
+FrameWidgetClass Row18
+{
+ position 0.01 0.793
+ size 0.98 0.027
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 0
+ {
+PanelWidgetClass RowBackground18
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.055 0.055 0.065 1
+}
+TextWidgetClass Position18
+{
+ position 0.015 0
+ size 0.03 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+CanvasWidgetClass Badge18
+{
+ position 0.055 0.02
+ size 0.04 0.96
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+}
+TextWidgetClass Name18
+{
+ position 0.115 0
+ size 0.37 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Kills18
+{
+ position 0.53 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Deaths18
+{
+ position 0.63 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass KD18
+{
+ position 0.73 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Elo18
+{
+ position 0.85 0
+ size 0.1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+ }
+}
+FrameWidgetClass Row19
+{
+ position 0.01 0.8215
+ size 0.98 0.027
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 0
+ {
+PanelWidgetClass RowBackground19
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.035 0.035 0.045 1
+}
+TextWidgetClass Position19
+{
+ position 0.015 0
+ size 0.03 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+CanvasWidgetClass Badge19
+{
+ position 0.055 0.02
+ size 0.04 0.96
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+}
+TextWidgetClass Name19
+{
+ position 0.115 0
+ size 0.37 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Kills19
+{
+ position 0.53 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Deaths19
+{
+ position 0.63 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass KD19
+{
+ position 0.73 0
+ size 0.08 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Elo19
+{
+ position 0.85 0
+ size 0.1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+ }
+}
+ButtonWidgetClass Previous
+{
+ position 0.03 0.89
+ size 0.06 0.06
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass PreviousFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.09 0.09 0.11 1
+}
+TextWidgetClass PreviousLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "<"
+}
+ }
+}
+TextWidgetClass Page
+{
+ position 0.12 0.89
+ size 0.76 0.06
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "Loading..."
+}
+ButtonWidgetClass Next
+{
+ position 0.91 0.89
+ size 0.06 0.06
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass NextFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.09 0.09 0.11 1
+}
+TextWidgetClass NextLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text ">"
+}
+ }
+}
+TextWidgetClass Status
+{
+ position 0.03 0.965
+ size 0.94 0.03
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.75 0.75 0.8 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+ }
+}
+ }
+}

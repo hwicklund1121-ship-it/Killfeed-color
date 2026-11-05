@@ -1,5 +1,5 @@
 {
-  "version": "0.1.1",
+  "version": "0.1.2",
   "arenas": [
     {
       "id": "electro_hill",
@@ -40,10 +40,11 @@
   "vote_locks_remaining": 30,
   "popup_seconds": 30,
   "outside_seconds": 5,
-  "pbo_sha256": "1c3606d32fb8cb578b33bfa22466e4bdd314fac957f21953564d727db65ac1f9",
+  "pbo_sha256": "fd32a517513efa412404a08e6386119aa44b7bd3da8dd7921fa1a463360926ad",
   "map_objects": 564,
   "map_hidden_objects": 6594,
   "map_author_metadata_removed": true,
   "original_map_sha256": "d4d0432893f6ab2df57e691a156ff1ce032d06e0b151d411975eb549c13a481a",
-  "sanitized_map_sha256": "867bcc3bc1200b421021b0b52d104247b685c3ac8f9bcb598b09aca638f0f9e8"
+  "sanitized_map_sha256": "867bcc3bc1200b421021b0b52d104247b685c3ac8f9bcb598b09aca638f0f9e8",
+  "loadout_sha256": "b98c40ace962ae115ca16cc3c93faac8841f7733c7a7f6cf63038e39d9f2c24e"
 }

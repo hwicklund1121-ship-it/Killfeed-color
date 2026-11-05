@@ -3,6 +3,8 @@ import argparse
 import hashlib
 import io
 import json
+import subprocess
+import sys
 from pathlib import Path
 from zipfile import ZipFile, ZIP_DEFLATED
 from PIL import Image
@@ -24,7 +26,7 @@ def widget(kind, name, x, y, w, h, props='', children=''):
 '''+ (' {\n'+children+' }\n' if children else '')+'}\n'
 
 def panel(name,x,y,w,h,color):
-    return widget('PanelWidgetClass',name,x,y,w,h,f'ignorepointer 1\n style rover_sim_colorable\n color {color}')
+    return widget('PanelWidgetClass',name,x,y,w,h,f'ignorepointer 1\n color {color}')
 
 def text(name,value,x,y,w,h,size=24,color='1 1 1 1',center=False):
     return widget('TextWidgetClass',name,x,y,w,h,
@@ -44,6 +46,7 @@ def layout():
     children += button('Close','X',.935,.035,.04,.055)
     children += button('LoadoutTab','LOADOUT',.027,.177,.18,.065,True)
     children += button('ClothingTab','CLOTHING',.22,.177,.18,.065)
+    children += button('DuelsTab','DUELS',.413,.177,.18,.065)
     children += panel('Divider',.027,.268,.946,.0015,'0.22 0.22 0.24 1')
     for name,label,x in [('Calibre20','20MM',.29),('Calibre50','.50 CAL',.445),('Calibre408','.408',.60)]:
         children += button(name,label,x,.29,.14,.06)
@@ -76,6 +79,7 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('logo_zip',type=Path)
 args = parser.parse_args()
 (source / 'gui/layouts/loadout.layout').write_text(layout())
+subprocess.run([sys.executable,str(root/'tools/build_duel_layouts.py')],check=True)
 with ZipFile(args.logo_zip) as archive:
     names = [n for n in archive.namelist() if n.lower().endswith('.png')]
     if len(names)!=1:
@@ -85,7 +89,7 @@ with ZipFile(args.logo_zip) as archive:
 (source / 'data/logo.paa').write_bytes(encode_paa(logo.resize((2048,512),Image.Resampling.LANCZOS), alpha_flags=True))
 pbo = build(source)
 (root / 'downloads/GRZ_Loadout.pbo').write_bytes(pbo)
-notes = '''GRZ Loadout 0.2.6 — Made By Blake
+notes = '''GRZ Loadout 0.3.0 — Made By Blake
 
 INSTALL
 Copy GRZ_Loadout.pbo into @GRZ_Local/Addons on BOTH game and server.
@@ -93,6 +97,12 @@ Restart both. Enable @GRZ_Local in the client launcher. Press comma (,).
 The key is rebindable in DayZ Controls > GRZ Loadout.
 
 FEATURES
+DUELS tab: online players, named maps, 60-second accept/decline, guns held at acceptance, BO1/3/5.
+Five-second protected countdown, side spawns between rounds and return to active rotation arena.
+Elo starts at 800; higher-rated opponents award more. Persistent colour ranks and badges.
+O opens the paginated server-wide leaderboard: kills, deaths, K/D, Elo; sortable by kills/KD/Elo.
+Duel maps start DISABLED until you build/configure their coordinates; no default teleport to zero.
+Install the paired GRZ_MapRotation update too; see DUELS.md.
 Fresh respawns remove default soda cans, glow sticks and starter fruit before applying saved gear.
 Large dark menu, transparent GunRunnerZ logo at top left, white accents.
 Only bolt-action rifle config families are included; semi-auto guns are excluded.
@@ -154,8 +164,11 @@ New gun goes into hands; all ten stacks must fit in clothing/backpack cargo.
 If any move fails, new items are deleted and original gear locations are restored.
 If another mod prevents restoration, preserved old items fall beside the owner and a script error is logged.
 Only after all new items fit are the old guns/ammo deleted.
-Weapon selections are not yet saved for respawn; saved clothing outfits are applied on new-character spawns.
-Preview entities are local-only and deleted on change/close. No hit/damage/recoil callbacks changed.
+Successfully applied weapon selections and clothing outfits are saved for normal respawn.
+Duels capture the currently held weapon separately and do not replace that saved selection.
+Preview entities are local-only and deleted on change/close.
+New server damage guards isolate duels; the player-death hook records server-wide K/D.
+Normal damage/recoil outside duels retains its native/modded behavior.
 
 VALIDATION
 Static package/API checks only. Enforce compilation, preview sizing, live inventory rollback and multiplayer sync require testing in DayZ 1.30.
@@ -165,6 +178,6 @@ Unsigned development build; sign with your own server key if required.
 with ZipFile(root / 'downloads/GRZ_Loadout.zip','w',ZIP_DEFLATED) as archive:
     archive.writestr('GRZ_Loadout.pbo',pbo)
     archive.writestr('INSTALL.txt',notes)
-manifest=dict(version='0.2.6',ammo_stacks=10,open_key='comma',replace='all carried guns and ammo',logo_original_size=logo.size,logo_source_sha256=hashlib.sha256(original).hexdigest(),pbo_sha256=hashlib.sha256(pbo).hexdigest())
+manifest=dict(version='0.3.0',ammo_stacks=10,open_key='comma',replace='all carried guns and ammo',logo_original_size=logo.size,logo_source_sha256=hashlib.sha256(original).hexdigest(),pbo_sha256=hashlib.sha256(pbo).hexdigest())
 (root / 'downloads/GRZ-LOADOUT-MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n')
 print('Built GRZ_Loadout.pbo:',len(pbo),'bytes')

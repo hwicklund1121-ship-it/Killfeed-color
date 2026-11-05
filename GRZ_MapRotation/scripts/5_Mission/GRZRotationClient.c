@@ -97,6 +97,7 @@ class GRZRotationClient
 
  static void Update()
  {
+  if (GRZDuelClientBus.Data && GRZDuelClientBus.Data.InMatch) return;
   if (Notification && g_Game.GetTime() >= NoticeUntil)
    Notification.Show(false);
   if (!PendingMenu || !Data || !Data.Enabled || !Data.Voting)

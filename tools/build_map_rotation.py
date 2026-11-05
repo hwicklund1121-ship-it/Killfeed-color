@@ -113,12 +113,13 @@ config+='};\nclass CfgSoundSets {\n'
 for name in ['vote','warning','change']:config+=f'class GRZ_Rotation_{name.capitalize()}_SoundSet {{ soundShaders[] = {{"GRZ_Rotation_{name}_Shader"}}; volumeFactor = 1; frequencyRandomizer = 0; spatial = 0; doppler = 0; loop = 0; }};\n'
 config+='};\n';(source/'config.cpp').write_text(config)
 pbo=build(source);(out/'GRZ_MapRotation.pbo').write_bytes(pbo)
-(root/'GRZ-MAP-ROTATION-MANIFEST.json').write_text(json.dumps(dict(version='0.1.1',arenas=report,round_seconds=1800,vote_opens_remaining=120,vote_locks_remaining=30,popup_seconds=30,outside_seconds=5,pbo_sha256=hashlib.sha256(pbo).hexdigest(),map_objects=len(objects),map_hidden_objects=len(dze['EditorHiddenObjects']),map_author_metadata_removed=True,original_map_sha256=hashlib.sha256(args.dze.read_bytes()).hexdigest(),sanitized_map_sha256=hashlib.sha256(sanitized).hexdigest()),indent=2)+'\n')
+(root/'GRZ-MAP-ROTATION-MANIFEST.json').write_text(json.dumps(dict(version='0.1.2',arenas=report,round_seconds=1800,vote_opens_remaining=120,vote_locks_remaining=30,popup_seconds=30,outside_seconds=5,pbo_sha256=hashlib.sha256(pbo).hexdigest(),loadout_sha256=hashlib.sha256(build(root/'GRZ_Loadout')).hexdigest(),map_objects=len(objects),map_hidden_objects=len(dze['EditorHiddenObjects']),map_author_metadata_removed=True,original_map_sha256=hashlib.sha256(args.dze.read_bytes()).hexdigest(),sanitized_map_sha256=hashlib.sha256(sanitized).hexdigest()),indent=2)+'\n')
 print('Built GRZ_MapRotation.pbo',len(pbo),'bytes; three placement-derived blueprint cards and sanitized DZE.')
 
 if (root/'MAP-ROTATION.md').exists():
     with ZipFile(out/'GRZ-MapRotation.zip','w',ZIP_DEFLATED) as archive:
         archive.writestr('GRZ_MapRotation.pbo',pbo)
+        archive.writestr('GRZ_Loadout.pbo',build(root/'GRZ_Loadout'))
         archive.writestr('EditorFiles/GRZ_BBC_DM_2.dze',sanitized)
         for filename in ['Install-GRZMapRotation.cmd','Install-GRZMapRotation.ps1']:
             archive.write(root/'packaging/map-rotation'/filename,filename)

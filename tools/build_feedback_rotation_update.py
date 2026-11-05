@@ -11,13 +11,18 @@ payload = build(root / 'GRZ_MapRotation')
 (out / 'GRZ_MapRotation.pbo').write_bytes(payload)
 p = root / 'GRZ-MAP-ROTATION-MANIFEST.json'
 manifest = json.loads(p.read_text())
-manifest['version'] = '0.1.1'
+manifest['version'] = '0.1.2'
 manifest['pbo_sha256'] = hashlib.sha256(payload).hexdigest()
+loadout = build(root/'GRZ_Loadout')
+manifest['loadout_sha256'] = hashlib.sha256(loadout).hexdigest()
 p.write_text(json.dumps(manifest, indent=2)+'\n')
 archive = out / 'GRZ-MapRotation.zip'
 with ZipFile(archive) as z:
     entries = {name:z.read(name) for name in z.namelist()}
 entries['GRZ_MapRotation.pbo'] = payload
+entries['GRZ_Loadout.pbo'] = loadout
+for filename in ['Install-GRZMapRotation.cmd','Install-GRZMapRotation.ps1']:
+    entries[filename] = (root/'packaging/map-rotation'/filename).read_bytes()
 entries['MANIFEST.json'] = p.read_bytes()
 entries['INSTALL.txt'] = (root / 'MAP-ROTATION.md').read_bytes()
 with ZipFile(archive, 'w', ZIP_DEFLATED) as z:
@@ -27,10 +32,11 @@ notes = '''Close DayZ and the server. Copy all FIVE PBOs to @GRZ_Local/Addons
 in BOTH DayZ and DayZServer, replacing the existing versions. Restart both.
 Do not replace or delete your profile config or DZE.
 
-GRZ_MapRotation 0.1.1: fixes terrain raycasts rejecting valid spawn points.
+GRZ_MapRotation 0.1.2: fixes terrain raycasts rejecting valid spawn points.
 Fresh respawns register for arena placement and the
 five-second outside-boundary countdown. Existing ready callbacks are deduplicated.
-GRZ_Loadout 0.2.6: Removes starter soda, glow sticks and fruit on fresh spawns.
+GRZ_Loadout 0.3.0: Duels, Elo ranks and O-key leaderboard added.
+Removes starter soda, glow sticks and fruit on fresh spawns.
 Save a weapon once after installing. Fresh respawns restore
 that gun/wrap, compatible scope, ten ammo stacks and six spare magazines for
 magazine-fed guns. Clothing is restored first. Choice survives server restarts;

@@ -180,6 +180,8 @@ class GRZRotationServer
   if (savedIndex >= 0)
    ActiveIndex = savedIndex;
   Enabled = true;
+  GRZDuelHooks.ReturnToArena.Remove(ReturnFromDuel);
+  GRZDuelHooks.ReturnToArena.Insert(ReturnFromDuel);
   Status = "";
   Print("[GRZ Rotation 0.1.1] Enabled: " + Settings.Arenas[ActiveIndex].Name);
   BeginRound();
@@ -313,9 +315,17 @@ class GRZRotationServer
   return winners[Math.RandomInt(0, winners.Count())];
  }
 
+ static void ReturnFromDuel(PlayerBase player)
+ {
+  if (MovePlayer(player))
+  {
+   player.m_GRZRotationReady = true;
+   SendSnapshot(player);
+  }
+ }
  static bool MovePlayer(PlayerBase player)
  {
-  if (!Enabled || !player || !player.IsAlive())
+  if (!Enabled || !player || !player.IsAlive() || player.m_GRZDuelMatch != "")
    return false;
   if (player.GetCommand_Vehicle())
   {
@@ -418,7 +428,7 @@ class GRZRotationServer
   foreach (Man man : players)
   {
    PlayerBase player = PlayerBase.Cast(man);
-   if (!player || !player.GetIdentity() || !player.IsAlive() || !player.m_GRZRotationReady)
+   if (!player || !player.GetIdentity() || !player.IsAlive() || !player.m_GRZRotationReady || player.m_GRZDuelMatch != "")
     continue;
    if (Inside(player.GetPosition(), Settings.Arenas[ActiveIndex]))
    {
@@ -448,6 +458,7 @@ class GRZRotationServer
 
  static void Stop()
  {
+  GRZDuelHooks.ReturnToArena.Remove(ReturnFromDuel);
   Enabled = false;
   g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).Remove(Tick);
   g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).Remove(MovePlayer);

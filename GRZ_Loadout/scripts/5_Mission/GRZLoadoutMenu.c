@@ -502,6 +502,12 @@ class GRZLoadoutMenu : UIScriptedMenu
   }
   if (m_Saving)
    return true;
+  if (name == "DuelsTab")
+  {
+   Close();
+   g_Game.GetUIManager().EnterScriptedMenu(GRZDuelRPC.MENU,null);
+   return true;
+  }
   if (name == "ClothingTab" || name == "LoadoutTab")
   {
    SelectPage(name == "ClothingTab");

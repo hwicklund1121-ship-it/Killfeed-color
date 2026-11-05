@@ -1,4 +1,4 @@
-GRZ Loadout 0.2.6 — Made By Blake
+GRZ Loadout 0.3.0 — Made By Blake
 
 INSTALL
 Copy GRZ_Loadout.pbo into @GRZ_Local/Addons on BOTH game and server.
@@ -6,6 +6,12 @@ Restart both. Enable @GRZ_Local in the client launcher. Press comma (,).
 The key is rebindable in DayZ Controls > GRZ Loadout.
 
 FEATURES
+DUELS tab: online players, named maps, 60-second accept/decline, guns held at acceptance, BO1/3/5.
+Five-second protected countdown, side spawns between rounds and return to active rotation arena.
+Elo starts at 800; higher-rated opponents award more. Persistent colour ranks and badges.
+O opens the paginated server-wide leaderboard: kills, deaths, K/D, Elo; sortable by kills/KD/Elo.
+Duel maps start DISABLED until you build/configure their coordinates; no default teleport to zero.
+Install the paired GRZ_MapRotation update too; see DUELS.md.
 Fresh respawns remove default soda cans, glow sticks and starter fruit before applying saved gear.
 Large dark menu, transparent GunRunnerZ logo at top left, white accents.
 Only bolt-action rifle config families are included; semi-auto guns are excluded.
@@ -67,8 +73,11 @@ New gun goes into hands; all ten stacks must fit in clothing/backpack cargo.
 If any move fails, new items are deleted and original gear locations are restored.
 If another mod prevents restoration, preserved old items fall beside the owner and a script error is logged.
 Only after all new items fit are the old guns/ammo deleted.
-Weapon selections are not yet saved for respawn; saved clothing outfits are applied on new-character spawns.
-Preview entities are local-only and deleted on change/close. No hit/damage/recoil callbacks changed.
+Successfully applied weapon selections and clothing outfits are saved for normal respawn.
+Duels capture the currently held weapon separately and do not replace that saved selection.
+Preview entities are local-only and deleted on change/close.
+New server damage guards isolate duels; the player-death hook records server-wide K/D.
+Normal damage/recoil outside duels retains its native/modded behavior.
 
 VALIDATION
 Static package/API checks only. Enforce compilation, preview sizing, live inventory rollback and multiplayer sync require testing in DayZ 1.30.

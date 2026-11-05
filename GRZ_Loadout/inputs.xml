@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <modded_inputs>
  <inputs>
-  <actions><input name="UAGRZLoadout" loc="GRZ Loadout menu" /></actions>
-  <sorting name="GRZLoadout" loc="GRZ Loadout"><input name="UAGRZLoadout" /></sorting>
+  <actions><input name="UAGRZLoadout" loc="GRZ Loadout menu" /><input name="UAGRZLeaderboard" loc="GRZ Leaderboard" /></actions>
+  <sorting name="GRZLoadout" loc="GRZ Loadout"><input name="UAGRZLoadout" /><input name="UAGRZLeaderboard" /></sorting>
  </inputs>
- <preset><input name="UAGRZLoadout"><btn name="kComma" /></input></preset>
+ <preset><input name="UAGRZLoadout"><btn name="kComma" /></input><input name="UAGRZLeaderboard"><btn name="kO" /></input></preset>
 </modded_inputs>

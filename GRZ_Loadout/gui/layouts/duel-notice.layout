@@ -1,0 +1,93 @@
+FrameWidgetClass DuelHud
+{
+ position 0.22 0.13
+ size 0.56 0.15
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0 0 0 0
+ {
+FrameWidgetClass NoticeBox
+{
+ position 0 0
+ size 1 0.6
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0 0 0 0
+ {
+PanelWidgetClass NoticeBackground
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.03 0.03 0.04 0.94
+}
+TextWidgetClass DuelMessage
+{
+ position 0.02 0.05
+ size 0.96 0.9
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text ""
+}
+ }
+}
+FrameWidgetClass ScoreBox
+{
+ position 0 0.67
+ size 1 0.33
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0 0 0 0
+ {
+PanelWidgetClass ScoreBackground
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.03 0.03 0.04 0.9
+}
+TextWidgetClass DuelScore
+{
+ position 0.02 0.05
+ size 0.96 0.9
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text ""
+}
+ }
+}
+ }
+}

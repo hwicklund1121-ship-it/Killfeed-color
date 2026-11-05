@@ -24,6 +24,7 @@ modded class MissionServer
   // gun grant. Reconnects use ClientReady and do not receive duplicate gear.
   GRZRemoveStarterItems(player);
   GRZApplySavedClothing(player);
+  if (GRZDuelServer.Spawned(player)) return;
   GRZSavedWeapon weapon = GRZWeaponStore.Load(player.GetIdentity());
   if (weapon && !GRZLoadoutServer.Equip(player, weapon.Weapon, weapon.Wrap, false))
    Print("[GRZ Loadout] Saved weapon could not be restored; spawn gear preserved.");

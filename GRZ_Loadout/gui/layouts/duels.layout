@@ -1,0 +1,581 @@
+FrameWidgetClass GRZDuelsRoot
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 0
+ {
+FrameWidgetClass MenuPanel
+{
+ position 0.07 0.065
+ size 0.86 0.87
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 0
+ {
+PanelWidgetClass Background
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.025 0.025 0.03 0.98
+}
+PanelWidgetClass WhiteAccent
+{
+ position 0 0
+ size 1 0.004
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+}
+ImageWidgetClass Logo
+{
+ position 0.025 0.02
+ size 0.245 0.105
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ mode blend
+ stretch 1
+}
+TextWidgetClass Title
+{
+ position 0.33 0.04
+ size 0.56 0.055
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text "CHALLENGE A PLAYER"
+}
+ButtonWidgetClass Close
+{
+ position 0.94 0.025
+ size 0.04 0.055
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass CloseFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.09 0.09 0.11 1
+}
+TextWidgetClass CloseLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "X"
+}
+ }
+}
+CanvasWidgetClass MyBadge
+{
+ position 0.03 0.14
+ size 0.065 0.095
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+}
+TextWidgetClass MyRank
+{
+ position 0.105 0.15
+ size 0.37 0.06
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text "BRONZE | 800 ELO"
+}
+TextWidgetClass MatchType
+{
+ position 0.52 0.15
+ size 0.2 0.04
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text "MATCH LENGTH"
+}
+ButtonWidgetClass Best1
+{
+ position 0.52 0.2
+ size 0.145 0.055
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass Best1Fill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.09 0.09 0.11 1
+}
+TextWidgetClass Best1Label
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "BEST OF 1"
+}
+ }
+}
+ButtonWidgetClass Best3
+{
+ position 0.675 0.2
+ size 0.145 0.055
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass Best3Fill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.09 0.09 0.11 1
+}
+TextWidgetClass Best3Label
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "BEST OF 3"
+}
+ }
+}
+ButtonWidgetClass Best5
+{
+ position 0.83 0.2
+ size 0.145 0.055
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass Best5Fill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.09 0.09 0.11 1
+}
+TextWidgetClass Best5Label
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "BEST OF 5"
+}
+ }
+}
+TextWidgetClass PlayersTitle
+{
+ position 0.03 0.27
+ size 0.43 0.04
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text "ONLINE PLAYERS"
+}
+TextWidgetClass MapsTitle
+{
+ position 0.52 0.27
+ size 0.45 0.04
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text "DUEL MAPS"
+}
+PanelWidgetClass PlayersBack
+{
+ position 0.03 0.32
+ size 0.45 0.34
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.07 0.07 0.08 1
+}
+TextListboxWidgetClass Players
+{
+ position 0.03 0.32
+ size 0.45 0.34
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight16"
+}
+PanelWidgetClass MapsBack
+{
+ position 0.52 0.32
+ size 0.45 0.34
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.07 0.07 0.08 1
+}
+TextListboxWidgetClass Maps
+{
+ position 0.52 0.32
+ size 0.45 0.34
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+}
+CanvasWidgetClass OpponentBadge
+{
+ position 0.03 0.675
+ size 0.065 0.09
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+}
+TextWidgetClass SelectedPlayer
+{
+ position 0.105 0.68
+ size 0.86 0.04
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text "Select an opponent"
+}
+TextWidgetClass SelectedGun
+{
+ position 0.105 0.725
+ size 0.86 0.03
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.7 0.7 0.74 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+TextWidgetClass Pending
+{
+ position 0.03 0.78
+ size 0.94 0.04
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+ButtonWidgetClass Accept
+{
+ position 0.53 0.835
+ size 0.2 0.055
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass AcceptFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.09 0.09 0.11 1
+}
+TextWidgetClass AcceptLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "ACCEPT"
+}
+ }
+}
+ButtonWidgetClass Decline
+{
+ position 0.75 0.835
+ size 0.22 0.055
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass DeclineFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.09 0.09 0.11 1
+}
+TextWidgetClass DeclineLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "DECLINE"
+}
+ }
+}
+ButtonWidgetClass Forfeit
+{
+ position 0.03 0.9
+ size 0.24 0.06
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass ForfeitFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.09 0.09 0.11 1
+}
+TextWidgetClass ForfeitLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "FORFEIT (-ELO)"
+}
+ }
+}
+ButtonWidgetClass SendChallenge
+{
+ position 0.7 0.9
+ size 0.27 0.06
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass SendChallengeFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.09 0.09 0.11 1
+}
+TextWidgetClass SendChallengeLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "SEND CHALLENGE"
+}
+ }
+}
+TextWidgetClass Status
+{
+ position 0.03 0.965
+ size 0.94 0.03
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.75 0.75 0.8 1
+ font "gui/fonts/sdf_MetronLight16"
+ "exact text" 1
+ "text valign" center
+ "text halign" left
+ text ""
+}
+ }
+}
+ }
+}

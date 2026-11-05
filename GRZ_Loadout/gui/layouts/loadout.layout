@@ -27,7 +27,6 @@ PanelWidgetClass MenuBackground
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 0.025 0.025 0.03 0.98
 }
 PanelWidgetClass AccentTop
@@ -39,7 +38,6 @@ PanelWidgetClass AccentTop
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 1 1 1 1
 }
 ImageWidgetClass Logo
@@ -90,7 +88,6 @@ PanelWidgetClass CloseFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass CloseLabel
@@ -130,7 +127,6 @@ PanelWidgetClass LoadoutTabFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 0.96 0.96 0.96 1
 }
 TextWidgetClass LoadoutTabLabel
@@ -170,7 +166,6 @@ PanelWidgetClass ClothingTabFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass ClothingTabLabel
@@ -191,6 +186,45 @@ TextWidgetClass ClothingTabLabel
 }
  }
 }
+ButtonWidgetClass DuelsTab
+{
+ position 0.413 0.177
+ size 0.18 0.065
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+PanelWidgetClass DuelsTabFill
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 0.085 0.085 0.095 1
+}
+TextWidgetClass DuelsTabLabel
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ ignorepointer 1
+ color 1 1 1 1
+ font "gui/fonts/sdf_MetronLight24"
+ "exact text" 1
+ "text valign" center
+ "text halign" center
+ text "DUELS"
+}
+ }
+}
 PanelWidgetClass Divider
 {
  position 0.027 0.268
@@ -200,7 +234,6 @@ PanelWidgetClass Divider
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 0.22 0.22 0.24 1
 }
 ButtonWidgetClass Calibre20
@@ -222,7 +255,6 @@ PanelWidgetClass Calibre20Fill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass Calibre20Label
@@ -252,7 +284,6 @@ PanelWidgetClass Calibre20Line
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 1 1 1 1
 }
 ButtonWidgetClass Calibre50
@@ -274,7 +305,6 @@ PanelWidgetClass Calibre50Fill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass Calibre50Label
@@ -304,7 +334,6 @@ PanelWidgetClass Calibre50Line
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 1 1 1 1
 }
 ButtonWidgetClass Calibre408
@@ -326,7 +355,6 @@ PanelWidgetClass Calibre408Fill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass Calibre408Label
@@ -356,7 +384,6 @@ PanelWidgetClass Calibre408Line
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 1 1 1 1
 }
 PanelWidgetClass PreviewBackground
@@ -368,7 +395,6 @@ PanelWidgetClass PreviewBackground
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 0.055 0.055 0.065 1
 }
 ItemPreviewWidgetClass GunPreview
@@ -402,7 +428,6 @@ PanelWidgetClass GunPreviousFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass GunPreviousLabel
@@ -442,7 +467,6 @@ PanelWidgetClass GunNextFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass GunNextLabel
@@ -530,7 +554,6 @@ PanelWidgetClass WrapPreviousFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass WrapPreviousLabel
@@ -586,7 +609,6 @@ PanelWidgetClass WrapNextFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass WrapNextLabel
@@ -648,7 +670,6 @@ PanelWidgetClass SlotHatFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass SlotHatLabel
@@ -688,7 +709,6 @@ PanelWidgetClass SlotMaskFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass SlotMaskLabel
@@ -728,7 +748,6 @@ PanelWidgetClass SlotShirtFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass SlotShirtLabel
@@ -768,7 +787,6 @@ PanelWidgetClass SlotBeltFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass SlotBeltLabel
@@ -808,7 +826,6 @@ PanelWidgetClass SlotPantsFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass SlotPantsLabel
@@ -848,7 +865,6 @@ PanelWidgetClass SlotGloveFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass SlotGloveLabel
@@ -888,7 +904,6 @@ PanelWidgetClass SlotVestFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass SlotVestLabel
@@ -928,7 +943,6 @@ PanelWidgetClass SlotShoesFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass SlotShoesLabel
@@ -968,7 +982,6 @@ PanelWidgetClass SelectCharacterFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass SelectCharacterLabel
@@ -1014,7 +1027,6 @@ PanelWidgetClass ClothingListBackground
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 0.065 0.065 0.075 1
 }
 TextListboxWidgetClass ClothingList
@@ -1047,7 +1059,6 @@ PanelWidgetClass RemoveClothingFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 0.085 0.085 0.095 1
 }
 TextWidgetClass RemoveClothingLabel
@@ -1089,7 +1100,6 @@ PanelWidgetClass SaveFill
  hexactsize 0
  vexactsize 0
  ignorepointer 1
- style rover_sim_colorable
  color 0.96 0.96 0.96 1
 }
 TextWidgetClass SaveLabel
