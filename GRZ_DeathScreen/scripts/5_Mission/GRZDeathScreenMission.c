@@ -18,7 +18,7 @@ modded class InGameMenu
     void GRZRespawnFromDeathScreen()
     {
         PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
-        if (!player || player.IsAlive())
+        if ((player && player.IsAlive()) || !GRZDeathScreenState.Visible)
             return;
         // Reuse native cleanup, respawn request and player-respawning state.
         // The server's CreateCharacter hook chooses the active GRZ arena.
@@ -56,7 +56,7 @@ modded class MissionGameplay
     void GRZRequestDeathRespawn()
     {
         PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
-        if (!player || player.IsAlive() || IsPlayerRespawning())
+        if ((player && player.IsAlive()) || !GRZDeathScreenState.Visible || IsPlayerRespawning())
             return;
         GRZDeathFocus(false);
         if (m_GRZDeathArtwork)
@@ -73,7 +73,7 @@ modded class MissionGameplay
         super.OnUpdate(timeslice);
         PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
         bool showArtwork = GRZDeathScreenState.Visible;
-        if (!player || player.IsAlive() || IsPlayerRespawning())
+        if ((player && player.IsAlive()) || IsPlayerRespawning())
         {
             GRZDeathScreenState.Visible = false;
             showArtwork = false;
