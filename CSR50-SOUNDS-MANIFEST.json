@@ -1,0 +1,28 @@
+{
+  "source_sha256": "00bb80e7bc6933a94513e3b086f1743e86bbb9b1b434b64d13279a7c3524c7d7",
+  "layers": {
+    "Close": {
+      "filter": "volume=0.82,alimiter=limit=0.95:level=false:latency=true",
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_seconds": 3.670227,
+      "sha256": "024efe935f2283242e5cb214d77b0e733fd5155852fa27ec1dba46be43aaed84"
+    },
+    "Mid": {
+      "filter": "highpass=f=55,lowpass=f=5200,aecho=0.88:1:23|51|89:0.12|0.08|0.04,alimiter=limit=0.95:level=false:latency=true",
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_seconds": 3.759206,
+      "sha256": "95ca753515733ee428c22dee9f65b53e4e18688ad23e302ceb6052366abe66f7"
+    },
+    "Far": {
+      "filter": "highpass=f=80,lowpass=f=2300,aecho=0.82:1:37|79|127|181:0.20|0.14|0.09|0.05,lowpass=f=2600,alimiter=limit=0.95:level=false:latency=true",
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_seconds": 3.851224,
+      "sha256": "5bc10688b05aa26a0054acc0ecea81d62c598bd086d76a8de7a51c3410da2ee5"
+    }
+  },
+  "config_changes": "three samples arrays only",
+  "old_shot_removed": true
+}
