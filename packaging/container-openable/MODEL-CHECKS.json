@@ -1,0 +1,13 @@
+{
+  "class": "GRZ_Container_Openable",
+  "visual_door_vertices": [
+    873,
+    665
+  ],
+  "door_collision_components": 2,
+  "static_collision_components": 6,
+  "lods": 6,
+  "native_action": "Twin doors open/close together",
+  "requires_dayz_binarize": true,
+  "runtime_tested": false
+}
