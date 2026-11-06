@@ -570,6 +570,10 @@ modded class PlayerBase
    PlayerBase attacker = PlayerBase.Cast(killer);
    EntityAI cause = EntityAI.Cast(killer);
    if (!attacker && cause) attacker = PlayerBase.Cast(cause.GetHierarchyRootPlayer());
+   // Siphon runs once per confirmed survivor death, independently of stats storage.
+   // Never revive a dead killer or reward a suicide.
+   if (attacker && attacker != this && attacker.IsAlive() && attacker.GetIdentity())
+    GRZDuelServer.Heal(attacker);
    GRZDuelRatingStore.Death(this,attacker);
   }
   super.EEKilled(killer);
