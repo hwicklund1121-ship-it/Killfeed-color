@@ -19,7 +19,7 @@ with Image.open(a/'preview.gif') as gif:
  for i in range(2):gif.seek(i);assert gif.info['duration']==750
 pbo=build(s);(r/'downloads/GRZ_AnimatedGhillie.pbo').write_bytes(pbo)
 m['pbo_sha256']=hashlib.sha256(pbo).hexdigest()
-notes='GRZ Animated Cross Wrap: GRZ_Animated_Ghillie_Cross. Two frames swap every 0.75 seconds. Original 2048px alpha retained. Select in VIP GHILLIE WRAP on compatible guns. Install combined update on server and client; no UAV repack. Existing checker wrap remains available at its original speed. Static/package checks only; DayZ runtime untested.\n'
+notes='XIMS Ghillie: GRZ_Animated_Ghillie_Cross. Two frames swap every 0.75 seconds. Original 2048px alpha retained. Select in VIP GHILLIE WRAP on compatible guns. Install combined update on server and client; no UAV repack. Existing checker wrap remains available at its original speed. Static/package checks only; DayZ runtime untested.\n'
 (r/'ANIMATED-CROSS-GHILLIE.md').write_text(notes)
 with ZipFile(r/'downloads/GRZ-Animated-Cross-Wrap.zip','w',ZIP_DEFLATED) as z:
  z.writestr('GRZ_AnimatedGhillie.pbo',pbo)

@@ -34,15 +34,15 @@ class CfgVehicles
  {
   scope = 2;
   displayName = "GRZ Animated Checker Wrap";
-  descriptionShort = "Made by Blake. Black and white checks swap every 0.25 seconds.";
+  descriptionShort = "Made By Blake";
   GRZVipOnly = 1;
   hiddenSelectionsTextures[] = {"GRZ_AnimatedGhillie\data\checker_a_co.paa"};
  };
  class GRZ_Animated_Ghillie_Cross: GhillieAtt_ColorBase
  {
   scope = 2;
-  displayName = "GRZ Animated Cross Wrap";
-  descriptionShort = "Made by Blake. Upright and upside-down crosses alternate every 0.75 seconds.";
+  displayName = "XIMS Ghillie";
+  descriptionShort = "Made By Blake";
   GRZVipOnly = 1;
   hiddenSelectionsTextures[] = {"GRZ_AnimatedGhillie\data\cross_upright_co.paa"};
  };
