@@ -33,8 +33,9 @@ class CfgWeapons
  class sfg50_Base: BoltActionRifle_InnerMagazine_Base
  {
   model = "GRZSFGAUTO\SFG50\SFG\data\SFG50.p3d";
-  attachments[] = {"weaponWrap", "weaponOpticsHunting", "UAV_SFG_Suppressor"};
+  attachments[] = {"weaponWrap", "weaponOpticsHunting", "weaponMuzzleM4"};
   GRZIntegratedSuppressor = 1;
+  GRZPermanentSuppressorSlot = "weaponMuzzleM4";
   class Single: Mode_SemiAuto
   {
    soundSetShot[] = {"sfgs50_Shot_SoundSet", "sfgs50_Shot_SoundSet", "sfgs50_Shot_SoundSet"};
@@ -60,7 +61,7 @@ class CfgVehicles
 		barrelArmor = 1500;
 		lootCategory = "Attachments";
 		hiddenSelections[] = {"camo"};
-		inventorySlot[] = {"UAV_SFG_Suppressor"};
+		inventorySlot[] = {"weaponMuzzleM4"};
 		simulation = "ItemSuppressor";
 		noiseShootModifier = -0.9;
 		recoilModifier[] = {0.8,0.8,0.8};
@@ -128,8 +129,7 @@ class CfgNonAIVehicles
 	class Proxysfg_muzzle: ProxyAttachment
 	{
 		scope = 2;
-		simulation = "alwaysshow";
-		inventorySlot = "";
+		inventorySlot = "weaponMuzzleM4";
 		model = "GRZSFGAUTO\SFG50\SFG\proxy\sfg_muzzle.p3d";
 	};
 };

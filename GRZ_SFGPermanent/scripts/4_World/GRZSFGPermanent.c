@@ -33,18 +33,11 @@ modded class sfg50_Base
  {
   if (!g_Game.IsServer())
    return;
-  if (g_Game.ConfigGetInt("CfgWeapons " + GetType() + " GRZIntegratedSuppressor") == 1)
-  {
-   EntityAI integratedOptic = FindAttachmentBySlotName("weaponOpticsHunting");
-   if (!integratedOptic) integratedOptic = GetInventory().CreateAttachment("HuntingOptic");
-   if (integratedOptic) return;
-   m_GRZPermanentPatchAttempts++;
-   if (m_GRZPermanentPatchAttempts < 10)
-    g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(GRZPermanentPatchEnsure, 250, false);
-   return;
-  }
-  int slot = InventorySlots.GetSlotIdFromString("UAV_SFG_Suppressor");
-  EntityAI suppressor = FindAttachmentBySlotName("UAV_SFG_Suppressor");
+  string slotName;
+  g_Game.ConfigGetText("CfgWeapons " + GetType() + " GRZPermanentSuppressorSlot", slotName);
+  if (slotName == "") slotName = "UAV_SFG_Suppressor";
+  int slot = InventorySlots.GetSlotIdFromString(slotName);
+  EntityAI suppressor = FindAttachmentBySlotName(slotName);
   if (!suppressor && slot >= 0)
   {
    GetInventory().SetSlotLock(slot, false);
@@ -66,14 +59,14 @@ modded class sfg50_Base
 
  override bool CanReleaseAttachment(EntityAI attachment)
  {
-  if (attachment && attachment == FindAttachmentBySlotName("UAV_SFG_Suppressor"))
+  if (attachment && (attachment == FindAttachmentBySlotName("UAV_SFG_Suppressor") || attachment == FindAttachmentBySlotName("weaponMuzzleM4")))
    return false;
   return super.CanReleaseAttachment(attachment);
  }
 
  override bool CanDisplayAttachmentSlot(int slot_id)
  {
-  if (slot_id == InventorySlots.GetSlotIdFromString("UAV_SFG_Suppressor"))
+  if (slot_id == InventorySlots.GetSlotIdFromString("UAV_SFG_Suppressor") || slot_id == InventorySlots.GetSlotIdFromString("weaponMuzzleM4"))
    return false;
   return super.CanDisplayAttachmentSlot(slot_id);
  }

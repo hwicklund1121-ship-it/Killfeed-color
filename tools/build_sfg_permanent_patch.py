@@ -52,8 +52,9 @@ class CfgWeapons
  class sfg50_Base: BoltActionRifle_InnerMagazine_Base
  {
   model = "GRZSFGAUTO\\SFG50\\SFG\\data\\SFG50.p3d";
-  attachments[] = {"weaponWrap", "weaponOpticsHunting", "UAV_SFG_Suppressor"};
+  attachments[] = {"weaponWrap", "weaponOpticsHunting", "weaponMuzzleM4"};
   GRZIntegratedSuppressor = 1;
+  GRZPermanentSuppressorSlot = "weaponMuzzleM4";
   class Single: Mode_SemiAuto
   {
    soundSetShot[] = {"sfgs50_Shot_SoundSet", "sfgs50_Shot_SoundSet", "sfgs50_Shot_SoundSet"};
@@ -66,13 +67,9 @@ class CfgWeapons
 };
 '''+'\n'.join(sections)+'\n'
 config = re.sub('UAVWEAPONS','GRZSFGAUTO',config,flags=re.I)
-# Render the muzzle model as an unconditional gun proxy. The hidden server
-# attachment still supplies suppressor behavior, but no longer controls visibility.
-config, static_proxy_edits = re.subn(
-    r'(class\s+Proxysfg_muzzle\s*:\s*ProxyAttachment\s*\{\s*scope\s*=\s*2;\s*)inventorySlot\s*=\s*"UAV_SFG_Suppressor";',
-    lambda match: match[1] + 'simulation = "alwaysshow";\n\t\tinventorySlot = "";', config)
-assert static_proxy_edits == 1
-
+# Held weapons render inventory proxies through the native muzzle slot.
+config = config.replace('inventorySlot[] = {"UAV_SFG_Suppressor"};', 'inventorySlot[] = {"weaponMuzzleM4"};')
+config = config.replace('inventorySlot = "UAV_SFG_Suppressor";', 'inventorySlot = "weaponMuzzleM4";')
 config = config.replace('\r\n', '\n')
 (source / 'config.cpp').write_text(config)
 for name,data in files.items():
@@ -97,14 +94,14 @@ Requires the original sfg50 weapon addon; does not add a second SFG weapon class
 
 Supplies the suppressor config, matching custom slot, visual proxy and required model assets.
 The SFG uses an integrated visual suppressor and its existing suppressed firing sound sets directly.
-A separate suppressor item is no longer required for loadout creation.
+A hidden, locked suppressor entity uses the standard weaponMuzzleM4 slot so native held-weapon rendering can display it.
 Server equips HuntingOptic after initialization, loading and debug spawning, with retries.
 An existing hunting-slot optic is preserved; the scope remains removable.
 Slot locking and CanReleaseAttachment prevent normal removal. Inventory slot stays hidden.
 Suppressor remains scope 1 so it cannot be selected as an ordinary separate spawn-menu item.
-The gun muzzle proxy uses simulation alwaysshow, making the suppressor model permanent on the gun, including local previews.
-The permanent visual proxy has no inventory slot; firing mode uses the suppressed sound sets directly.
-The loadout recognizes the integrated-suppressor config marker and does not require a separate attachment.
+The gun muzzle proxy uses native ProxyAttachment rendering with weaponMuzzleM4 for both held guns and local previews.
+The visual proxy and suppressor item use the same native muzzle slot. The slot is locked and hidden on the SFG.
+The loadout creates that attachment before committing the equipment transaction.
 The private asset namespace preserves original geometry bytes.
 The latest loadout creates the same suppressor in its local preview.
 VPP's own local model preview may omit runtime attachments; check the actual spawned gun.
