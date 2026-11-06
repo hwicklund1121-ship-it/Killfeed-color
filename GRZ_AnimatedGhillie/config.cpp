@@ -2,7 +2,7 @@ class CfgPatches
 {
  class GRZ_AnimatedGhillie
  {
-  units[] = {"GRZ_Animated_Ghillie_Checker", "GRZ_Animated_Ghillie_Cross"};
+  units[] = {"GRZ_Animated_Ghillie_Checker", "GRZ_Animated_Ghillie_Cross", "GRZ_Animated_Ghillie_XIMS_V2"};
   weapons[] = {};
   requiredVersion = 0.1;
   requiredAddons[] = {"DZ_Data", "DZ_Weapons_Supports", "GRZ_Loadout"};
@@ -14,7 +14,7 @@ class CfgMods
  {
   name = "GRZ Animated Checker Ghillie";
   author = "Blake";
-  version = "0.2.0";
+  version = "0.3.0";
   type = "mod";
   dependencies[] = {"World"};
   class defs
@@ -45,5 +45,13 @@ class CfgVehicles
   descriptionShort = "Made By Blake";
   GRZVipOnly = 1;
   hiddenSelectionsTextures[] = {"GRZ_AnimatedGhillie\data\cross_upright_co.paa"};
+ };
+ class GRZ_Animated_Ghillie_XIMS_V2: GhillieAtt_ColorBase
+ {
+  scope = 2;
+  displayName = "XIMS Ghillie V2";
+  descriptionShort = "Made By Blake";
+  GRZVipOnly = 1;
+  hiddenSelectionsTextures[] = {"GRZ_AnimatedGhillie\data\butterfly_purple_co.paa"};
  };
 };

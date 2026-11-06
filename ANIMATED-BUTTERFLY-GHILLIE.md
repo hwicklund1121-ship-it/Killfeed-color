@@ -1,0 +1,1 @@
+XIMS Ghillie V2. Description: Made By Blake. Purple with black butterflies / black with purple butterflies. Swap every 1 second. Original 2048px UV alpha preserved. Native wrap model, compatible guns only. Select in VIP GHILLIE WRAP; install on client and server. Existing wraps remain available. Package and image checks passed; DayZ runtime untested.
