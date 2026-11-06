@@ -14,7 +14,7 @@ class CfgMods
  {
   name = "GRZ Animated Hexgrid";
   author = "Blake";
-  version = "0.1.1";
+  version = "0.1.2";
   type = "mod";
   dependencies[] = {"World"};
   class defs
@@ -38,12 +38,14 @@ class CfgVehicles
   hiddenSelectionsMaterials[] = {"GRZ_AnimatedHexgrid\data\flat_black.rvmat"};
   hiddenSelectionsTextures[] = {"GRZ_AnimatedHexgrid\data\frame_000.paa"};
   // All damage stages keep the flat material instead of restoring the original hex normal map.
-  class DamageSystem: DamageSystem
+  class DamageSystem
   {
-   class GlobalHealth: GlobalHealth
+   class GlobalHealth
    {
-    class Health: Health
+    class Health
     {
+     hitpoints = 10000;
+     transferToAttachmentsCoef = 0.5;
      healthLevels[] = {
       {1,{"GRZ_AnimatedHexgrid\data\flat_black.rvmat"}},
       {0.45,{"GRZ_AnimatedHexgrid\data\flat_black.rvmat"}},
@@ -53,6 +55,69 @@ class CfgVehicles
      };
     };
    };
-  };
+  class GlobalArmor
+			{
+				class Projectile
+				{
+					class Health
+					{
+						damage = 0.045;
+					};
+					class Blood
+					{
+						damage = 0;
+					};
+					class Shock
+					{
+						damage = 0.1;
+					};
+				};
+				class Melee
+				{
+					class Health
+					{
+						damage = 0.05;
+					};
+					class Blood
+					{
+						damage = 0;
+					};
+					class Shock
+					{
+						damage = 0.1;
+					};
+				};
+				class Infected
+				{
+					class Health
+					{
+						damage = 0.05;
+					};
+					class Blood
+					{
+						damage = 0;
+					};
+					class Shock
+					{
+						damage = 0.1;
+					};
+				};
+				class FragGrenade
+				{
+					class Health
+					{
+						damage = 0.05;
+					};
+					class Blood
+					{
+						damage = 0;
+					};
+					class Shock
+					{
+						damage = 0.1;
+					};
+				};
+			};
+};
  };
 };

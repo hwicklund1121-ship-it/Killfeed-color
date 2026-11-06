@@ -504,6 +504,7 @@
   ],
   "frame_count": 119,
   "loop_seconds": 14.875,
-  "pbo_sha256": "1e4e61631c682689e4bd4eaaad0516c396c7aea0ae4990ab2c90bae47a779e96",
-  "pbo_bytes": 83213629
+  "pbo_sha256": "240991044bf9a0b018d778ee7dfe36ab339c33b9896d1db6d1422295efef8bd9",
+  "pbo_bytes": 83214501,
+  "config_revision": "0.1.2"
 }
