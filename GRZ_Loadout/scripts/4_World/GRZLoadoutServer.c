@@ -274,6 +274,10 @@ class GRZLoadoutServer
    return false;
   if (!GameInventory.LocationCanMoveEntity(current, destination))
    return false;
+  // SERVER performs the same synchronous move and sends the authoritative
+  // inventory command to clients. A bare LocationSyncMoveEntity only moves locally.
+  if (g_Game.IsServer())
+   return item.GetInventory().TakeToDst(InventoryMode.SERVER, current, destination);
   return GameInventory.LocationSyncMoveEntity(current, destination);
  }
 
@@ -579,7 +583,7 @@ modded class PlayerBase
     {
      GRZSavedOutfit saved = GRZOutfitStore.Snapshot(this, character);
      if (GRZOutfitStore.Save(sender, saved))
-      GRZLoadoutServer.Reply(this, "Outfit applied and saved for respawn. Character changes on next respawn.");
+      GRZLoadoutServer.Reply(this, "Clothing applied now and saved. Character model changes on next respawn.");
      else
       GRZLoadoutServer.Reply(this, "Clothing applied, but saving failed. Check the server profile folder.");
     }

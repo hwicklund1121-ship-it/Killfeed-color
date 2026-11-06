@@ -125,3 +125,5 @@ Loadout 0.3.2 adds BAG selection and native mouse/keyboard/gamepad menu focus to
 Both spawn sides face their opponent. GroundSpawns resolves Y from live Chernarus terrain each round; keep it false for future rooftop arenas with explicitly measured Y. The 100 Meters spawns are 100 metres apart horizontally. The included black-and-white planning preview marks sides A/B. Positions were derived from placed geometry; verify both sides in game, including modded object collision, before public matches.
 
 Siphon applies server-wide, including duel kills and survivor bots: a living human killer receives full health, blood, shock and repaired body damage, with bleeding cleared. It triggers once per victim death and never for suicide or a dead killer. Clothing and weapon condition are unchanged.
+
+Clothing Save & Apply uses native SERVER inventory moves to update worn items on connected clients immediately. Contents are transferred into replacement clothing; insufficient space cancels and restores the old outfit. The selected character model remains a respawn choice.
