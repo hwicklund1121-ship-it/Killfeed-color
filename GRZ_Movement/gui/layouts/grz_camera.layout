@@ -1,0 +1,371 @@
+PanelWidgetClass GRZCameraRoot
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+
+ {
+ImageWidgetClass GRZRowsBackground
+{
+ position 0 0.25
+ size 1 0.75
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 0.35
+ blend 1
+ ignorepointer 1
+ image0 "#(argb,8,8,3)color(1,1,1,1,co)"
+ mode blend
+}
+PanelWidgetClass GRZHeading
+{
+ position 0 0
+ size 1 0.25
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ {
+ImageWidgetClass GRZHeadingBackground
+{
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 0 0 0 1
+ blend 1
+ ignorepointer 1
+ image0 "#(argb,8,8,3)color(1,1,1,1,co)"
+ mode blend
+}
+TextWidgetClass GRZSectionTitle
+{
+ position 0 0.05
+ size 1 0.90
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ text "GUNRUNNERZ FOV"
+ font "gui/fonts/sdf_MetronBook24"
+ text_proportion 0.55
+ ignorepointer 1
+}
+ }
+}
+PanelWidgetClass GRZFovRow
+{
+ position 0 0.25
+ size 1 0.25
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ {
+PanelWidgetClass GRZFovBorder
+{
+ position 0.52 0.18
+ size 0.46 0.64
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ style Colorable
+ color 1 1 1 1
+ ignorepointer 1
+}
+PanelWidgetClass GRZFovTrack
+{
+ position 0.523 0.22
+ size 0.454 0.56
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ style Colorable
+ color 0.45 0.45 0.45 1
+ ignorepointer 1
+}
+TextWidgetClass GRZFovLabel
+{
+ position 0.015 0.13
+ size 0.49 0.8
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ text "FIELD OF VIEW"
+ font "gui/fonts/sdf_MetronBook24"
+ text_proportion 0.55
+ ignorepointer 1
+}
+SliderWidgetClass GRZFov
+{
+ position 0.52 0.18
+ size 0.46 0.64
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+ImageWidgetClass GRZFovFill
+{
+ position 0 0
+ size 0 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 0.30
+ blend 1
+ ignorepointer 1
+ image0 "#(argb,8,8,3)color(1,1,1,1,co)"
+ mode blend
+}
+PanelWidgetClass GRZFovMarker
+{
+ position 0 0.1
+ size 0.012 0.8
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ style Colorable
+ color 1 1 1 1
+ ignorepointer 1
+}
+ }
+}
+TextWidgetClass GRZFovValue
+{
+ position 0.70 0.17
+ size 0.20 0.7
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ font "gui/fonts/sdf_MetronBook24"
+ text_proportion 0.55
+ ignorepointer 1
+}
+ }
+}
+PanelWidgetClass GRZViewRow
+{
+ position 0 0.50
+ size 1 0.25
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ {
+PanelWidgetClass GRZViewBorder
+{
+ position 0.52 0.18
+ size 0.46 0.64
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ style Colorable
+ color 1 1 1 1
+ ignorepointer 1
+}
+PanelWidgetClass GRZViewTrack
+{
+ position 0.523 0.22
+ size 0.454 0.56
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ style Colorable
+ color 0.45 0.45 0.45 1
+ ignorepointer 1
+}
+TextWidgetClass GRZViewLabel
+{
+ position 0.015 0.13
+ size 0.49 0.8
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ text "VIEW DISTANCE"
+ font "gui/fonts/sdf_MetronBook24"
+ text_proportion 0.55
+ ignorepointer 1
+}
+SliderWidgetClass GRZView
+{
+ position 0.52 0.18
+ size 0.46 0.64
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+ImageWidgetClass GRZViewFill
+{
+ position 0 0
+ size 0 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 0.30
+ blend 1
+ ignorepointer 1
+ image0 "#(argb,8,8,3)color(1,1,1,1,co)"
+ mode blend
+}
+PanelWidgetClass GRZViewMarker
+{
+ position 0 0.1
+ size 0.012 0.8
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ style Colorable
+ color 1 1 1 1
+ ignorepointer 1
+}
+ }
+}
+TextWidgetClass GRZViewValue
+{
+ position 0.70 0.17
+ size 0.20 0.7
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ font "gui/fonts/sdf_MetronBook24"
+ text_proportion 0.55
+ ignorepointer 1
+}
+ }
+}
+PanelWidgetClass GRZObjectsRow
+{
+ position 0 0.75
+ size 1 0.25
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ {
+PanelWidgetClass GRZObjectsBorder
+{
+ position 0.52 0.18
+ size 0.46 0.64
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ style Colorable
+ color 1 1 1 1
+ ignorepointer 1
+}
+PanelWidgetClass GRZObjectsTrack
+{
+ position 0.523 0.22
+ size 0.454 0.56
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ style Colorable
+ color 0.45 0.45 0.45 1
+ ignorepointer 1
+}
+TextWidgetClass GRZObjectsLabel
+{
+ position 0.015 0.13
+ size 0.49 0.8
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ text "OBJECT VIEW DISTANCE"
+ font "gui/fonts/sdf_MetronBook24"
+ text_proportion 0.55
+ ignorepointer 1
+}
+SliderWidgetClass GRZObjects
+{
+ position 0.52 0.18
+ size 0.46 0.64
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 1
+ {
+ImageWidgetClass GRZObjectsFill
+{
+ position 0 0
+ size 0 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ color 1 1 1 0.30
+ blend 1
+ ignorepointer 1
+ image0 "#(argb,8,8,3)color(1,1,1,1,co)"
+ mode blend
+}
+PanelWidgetClass GRZObjectsMarker
+{
+ position 0 0.1
+ size 0.012 0.8
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ style Colorable
+ color 1 1 1 1
+ ignorepointer 1
+}
+ }
+}
+TextWidgetClass GRZObjectsValue
+{
+ position 0.70 0.17
+ size 0.20 0.7
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ font "gui/fonts/sdf_MetronBook24"
+ text_proportion 0.55
+ ignorepointer 1
+}
+ }
+}
+TextWidgetClass GRZStatus
+{
+ visible 0
+ position 0.015 0.85
+ size 0.97 0.15
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ font "gui/fonts/sdf_MetronBook24"
+ text_proportion 0.55
+ ignorepointer 1
+}
+ }
+}

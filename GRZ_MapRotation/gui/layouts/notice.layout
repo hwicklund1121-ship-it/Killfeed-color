@@ -10,7 +10,7 @@ FrameWidgetClass GRZMapNotice
  ignorepointer 1
  color 0 0 0 0
  {
-PanelWidgetClass NoticeBackground
+ImageWidgetClass NoticeBackground
 {
  position 0 0
  size 1 1
@@ -19,6 +19,8 @@ PanelWidgetClass NoticeBackground
  hexactsize 0
  vexactsize 0
  ignorepointer 1
+ mode blend
+ stretch 1
  color 0 0 0 0.85
 }
 TextWidgetClass Message

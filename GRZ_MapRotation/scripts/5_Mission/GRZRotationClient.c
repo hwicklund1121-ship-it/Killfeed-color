@@ -76,7 +76,19 @@ class GRZRotationClient
    return;
   }
   if (!Notification)
+  {
    Notification = g_Game.GetWorkspace().CreateWidgets("GRZ_MapRotation/gui/layouts/notice.layout");
+   if (Notification)
+   {
+    ImageWidget background = ImageWidget.Cast(Notification.FindAnyWidget("NoticeBackground"));
+    if (background)
+    {
+     background.LoadImageFile(0, "GRZ_MapRotation/data/solid_white.paa");
+     background.SetImage(0);
+     background.SetFlags(WidgetFlags.SOURCEALPHA | WidgetFlags.BLEND);
+    }
+   }
+  }
   if (Notification)
   {
    TextWidget label = TextWidget.Cast(Notification.FindAnyWidget("Message"));
