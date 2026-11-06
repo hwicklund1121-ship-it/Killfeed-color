@@ -321,7 +321,13 @@ class GRZDuelServer
   float facing = match.Map.FacingB;
   if (sideA) { position = match.Map.SpawnA; facing = match.Map.FacingA; }
   // Configured DZE arenas use natural ground. Preserve explicit Y for future roof maps.
-  if (match.Map.GroundSpawns)
+  if (match.Map.SurfaceSpawns)
+  {
+   float terrain = g_Game.SurfaceY(position[0], position[2]);
+   float roadway = g_Game.SurfaceRoadY3D(position[0], terrain + 50, position[2], RoadSurfaceDetection.UNDER);
+   position[1] = Math.Max(terrain, roadway) + 0.2;
+  }
+  else if (match.Map.GroundSpawns)
    position[1] = g_Game.SurfaceY(position[0], position[2]) + 0.2;
   p.SetPosition(position);
   p.SetOrientation(Vector(facing, 0, 0));

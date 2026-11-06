@@ -34,9 +34,25 @@ foreach ($entry in ,@('GRZ_BBC_DM_3.dze',(Join-Path $editor 'GRZ_BBC_DM_3.dze'))
  if ((Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash.ToLowerInvariant() -ne $expected) { throw "Invalid configuration or DZE: $source" }
  $changes += [pscustomobject]@{Source=$source; Target=$entry[1]; Existed=$false; Backup=''}
 }
+$duelConfigPath = Join-Path $ProfilePath 'GRZ_Duels/config.json'
+if (!(Test-Path -LiteralPath $duelConfigPath)) { throw "Duel config not found: $duelConfigPath. Start the server once first." }
+$duelConfig = Get-Content -LiteralPath $duelConfigPath -Raw | ConvertFrom-Json
+if (!$duelConfig.PSObject.Properties['Maps']) { throw 'Duel config has no Maps array; existing config preserved.' }
+$mapUpdatePath = Join-Path $PSScriptRoot 'duel-map-update.json'
+if ((Get-FileHash -LiteralPath $mapUpdatePath -Algorithm SHA256).Hash.ToLowerInvariant() -ne $manifest.files.'duel-map-update.json') { throw 'Duel map update hash mismatch.' }
+$mapUpdate = Get-Content -LiteralPath $mapUpdatePath -Raw | ConvertFrom-Json
+if ($mapUpdate.Id -ne 'long_range_1v1') { throw 'Unexpected duel map ID; existing config preserved.' }
+$foundDuelMap = $false
+$duelConfig.Maps = @($duelConfig.Maps | ForEach-Object {
+ if ($_.Id -eq $mapUpdate.Id) { $foundDuelMap = $true; $mapUpdate } else { $_ }
+})
+if (!$foundDuelMap) { $duelConfig.Maps = @($duelConfig.Maps) + $mapUpdate }
 $backup = Join-Path $ServerPath ('GRZ-update-backup-' + [guid]::NewGuid().ToString('N'))
 New-Item -ItemType Directory -Path $backup | Out-Null
 Copy-Item -LiteralPath $configPath -Destination (Join-Path $backup 'config.json')
+$stagedDuelConfig = Join-Path $backup 'duel-config.updated.json'
+[IO.File]::WriteAllText($stagedDuelConfig, ($duelConfig | ConvertTo-Json -Depth 100), (New-Object System.Text.UTF8Encoding($false)))
+$changes += [pscustomobject]@{Source=$stagedDuelConfig; Target=$duelConfigPath; Existed=$false; Backup=''}
 $done = @()
 $movedMaps = @()
 try {
@@ -44,7 +60,7 @@ try {
   foreach ($old in @(Get-ChildItem -LiteralPath $editor -Filter '*.dze' -File -Recurse)) {
    if ($old.FullName -eq (Join-Path $editor 'GRZ_BBC_DM_3.dze')) { continue }
    $oldHash = (Get-FileHash -LiteralPath $old.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
-   if ($old.Name -in @('GRZ_BBC_DM_2.dze','GRZ_BBC_DM_3.dze') -or $oldHash -in $manifest.previous_map_hashes -or $oldHash -eq $manifest.files.'GRZ_BBC_DM_3.dze') {
+   if ($old.Name -in @('GRZ_BBC_DM_2.dze','GRZ_BBC_DM_3.dze','GRZ_BBC_DM_3POND.dze') -or $oldHash -in $manifest.previous_map_hashes -or $oldHash -eq $manifest.files.'GRZ_BBC_DM_3.dze') {
     $saved = Join-Path $backup ([guid]::NewGuid().ToString('N') + '.dze')
     Move-Item -LiteralPath $old.FullName -Destination $saved
     $movedMaps += [pscustomobject]@{Original=$old.FullName; Saved=$saved}
@@ -70,5 +86,5 @@ try {
  Copy-Item -LiteralPath (Join-Path $backup 'config.json') -Destination $configPath -Force
  throw
 }
-Write-Host 'Installed updated DZE, respawn screen and loadout PBOs. Existing arena settings, ratings and loadouts preserved. Restart server and client.'
+Write-Host 'Installed VIP menu, loadout updates and POND DZE. Long Range 1v1 updated; other arenas, VIP access, prefixes, ratings and loadouts preserved. Restart server and client.'
 Write-Host "Backup: $backup"

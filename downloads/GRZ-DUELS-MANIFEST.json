@@ -1,5 +1,5 @@
 {
-  "loadout_version": "0.3.2",
+  "loadout_version": "0.4.0",
   "rotation_version": "0.1.3",
   "starting_elo": 800,
   "leaderboard_key": "O",
@@ -13,8 +13,8 @@
   "maps_configured": false,
   "pbo": {
     "GRZ_Loadout": {
-      "bytes": 1599117,
-      "sha256": "caa1a4857cee924553639cf0e7c6b50fc3e476b20e8485fb7d42790c0cfc48d9"
+      "bytes": 1606929,
+      "sha256": "4843b587b7cb500fb52e7399b12a6baa9d9345232aedab781442cb28ef84b7a0"
     },
     "GRZ_MapRotation": {
       "bytes": 3574446,

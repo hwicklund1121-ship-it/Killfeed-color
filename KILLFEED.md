@@ -156,3 +156,19 @@ Version 0.1.29: streak count sits immediately after the killer name, separated
 by 4 pixels. Weapon, victim and distance follow at 8-pixel gaps. Text is measured
 after applying prefixes and truncation, and the grey row resizes to its contents,
 removing the former empty name columns and the far-right streak column.
+
+## VIP menu update
+
+The existing VIP command/menu now has PREFIX, KILLFEED and GUN RESKINS tabs, with the same translucent black background, white accents and logo as Loadout. Prefix/name animations and persistent saved styles keep the existing server RPC format.
+
+The gun tab has 20MM, .50 CAL, .408 and OTHER sections, a live model preview, arrows/list navigation and a GHILLIE WRAP selector below the gun. EQUIP & SAVE grants the selected gun with its ammo, magazines, scope and compatible suppressor. It uses the existing saved-weapon flow and checks VIP access server-side.
+
+The permission source remains `profiles/GRZ_Killfeed/config.json` → `AllowedSteamIds`. No extra payment system or new role list is added. The installer preserves this file and `styles.json`. VIP weapon checks refresh the allowlist within five seconds; the existing killfeed style service reloads on server restart.
+
+GRZ/RVK/XIMS/Blake weapon class prefixes and GRZ/GunRunnerZ/Blake texture paths are detected as paid reskins. For other naming schemes, add exact class names to `profiles/GRZ_Loadout/vip-reskins.json` → `ExtraPaidGuns`; `FreeGuns` exempts a class. Paid reskins are excluded from the regular gun list and available through the VIP tab. Non-VIP server requests, pickup into hands and firing are checked too.
+
+Future animated wraps must inherit a compatible gun-wrap class (GhillieAtt_ColorBase) and set `GRZVipOnly = 1;`, or be listed in `ExtraPaidWraps`. Classes with “animated” in their name are treated as VIP wraps automatically. The selector supports installed wraps; this update does not invent animation artwork or install wraps that have not been supplied.
+
+A compatible suppressor is added automatically to VIP grants from either the ordinary Loadout or VIP reskin menu. Guns with no compatible slot remain usable without a suppressor. The permanent SFG suppressor remains available to everyone.
+
+Keep GRZ_Loadout and GRZ_Killfeed installed on both client and server. Static/native-API and installer checks are not a DayZ multiplayer test.

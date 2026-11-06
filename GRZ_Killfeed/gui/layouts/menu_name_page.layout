@@ -22,7 +22,7 @@ color 1 1 1 1
 font "gui/fonts/sdf_MetronLight16"
 "exact text" 1
 "text valign" center
-text "Name style"
+text "Killfeed style"
 }
 TextWidgetClass PageDescription
 {
@@ -37,9 +37,9 @@ color 0.7 0.7 0.7 1
 font "gui/fonts/sdf_MetronLight16"
 "exact text" 1
 "text valign" center
-text "Choose how your player name appears."
+text "Animate your name in the live killfeed."
 }
-PanelWidgetClass PreviewCard
+ImageWidgetClass PreviewCard
 {
 position 0 104
 size 440 240
@@ -48,7 +48,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.045 0.045 0.045 1
 }
 TextWidgetClass PreviewCaption
@@ -125,7 +126,7 @@ font "gui/fonts/sdf_MetronLight16"
 "text valign" center
 text "Name, prefix and icon share the same animation."
 }
-PanelWidgetClass PageDivider
+ImageWidgetClass PageDivider
 {
 position 464 0
 size 1 360
@@ -134,7 +135,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.16 0.16 0.16 1
 }
 FrameWidgetClass AnimationHost

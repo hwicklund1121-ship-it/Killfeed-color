@@ -211,7 +211,8 @@ def main():
     assert "ResetGameFocus" not in menu
     menu_layout = files["gui/layouts/menu.layout"].decode()
     verify_menu_bounds(menu_layout)
-    assert 'text "GRZ Killfeed"' in menu_layout
+    assert 'text "GRZ VIP"' in menu_layout
+    assert 'GunTab' in declared and 'VIPGunList' in declared and 'VIPWrapName' in declared
     assert "ImageWidgetClass MenuLogo" in menu_layout
     assert "MenuOutline" not in menu_layout
     client_fields = re.findall(r"rpc.Write\(Chosen\.([\w.]+)\)", menu)
@@ -233,7 +234,8 @@ def main():
     assert 'prefixText = Chosen.PrefixWord + " |";' in menu
     current_animation = menu.split("protected GRZAnimationStyle CurrentAnimation()", 1)[1].split("override bool OnChange", 1)[0]
     assert "return Chosen;" in current_animation and "return Chosen.PrefixAnimation" not in current_animation
-    assert "m_NamePage.Show(!m_PrefixTab);" in menu and "m_PrefixPage.Show(m_PrefixTab);" in menu
+    assert "m_NamePage.Show(!m_PrefixTab && !m_GRZGunTab);" in menu and "m_PrefixPage.Show(m_PrefixTab && !m_GRZGunTab);" in menu
+    assert "m_GRZGunPage.Show(m_GRZGunTab);" in menu
     for page in ["menu_name_page.layout", "menu_prefix_page.layout", "menu_animation.layout"]:
         verify_menu_bounds(files["gui/layouts/" + page].decode())
         assert page in menu

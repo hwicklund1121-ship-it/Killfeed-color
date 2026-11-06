@@ -61,7 +61,7 @@ vexactsize 1
 color 0 0 0 0
 
 {
-PanelWidgetClass PrefixWordBacking
+ImageWidgetClass PrefixWordBacking
 {
 position 0 0
 size 440 44
@@ -70,7 +70,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.1 0.1 0.1 1
 }
 TextWidgetClass PrefixWordCaption
@@ -110,7 +111,7 @@ hexactsize 1
 vexactsize 1
 color 0 0 0 0
 {
-PanelWidgetClass PrefixIconChoiceBorder
+ImageWidgetClass PrefixIconChoiceBorder
 {
 position 0 0
 size 328 52
@@ -119,10 +120,11 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.22 0.22 0.22 1
 }
-PanelWidgetClass PrefixIconChoiceFill
+ImageWidgetClass PrefixIconChoiceFill
 {
 position 1 1
 size 326 50
@@ -131,7 +133,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.065 0.065 0.065 1
 }
 TextWidgetClass PrefixIconChoiceLabel
@@ -152,7 +155,7 @@ text "Icon: None >"
 }
 }
 }
-PanelWidgetClass IconPreviewBacking
+ImageWidgetClass IconPreviewBacking
 {
 position 352 58
 size 88 72
@@ -161,7 +164,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.045 0.045 0.045 1
 }
 ImageWidgetClass PrefixChoicePreview
@@ -179,7 +183,7 @@ stretch 1
 }
 }
 }
-PanelWidgetClass PreviewCard
+ImageWidgetClass PreviewCard
 {
 position 0 232
 size 440 112
@@ -188,7 +192,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.045 0.045 0.045 1
 }
 TextWidgetClass PreviewCaption

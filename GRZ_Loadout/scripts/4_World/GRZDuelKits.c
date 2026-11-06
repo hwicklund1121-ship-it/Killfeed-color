@@ -23,6 +23,7 @@ class GRZDuelKits
   if (!player) return null;
   Weapon_Base weapon = Weapon_Base.Cast(player.GetHumanInventory().GetEntityInHands());
   if (!weapon || weapon.GetMuzzleCount() != 1) return null;
+  if (!GRZVipLoadoutPolicy.CanUseWeapon(player, weapon)) return null;
   GRZDuelKit kit = new GRZDuelKit;
   kit.Gun = new GRZLoadoutGun;
   kit.Gun.Type = weapon.GetType();

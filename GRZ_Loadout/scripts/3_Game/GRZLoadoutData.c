@@ -16,6 +16,7 @@ class GRZLoadoutGun
  string Ammo;
  string MagazineType;
  string ScopeType;
+ bool VipOnly;
  int Category;
 };
 
@@ -39,6 +40,8 @@ class GRZSavedOutfit
 
 class GRZLoadoutCatalogue
 {
+ bool VipAuthorized;
+ ref array<ref GRZLoadoutGun> VipGuns = new array<ref GRZLoadoutGun>;
  ref array<ref GRZLoadoutGun> Guns = new array<ref GRZLoadoutGun>;
  ref array<string> Wraps = new array<string>;
  ref array<ref GRZLoadoutClothing> Clothing = new array<ref GRZLoadoutClothing>;

@@ -127,3 +127,7 @@ Both spawn sides face their opponent. GroundSpawns resolves Y from live Chernaru
 Siphon applies server-wide, including duel kills and survivor bots: a living human killer receives full health, blood, shock and repaired body damage, with bleeding cleared. It triggers once per victim death and never for suicide or a dead killer. Clothing and weapon condition are unchanged.
 
 Clothing Save & Apply uses native SERVER inventory moves to update worn items on connected clients immediately. Contents are transferred into replacement clothing; insufficient space cancels and restores the old outfit. The selected character model remains a respawn choice.
+
+The POND version replaces the airfield Long Range 1v1 build with the supplied pond/roadways update. Its two sides are aligned to the end platforms; `SurfaceSpawns = true` resolves the live roadway height via SurfaceRoadY3D. The combined installer merges only the long_range_1v1 map entry into the existing duel config and preserves other maps/round settings/Elo.
+
+Loadout 0.4.0 adds the shared-allowlist VIP gun reskin selector and automatic compatible suppressors. See KILLFEED.md for entitlement markers and extra paid-class configuration.

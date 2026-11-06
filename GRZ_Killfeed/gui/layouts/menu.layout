@@ -10,7 +10,7 @@ color 0 0 0 0
 position 0 0
 size 1 1
 {
-PanelWidgetClass MenuPanel
+FrameWidgetClass MenuPanel
 {
 position 0 0
 size 1100 760
@@ -18,10 +18,22 @@ hexactpos 1
 vexactpos 1
 hexactsize 1
 vexactsize 1
-color 0 0 0 1
-style rover_sim_colorable
+color 1 1 1 1
 {
-PanelWidgetClass MenuTop
+ImageWidgetClass MenuBackground
+{
+position 0 0
+size 1100 760
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+mode blend
+stretch 1
+color 0 0 0 0.8
+}
+ImageWidgetClass MenuTop
 {
 position 0 0
 size 1100 3
@@ -30,10 +42,11 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
-color 0.94 0.16 0.18 1
+mode blend
+stretch 1
+color 1 1 1 1
 }
-PanelWidgetClass MenuBottom
+ImageWidgetClass MenuBottom
 {
 position 0 759
 size 1100 1
@@ -42,10 +55,11 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
-color 0.25 0.035 0.04 1
+mode blend
+stretch 1
+color 0.35 0.35 0.38 1
 }
-PanelWidgetClass MenuLeft
+ImageWidgetClass MenuLeft
 {
 position 0 3
 size 1 756
@@ -54,10 +68,11 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
-color 0.25 0.035 0.04 1
+mode blend
+stretch 1
+color 0.35 0.35 0.38 1
 }
-PanelWidgetClass MenuRight
+ImageWidgetClass MenuRight
 {
 position 1099 3
 size 1 756
@@ -66,8 +81,9 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
-color 0.25 0.035 0.04 1
+mode blend
+stretch 1
+color 0.35 0.35 0.38 1
 }
 ImageWidgetClass MenuLogo
 {
@@ -91,11 +107,11 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-color 0.94 0.16 0.18 1
+color 1 1 1 1
 font "gui/fonts/sdf_MetronLight16"
 "exact text" 1
 "text valign" center
-text "GRZ Killfeed"
+text "GRZ VIP"
 }
 TextWidgetClass Hint
 {
@@ -110,11 +126,11 @@ color 0.7 0.7 0.7 1
 font "gui/fonts/sdf_MetronLight16"
 "exact text" 1
 "text valign" center
-text "Customize your name and prefix on their own pages."
+text "Your prefix, animated killfeed and custom gun reskins."
 }
 ButtonWidgetClass NameTab
 {
-position 32 128
+position 256 128
 size 208 48
 hexactpos 1
 vexactpos 1
@@ -122,7 +138,7 @@ hexactsize 1
 vexactsize 1
 color 0 0 0 0
 {
-PanelWidgetClass NameTabBorder
+ImageWidgetClass NameTabBorder
 {
 position 0 0
 size 208 48
@@ -131,10 +147,11 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.22 0.22 0.22 1
 }
-PanelWidgetClass NameTabFill
+ImageWidgetClass NameTabFill
 {
 position 1 1
 size 206 46
@@ -143,7 +160,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.065 0.065 0.065 1
 }
 TextWidgetClass NameTabLabel
@@ -159,14 +177,14 @@ color 1 1 1 1
 font "gui/fonts/sdf_MetronLight16"
 "exact text" 1
 "text valign" center
-text "NAME"
+text "KILLFEED"
 "text halign" center
 }
 }
 }
 ButtonWidgetClass PrefixTab
 {
-position 256 128
+position 32 128
 size 208 48
 hexactpos 1
 vexactpos 1
@@ -174,7 +192,7 @@ hexactsize 1
 vexactsize 1
 color 0 0 0 0
 {
-PanelWidgetClass PrefixTabBorder
+ImageWidgetClass PrefixTabBorder
 {
 position 0 0
 size 208 48
@@ -183,10 +201,11 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.22 0.22 0.22 1
 }
-PanelWidgetClass PrefixTabFill
+ImageWidgetClass PrefixTabFill
 {
 position 1 1
 size 206 46
@@ -195,7 +214,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.065 0.065 0.065 1
 }
 TextWidgetClass PrefixTabLabel
@@ -216,7 +236,61 @@ text "PREFIX"
 }
 }
 }
-PanelWidgetClass HeaderDivider
+ButtonWidgetClass GunTab
+{
+position 480 128
+size 240 48
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+{
+ImageWidgetClass GunTabBorder
+{
+position 0 0
+size 240 48
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+mode blend
+stretch 1
+color 0.22 0.22 0.22 1
+}
+ImageWidgetClass GunTabFill
+{
+position 1 1
+size 238 46
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+mode blend
+stretch 1
+color 0.065 0.065 0.065 1
+}
+TextWidgetClass GunTabLabel
+{
+position 12 0
+size 216 48
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "GUN RESKINS"
+"text halign" center
+}
+}
+}
+ImageWidgetClass HeaderDivider
 {
 position 32 184
 size 1036 1
@@ -225,13 +299,14 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
-color 0.28 0.04 0.05 1
+mode blend
+stretch 1
+color 0.25 0.25 0.28 1
 }
 FrameWidgetClass PageHost
 {
 position 32 208
-size 1036 392
+size 1036 400
 hexactpos 1
 vexactpos 1
 hexactsize 1
@@ -254,7 +329,7 @@ font "gui/fonts/sdf_MetronLight16"
 "text valign" center
 text "Preview your style, then save when ready."
 }
-PanelWidgetClass FooterDivider
+ImageWidgetClass FooterDivider
 {
 position 32 664
 size 1036 1
@@ -263,7 +338,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.16 0.16 0.16 1
 }
 ButtonWidgetClass Test
@@ -276,7 +352,7 @@ hexactsize 1
 vexactsize 1
 color 0 0 0 0
 {
-PanelWidgetClass TestBorder
+ImageWidgetClass TestBorder
 {
 position 0 0
 size 240 48
@@ -285,10 +361,11 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.22 0.22 0.22 1
 }
-PanelWidgetClass TestFill
+ImageWidgetClass TestFill
 {
 position 1 1
 size 238 46
@@ -297,7 +374,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.065 0.065 0.065 1
 }
 TextWidgetClass TestLabel
@@ -328,7 +406,7 @@ hexactsize 1
 vexactsize 1
 color 0 0 0 0
 {
-PanelWidgetClass CloseBorder
+ImageWidgetClass CloseBorder
 {
 position 0 0
 size 240 48
@@ -337,10 +415,11 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.22 0.22 0.22 1
 }
-PanelWidgetClass CloseFill
+ImageWidgetClass CloseFill
 {
 position 1 1
 size 238 46
@@ -349,7 +428,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.065 0.065 0.065 1
 }
 TextWidgetClass CloseLabel
@@ -380,7 +460,7 @@ hexactsize 1
 vexactsize 1
 color 0 0 0 0
 {
-PanelWidgetClass SaveBorder
+ImageWidgetClass SaveBorder
 {
 position 0 0
 size 256 48
@@ -389,10 +469,11 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
-color 0.94 0.16 0.18 1
+mode blend
+stretch 1
+color 1 1 1 1
 }
-PanelWidgetClass SaveFill
+ImageWidgetClass SaveFill
 {
 position 1 1
 size 254 46
@@ -401,8 +482,9 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
-color 0.72 0.06 0.09 1
+mode blend
+stretch 1
+color 0.94 0.94 0.94 1
 }
 TextWidgetClass SaveLabel
 {
@@ -413,7 +495,7 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-color 1 1 1 1
+color 0.02 0.02 0.02 1
 font "gui/fonts/sdf_MetronLight16"
 "exact text" 1
 "text valign" center

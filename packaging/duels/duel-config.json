@@ -57,25 +57,26 @@
       "Id": "long_range_1v1",
       "Name": "Long Range 1v1",
       "Enabled": true,
-      "GroundSpawns": true,
+      "GroundSpawns": false,
       "Center": [
-        4306.5,
+        4300.124,
         0,
-        10689.0
+        10695.9
       ],
       "Radius": 185,
       "SpawnA": [
-        4229,
+        4238.935,
         0,
-        10813
+        10808.444
       ],
       "SpawnB": [
-        4384,
+        4361.314,
         0,
-        10565
+        10583.357
       ],
-      "FacingA": 147.995,
-      "FacingB": 327.995
+      "FacingA": 151.467,
+      "FacingB": 331.467,
+      "SurfaceSpawns": true
     },
     {
       "Id": "cargo_containers",

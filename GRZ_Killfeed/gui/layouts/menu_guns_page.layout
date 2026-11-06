@@ -1,0 +1,557 @@
+FrameWidgetClass GRZGunPage
+{
+position 0 0
+size 1036 400
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+visible 0
+{
+ButtonWidgetClass VIPGun20
+{
+position 0 0
+size 244 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+{
+ImageWidgetClass VIPGun20Border
+{
+position 0 0
+size 244 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+mode blend
+stretch 1
+color 0.22 0.22 0.22 1
+}
+ImageWidgetClass VIPGun20Fill
+{
+position 1 1
+size 242 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+mode blend
+stretch 1
+color 0.065 0.065 0.065 1
+}
+TextWidgetClass VIPGun20Label
+{
+position 12 0
+size 220 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "20MM"
+"text halign" center
+}
+}
+}
+ButtonWidgetClass VIPGun50
+{
+position 264 0
+size 244 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+{
+ImageWidgetClass VIPGun50Border
+{
+position 0 0
+size 244 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+mode blend
+stretch 1
+color 0.22 0.22 0.22 1
+}
+ImageWidgetClass VIPGun50Fill
+{
+position 1 1
+size 242 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+mode blend
+stretch 1
+color 0.065 0.065 0.065 1
+}
+TextWidgetClass VIPGun50Label
+{
+position 12 0
+size 220 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text ".50 CAL"
+"text halign" center
+}
+}
+}
+ButtonWidgetClass VIPGun408
+{
+position 528 0
+size 244 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+{
+ImageWidgetClass VIPGun408Border
+{
+position 0 0
+size 244 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+mode blend
+stretch 1
+color 0.22 0.22 0.22 1
+}
+ImageWidgetClass VIPGun408Fill
+{
+position 1 1
+size 242 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+mode blend
+stretch 1
+color 0.065 0.065 0.065 1
+}
+TextWidgetClass VIPGun408Label
+{
+position 12 0
+size 220 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text ".408"
+"text halign" center
+}
+}
+}
+ButtonWidgetClass VIPGunOther
+{
+position 792 0
+size 244 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+{
+ImageWidgetClass VIPGunOtherBorder
+{
+position 0 0
+size 244 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+mode blend
+stretch 1
+color 0.22 0.22 0.22 1
+}
+ImageWidgetClass VIPGunOtherFill
+{
+position 1 1
+size 242 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+mode blend
+stretch 1
+color 0.065 0.065 0.065 1
+}
+TextWidgetClass VIPGunOtherLabel
+{
+position 12 0
+size 220 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "OTHER"
+"text halign" center
+}
+}
+}
+ImageWidgetClass VIPGunListBacking
+{
+position 0 60
+size 300 300
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+mode blend
+stretch 1
+color 0.06 0.06 0.07 1
+}
+TextListboxWidgetClass VIPGunList
+{
+position 0 60
+size 300 300
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+}
+ImageWidgetClass VIPGunPreviewBacking
+{
+position 324 60
+size 712 210
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+mode blend
+stretch 1
+color 0.05 0.05 0.06 1
+}
+ItemPreviewWidgetClass VIPGunPreview
+{
+position 344 60
+size 672 210
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+mode blend
+}
+ButtonWidgetClass VIPGunPrevious
+{
+position 324 280
+size 48 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+{
+ImageWidgetClass VIPGunPreviousBorder
+{
+position 0 0
+size 48 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+mode blend
+stretch 1
+color 0.22 0.22 0.22 1
+}
+ImageWidgetClass VIPGunPreviousFill
+{
+position 1 1
+size 46 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+mode blend
+stretch 1
+color 0.065 0.065 0.065 1
+}
+TextWidgetClass VIPGunPreviousLabel
+{
+position 12 0
+size 24 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "<"
+"text halign" center
+}
+}
+}
+TextWidgetClass VIPGunName
+{
+position 382 280
+size 596 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "Loading reskins..."
+"text halign" center
+}
+ButtonWidgetClass VIPGunNext
+{
+position 988 280
+size 48 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+{
+ImageWidgetClass VIPGunNextBorder
+{
+position 0 0
+size 48 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+mode blend
+stretch 1
+color 0.22 0.22 0.22 1
+}
+ImageWidgetClass VIPGunNextFill
+{
+position 1 1
+size 46 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+mode blend
+stretch 1
+color 0.065 0.065 0.065 1
+}
+TextWidgetClass VIPGunNextLabel
+{
+position 12 0
+size 24 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text ">"
+"text halign" center
+}
+}
+}
+TextWidgetClass VIPWrapHeading
+{
+position 324 332
+size 156 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "GHILLIE WRAP"
+}
+ButtonWidgetClass VIPWrapPrevious
+{
+position 486 332
+size 48 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+{
+ImageWidgetClass VIPWrapPreviousBorder
+{
+position 0 0
+size 48 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+mode blend
+stretch 1
+color 0.22 0.22 0.22 1
+}
+ImageWidgetClass VIPWrapPreviousFill
+{
+position 1 1
+size 46 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+mode blend
+stretch 1
+color 0.065 0.065 0.065 1
+}
+TextWidgetClass VIPWrapPreviousLabel
+{
+position 12 0
+size 24 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "<"
+"text halign" center
+}
+}
+}
+TextWidgetClass VIPWrapName
+{
+position 544 332
+size 434 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "No wrap"
+"text halign" center
+}
+ButtonWidgetClass VIPWrapNext
+{
+position 988 332
+size 48 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+{
+ImageWidgetClass VIPWrapNextBorder
+{
+position 0 0
+size 48 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+mode blend
+stretch 1
+color 0.22 0.22 0.22 1
+}
+ImageWidgetClass VIPWrapNextFill
+{
+position 1 1
+size 46 40
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+mode blend
+stretch 1
+color 0.065 0.065 0.065 1
+}
+TextWidgetClass VIPWrapNextLabel
+{
+position 12 0
+size 24 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text ">"
+"text halign" center
+}
+}
+}
+TextWidgetClass VIPGearNote
+{
+position 324 378
+size 712 18
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 0.65 0.65 0.68 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "Compatible VIP suppressors are attached automatically."
+"text halign" center
+}
+}
+}

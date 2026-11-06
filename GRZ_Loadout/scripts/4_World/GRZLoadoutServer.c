@@ -102,11 +102,12 @@ class GRZLoadoutServer
 
  static bool ValidGun(GRZLoadoutGun entry)
  {
-  if (!entry || entry.Category < 0 || entry.Category > 2)
+  if (!entry) return false;
+  entry.VipOnly = GRZVipLoadoutPolicy.PaidGun(entry.Type);
+  if (entry.Category < 0 || entry.Category > 3) return false;
+  if (!entry.VipOnly && ExcludedGun(entry.Type))
    return false;
-  if (ExcludedGun(entry.Type))
-   return false;
-  if (!g_Game.IsKindOf(entry.Type, "BoltActionRifle_Base") && !g_Game.IsKindOf(entry.Type, "BoltActionRifle_InnerMagazine_Base"))
+  if (!entry.VipOnly && !g_Game.IsKindOf(entry.Type, "BoltActionRifle_Base") && !g_Game.IsKindOf(entry.Type, "BoltActionRifle_InnerMagazine_Base"))
    return false;
   if (g_Game.ConfigGetInt("CfgWeapons " + entry.Type + " scope") != 2)
    return false;
@@ -125,6 +126,7 @@ class GRZLoadoutServer
    if (pileBullet == "" || pileBullet != magazineBullet)
     return false;
   }
+  entry.VipOnly = GRZVipLoadoutPolicy.PaidGun(entry.Type);
   entry.ScopeType = FindScope(entry.Type);
   if (entry.Name == "")
    g_Game.ConfigGetText("CfgWeapons " + entry.Type + " displayName", entry.Name);
@@ -133,7 +135,7 @@ class GRZLoadoutServer
   return true;
  }
 
- static GRZLoadoutGun Discover(string weapon)
+ static GRZLoadoutGun Discover(string weapon, bool vip = false)
  {
   array<string> chamber = new array<string>;
   array<string> magazines = new array<string>;
@@ -141,12 +143,15 @@ class GRZLoadoutServer
   g_Game.ConfigGetTextArray("CfgWeapons " + weapon + " magazines", magazines);
   GRZLoadoutGun entry = new GRZLoadoutGun;
   entry.Type = weapon;
+  entry.VipOnly = GRZVipLoadoutPolicy.PaidGun(weapon);
+  bool wide = vip && entry.VipOnly;
   entry.Category = -1;
   foreach (string pile : chamber)
   {
    int category = AmmoCategory(pile);
-   if (category >= 0)
+   if (category >= 0 || (wide && g_Game.IsKindOf(pile, "Ammunition_Base")))
    {
+    if (category < 0) category = 3;
     entry.Ammo = pile;
     entry.Category = category;
     break;
@@ -156,7 +161,10 @@ class GRZLoadoutServer
   {
    int magCategory = AmmoCategory(mag);
    if (magCategory < 0)
-    continue;
+   {
+    if (!wide) continue;
+    magCategory = 3;
+   }
    if (entry.Category >= 0 && magCategory != entry.Category)
     continue;
    entry.MagazineType = mag;
@@ -244,6 +252,15 @@ class GRZLoadoutServer
     }
    }
   }
+  // VIP reskins may use any supported single-muzzle firearm/calibre.
+  for (int vipIndex = 0; vipIndex < count; vipIndex++)
+  {
+   string vipType;
+   g_Game.ConfigGetChildName("CfgWeapons", vipIndex, vipType);
+   if (!GRZVipLoadoutPolicy.PaidGun(vipType) || g_Game.ConfigGetInt("CfgWeapons " + vipType + " scope") != 2) continue;
+   GRZLoadoutGun vipGun = Discover(vipType, true);
+   if (vipGun) Catalogue.VipGuns.Insert(vipGun);
+  }
   GRZLoadoutClothingServer.Discover(Catalogue, Settings.AllInstalledClothing);
   // Native wraps and installed GRZ/custom gun wraps, never full ghillie suits.
   Catalogue.Wraps.Insert("");
@@ -315,6 +332,12 @@ class GRZLoadoutServer
    Reply(player, "Loadout unavailable right now.");
    return false;
   }
+  bool vipAllowed = GRZVipLoadoutPolicy.Allowed(player.GetIdentity());
+  if ((GRZVipLoadoutPolicy.PaidGun(weaponType) || GRZVipLoadoutPolicy.PaidWrap(wrapType)) && !vipAllowed)
+  {
+   Reply(player, "VIP access is required for this reskin or animated wrap. Your inventory was kept.");
+   return false;
+  }
   GRZLoadoutGun selected;
   if (duelKit) selected = duelKit.Gun;
   foreach (GRZLoadoutGun entry : Catalogue.Guns)
@@ -324,6 +347,11 @@ class GRZLoadoutServer
     selected = entry;
     break;
    }
+  }
+  if (!selected && !duelKit && vipAllowed)
+  {
+   foreach (GRZLoadoutGun vipEntry : Catalogue.VipGuns)
+    if (vipEntry.Type == weaponType) { selected = vipEntry; break; }
   }
   if (!selected || (!duelKit && Catalogue.Wraps.Find(wrapType) < 0))
   {
@@ -346,6 +374,12 @@ class GRZLoadoutServer
    return false;
   }
   staged.Insert(gun);
+  if (gun.GetMuzzleCount() != 1)
+  {
+   DeleteStaged(staged);
+   Reply(player, "This firearm needs a custom multi-muzzle loadout. Your inventory was kept.");
+   return false;
+  }
   if (!GRZLoadoutAttachments.EnsurePermanentSFGSuppressor(gun, true))
   {
    DeleteStaged(staged);
@@ -376,6 +410,12 @@ class GRZLoadoutServer
     Reply(player, "That gun cannot accept this wrap. Your inventory was kept.");
     return false;
    }
+  }
+  if (!duelKit && vipAllowed && !GRZVipLoadoutPolicy.EnsureSuppressor(gun))
+  {
+   DeleteStaged(staged);
+   Reply(player, "The compatible VIP suppressor could not be attached. Your inventory was kept.");
+   return false;
   }
   string loadType = selected.Ammo;
   if (selected.MagazineType != "")
@@ -534,8 +574,12 @@ modded class PlayerBase
     m_GRZLoadoutLastRequest = now;
     ScriptRPC catalogueReply = new ScriptRPC;
     GRZLoadoutCatalogue personal = new GRZLoadoutCatalogue;
-    personal.Guns = GRZLoadoutServer.Catalogue.Guns;
-    personal.Wraps = GRZLoadoutServer.Catalogue.Wraps;
+    personal.VipAuthorized = GRZVipLoadoutPolicy.Allowed(sender);
+    foreach (GRZLoadoutGun available : GRZLoadoutServer.Catalogue.Guns)
+     if (!GRZVipLoadoutPolicy.PaidGun(available.Type)) personal.Guns.Insert(available);
+    if (personal.VipAuthorized) personal.VipGuns = GRZLoadoutServer.Catalogue.VipGuns;
+    foreach (string availableWrap : GRZLoadoutServer.Catalogue.Wraps)
+     if (!GRZVipLoadoutPolicy.PaidWrap(availableWrap) || personal.VipAuthorized) personal.Wraps.Insert(availableWrap);
     personal.Characters = GRZLoadoutServer.Catalogue.Characters;
     personal.AmmoStacks = GRZLoadoutServer.Catalogue.AmmoStacks;
     personal.SavedOutfit = GRZOutfitStore.Load(sender);

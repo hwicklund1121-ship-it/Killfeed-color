@@ -34,7 +34,7 @@ hexactsize 1
 vexactsize 1
 color 0 0 0 0
 {
-PanelWidgetClass ColorABorder
+ImageWidgetClass ColorABorder
 {
 position 0 0
 size 258 46
@@ -43,10 +43,11 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.22 0.22 0.22 1
 }
-PanelWidgetClass ColorAFill
+ImageWidgetClass ColorAFill
 {
 position 1 1
 size 256 44
@@ -55,7 +56,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.065 0.065 0.065 1
 }
 TextWidgetClass ColorALabel
@@ -86,7 +88,7 @@ hexactsize 1
 vexactsize 1
 color 0 0 0 0
 {
-PanelWidgetClass ColorBBorder
+ImageWidgetClass ColorBBorder
 {
 position 0 0
 size 262 46
@@ -95,10 +97,11 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.22 0.22 0.22 1
 }
-PanelWidgetClass ColorBFill
+ImageWidgetClass ColorBFill
 {
 position 1 1
 size 260 44
@@ -107,7 +110,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.065 0.065 0.065 1
 }
 TextWidgetClass ColorBLabel
@@ -128,7 +132,7 @@ text "Secondary: Red"
 }
 }
 }
-PanelWidgetClass PrimaryActive
+ImageWidgetClass PrimaryActive
 {
 position 0 108
 size 258 2
@@ -137,10 +141,11 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
-color 0.94 0.16 0.18 1
+mode blend
+stretch 1
+color 1 1 1 1
 }
-PanelWidgetClass SecondaryActive
+ImageWidgetClass SecondaryActive
 {
 position 278 108
 size 262 2
@@ -149,7 +154,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0 0 0 0
 }
 ButtonWidgetClass Swatch0
@@ -162,7 +168,7 @@ hexactsize 1
 vexactsize 1
 color 0 0 0 0
 {
-PanelWidgetClass SwatchBorder0
+ImageWidgetClass SwatchBorder0
 {
 position 0 0
 size 80 40
@@ -171,10 +177,11 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.2 0.2 0.2 1
 }
-PanelWidgetClass SwatchFill0
+ImageWidgetClass SwatchFill0
 {
 position 2 2
 size 76 36
@@ -183,7 +190,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0 0 0 1
 }
 TextWidgetClass SwatchLabel0
@@ -214,7 +222,7 @@ hexactsize 1
 vexactsize 1
 color 0 0 0 0
 {
-PanelWidgetClass SwatchBorder1
+ImageWidgetClass SwatchBorder1
 {
 position 0 0
 size 80 40
@@ -223,10 +231,11 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.2 0.2 0.2 1
 }
-PanelWidgetClass SwatchFill1
+ImageWidgetClass SwatchFill1
 {
 position 2 2
 size 76 36
@@ -235,7 +244,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0 0 0 1
 }
 TextWidgetClass SwatchLabel1
@@ -266,7 +276,7 @@ hexactsize 1
 vexactsize 1
 color 0 0 0 0
 {
-PanelWidgetClass SwatchBorder2
+ImageWidgetClass SwatchBorder2
 {
 position 0 0
 size 80 40
@@ -275,10 +285,11 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.2 0.2 0.2 1
 }
-PanelWidgetClass SwatchFill2
+ImageWidgetClass SwatchFill2
 {
 position 2 2
 size 76 36
@@ -287,7 +298,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0 0 0 1
 }
 TextWidgetClass SwatchLabel2
@@ -318,7 +330,7 @@ hexactsize 1
 vexactsize 1
 color 0 0 0 0
 {
-PanelWidgetClass SwatchBorder3
+ImageWidgetClass SwatchBorder3
 {
 position 0 0
 size 80 40
@@ -327,10 +339,11 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.2 0.2 0.2 1
 }
-PanelWidgetClass SwatchFill3
+ImageWidgetClass SwatchFill3
 {
 position 2 2
 size 76 36
@@ -339,7 +352,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0 0 0 1
 }
 TextWidgetClass SwatchLabel3
@@ -370,7 +384,7 @@ hexactsize 1
 vexactsize 1
 color 0 0 0 0
 {
-PanelWidgetClass SwatchBorder4
+ImageWidgetClass SwatchBorder4
 {
 position 0 0
 size 80 40
@@ -379,10 +393,11 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.2 0.2 0.2 1
 }
-PanelWidgetClass SwatchFill4
+ImageWidgetClass SwatchFill4
 {
 position 2 2
 size 76 36
@@ -391,7 +406,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0 0 0 1
 }
 TextWidgetClass SwatchLabel4
@@ -422,7 +438,7 @@ hexactsize 1
 vexactsize 1
 color 0 0 0 0
 {
-PanelWidgetClass SwatchBorder5
+ImageWidgetClass SwatchBorder5
 {
 position 0 0
 size 80 40
@@ -431,10 +447,11 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.2 0.2 0.2 1
 }
-PanelWidgetClass SwatchFill5
+ImageWidgetClass SwatchFill5
 {
 position 2 2
 size 76 36
@@ -443,7 +460,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0 0 0 1
 }
 TextWidgetClass SwatchLabel5
@@ -474,7 +492,7 @@ hexactsize 1
 vexactsize 1
 color 0 0 0 0
 {
-PanelWidgetClass SwatchBorder6
+ImageWidgetClass SwatchBorder6
 {
 position 0 0
 size 80 40
@@ -483,10 +501,11 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.2 0.2 0.2 1
 }
-PanelWidgetClass SwatchFill6
+ImageWidgetClass SwatchFill6
 {
 position 2 2
 size 76 36
@@ -495,7 +514,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0 0 0 1
 }
 TextWidgetClass SwatchLabel6
@@ -526,7 +546,7 @@ hexactsize 1
 vexactsize 1
 color 0 0 0 0
 {
-PanelWidgetClass SwatchBorder7
+ImageWidgetClass SwatchBorder7
 {
 position 0 0
 size 80 40
@@ -535,10 +555,11 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.2 0.2 0.2 1
 }
-PanelWidgetClass SwatchFill7
+ImageWidgetClass SwatchFill7
 {
 position 2 2
 size 76 36
@@ -547,7 +568,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0 0 0 1
 }
 TextWidgetClass SwatchLabel7
@@ -578,7 +600,7 @@ hexactsize 1
 vexactsize 1
 color 0 0 0 0
 {
-PanelWidgetClass SwatchBorder8
+ImageWidgetClass SwatchBorder8
 {
 position 0 0
 size 80 40
@@ -587,10 +609,11 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.2 0.2 0.2 1
 }
-PanelWidgetClass SwatchFill8
+ImageWidgetClass SwatchFill8
 {
 position 2 2
 size 76 36
@@ -599,7 +622,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0 0 0 1
 }
 TextWidgetClass SwatchLabel8
@@ -630,7 +654,7 @@ hexactsize 1
 vexactsize 1
 color 0 0 0 0
 {
-PanelWidgetClass SwatchBorder9
+ImageWidgetClass SwatchBorder9
 {
 position 0 0
 size 80 40
@@ -639,10 +663,11 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.2 0.2 0.2 1
 }
-PanelWidgetClass SwatchFill9
+ImageWidgetClass SwatchFill9
 {
 position 2 2
 size 76 36
@@ -651,7 +676,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0 0 0 1
 }
 TextWidgetClass SwatchLabel9
@@ -682,7 +708,7 @@ hexactsize 1
 vexactsize 1
 color 0 0 0 0
 {
-PanelWidgetClass SwatchBorder10
+ImageWidgetClass SwatchBorder10
 {
 position 0 0
 size 80 40
@@ -691,10 +717,11 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.2 0.2 0.2 1
 }
-PanelWidgetClass SwatchFill10
+ImageWidgetClass SwatchFill10
 {
 position 2 2
 size 76 36
@@ -703,7 +730,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0 0 0 1
 }
 TextWidgetClass SwatchLabel10
@@ -734,7 +762,7 @@ hexactsize 1
 vexactsize 1
 color 0 0 0 0
 {
-PanelWidgetClass SwatchBorder11
+ImageWidgetClass SwatchBorder11
 {
 position 0 0
 size 80 40
@@ -743,10 +771,11 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.2 0.2 0.2 1
 }
-PanelWidgetClass SwatchFill11
+ImageWidgetClass SwatchFill11
 {
 position 2 2
 size 76 36
@@ -755,7 +784,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0 0 0 1
 }
 TextWidgetClass SwatchLabel11
@@ -786,7 +816,7 @@ hexactsize 1
 vexactsize 1
 color 0 0 0 0
 {
-PanelWidgetClass EffectBorder
+ImageWidgetClass EffectBorder
 {
 position 0 0
 size 258 46
@@ -795,10 +825,11 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.22 0.22 0.22 1
 }
-PanelWidgetClass EffectFill
+ImageWidgetClass EffectFill
 {
 position 1 1
 size 256 44
@@ -807,7 +838,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.065 0.065 0.065 1
 }
 TextWidgetClass EffectLabel
@@ -838,7 +870,7 @@ hexactsize 1
 vexactsize 1
 color 0 0 0 0
 {
-PanelWidgetClass SpeedBorder
+ImageWidgetClass SpeedBorder
 {
 position 0 0
 size 262 46
@@ -847,10 +879,11 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.22 0.22 0.22 1
 }
-PanelWidgetClass SpeedFill
+ImageWidgetClass SpeedFill
 {
 position 1 1
 size 260 44
@@ -859,7 +892,8 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 ignorepointer 1
-style rover_sim_colorable
+mode blend
+stretch 1
 color 0.065 0.065 0.065 1
 }
 TextWidgetClass SpeedLabel

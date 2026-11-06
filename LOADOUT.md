@@ -1,4 +1,4 @@
-GRZ Loadout 0.3.2 — Made By Blake
+GRZ Loadout 0.4.0 — Made By Blake
 
 INSTALL
 Copy GRZ_Loadout.pbo into @GRZ_Local/Addons on BOTH game and server.
@@ -82,3 +82,5 @@ Normal damage/recoil outside duels retains its native/modded behavior.
 VALIDATION
 Static package/API checks only. Enforce compilation, preview sizing, live inventory rollback and multiplayer sync require testing in DayZ 1.30.
 Unsigned development build; sign with your own server key if required.
+
+VIP reskins are selected in the VIP menu, under GUN RESKINS, grouped as 20MM / .50 CAL / .408 / OTHER. The ordinary loadout excludes paid skins. Server access uses the existing killfeed AllowedSteamIds list. VIP grants get a compatible suppressor when one is available, including normal loadout guns. Animated wraps can opt in with GRZVipOnly=1.
