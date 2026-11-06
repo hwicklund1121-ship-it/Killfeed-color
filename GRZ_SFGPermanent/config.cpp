@@ -118,7 +118,8 @@ class CfgNonAIVehicles
 	class Proxysfg_muzzle: ProxyAttachment
 	{
 		scope = 2;
-		inventorySlot = "UAV_SFG_Suppressor";
+		simulation = "alwaysshow";
+		inventorySlot = "";
 		model = "GRZSFGAUTO\SFG50\SFG\proxy\sfg_muzzle.p3d";
 	};
 };

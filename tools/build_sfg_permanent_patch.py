@@ -56,6 +56,14 @@ class CfgWeapons
 };
 '''+'\n'.join(sections)+'\n'
 config = re.sub('UAVWEAPONS','GRZSFGAUTO',config,flags=re.I)
+# Render the muzzle model as an unconditional gun proxy. The hidden server
+# attachment still supplies suppressor behavior, but no longer controls visibility.
+config, static_proxy_edits = re.subn(
+    r'(class\s+Proxysfg_muzzle\s*:\s*ProxyAttachment\s*\{\s*scope\s*=\s*2;\s*)inventorySlot\s*=\s*"UAV_SFG_Suppressor";',
+    lambda match: match[1] + 'simulation = "alwaysshow";\n\t\tinventorySlot = "";', config)
+assert static_proxy_edits == 1
+
+config = config.replace('\r\n', '\n')
 (source / 'config.cpp').write_text(config)
 for name,data in files.items():
     if not name.endswith(('.p3d','.paa','.rvmat')):
@@ -82,7 +90,9 @@ Server attaches UAV_SFG_Sup and HuntingOptic after initialization, loading and d
 An existing hunting-slot optic is preserved; the scope remains removable.
 Slot locking and CanReleaseAttachment prevent normal removal. Inventory slot stays hidden.
 Suppressor remains scope 1 so it cannot be selected as an ordinary separate spawn-menu item.
-Corrected visual proxy has a private asset namespace and preserves original geometry bytes.
+The gun muzzle proxy uses simulation alwaysshow, making the suppressor model permanent on the gun, including local previews.
+The visual proxy has no inventory slot; the hidden locked attachment supplies sound behavior.
+The private asset namespace preserves original geometry bytes.
 The latest loadout creates the same suppressor in its local preview.
 VPP's own local model preview may omit runtime attachments; check the actual spawned gun.
 Does not change weapon ammunition, damage, recoil or sound settings.

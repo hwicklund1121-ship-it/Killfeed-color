@@ -10,7 +10,9 @@ Server attaches UAV_SFG_Sup and HuntingOptic after initialization, loading and d
 An existing hunting-slot optic is preserved; the scope remains removable.
 Slot locking and CanReleaseAttachment prevent normal removal. Inventory slot stays hidden.
 Suppressor remains scope 1 so it cannot be selected as an ordinary separate spawn-menu item.
-Corrected visual proxy has a private asset namespace and preserves original geometry bytes.
+The gun muzzle proxy uses simulation alwaysshow, making the suppressor model permanent on the gun, including local previews.
+The visual proxy has no inventory slot; the hidden locked attachment supplies sound behavior.
+The private asset namespace preserves original geometry bytes.
 The latest loadout creates the same suppressor in its local preview.
 VPP's own local model preview may omit runtime attachments; check the actual spawned gun.
 Does not change weapon ammunition, damage, recoil or sound settings.
