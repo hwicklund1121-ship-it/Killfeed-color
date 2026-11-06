@@ -1,27 +1,34 @@
 {
-  "source_zip_sha256": "004b3dfbcc1765164ba7526a673bd9ce2520297a5beb66ba3d2f1aa554c579a3",
-  "source_recording_sha256": "275d424dcb4a4427582d082a4cbb7caf5a5755aab603135c99dc94a6e5afe671",
-  "runtime_audio": "ar50a1/ar50/data/AR50_Shot.ogg",
-  "replacement_audio_sha256": "f0c26d2cc3bf847fe6d1f2eee6aac5a172d1e1993d6f56f86b48f4ab451c645e",
-  "replaced_sample_references": 9,
-  "sample_rate": 44100,
-  "channels": 1,
-  "unchanged_files": [
-    "ar50a1/ar50/data/AR50.rvmat",
-    "ar50a1/ar50/data/AR50A1.p3d",
-    "ar50a1/ar50/data/AR50_CO.paa",
-    "ar50a1/ar50/data/AR50_NOHQ.paa",
-    "ar50a1/ar50/data/AR50_SMDI.paa",
-    "ar50a1/ar50/data/AR50_damage.rvmat",
-    "ar50a1/ar50/data/AR50_destruct.rvmat",
-    "ar50a1/ar50/data/MUZZLE.rvmat",
-    "ar50a1/ar50/data/MUZZLE_CO.paa",
-    "ar50a1/ar50/data/MUZZLE_NOHQ.paa",
-    "ar50a1/ar50/data/MUZZLE_SMDI.paa",
-    "ar50a1/ar50/data/MUZZLE_damage.rvmat",
-    "ar50a1/ar50/data/MUZZLE_destruct.rvmat",
-    "ar50a1/config.cpp",
-    "ar50a1/scripts/4_World/entities/firearms/rifle/AR50A1.c",
-    "ar50a1/scripts/4_World/entities/manbase/dayzplayer/dayzplayercfgbase.c"
-  ]
+  "source_sha256": "4ed75451c38aa8386950301eb4e362ed3d0a524cc9efb7b008f04a5c96b1e445",
+  "layers": {
+    "Close": {
+      "filter": "volume=0.82,alimiter=limit=0.95:level=false:latency=true",
+      "headroom_gain": 0.7368522083614543,
+      "decoded_peak": 0.8997947573661804,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_seconds": 1.634921,
+      "sha256": "b2b3ccedd9ab5065fb05788b30614cefcb8925d308d0278e7adf944fd14d378d"
+    },
+    "Mid": {
+      "filter": "highpass=f=55,lowpass=f=5200,aecho=0.88:1:23|51|89:0.12|0.08|0.04,alimiter=limit=0.95:level=false:latency=true",
+      "headroom_gain": 0.64442783007397,
+      "decoded_peak": 0.8995469808578491,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_seconds": 1.723923,
+      "sha256": "617ea67ed60337d6ffaee46590db12a36b60db83797c930aee32ce45686d6c74"
+    },
+    "Far": {
+      "filter": "highpass=f=80,lowpass=f=2300,aecho=0.82:1:37|79|127|181:0.20|0.14|0.09|0.05,lowpass=f=2600,alimiter=limit=0.95:level=false:latency=true",
+      "headroom_gain": 0.7197697041170775,
+      "decoded_peak": 0.9121031761169434,
+      "channels": 1,
+      "sample_rate": 44100,
+      "duration_seconds": 1.815918,
+      "sha256": "942d1f84689d0a5cb4ec6e066c129dcd22e334fbaf2f3f65dbedd1999bf67c62"
+    }
+  },
+  "config_changes": "three samples arrays only",
+  "old_shot_removed": true
 }
