@@ -172,3 +172,5 @@ Future animated wraps must inherit a compatible gun-wrap class (GhillieAtt_Color
 A compatible suppressor is added automatically to VIP grants from either the ordinary Loadout or VIP reskin menu. Guns with no compatible slot remain usable without a suppressor. The permanent SFG suppressor remains available to everyone.
 
 Keep GRZ_Loadout and GRZ_Killfeed installed on both client and server. Static/native-API and installer checks are not a DayZ multiplayer test.
+
+The combined update now includes GRZ_AnimatedGhillie.pbo. Its GRZ Animated Checker Wrap appears in the VIP ghillie selector automatically after restart. The two inverse checker textures preserve the supplied alpha mask and swap every 250ms. The animation is client-cosmetic and also runs on local weapon previews.

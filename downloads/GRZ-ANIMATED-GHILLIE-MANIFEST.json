@@ -1,0 +1,28 @@
+{
+  "class": "GRZ_Animated_Ghillie_Checker",
+  "size": [
+    2048,
+    2048
+  ],
+  "checker_grid": [
+    8,
+    8
+  ],
+  "cell_pixels": 256,
+  "swap_interval_ms": 250,
+  "full_cycle_ms": 500,
+  "alpha_preserved_exactly": true,
+  "encoded_top_mips_lossless_against_png": true,
+  "source_alpha_sha256": "c364cc38ab361ab4308882828bc01a6ab0bc7d4024f186343f43ca6dd8c53b95",
+  "frames": {
+    "a": {
+      "png_sha256": "c200e412435a0d75b21ce404f87159d76f5d0a2b0e82a8fe759d13ce980005ea",
+      "paa_sha256": "dea55240890141aaddef253b3ba9598537e5a84695aca3058b9f4988cd13ebce"
+    },
+    "b": {
+      "png_sha256": "3c8efba095a119e0b824e8122c00a52ea384f8a484abaaf50f1fe4608ac49f99",
+      "paa_sha256": "8d5f6bd8374f6b7ab268c22fb1c8618824c1ed707a64ea20208e9048a32dd2f6"
+    }
+  },
+  "pbo_sha256": "dae35f5be6854f106878b8fcc82714e59ac26f519ef3d215663971700b80a698"
+}
