@@ -1,0 +1,1 @@
+GRZ Animated Cross Wrap: GRZ_Animated_Ghillie_Cross. Two frames swap every 0.75 seconds. Original 2048px alpha retained. Select in VIP GHILLIE WRAP on compatible guns. Install combined update on server and client; no UAV repack. Existing checker wrap remains available at its original speed. Static/package checks only; DayZ runtime untested.
