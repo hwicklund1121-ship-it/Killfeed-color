@@ -33,6 +33,16 @@ modded class sfg50_Base
  {
   if (!g_Game.IsServer())
    return;
+  if (g_Game.ConfigGetInt("CfgWeapons " + GetType() + " GRZIntegratedSuppressor") == 1)
+  {
+   EntityAI integratedOptic = FindAttachmentBySlotName("weaponOpticsHunting");
+   if (!integratedOptic) integratedOptic = GetInventory().CreateAttachment("HuntingOptic");
+   if (integratedOptic) return;
+   m_GRZPermanentPatchAttempts++;
+   if (m_GRZPermanentPatchAttempts < 10)
+    g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(GRZPermanentPatchEnsure, 250, false);
+   return;
+  }
   int slot = InventorySlots.GetSlotIdFromString("UAV_SFG_Suppressor");
   EntityAI suppressor = FindAttachmentBySlotName("UAV_SFG_Suppressor");
   if (!suppressor && slot >= 0)

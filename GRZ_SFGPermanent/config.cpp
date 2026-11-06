@@ -5,7 +5,7 @@ class CfgPatches
   units[] = {};
   weapons[] = {};
   requiredVersion = 0.1;
-  requiredAddons[] = {"sfg50"};
+  requiredAddons[] = {"sfg50", "UAV_SFG_Suppressor"};
  };
 };
 class CfgMods
@@ -26,6 +26,7 @@ class CfgMods
   };
  };
 };
+class Mode_SemiAuto;
 class CfgWeapons
 {
  class BoltActionRifle_InnerMagazine_Base;
@@ -33,6 +34,15 @@ class CfgWeapons
  {
   model = "GRZSFGAUTO\SFG50\SFG\data\SFG50.p3d";
   attachments[] = {"weaponWrap", "weaponOpticsHunting", "UAV_SFG_Suppressor"};
+  GRZIntegratedSuppressor = 1;
+  class Single: Mode_SemiAuto
+  {
+   soundSetShot[] = {"sfgs50_Shot_SoundSet", "sfgs50_Shot_SoundSet", "sfgs50_Shot_SoundSet"};
+   soundSetShotExt[] = {{"sfgs50_Shot_SoundSet", "sfgs50_Shot_SoundSet", "sfgs50_Shot_SoundSet"}};
+   reloadTime = 1.0;
+   recoil = "recoil_AKM";
+   recoilProne = "recoil_AKM_prone";
+  };
  };
 };
 class CfgVehicles

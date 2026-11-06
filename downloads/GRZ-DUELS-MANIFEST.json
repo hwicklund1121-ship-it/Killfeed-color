@@ -13,8 +13,8 @@
   "maps_configured": false,
   "pbo": {
     "GRZ_Loadout": {
-      "bytes": 1598700,
-      "sha256": "31b4a01821377ddbd3719375387838fc123607950588cab0739dc37a0282009a"
+      "bytes": 1598888,
+      "sha256": "56ac551c76fa0aa70441d86499f85ed5e89caa750c999069217b3bc88f2606eb"
     },
     "GRZ_MapRotation": {
       "bytes": 3573583,

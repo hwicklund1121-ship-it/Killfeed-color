@@ -6,16 +6,19 @@ Spawn a fresh SFG from VPP or save an SFG loadout.
 Requires the original sfg50 weapon addon; does not add a second SFG weapon classname.
 
 Supplies the suppressor config, matching custom slot, visual proxy and required model assets.
-Server attaches UAV_SFG_Sup and HuntingOptic after initialization, loading and debug spawning, with retries.
+The SFG uses an integrated visual suppressor and its existing suppressed firing sound sets directly.
+A separate suppressor item is no longer required for loadout creation.
+Server equips HuntingOptic after initialization, loading and debug spawning, with retries.
 An existing hunting-slot optic is preserved; the scope remains removable.
 Slot locking and CanReleaseAttachment prevent normal removal. Inventory slot stays hidden.
 Suppressor remains scope 1 so it cannot be selected as an ordinary separate spawn-menu item.
 The gun muzzle proxy uses simulation alwaysshow, making the suppressor model permanent on the gun, including local previews.
-The visual proxy has no inventory slot; the hidden locked attachment supplies sound behavior.
+The permanent visual proxy has no inventory slot; firing mode uses the suppressed sound sets directly.
+The loadout recognizes the integrated-suppressor config marker and does not require a separate attachment.
 The private asset namespace preserves original geometry bytes.
 The latest loadout creates the same suppressor in its local preview.
 VPP's own local model preview may omit runtime attachments; check the actual spawned gun.
-Does not change weapon ammunition, damage, recoil or sound settings.
+Ammunition, damage, recoil and reload timing are preserved; firing sounds use the existing suppressed SFG sound sets.
 An admin or another server script can still forcibly delete entities; normal player removal is blocked.
 
 Asset references, PBO, ZIP and source checked. Not compiled or tested in DayZ.

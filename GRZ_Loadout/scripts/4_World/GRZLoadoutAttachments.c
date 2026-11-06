@@ -19,6 +19,9 @@ class GRZLoadoutAttachments
  {
   if (!gun || !gun.IsKindOf("sfg50_Base"))
    return true;
+  // The integrated gun model and suppressed firing mode need no separate item.
+  if (g_Game.ConfigGetInt("CfgWeapons " + gun.GetType() + " GRZIntegratedSuppressor") == 1)
+   return true;
   if (!g_Game.ConfigIsExisting("CfgVehicles UAV_SFG_Sup"))
    return false;
   int slot = InventorySlots.GetSlotIdFromString("UAV_SFG_Suppressor");
