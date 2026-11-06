@@ -44,11 +44,13 @@ class GRZ_Hexgrid_Animated_Anime: Clothing
  override void EEInit()
  {
   super.EEInit();
+  if (g_Game && !g_Game.IsDedicatedServer()) SetObjectMaterial(0, "GRZ_AnimatedHexgrid/data/flat_black.rvmat");
   GRZHexgridAnimationTicker.Register(this);
  }
  override void EEOnAfterLoad()
  {
   super.EEOnAfterLoad();
+  if (g_Game && !g_Game.IsDedicatedServer()) SetObjectMaterial(0, "GRZ_AnimatedHexgrid/data/flat_black.rvmat");
   GRZHexgridAnimationTicker.Register(this);
  }
  void GRZRenderHexFrame(int frame)

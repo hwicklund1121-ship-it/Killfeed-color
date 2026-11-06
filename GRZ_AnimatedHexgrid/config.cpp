@@ -14,7 +14,7 @@ class CfgMods
  {
   name = "GRZ Animated Hexgrid";
   author = "Blake";
-  version = "0.1.0";
+  version = "0.1.1";
   type = "mod";
   dependencies[] = {"World"};
   class defs
@@ -35,6 +35,24 @@ class CfgVehicles
   scope = 2;
   displayName = "GRZ Animated Hexgrid";
   descriptionShort = "Made By Blake";
+  hiddenSelectionsMaterials[] = {"GRZ_AnimatedHexgrid\data\flat_black.rvmat"};
   hiddenSelectionsTextures[] = {"GRZ_AnimatedHexgrid\data\frame_000.paa"};
+  // All damage stages keep the flat material instead of restoring the original hex normal map.
+  class DamageSystem: DamageSystem
+  {
+   class GlobalHealth: GlobalHealth
+   {
+    class Health: Health
+    {
+     healthLevels[] = {
+      {1,{"GRZ_AnimatedHexgrid\data\flat_black.rvmat"}},
+      {0.45,{"GRZ_AnimatedHexgrid\data\flat_black.rvmat"}},
+      {0.35,{"GRZ_AnimatedHexgrid\data\flat_black.rvmat"}},
+      {0.3,{"GRZ_AnimatedHexgrid\data\flat_black.rvmat"}},
+      {0,{"GRZ_AnimatedHexgrid\data\flat_black.rvmat"}}
+     };
+    };
+   };
+  };
  };
 };
