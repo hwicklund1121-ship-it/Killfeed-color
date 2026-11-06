@@ -26,7 +26,7 @@ modded class sfg50_Base
    return;
   m_GRZPermanentPatchAttempts = 0;
   g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).Remove(GRZPermanentPatchEnsure);
-  GRZPermanentPatchEnsure();
+  g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(GRZPermanentPatchEnsure, 100, false);
  }
 
  void GRZPermanentPatchEnsure()
@@ -41,15 +41,17 @@ modded class sfg50_Base
    suppressor = GetInventory().CreateAttachmentEx("UAV_SFG_Sup", slot);
   }
   if (suppressor)
-  {
    GetInventory().SetSlotLock(slot, true);
+  EntityAI optic = FindAttachmentBySlotName("weaponOpticsHunting");
+  if (!optic)
+   optic = GetInventory().CreateAttachment("HuntingOptic");
+  if (suppressor && optic)
    return;
-  }
   m_GRZPermanentPatchAttempts++;
   if (m_GRZPermanentPatchAttempts < 10)
    g_Game.GetCallQueue(CALL_CATEGORY_GAMEPLAY).CallLater(GRZPermanentPatchEnsure, 250, false);
   else
-   Error("[GRZ SFG Permanent] Cannot attach UAV_SFG_Sup to " + GetType());
+   Error("[GRZ SFG Permanent] Cannot attach SFG suppressor or hunting optic to " + GetType());
  }
 
  override bool CanReleaseAttachment(EntityAI attachment)

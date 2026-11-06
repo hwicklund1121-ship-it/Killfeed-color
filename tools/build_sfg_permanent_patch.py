@@ -78,7 +78,8 @@ Spawn a fresh SFG from VPP or save an SFG loadout.
 Requires the original sfg50 weapon addon; does not add a second SFG weapon classname.
 
 Supplies the suppressor config, matching custom slot, visual proxy and required model assets.
-Server attaches UAV_SFG_Sup on initialization, loading and debug spawning, with retries.
+Server attaches UAV_SFG_Sup and HuntingOptic after initialization, loading and debug spawning, with retries.
+An existing hunting-slot optic is preserved; the scope remains removable.
 Slot locking and CanReleaseAttachment prevent normal removal. Inventory slot stays hidden.
 Suppressor remains scope 1 so it cannot be selected as an ordinary separate spawn-menu item.
 Corrected visual proxy has a private asset namespace and preserves original geometry bytes.

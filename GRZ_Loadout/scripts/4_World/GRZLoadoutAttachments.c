@@ -1,5 +1,20 @@
 class GRZLoadoutAttachments
 {
+ static bool AttachScope(EntityAI gun, string scopeType)
+ {
+  if (!gun) return false;
+  if (scopeType == "" && gun.IsKindOf("sfg50_Base")) scopeType = "HuntingOptic";
+  if (scopeType == "") return true;
+  array<string> slots = new array<string>;
+  g_Game.ConfigGetTextArray("CfgVehicles " + scopeType + " inventorySlot", slots);
+  foreach (string slot : slots)
+  {
+   EntityAI existing = gun.FindAttachmentBySlotName(slot);
+   if (existing && existing.IsKindOf(scopeType)) return true;
+  }
+  return gun.GetInventory().CreateAttachment(scopeType) != null;
+ }
+
  static bool EnsurePermanentSFGSuppressor(EntityAI gun, bool lockSlot)
  {
   if (!gun || !gun.IsKindOf("sfg50_Base"))

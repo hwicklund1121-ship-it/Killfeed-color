@@ -354,9 +354,9 @@ class GRZLoadoutServer
    Reply(player, "Duel attachment creation failed. Your inventory was kept.");
    return false;
   }
-  if (!duelKit && selected.ScopeType != "")
+  if (!duelKit)
   {
-   if (!gun.GetInventory().CreateAttachment(selected.ScopeType))
+   if (!GRZLoadoutAttachments.AttachScope(gun, selected.ScopeType))
    {
     DeleteStaged(staged);
     Reply(player, "Scope attachment failed. Your inventory was kept.");

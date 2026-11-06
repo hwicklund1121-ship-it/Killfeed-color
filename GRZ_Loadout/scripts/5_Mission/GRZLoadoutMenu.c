@@ -234,8 +234,8 @@ class GRZLoadoutMenu : UIScriptedMenu
   }
   if (!GRZLoadoutAttachments.EnsurePermanentSFGSuppressor(m_PreviewGun, false))
    Text("Status", "SFG suppressor preview could not be attached. Check the SFG weapon pack.");
-  if (gun.ScopeType != "")
-   m_PreviewGun.GetInventory().CreateAttachment(gun.ScopeType);
+  if (!GRZLoadoutAttachments.AttachScope(m_PreviewGun, gun.ScopeType))
+   Text("Status", "Scope preview could not be attached. Check the weapon attachment config.");
   string wrap = CurrentWrap();
   if (wrap != "" && !m_PreviewGun.GetInventory().CreateAttachment(wrap))
    Text("Status", "This gun does not accept the selected wrap. Choose another wrap.");
