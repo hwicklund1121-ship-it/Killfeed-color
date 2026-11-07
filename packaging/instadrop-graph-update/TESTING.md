@@ -1,4 +1,4 @@
-# v0.2.0 validation
+# v0.2.1 validation
 
 Validated against the supplied vanilla graph export for DayZ 1.30.164.289.
 
@@ -13,7 +13,7 @@ resource references, no `.anm` payloads, disabled old rate settings and the
 unchanged working roll-to-stand source hash.
 
 ```powershell
-pwsh -NoProfile -File tools/test_instadrop_graph_installer.ps1 -PackageZip /path/to/GRZ-InstaDrop-v0.2.0.zip -NativeArchive /path/to/fixture/anims_workspaces.pbo
+pwsh -NoProfile -File tools/test_instadrop_graph_installer.ps1 -PackageZip /path/to/GRZ-InstaDrop-v0.2.1.zip -NativeArchive /path/to/fixture/anims_workspaces.pbo
 ```
 
 Passed real fixture file operations for installation and hash checks on both
@@ -26,7 +26,7 @@ syntax, but this is not a Windows integration test.
 Build:
 
 ```sh
-python tools/build_instadrop_graph_release.py --export /path/to/GRZ-DropGraph-export.zip --output downloads/GRZ-InstaDrop-v0.2.0.zip
+python tools/build_instadrop_graph_release.py --export /path/to/GRZ-DropGraph-export.zip --output downloads/GRZ-InstaDrop-v0.2.1.zip
 ```
 
 The export is not committed. Source graph hashes and the change description are in GRAPH-CHANGES.json;
@@ -40,7 +40,7 @@ No Enforce compilation, native graph parsing or DayZ gameplay test is available
 in this Linux environment. Actual drop timing, throw behavior, roll-to-stand
 playback and network agreement still need the owner's in-game test.
 
-Additional v0.2.0 check:
+Additional v0.2.1 check:
 
 ```sh
 python tools/test_instadrop_roll_policy.py
@@ -52,8 +52,9 @@ guard and combinations of blocked actions. This does not compile the native
 PlayerBase wrapper or establish that DayZ invokes CanRoll for this input.
 The roll-entry edges require native CMD_Roll. Recovery edges require native standing stance and at least 0.12 seconds of roll playback. The host policy test verifies that an on-back pose alone cannot trigger a forced stand.
 
-Directional landing checks verify matched native AimX/S interpolation on the body
-and weapon nodes, symmetric native pose endpoints and matched 0.14-second
-weapon stance blending. Reversing these edits, the existing four drop/recovery
-edits and authored roll edges reproduces the supplied original graph exactly.
-The C# local builder is compared byte-for-byte with the Python reference build.
+Directional landing checks verify the native directional prone source, signed
+AimX/AimY sampling and distinct +/-90-degree pose columns against the supplied
+native pose table. Body and weapon view direction stays native. These checks
+do not establish anatomical ground-side contact or native rendering.
+Reversing the authored landing/roll edits reproduces the supplied graph. The
+local C# generator must match the Python reference graph PBO byte-for-byte.

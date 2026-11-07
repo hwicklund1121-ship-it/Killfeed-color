@@ -84,9 +84,9 @@ modded class PlayerBase
     if (DayZPlayerUtils.PlayerCanChangeStance(this, DayZPlayerConstants.STANCEIDX_ERECT, true))
     {
      movement.ForceStanceUp(DayZPlayerConstants.STANCEIDX_ERECT);
-     Print("[GRZ InstaDrop] v0.2.0 actual-roll stand requested; graph recovery has a minimum 0.12-second roll segment.");
+     Print("[GRZ InstaDrop] v0.2.1 actual-roll stand requested; graph recovery has a minimum 0.12-second roll segment.");
     }
-    else Print("[GRZ InstaDrop] v0.2.0 native stance test rejected actual-roll stand.");
+    else Print("[GRZ InstaDrop] v0.2.1 native stance test rejected actual-roll stand.");
     m_GRZStandRequestUntil = -1;
    }
   }
@@ -109,7 +109,7 @@ modded class PlayerBase
   if (GRZInstaDrop.IsEnabled() && previousStance != newStance && GRZInstaDropThrowPolicy.RecentInput(now, m_GRZStanceInputUntil) && now >= m_GRZNextStanceTrace)
   {
    m_GRZNextStanceTrace = now + 300;
-   Print("[GRZ InstaDrop] v0.2.0 stance from=" + previousStance.ToString() + " to=" + newStance.ToString() + " allowed=" + allowed.ToString() + " legacyException=" + legacy.ToString() + " gun-lift mode preserved");
+   Print("[GRZ InstaDrop] v0.2.1 stance from=" + previousStance.ToString() + " to=" + newStance.ToString() + " allowed=" + allowed.ToString() + " legacyException=" + legacy.ToString() + " gun-lift mode preserved");
   }
   return allowed;
  }

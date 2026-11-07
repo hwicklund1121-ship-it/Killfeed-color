@@ -1,31 +1,27 @@
-# GRZ InstaDrop v0.2.0 directional landing test
+# GRZ InstaDrop v0.2.1 signed native landing test
 
 Target: the supplied vanilla DayZ 1.30.164.289 player graph.
 
-Changes from v0.1.9:
+Changes from v0.2.0:
 
-- Replaces the fixed belly-down gun-lift landing with a look-angle blend of
-  DayZ's native front and on-back poses. Forward uses the native front pose;
-  looking roughly 90 degrees right or left mixes the two into a side-facing
-  pose; looking behind tends toward the native on-back pose.
-- Uses the same AimX thresholds and S interpolation for the body and weapon
-  hold layer, so one does not switch to the on-back pose ahead of the other.
-- Matches the weapon stance blend to the softened 0.14-second drop request
-  (previously 0.10). The short drop is retained while giving the landing a
-  little more time to blend.
-- Retains v0.1.9's roll-entry/recovery routes, on-back roll permission guards,
-  and stand queue that requires an actual roll. Key bindings are unchanged.
-
-The direction blend uses existing game poses with thresholds -180, 0, 180 and
-the native S interpolation mode. This changes the visual pose; DayZ keeps its
-native stance and collision handling. No position/velocity edits are used.
-
-This is a test build. Source, graph structure, local generation and installer
-checks do not establish the appearance in DayZ. Side appearance depends on the
-native AimX angle relative to the character, rather than absolute world camera
-heading. Actual smoothness, weapon alignment, and the full quick-motion combo
-still need first-person, third-person and remote-view gameplay testing.
-
++- Targets the requested mapping: look right -> lie on the left side; look
++  left -> lie on the right side, while keeping the rifle aimed with the view.
++- Replaces the body blend's identical front/back endpoints with DayZ's recorded
++  directional prone pose (`Locomotion.PneRas.AimToBack`). Left and right view
++  angles now sample distinct native pose columns, including the intermediate
++  side poses, rather than relying on a symmetric two-pose interpolation.
++- Preserves the signed native AimX/AimY sampling and the weapon hold layer.
++  Camera controls and weapon aiming are not inverted.
++- Keeps the 0.14-second drop request, weapon blend timing, roll entry/recovery,
++  guarded on-back roll permission and actual-roll stand queue from v0.2.0.
++
++This is a test build. Structural checks establish distinct native pose samples
++for the two view directions, not which anatomical side contacts the ground in
++DayZ. The requested left/right ground-side mapping, weapon pose and smoothness
++still need in-game verification. AimX is relative to the character, rather than
++absolute world camera heading. DayZ retains its native stance and collision
++handling; no position/velocity edits are used.
++
 ## Install
 
 Close DayZ and stop the server. Extract this ZIP to a new folder in Downloads,
@@ -53,13 +49,14 @@ profiles and outfits alone. Use your normal dependency mods plus `@GRZ_Local`.
 Restart both sides. The startup message begins:
 
 ```
-[GRZ InstaDrop] v0.2.0 graph selected: GRZ_InstaDropGraph/player_main.agr.
+[GRZ InstaDrop] v0.2.1 graph selected: GRZ_InstaDropGraph/player_main.agr.
 ```
 
 This confirms config selection; also check RPT/error logs for graph load errors.
-With a rifle in G preparation, test dropping while already looking forward,
-right, left and behind. Look for a gradual side-facing landing to the right,
-with the rifle/arms following the torso. Then test the right-look Q/A/D roll
+With a rifle in G preparation, test dropping while already looking right,
+then while looking left. Check right-look -> left ground side and left-look ->
+right ground side, with the rifle following the view. Also check forward and
+backward views. Then test the right-look Q/A/D roll
 combo and your normal stand input. Check normal throwing and ordinary movement
 as well. Send a new short clip and client/server logs if the result still differs.
 The roll permission/start/finish traces and actual-roll standing traces remain.

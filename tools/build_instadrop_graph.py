@@ -66,7 +66,7 @@ def roll_route_text():
     return ''.join(result)
 
 
-DIRECTION_BODY = 'AnimSrcNodeBlendN GRZDropDirectionalPose {\n     BlendWeight "AimX"\n     BlendFn S\n     Thresholds {\n      -180 0 180\n     }\n     Children {\n      "PoBAimB" "ThrowPneIdleG" "PoBAimB"\n     }\n     IsCyclic 0\n    }'
+DIRECTION_BODY = 'AnimSrcNodePose2 GRZDropDirectionalPose {\n     Source "Locomotion.PneRas.AimToBack"\n     ValueX "AimX"\n     ValueY "AimY"\n     Table "Y(-45): X(-180) = 0, X(-90) = 10, X(0) = 20, X(90) = 30, X(180) = 40"\\\n     "Y(0): X(-180) = 41, X(-90) = 51, X(0) = 61, X(90) = 71, X(180) = 81"\\\n     "Y(90): X(-180) = 82, X(-90) = 92, X(0) = 102, X(90) = 112, X(180) = 122"\n    }'
 DIRECTION_STRENGTH = 'AnimSrcNodeBlendN ThrowStrenghPoBB {\n     BlendWeight "AimX"\n     BlendFn S\n     Thresholds {\n      -180 0 180\n     }\n     Children {\n      "ThrowStrengthPoBP" "ThrowStrengthPneP" "ThrowStrengthPoBP"\n     }\n     IsCyclic 0\n    }'
 
 def patch_direction(source):
@@ -135,7 +135,7 @@ def build_graph(export, output):
     patched, changes = patch_locomotion(source)
     root = files[BASE + 'player_main.agr'].decode('utf-8')
     original_resource = '{6CA2ACDCAC1184DC}DZ/anims/workspaces/player/player_main/Locomotion.agf'
-    new_resource = '{E5500200E0494CA1}' + PREFIX + '/locomotion.agf'
+    new_resource = '{E5500210E0494CA1}' + PREFIX + '/locomotion.agf'
     if root.count(original_resource) != 1:
         raise ValueError('Native locomotion reference not uniquely located')
     root = root.replace(original_resource, new_resource)
@@ -166,11 +166,11 @@ class CfgVehicles
 };
 ''')
     evidence = dict(
-        Version='0.2.0', TargetDayZ=TARGET_VERSION,
+        Version='0.2.1', TargetDayZ=TARGET_VERSION,
         SourceHashes={p: hashlib.sha256(b).hexdigest() for p, b in files.items()},
         Changes=changes,
         RollRoutes=[dict(Transition=g, From=f, To=t, Condition=c, BlendSeconds=float(d)) for g,f,t,c,d in ROLL_ROUTES],
-        DirectionBlend=dict(Variable='AimX', Thresholds=[-180,0,180], BlendFn='S', BodyNode='GRZDropDirectionalPose', WeaponNode='ThrowStrenghPoBB', StanceWeaponBlendSeconds=0.14),
+        DirectionBlend=dict(BodySource='Locomotion.PneRas.AimToBack', BodyValueX='AimX', BodyValueY='AimY', BodyNode='GRZDropDirectionalPose', WeaponNode='ThrowStrenghPoBB', StanceWeaponBlendSeconds=0.14, TargetMapping='look right -> left ground side; look left -> right ground side; anatomy requires native verification'),
         LocomotionSHA256=hashlib.sha256(patched.encode()).hexdigest(),
         Limits='Source/package checks only; native graph loading and gameplay require DayZ testing.',
     )

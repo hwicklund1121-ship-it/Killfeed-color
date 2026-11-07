@@ -1,5 +1,5 @@
 {
-  "Version": "0.2.0",
+  "Version": "0.2.1",
   "TargetDayZ": "1.30.164.289",
   "SourceHashes": {
     "dz/anims/workspaces/player/player_main/player_main.agr": "89f82f6de2461cf42367b989b2b1392814a4df9272034fbb23be8e5c2106df23",
@@ -80,17 +80,14 @@
     }
   ],
   "DirectionBlend": {
-    "Variable": "AimX",
-    "Thresholds": [
-      -180,
-      0,
-      180
-    ],
-    "BlendFn": "S",
+    "BodySource": "Locomotion.PneRas.AimToBack",
+    "BodyValueX": "AimX",
+    "BodyValueY": "AimY",
     "BodyNode": "GRZDropDirectionalPose",
     "WeaponNode": "ThrowStrenghPoBB",
-    "StanceWeaponBlendSeconds": 0.14
+    "StanceWeaponBlendSeconds": 0.14,
+    "TargetMapping": "look right -> left ground side; look left -> right ground side; anatomy requires native verification"
   },
-  "LocomotionSHA256": "92cd55440ebd1a51b37af00d77ad94a91d4f30e9978d14b33c4c287b561a6284",
+  "LocomotionSHA256": "dc5ef86a20cae57914a8701dcea802b055ee4de4c2276be3b2bb880cee6f4fe7",
   "Limits": "Source/package checks only; native graph loading and gameplay require DayZ testing."
 }

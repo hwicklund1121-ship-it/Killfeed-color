@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Security.Cryptography;
 
-public static class GRZDropGraphPatchV020 {
+public static class GRZDropGraphPatchV021 {
     struct Span { public int Start; public int End; }
     static Span Block(string text, string kind, string name) {
         string expression = @"\b" + Regex.Escape(kind) + @"\s+" + Regex.Escape(name) + @"\s*\{";
@@ -72,7 +72,7 @@ public static class GRZDropGraphPatchV020 {
         var strengthTime = Block(result,"AnimSrcNodeBlendT","ThrowStrenghB");
         result = result.Substring(0,strengthTime.Start)+Property(result.Substring(strengthTime.Start,strengthTime.End-strengthTime.Start),"BlendTime","0.3","0.14")+result.Substring(strengthTime.End);
         var aim = Block(result,"AnimSrcNodeBlend","ThrowAimB");
-        return result.Substring(0,aim.Start)+"AnimSrcNodeBlendN GRZDropDirectionalPose {\n     BlendWeight \"AimX\"\n     BlendFn S\n     Thresholds {\n      -180 0 180\n     }\n     Children {\n      \"PoBAimB\" \"ThrowPneIdleG\" \"PoBAimB\"\n     }\n     IsCyclic 0\n    }\n    "+result.Substring(aim.Start);
+        return result.Substring(0,aim.Start)+"AnimSrcNodePose2 GRZDropDirectionalPose {\n     Source \"Locomotion.PneRas.AimToBack\"\n     ValueX \"AimX\"\n     ValueY \"AimY\"\n     Table \"Y(-45): X(-180) = 0, X(-90) = 10, X(0) = 20, X(90) = 30, X(180) = 40\"\\\n     \"Y(0): X(-180) = 41, X(-90) = 51, X(0) = 61, X(90) = 71, X(180) = 81\"\\\n     \"Y(90): X(-180) = 82, X(-90) = 92, X(0) = 102, X(90) = 112, X(180) = 122\"\n    }\n    "+result.Substring(aim.Start);
     }
     static string RollRoutes() {
         string[] ids = { "{A619000000000001}", "{A619000000000002}", "{A619000000000003}", "{A619000000000004}", "{A619000000000005}", "{A619000000000006}" };
@@ -94,7 +94,7 @@ public static class GRZDropGraphPatchV020 {
     }
     public static string Root(string text) {
         const string original = "{6CA2ACDCAC1184DC}DZ/anims/workspaces/player/player_main/Locomotion.agf";
-        const string replacement = "{E5500200E0494CA1}GRZ_InstaDropGraph/locomotion.agf";
+        const string replacement = "{E5500210E0494CA1}GRZ_InstaDropGraph/locomotion.agf";
         if (text.IndexOf(original, StringComparison.Ordinal) < 0 || text.IndexOf(original, StringComparison.Ordinal) != text.LastIndexOf(original, StringComparison.Ordinal)) throw new InvalidDataException("Unsupported native root graph reference.");
         return text.Replace(original, replacement);
     }

@@ -105,23 +105,29 @@ class DropGraphTests(unittest.TestCase):
             self.assertIn('AnimSrcNodeState ' + origin + ' {', patched)
             self.assertIn('AnimSrcNodeState ' + target + ' {', patched)
 
-    def test_body_and_weapon_follow_same_native_look_angle(self):
+    def test_signed_native_pose_samples_keep_the_view_direction(self):
         patched, _ = patch_locomotion(self.native)
-        for name in ['GRZDropDirectionalPose', 'ThrowStrenghPoBB']:
-            a,b = named_block(patched, 'AnimSrcNodeBlendN', name)
-            node = patched[a:b]
-            self.assertIn('BlendWeight "AimX"', node)
-            self.assertIn('BlendFn S', node)
-            self.assertIn('-180 0 180', node)
-            self.assertIn('IsCyclic 0', node)
-        self.assertIn('"PoBAimB" "ThrowPneIdleG" "PoBAimB"', patched)
-        self.assertIn('"ThrowStrengthPoBP" "ThrowStrengthPneP" "ThrowStrengthPoBP"', patched)
-        a,b = named_block(patched, 'AnimSrcNodeBlendT', 'ThrowStrenghB')
-        self.assertIn('BlendTime "0.14"', patched[a:b])
-        # Both angle boundaries resolve to the same native back-pose child;
-        # the midpoint on either side interpolates the front/back pose pair.
-        self.assertEqual(DIRECTION_BODY.count('"PoBAimB"'),2)
-        self.assertEqual(DIRECTION_STRENGTH.count('"ThrowStrengthPoBP"'),2)
+        a,b = named_block(patched,'AnimSrcNodePose2','GRZDropDirectionalPose')
+        body = patched[a:b]
+        self.assertIn('Source "Locomotion.PneRas.AimToBack"',body)
+        self.assertIn('ValueX "AimX"',body)
+        self.assertIn('ValueY "AimY"',body)
+        # Opposite directions must use distinct recorded native pose columns.
+        self.assertIn('X(-90) = 10',body)
+        self.assertIn('X(90) = 30',body)
+        self.assertIn('X(-90) = 51',body)
+        self.assertIn('X(90) = 71',body)
+        self.assertNotIn('"PoBAimB" "ThrowPneIdleG" "PoBAimB"',body)
+        # Keep the native signed view/aim relationship, avoiding an aim inversion.
+        a,b = named_block(self.native,'AnimSrcNodePose2','PneRasPose')
+        native_pose=self.native[a:b]
+        self.assertIn('ValueX "AimX"',native_pose)
+        for column in ['X(-90) = 10','X(90) = 30','X(-90) = 51','X(90) = 71']:
+            self.assertIn(column.replace(' ', ''),native_pose.replace(' ', ''))
+        a,b = named_block(patched,'AnimSrcNodeBlendN','ThrowStrenghPoBB')
+        self.assertIn('BlendWeight "AimX"',patched[a:b])
+        a,b = named_block(patched,'AnimSrcNodeBlendT','ThrowStrenghB')
+        self.assertIn('BlendTime "0.14"',patched[a:b])
 
     def test_already_patched_or_changed_native_edges_rejected(self):
         patched, _ = patch_locomotion(self.native)
@@ -171,7 +177,7 @@ class DropGraphTests(unittest.TestCase):
                 self.assertEqual(set(graph), {'config.cpp', 'locomotion.agf', 'player_main.agr'})
                 self.assertEqual(graph['locomotion.agf'].decode(), patch_locomotion(self.native)[0])
                 root = graph['player_main.agr'].decode()
-                restored = root.replace('{E5500200E0494CA1}GRZ_InstaDropGraph/locomotion.agf', '{6CA2ACDCAC1184DC}DZ/anims/workspaces/player/player_main/Locomotion.agf')
+                restored = root.replace('{E5500210E0494CA1}GRZ_InstaDropGraph/locomotion.agf', '{6CA2ACDCAC1184DC}DZ/anims/workspaces/player/player_main/Locomotion.agf')
                 self.assertEqual(restored, self.native_root)
                 source = all_files['GRZ_InstaDrop']['scripts/4_World/GRZInstaDropThrowReady.c']
                 self.assertEqual(source, (ROOT / 'GRZ_InstaDrop/scripts/4_World/GRZInstaDropThrowReady.c').read_bytes())
