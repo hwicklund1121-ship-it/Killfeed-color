@@ -9,7 +9,7 @@ from zipfile import ZipFile,ZIP_DEFLATED
 from build_pbo import build
 ROOT=Path(__file__).resolve().parents[1]
 
-def reviewed_data(index,drop,recover,drop_speed=2.0,recovery_speed=1.6):
+def reviewed_data(index,drop,recover,drop_speed=2.0,recovery_speed=1.6,override_transition_speeds=False):
     if index.get('Schema')!=1 or not isinstance(index.get('Animations'),list):
         raise ValueError('Unsupported native animation index')
     available={row['Path'].replace('\\','/').lower() for row in index['Animations']}
@@ -27,7 +27,8 @@ def reviewed_data(index,drop,recover,drop_speed=2.0,recovery_speed=1.6):
     if set(down)&set(up):raise ValueError('One clip cannot be assigned both directions')
     for speed in [drop_speed,recovery_speed]:
         if not math.isfinite(speed) or not 1.0<=speed<=4.0:raise ValueError('Prototype speed request must be in [1.0, 4.0]')
-    return dict(DropSpeed=drop_speed,RecoverySpeed=recovery_speed,Drop=down,Recover=up)
+    if type(override_transition_speeds) is not bool:raise ValueError('Transition override flag must be boolean')
+    return dict(OverrideTransitionSpeeds=override_transition_speeds,DropSpeed=drop_speed,RecoverySpeed=recovery_speed,Drop=down,Recover=up)
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
@@ -35,6 +36,7 @@ def main():
     p.add_argument('--drop',action='append')
     p.add_argument('--preset',type=Path)
     p.add_argument('--recover',action='append')
+    p.add_argument('--tune-native-transitions',action='store_true',help='Opt in to native clip-speed tuning; default only fixes input')
     p.add_argument('--drop-speed',type=float,default=2.0)
     p.add_argument('--recovery-speed',type=float,default=1.6)
     p.add_argument('--output',type=Path,default=ROOT/'downloads/GRZ-InstaDrop-Prototype.zip')
@@ -44,7 +46,7 @@ def main():
         preset=json.loads(a.preset.read_text())
         a.drop,a.recover=preset['Drop'],preset['Recover']
         a.drop_speed,a.recovery_speed=preset['DropSpeed'],preset['RecoverySpeed']
-    data=reviewed_data(json.loads(a.index.read_text(encoding='utf-8-sig')),a.drop,a.recover,a.drop_speed,a.recovery_speed)
+    data=reviewed_data(json.loads(a.index.read_text(encoding='utf-8-sig')),a.drop,a.recover,a.drop_speed,a.recovery_speed,a.tune_native_transitions)
     with tempfile.TemporaryDirectory() as t:
         d=Path(t);(d/'$PBOPREFIX$').write_text('GRZ_InstaDropData')
         (d/'config.cpp').write_text('class CfgPatches { class GRZ_InstaDropData { units[]={}; weapons[]={}; requiredVersion=0.1; requiredAddons[]={"GRZ_InstaDrop"}; }; };\n')

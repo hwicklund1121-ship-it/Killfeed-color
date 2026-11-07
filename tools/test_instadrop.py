@@ -13,6 +13,7 @@ def main():
  index=json.loads(a.index.read_text(encoding='utf-8-sig'))
  preset=json.loads((ROOT/'packaging/instadrop-update/TRANSITIONS.json').read_text())
  data=reviewed_data(index,preset['Drop'],preset['Recover'],preset['DropSpeed'],preset['RecoverySpeed'])
+ assert data['OverrideTransitionSpeeds'] is False
  assert len(data['Drop'])==6 and len(data['Recover'])==10
  assert all('/rifles/transitions/' in x and '_inj_' not in x for x in data['Drop']+data['Recover'])
  for down,up,speed in [([],data['Recover'],2),([data['Drop'][0]],[data['Drop'][0]],2),([data['Drop'][0]]*2,data['Recover'],2),(['dz/anims/anm/player/moves/missing.anm'],data['Recover'],2),(['dz/anims/anm/player/moves/../file.anm'],data['Recover'],2),(data['Drop'],data['Recover'],float('nan')),(data['Drop'],data['Recover'],4.1)]:

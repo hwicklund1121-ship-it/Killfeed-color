@@ -2,6 +2,7 @@
 // No third-party animation graphs, scripts, assets or forced player positions.
 class GRZInstaDropTransitions
 {
+ bool OverrideTransitionSpeeds = false;
  float DropSpeed = 2.0;
  float RecoverySpeed = 1.6;
  ref array<string> Drop = new array<string>;
@@ -53,6 +54,12 @@ class GRZInstaDrop
    Print("[GRZ InstaDrop] Inactive: no reviewed native transition list. Export the vanilla animation index first.");
    return;
   }
+  if (!settings.OverrideTransitionSpeeds)
+  {
+   Ready = true;
+   Print("[GRZ InstaDrop] v0.1.3 input-only compatibility mode. Other movement mods retain all animation speeds and graphs.");
+   return;
+  }
   if (settings.Drop.Count() == 0 || settings.Recover.Count() == 0)
   {
    Print("[GRZ InstaDrop] Inactive: both drop and recovery clip lists are required.");
@@ -63,7 +70,7 @@ class GRZInstaDrop
   // weapon input, stamina, and multiplayer movement commands remain in control.
   int drops = ApplyClips(settings.Drop, Math.Clamp(settings.DropSpeed, 1.0, 4.0));
   int recoveries = ApplyClips(settings.Recover, Math.Clamp(settings.RecoverySpeed, 1.0, 4.0));
-  Print("[GRZ InstaDrop] v0.1.1 prototype: accepted " + drops.ToString() + "/" + settings.Drop.Count().ToString() + " drop and " + recoveries.ToString() + "/" + settings.Recover.Count().ToString() + " recovery clips. In-game verification required.");
+  Print("[GRZ InstaDrop] v0.1.3 prototype: accepted " + drops.ToString() + "/" + settings.Drop.Count().ToString() + " drop and " + recoveries.ToString() + "/" + settings.Recover.Count().ToString() + " recovery clips. In-game verification required.");
  }
 };
 modded class DayZPlayerTypeUtils

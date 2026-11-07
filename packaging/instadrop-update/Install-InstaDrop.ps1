@@ -38,7 +38,7 @@ try {
   if ((Get-FileHash -LiteralPath $operation.Target -Algorithm SHA256).Hash -ne (Get-FileHash -LiteralPath $operation.Source -Algorithm SHA256).Hash) { throw 'Installed PBO verification failed.' }
  }
  Write-Host "GRZ InstaDrop prototype installed on BOTH sides. Backups: $backup"
- Write-Host 'Restart both. Test the ordinary prone key while holding a rifle. Drop request 2.0; recovery request 1.6.'
+ Write-Host 'Restart both. Test G then prone, and getting back up with your normal stance keys. Default input-only compatibility mode preserves other movement animation speeds.'
  Write-Host 'Check client/server script logs for [GRZ InstaDrop] accepted clip counts. This is an unverified in-game prototype.'
 } catch {
  $originalFailure = $_
