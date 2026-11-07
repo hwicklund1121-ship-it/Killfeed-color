@@ -1,20 +1,24 @@
-"""Package verified vanilla XIMS items; prepare layered-shirt art without a guessed dependency."""
+"""Package verified vanilla XIMS items; include the verified Windstride layered-shirt reskin."""
 from pathlib import Path
 from zipfile import ZipFile,ZIP_DEFLATED
-import argparse,hashlib,io,json,struct
+import argparse,hashlib,io,json,struct,shutil
 from PIL import Image,ImageOps
 from build_status_textures import encode_paa
 from build_pbo import build
 r=Path(__file__).resolve().parents[1]
 p=argparse.ArgumentParser(description=__doc__)
-for key in ['sneakers','shorts','shirt','shirt-model']:p.add_argument('--'+key,type=Path,required=True)
-a=p.parse_args();s=r/'GRZ_XimsClothing';pending=r/'packaging/pending-xims-layered-shirt'
-report={'items':[],'pending':['XIMS Layered Shirt: Windstride CfgPatches/config and texture selection order required.','XIMS Canvas Bag: uploaded archive exceeds 32 MiB transfer limit.']}
+for key in ['sneakers','shorts','shirt','shirt-model','shirt-config','canvas-colour']:p.add_argument('--'+key,type=Path,required=True)
+a=p.parse_args();s=r/'GRZ_XimsClothing';layer=r/'GRZ_XimsLayeredShirt'
+for supplied in vars(a).values():
+ assert supplied.is_file(),str(supplied)
+report={'items':[],'pending':[],'pending_custom_normals':['XIMS Canvas Bag']}
 
-def convert(zip_path,key,target):
+def convert(zip_path,key,target,colour_only=False):
  textures={}
  with ZipFile(zip_path) as z:
   for kind,ending in [('co','_Base_color.png'),('nohq','_Normal.png')]:
+   if kind=='nohq' and colour_only:
+    textures[kind]={'mode':'custom normal upload oversized; native normal/material inherited'};continue
    names=[n for n in z.namelist() if n.endswith(ending)];assert len(names)==1
    raw=z.read(names[0]);im=Image.open(io.BytesIO(raw)).convert('RGB');assert im.size==(4096,4096)
    meta={'source_sha256':hashlib.sha256(raw).hexdigest(),'size':list(im.size),'source_filename':Path(names[0]).name}
@@ -32,31 +36,33 @@ def convert(zip_path,key,target):
    meta['paa_sha256']=hashlib.sha256(data).hexdigest();meta['mode']='supplied painted colour' if kind=='co' else 'OpenGL to DirectX green conversion; native SWIZ normal packing'
    textures[kind]=meta
  return textures
-for key,cls,name,parent in [('sneakers','XIMS_Sneakers','XIMS Sneakers','Sneakers_Black'),('shorts','XIMS_JeanShorts','XIMS Jean Shorts','ShortJeans_Blue')]:
- report['items'].append({'class':cls,'displayName':name,'descriptionShort':'Made By Blake','base_class':parent,'key':key,'textures':convert(getattr(a,key),key,s)})
+for key,cls,name,parent in [('sneakers','XIMS_Sneakers','XIMS Sneakers','Sneakers_Black'),('shorts','XIMS_JeanShorts','XIMS Jean Shorts','ShortJeans_Blue'),('bag','XIMS_CanvasBag','XIMS Canvas Bag','CanvasBag_Olive')]:
+ report['items'].append({'class':cls,'displayName':name,'descriptionShort':'Made By Blake','base_class':parent,'key':key,'textures':convert(a.canvas_colour if key=='bag' else getattr(a,key),key,s,colour_only=(key=='bag'))})
 material=(r/'packaging/customs/GRZ_XimsKit/data/pants.rvmat').read_text().replace('GRZ_XimsKit\\data\\pants_nohq.paa','GRZ_XimsClothing\\data\\shorts_nohq.paa')
 (s/'data/shorts.rvmat').write_text(material)
-shirt=convert(a.shirt,'shirt',pending)
-(pending/'TEXTURE-MANIFEST.json').write_text(json.dumps({'displayName':'XIMS Layered Shirt','descriptionShort':'Made By Blake','base_class':'Layered_Shirt_Base','textures':shirt,'provided_female_mlod_sha256':hashlib.sha256(a.shirt_model.read_bytes()).hexdigest()},indent=2)+'\n')
-(pending/'README.txt').write_text('XIMS Layered Shirt — Made By Blake\nTextures are converted and ready. The supplied female MLOD references windstrideclothing/models/layered_shirt. Public Expansion market settings confirm Layered_Shirt_Base. To safely build this reskin, the original Windstride config.cpp is still required to verify its CfgPatches dependency and hidden-selection/material order for ground, male and female models. Do not install this staging folder as an addon. No active config/PBO is shipped until those bindings are verified. The canvas bag textures are also pending a smaller upload.\n')
-pbo=build(s);(r/'downloads/GRZ_XimsClothing.pbo').write_bytes(pbo);report['pbo_sha256']=hashlib.sha256(pbo).hexdigest()
+original=a.shirt_config.read_text(encoding='utf-8-sig')
+for token in ['class Layered_Shirt','class Layered_Shirt_Base: Clothing','hiddenSelections[] = {"zbytek"}', 'layered_shirt_m.p3d','layered_shirt_f.p3d','layered_shirt_g.p3d']:
+ assert token in original,token
+shirt=convert(a.shirt,'shirt',layer)
+material=(r/'packaging/customs/GRZ_XimsKit/data/pants.rvmat').read_text().replace('GRZ_XimsKit\\data\\pants_nohq.paa','GRZ_XimsLayeredShirt\\data\\shirt_nohq.paa')
+(layer/'data/shirt.rvmat').write_text(material)
+report['items'].append({'class':'XIMS_LayeredShirt','displayName':'XIMS Layered Shirt','descriptionShort':'Made By Blake','base_class':'Layered_Shirt_Base','required_patch':'Layered_Shirt','key':'shirt','textures':shirt})
+report['verified_windstride_config_sha256']=hashlib.sha256(a.shirt_config.read_bytes()).hexdigest()
+report['provided_female_mlod_sha256']=hashlib.sha256(a.shirt_model.read_bytes()).hexdigest()
+report['addons']={}
+for addon in ['GRZ_XimsClothing','GRZ_XimsLayeredShirt']:
+ data=build(r/addon);(r/'downloads'/(addon+'.pbo')).write_bytes(data)
+ report['addons'][addon]=hashlib.sha256(data).hexdigest()
+report['pbo_sha256']=report['addons']['GRZ_XimsClothing']
 (r/'downloads/XIMS-Clothing-MANIFEST.json').write_text(json.dumps(report,indent=2)+'\n')
-notes='''XIMS Clothing — available pieces
-XIMS Sneakers — XIMS_Sneakers
-XIMS Jean Shorts — XIMS_JeanShorts
-Descriptions: Made By Blake
-
-Vanilla Sneakers_Black and ShortJeans_Blue bases, with original models, slots, storage, insulation, durability and protection. No stat/DamageSystem overrides. Sneakers use your painted colour plus native material/normal because the supplied exported normal is entirely flat. Shorts use your supplied all-black colour and custom baked normal, converted from OpenGL to DirectX. Fabric material used for pristine shorts; native wear-state materials are inherited.
-
-Ready PBO: GRZ_XimsClothing.pbo. Copy to BOTH client and server @GRZ_Local/Addons and restart both, alongside GRZ_VanillaClothing.pbo. Ordinary clothing, not VIP-only. The existing loadout discovers SHOES/PANTS after restart. Never replace vanilla PBOs. Source config/material files included; unpack the PBO for full texture assets.
-
-Layered shirt remains pending: its source model is Windstride, not vanilla. Prepared colour/normal assets are staged in packaging/pending-xims-layered-shirt in the repository, but an original Windstride config.cpp is required before an installable shirt addon can be built safely. Canvas bag remains pending because its ZIP exceeded the 32 MiB transfer limit; resend separate texture ZIPs under that limit.
-
-Use the combined GRZ-All-Reskins-Update installer to apply this alongside the prior GRZ clothing, CSR50, CS5, animated reskins and gameplay update. Existing mod dependencies remain required. Static/resource/package checks only; worn appearance requires a DayZ test.
-'''
+old_staging=r/'packaging/pending-xims-layered-shirt'
+if old_staging.exists():shutil.rmtree(old_staging)
+notes=(r/'packaging/xims-clothing/INSTALL.txt').read_text()
 (r/'XIMS-CLOTHING.md').write_text(notes)
 with ZipFile(r/'downloads/XIMS-Clothing.zip','w',ZIP_DEFLATED) as z:
- z.writestr('GRZ_XimsClothing.pbo',pbo);z.writestr('MANIFEST.json',json.dumps(report,indent=2)+'\n');z.writestr('INSTALL.txt',notes)
- for f in sorted(s.rglob('*')):
-  if f.is_file() and f.suffix!='.paa':z.write(f,'source/GRZ_XimsClothing/'+f.relative_to(s).as_posix())
-print('Built XIMS Sneakers and Jean Shorts; layered shirt textures prepared, original config still required.')
+ for addon in report['addons']:
+  z.write(r/'downloads'/(addon+'.pbo'),addon+'.pbo')
+  for f in sorted((r/addon).rglob('*')):
+   if f.is_file() and f.suffix!='.paa':z.write(f,'source/'+addon+'/'+f.relative_to(r/addon).as_posix())
+ z.writestr('MANIFEST.json',json.dumps(report,indent=2)+'\n');z.writestr('INSTALL.txt',notes)
+print('Built all four XIMS clothing items; verified layered-shirt bindings. Canvas bag custom normal remains pending.')

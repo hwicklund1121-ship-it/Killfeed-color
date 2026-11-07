@@ -1,2 +1,0 @@
-XIMS Layered Shirt — Made By Blake
-Textures are converted and ready. The supplied female MLOD references windstrideclothing/models/layered_shirt. Public Expansion market settings confirm Layered_Shirt_Base. To safely build this reskin, the original Windstride config.cpp is still required to verify its CfgPatches dependency and hidden-selection/material order for ground, male and female models. Do not install this staging folder as an addon. No active config/PBO is shipped until those bindings are verified. The canvas bag textures are also pending a smaller upload.

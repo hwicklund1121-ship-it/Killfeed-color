@@ -56,11 +56,69 @@
           "mode": "OpenGL to DirectX green conversion; native SWIZ normal packing"
         }
       }
+    },
+    {
+      "class": "XIMS_CanvasBag",
+      "displayName": "XIMS Canvas Bag",
+      "descriptionShort": "Made By Blake",
+      "base_class": "CanvasBag_Olive",
+      "key": "bag",
+      "textures": {
+        "co": {
+          "source_sha256": "8d61cbded1534b79593638afefd98166abe6ade79bb820423474804c14f82a50",
+          "size": [
+            4096,
+            4096
+          ],
+          "source_filename": "canvasbag_olive_co.paa_NNN107_Base_color.png",
+          "paa_sha256": "8316eb48c9843955c087a4ee11d9378d95740aa86e9784d4bbdf4699ca31551d",
+          "mode": "supplied painted colour"
+        },
+        "nohq": {
+          "mode": "custom normal upload oversized; native normal/material inherited"
+        }
+      }
+    },
+    {
+      "class": "XIMS_LayeredShirt",
+      "displayName": "XIMS Layered Shirt",
+      "descriptionShort": "Made By Blake",
+      "base_class": "Layered_Shirt_Base",
+      "required_patch": "Layered_Shirt",
+      "key": "shirt",
+      "textures": {
+        "co": {
+          "source_sha256": "33ca2b4cf731054af071a07b57df38c1bedfed2a00a9716dcda15c56843d2844",
+          "size": [
+            4096,
+            4096
+          ],
+          "source_filename": "layered_shirt_troublemaker_co.paa_NNN31_Base_color.png",
+          "paa_sha256": "e3f796a09ded12a8c74af689d334e24bcb40b0d9af38009b201b1aee2e7866f2",
+          "mode": "supplied painted colour"
+        },
+        "nohq": {
+          "source_sha256": "ea6d1fb5c8119602d0711f486ceb02b654f2336c12c072241b4abcbad38fa7ee",
+          "size": [
+            4096,
+            4096
+          ],
+          "source_filename": "layered_shirt_troublemaker_co.paa_NNN31_Normal.png",
+          "paa_sha256": "13fa7b783c4befaa8ca3bc5cf85dcb086e38b1b74cbed35e46d029d16bc15f67",
+          "mode": "OpenGL to DirectX green conversion; native SWIZ normal packing"
+        }
+      }
     }
   ],
-  "pending": [
-    "XIMS Layered Shirt: Windstride CfgPatches/config and texture selection order required.",
-    "XIMS Canvas Bag: uploaded archive exceeds 32 MiB transfer limit."
+  "pending": [],
+  "pending_custom_normals": [
+    "XIMS Canvas Bag"
   ],
-  "pbo_sha256": "8d6aea83e7d5a2483e7115eb7f236e29aab0b961f851f046a0082df850bfcb0d"
+  "verified_windstride_config_sha256": "f446b552c9d07bd6e0b87c196ee3bbabe4a48a5c87c6391ada954ea0d03589fd",
+  "provided_female_mlod_sha256": "a8f7ee97c360893fe8ed8327ee03559c64d0049ecab0a6e8c24426173b88d4ac",
+  "addons": {
+    "GRZ_XimsClothing": "60da4fd8ffe4252acd2f8c92b943ab3bdace2f4b15edb96d45902dbca6ecb31b",
+    "GRZ_XimsLayeredShirt": "fc9143a69510a139a338c38ffa6308c6a476917045594d05dd457387af31c81f"
+  },
+  "pbo_sha256": "60da4fd8ffe4252acd2f8c92b943ab3bdace2f4b15edb96d45902dbca6ecb31b"
 }

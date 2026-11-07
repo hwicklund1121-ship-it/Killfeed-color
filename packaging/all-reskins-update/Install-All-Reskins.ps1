@@ -4,7 +4,10 @@ param(
  [string]$GamePath = "${env:ProgramFiles(x86)}\Steam\steamapps\common\DayZ",
  [string]$ProfilePath = '',
  [string]$MissionName = 'dayzOffline.chernarusplus',
- [string]$PackageDirectory = ''
+ [string]$PackageDirectory = '',
+ [string]$WindstrideServerPbo = '',
+ [string]$WindstrideClientPbo = '',
+ [switch]$SkipLayeredShirt
 )
 $ErrorActionPreference = 'Stop'
 if (Get-Process -Name DayZ_x64,DayZServer_x64 -ErrorAction SilentlyContinue) { throw 'Close DayZ and stop the server first.' }
@@ -13,6 +16,39 @@ foreach ($pair in @(@($ServerPath,'DayZServer_x64.exe'),@($GamePath,'DayZ_x64.ex
 }
 $catalogue = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'RESKIN-PACKS.json') -Raw | ConvertFrom-Json
 if ($catalogue.schema -ne 1) { throw 'Unsupported reskin package manifest.' }
+
+function Find-WindstridePbo([string]$root, [string]$specified) {
+ if ($specified) {
+  if (!(Test-Path -LiteralPath $specified -PathType Leaf) -or [IO.Path]::GetExtension($specified) -ne '.pbo') { throw "Windstride PBO not found: $specified" }
+  return $specified
+ }
+ foreach ($mod in @(Get-ChildItem -LiteralPath $root -Directory -Filter '@*')) {
+  foreach ($name in @('WindstrideClothing.pbo','Layered_Shirt.pbo')) {
+   $candidate = Join-Path $mod.FullName ('Addons/' + $name)
+   if (Test-Path -LiteralPath $candidate -PathType Leaf) { return $candidate }
+  }
+ }
+ $steamapps = Split-Path (Split-Path $root -Parent) -Parent
+ if (!$steamapps) { return '' }
+ $workshop = Join-Path $steamapps 'workshop/content/221100'
+ if (Test-Path -LiteralPath $workshop -PathType Container) {
+  foreach ($mod in @(Get-ChildItem -LiteralPath $workshop -Directory)) {
+   foreach ($name in @('WindstrideClothing.pbo','Layered_Shirt.pbo')) {
+    $candidate = Join-Path $mod.FullName ('Addons/' + $name)
+    if (Test-Path -LiteralPath $candidate -PathType Leaf) { return $candidate }
+   }
+  }
+ }
+ return ''
+}
+if (!$SkipLayeredShirt) {
+ foreach ($side in @(@($ServerPath,$WindstrideServerPbo),@($GamePath,$WindstrideClientPbo))) {
+  if (!(Find-WindstridePbo $side[0] $side[1])) {
+   throw "Original Windstride Clothing PBO not found under $($side[0]). A .bisign is insufficient. Install/load Windstride on both sides; or pass -WindstrideServerPbo and -WindstrideClientPbo for external mod paths. Use -SkipLayeredShirt to install the other updates only. Nothing installed."
+  }
+ }
+}
+
 $staging = Join-Path ([IO.Path]::GetTempPath()) ('GRZ-all-reskins-' + [guid]::NewGuid().ToString('N'))
 New-Item -ItemType Directory -Path $staging | Out-Null
 try {
@@ -37,6 +73,7 @@ try {
    $core = $expanded
   }
   foreach ($entry in $pack.addons.PSObject.Properties) {
+   if ($SkipLayeredShirt -and $entry.Name -eq 'GRZ_XimsLayeredShirt') { continue }
    if ($entry.Name -notmatch '^GRZ_[A-Za-z0-9_]+$') { throw 'Invalid addon name in manifest.' }
    $pbo = Join-Path $expanded ($entry.Name + '.pbo')
    if ((Get-FileHash -LiteralPath $pbo -Algorithm SHA256).Hash.ToLowerInvariant() -ne $entry.Value) { throw "PBO hash mismatch: $($entry.Name). Nothing installed." }
@@ -56,7 +93,9 @@ try {
  if ($ProfilePath) { $invoke.ProfilePath=$ProfilePath }
  & (Join-Path $core 'Install-Update.ps1') @invoke
  Write-Host 'Installed the available GRZ and XIMS reskin packs on client and server.'
- Write-Host 'Layered shirt and canvas bag are NOT installed: see INSTALL.txt for the missing source files.'
+ if ($SkipLayeredShirt) { Write-Host 'Layered Shirt skipped as requested; other reskins installed.' }
+ else { Write-Host 'All four XIMS clothes installed. Keep original Windstride Clothing loaded on both sides.' }
+ Write-Host 'Canvas Bag uses vanilla normal detail pending a smaller custom normal upload.'
 } finally {
  if (Test-Path -LiteralPath $staging) { Remove-Item -LiteralPath $staging -Recurse -Force }
 }

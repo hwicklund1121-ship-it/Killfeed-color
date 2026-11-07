@@ -2,16 +2,17 @@ class CfgPatches
 {
  class GRZ_XimsClothing
  {
-  units[] = {"XIMS_Sneakers","XIMS_JeanShorts"};
+  units[] = {"XIMS_Sneakers","XIMS_JeanShorts","XIMS_CanvasBag"};
   weapons[] = {};
   requiredVersion = 0.1;
-  requiredAddons[] = {"DZ_Data","DZ_Characters","DZ_Characters_Pants","DZ_Characters_Shoes"};
+  requiredAddons[] = {"DZ_Data","DZ_Characters","DZ_Characters_Pants","DZ_Characters_Shoes","DZ_Characters_Backpacks"};
  };
 };
 class CfgVehicles
 {
  class Sneakers_Black;
  class ShortJeans_Blue;
+ class CanvasBag_Olive;
  class XIMS_Sneakers: Sneakers_Black
  {
   scope = 2;
@@ -27,5 +28,13 @@ class CfgVehicles
   descriptionShort = "Made By Blake";
   hiddenSelectionsTextures[] = {"GRZ_XimsClothing\data\shorts_co.paa","GRZ_XimsClothing\data\shorts_co.paa","GRZ_XimsClothing\data\shorts_co.paa"};
   hiddenSelectionsMaterials[] = {"GRZ_XimsClothing\data\shorts.rvmat","GRZ_XimsClothing\data\shorts.rvmat","GRZ_XimsClothing\data\shorts.rvmat"};
+ };
+ class XIMS_CanvasBag: CanvasBag_Olive
+ {
+  scope = 2;
+  displayName = "XIMS Canvas Bag";
+  descriptionShort = "Made By Blake";
+  hiddenSelectionsTextures[] = {"GRZ_XimsClothing\data\bag_co.paa","GRZ_XimsClothing\data\bag_co.paa","GRZ_XimsClothing\data\bag_co.paa"};
+  // Custom normal upload is oversized; inherit the native canvas material.
  };
 };
