@@ -263,6 +263,7 @@ class GRZDuelServer
   challenge.WeaponA = Weapon_Base.Cast(from.GetHumanInventory().GetEntityInHands());
   challenge.Expires = g_Game.GetTime() + 60000;
   Challenges.Insert(challenge);
+  GRZAudit.Record("duel_invite", from.GetIdentity(), "Map: " + mapId + " | Best of " + bestOf.ToString() + " | Challenge: " + challenge.Id, target.GetIdentity());
   Tell(target, from.GetIdentity().GetName() + " challenged you to a duel. Accept or decline within 60 seconds.");
   Snapshot(from);
   Snapshot(target);
@@ -273,6 +274,7 @@ class GRZDuelServer
   if (!challenge || challenge.Id != id) return;
   if (!accept || challenge.A == Uid(p))
   {
+   GRZAudit.Record("duel_reject", p.GetIdentity(), "Declined/cancelled challenge: " + challenge.Id);
    Challenges.RemoveItem(challenge);
    Tell(Player(challenge.A), "Duel challenge declined or cancelled.");
    Tell(Player(challenge.B), "Duel challenge declined or cancelled.");
@@ -301,6 +303,7 @@ class GRZDuelServer
   GRZDuelReturn returnB = new GRZDuelReturn;
   returnB.Uid = match.B; returnB.Position = b.GetPosition(); Returns.Insert(returnB);
   Matches.Insert(match);
+  GRZAudit.Record("duel_accept", b.GetIdentity(), "Map: " + match.Map.Name + " | Match: " + match.Id, a.GetIdentity());
   Challenges.RemoveItem(challenge);
   a.m_GRZDuelMatch = match.Id; b.m_GRZDuelMatch = match.Id;
   Both(match, "Duel accepted. Lower your weapon while the round is prepared.");
@@ -365,6 +368,24 @@ class GRZDuelServer
    if (GRZDuelRatingStore.Result(winningId, losingId, delta)) result += " | Elo +" + delta.ToString() + " / -" + delta.ToString();
    else result += " | Rating could not be saved; match not rated.";
   }
+  GRZAuditEvent audit = new GRZAuditEvent;
+  audit.Kind = "duel_finish"; audit.PlayerId = match.SteamA; audit.PlayerName = match.NameA;
+  audit.OtherId = match.SteamB; audit.OtherName = match.NameB;
+  audit.Details = "Match: " + match.Id + " | Map: " + match.Map.Name + " | " + result;
+  GRZAudit.Send(audit);
+  if (winner >= 0)
+  {
+   GRZAuditEvent outcome = new GRZAuditEvent;
+   outcome.Kind = "duel_win"; outcome.PlayerId = match.SteamA; outcome.PlayerName = match.NameA;
+   outcome.OtherId = match.SteamB; outcome.OtherName = match.NameB;
+   if (winner == 1) { outcome.PlayerId = match.SteamB; outcome.PlayerName = match.NameB; outcome.OtherId = match.SteamA; outcome.OtherName = match.NameA; }
+   outcome.Details = audit.Details;
+   GRZAudit.Send(outcome);
+   GRZAuditEvent defeat = new GRZAuditEvent;
+   defeat.Kind = "duel_loss"; defeat.PlayerId = outcome.OtherId; defeat.PlayerName = outcome.OtherName;
+   defeat.OtherId = outcome.PlayerId; defeat.OtherName = outcome.PlayerName; defeat.Details = audit.Details;
+   GRZAudit.Send(defeat);
+  }
   PlayerBase a = Player(match.A);
   PlayerBase b = Player(match.B);
   if (a) { a.m_GRZDuelMatch = ""; Tell(a, result); Return(a); Snapshot(a); }
@@ -391,6 +412,7 @@ class GRZDuelServer
   else if (match.DeadA) match.ScoreB++;
   else if (match.DeadB) match.ScoreA++;
   else match.Draws++;
+  GRZAudit.Record("duel_round", null, "Match: " + match.Id + " | Score: " + match.ScoreA.ToString() + " - " + match.ScoreB.ToString());
   int firstTo = (match.BestOf + 1) / 2;
   if (match.ScoreA >= firstTo) { Finish(match, 0, ""); return; }
   if (match.ScoreB >= firstTo) { Finish(match, 1, ""); return; }
@@ -460,6 +482,7 @@ class GRZDuelServer
    PlayerBase challengeA = Player(challenge.A);
    PlayerBase challengeB = Player(challenge.B);
    if (challenge.Expires > now && challengeA && challengeB && challengeA.IsAlive() && challengeB.IsAlive()) continue;
+   GRZAudit.Record("duel_expire", null, "Challenge: " + challenge.Id + " | Map: " + challenge.MapId);
    Challenges.Remove(c);
    Tell(Player(challenge.A), "Duel challenge expired."); Tell(Player(challenge.B), "Duel challenge expired.");
    Snapshot(Player(challenge.A)); Snapshot(Player(challenge.B));
@@ -512,6 +535,7 @@ class GRZDuelServer
      else
      {
       match.Phase = 2; match.Due = now + Settings.RoundSeconds * 1000;
+      GRZAudit.Record("duel_start", a.GetIdentity(), "Match: " + match.Id + " | Map: " + match.Map.Name, b.GetIdentity());
       Both(match, "GO!"); Snapshot(a); Snapshot(b);
      }
     }
@@ -580,6 +604,12 @@ modded class PlayerBase
    // Never revive a dead killer or reward a suicide.
    if (attacker && attacker != this && attacker.IsAlive() && attacker.GetIdentity())
     GRZDuelServer.Heal(attacker);
+   PlayerIdentity auditKiller;
+   if (attacker) auditKiller = attacker.GetIdentity();
+   string auditWeapon = "Environment/unknown";
+   if (killer) auditWeapon = killer.GetType();
+   if (attacker && attacker.GetHumanInventory().GetEntityInHands()) auditWeapon = attacker.GetHumanInventory().GetEntityInHands().GetType();
+   GRZAudit.Record("kill", auditKiller, "Weapon/source: " + auditWeapon, GetIdentity());
    GRZDuelRatingStore.Death(this,attacker);
   }
   super.EEKilled(killer);

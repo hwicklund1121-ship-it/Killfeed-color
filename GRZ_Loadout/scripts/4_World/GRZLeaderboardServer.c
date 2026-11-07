@@ -53,6 +53,7 @@ class GRZLeaderboardServer
 modded class PlayerBase
 {
  protected int m_GRZLeaderboardRequest = -10000;
+ protected int m_GRZLeaderboardAuditAt = -60000;
  override void OnRPC(PlayerIdentity sender, int rpc_type, ParamsReadContext ctx)
  {
   if (rpc_type == GRZLeaderboardRPC.REQUEST)
@@ -61,7 +62,15 @@ modded class PlayerBase
    if (g_Game.GetTime() - m_GRZLeaderboardRequest < 1000) return;
    m_GRZLeaderboardRequest = g_Game.GetTime();
    int page; int sort;
-   if (ctx.Read(page) && ctx.Read(sort)) GRZLeaderboardServer.Page(this,page,sort);
+   if (ctx.Read(page) && ctx.Read(sort))
+   {
+    if (g_Game.GetTime() - m_GRZLeaderboardAuditAt >= 30000)
+    {
+     m_GRZLeaderboardAuditAt = g_Game.GetTime();
+     GRZAudit.Record("leaderboard_view", sender, "Leaderboard opened (view logging limited to once per 30 seconds)");
+    }
+    GRZLeaderboardServer.Page(this,page,sort);
+   }
    return;
   }
   if (rpc_type == GRZLeaderboardRPC.PAGE)

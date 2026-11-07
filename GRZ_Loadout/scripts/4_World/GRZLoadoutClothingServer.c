@@ -136,6 +136,8 @@ class GRZLoadoutClothingServer
     return false;
    }
   }
+  string auditClothes;
+  bool auditVip;
   array<EntityAI> fresh = new array<EntityAI>;
   array<EntityAI> old = new array<EntityAI>;
   array<ref InventoryLocation> original = new array<ref InventoryLocation>;
@@ -158,6 +160,13 @@ class GRZLoadoutClothingServer
    EntityAI current = player.FindAttachmentBySlotName(slotName);
    if (current && current.GetType() == choices[i])
     continue;
+   if (current)
+   {
+    auditClothes += slotName + ": " + current.GetType() + " -> " + choices[i] + " | ";
+    if (GRZVipLoadoutPolicy.PaidClothing(current.GetType())) auditVip = true;
+   }
+   else auditClothes += slotName + ": empty -> " + choices[i] + " | ";
+   if (GRZVipLoadoutPolicy.PaidClothing(choices[i])) auditVip = true;
    if (choices[i] == "__REMOVE__")
    {
     if (current)
@@ -238,6 +247,7 @@ class GRZLoadoutClothingServer
    }
   }
   GRZLoadoutServer.DeleteStaged(old);
+  if (selectedSlots.Count() > 0) GRZAudit.Record("clothing_change", player.GetIdentity(), auditClothes, null, auditVip);
   return true;
  }
 };

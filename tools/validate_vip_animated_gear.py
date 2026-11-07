@@ -31,7 +31,7 @@ _,base=read_pbo((r/'downloads/HEXGRID.pbo').read_bytes());baseconfig=base['confi
 import re
 basearmour=re.sub(r'\s+','',baseconfig[a:b])
 with ZipFile(r/'downloads/GRZ-Arena-Menu-Update.zip') as z:
- assert len([n for n in z.namelist() if n.endswith('.pbo')])==13
+ assert len([n for n in z.namelist() if n.endswith('.pbo')])==14
  for addon in ['GRZ_Loadout','GRZ_Killfeed','GRZ_AnimatedHexgrid','GRZ_AnimatedHexgridWhite','GRZ_AnimatedHexgridBlackV2']:
   data=z.read(addon+'.pbo');ext,files=read_pbo(data)
   assert ext['prefix']==addon and hashlib.sha1(data[:-21]).digest()==data[-20:]
@@ -49,4 +49,4 @@ with ZipFile(r/'downloads/GRZ-Arena-Menu-Update.zip') as z:
    arr=np.asarray(Image.open(io.BytesIO(hdr.getvalue()[:128]+d[off+7:off+7+length])).convert('RGB'))
    target=255 if white else 0
    assert (arr[:,:500]==target).all() and (arr[610:]==target).all(),path
-print('VIP ownership/access, OTHER list routing, paid catalogue isolation, one-slot gear grant, inventory preflight, unchanged armour, all new frame base colours and thirteen-addon package passed. Static/package checks only.')
+print('VIP ownership/access, OTHER list routing, paid catalogue isolation, one-slot gear grant, inventory preflight, unchanged armour, all new frame base colours and fourteen-addon package passed. Static/package checks only.')

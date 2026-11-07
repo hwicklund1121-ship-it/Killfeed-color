@@ -1,0 +1,6 @@
+.env
+.venv/
+logging_data/
+logging-bot.lock
+channel-overrides.json
+__pycache__/

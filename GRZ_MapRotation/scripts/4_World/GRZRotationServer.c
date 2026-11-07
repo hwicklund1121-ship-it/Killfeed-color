@@ -199,6 +199,7 @@ class GRZRotationServer
 
  static void BeginRound()
  {
+  GRZAudit.Record("map_round_start", null, "Arena: " + Settings.Arenas[ActiveIndex].Name);
   ManualSkipAt = 0;
   RoundId++;
   RoundStart = g_Game.GetTime();
@@ -291,6 +292,7 @@ class GRZRotationServer
    if (Settings.Arenas[i].Id != arenaId || i == ActiveIndex)
     continue;
    Votes.Set(player.GetIdentity().GetId(), arenaId);
+   GRZAudit.Record("map_vote", player.GetIdentity(), "Arena: " + Settings.Arenas[i].Name + " | Round: " + RoundId.ToString());
    Broadcast();
    return;
   }
@@ -394,6 +396,7 @@ class GRZRotationServer
    return;
   if (!Settings.AdminSteamIds || Settings.AdminSteamIds.Find(player.GetIdentity().GetPlainId()) < 0)
   {
+   GRZAudit.Record("map_skip_denied", player.GetIdentity(), "Not in AdminSteamIds");
    Notice(player, "Only configured admins can skip maps.", 0);
    return;
   }
@@ -408,6 +411,7 @@ class GRZRotationServer
   VoteWarning = true;
   ChangeWarning = true;
   ManualSkipAt = g_Game.GetTime() + 30000;
+  GRZAudit.Record("map_skip", player.GetIdentity(), "Next arena: " + Settings.Arenas[NextIndex].Name + " | Changes in 30 seconds");
   BroadcastNotice("An admin skipped the map. You'll be teleported in 30 seconds.", 2);
   Broadcast();
  }
@@ -425,6 +429,7 @@ class GRZRotationServer
   if (ManualSkipAt == 0 && !Voting && !VoteLocked && remaining <= Settings.VoteSeconds)
   {
    Voting = true;
+   GRZAudit.Record("map_vote_open", null, "Current arena: " + Settings.Arenas[ActiveIndex].Name);
    BroadcastNotice("Map voting is open. Type !vote to vote or change your vote.", 1);
    Broadcast();
   }
@@ -432,6 +437,7 @@ class GRZRotationServer
   {
    ChangeWarning = true;
    NextIndex = Winner();
+   GRZAudit.Record("map_vote_close", null, "Selected arena: " + Settings.Arenas[NextIndex].Name);
    Voting = false;
    VoteLocked = true;
    BroadcastNotice("Vote closed. " + Settings.Arenas[NextIndex].Name + " starts in 30 seconds.", 2);

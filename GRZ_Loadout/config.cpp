@@ -5,7 +5,7 @@ class CfgPatches
   units[] = {};
   weapons[] = {};
   requiredVersion = 0.1;
-  requiredAddons[] = {"DZ_Data", "DZ_Scripts"};
+  requiredAddons[] = {"GRZ_Audit","DZ_Data", "DZ_Scripts"};
  };
 };
 class CfgMods
@@ -15,7 +15,7 @@ class CfgMods
   dir = "GRZ_Loadout";
   name = "GRZ Loadout";
   author = "Blake";
-  version = "0.4.4";
+  version = "0.4.5";
   type = "mod";
   inputs = "GRZ_Loadout/inputs.xml";
   dependencies[] = {"Game", "World", "Mission"};

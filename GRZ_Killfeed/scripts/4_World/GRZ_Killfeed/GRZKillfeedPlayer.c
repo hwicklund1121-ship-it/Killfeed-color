@@ -47,6 +47,8 @@ modded class PlayerBase
                 int status = 0;
                 if (GRZKillfeedServer.Allowed(sender))
                     status = 1;
+                if (status == 1) GRZAudit.Record("vip_access", sender, "VIP menu opened");
+                else GRZAudit.Record("vip_denied", sender, "VIP menu access denied");
                 GRZKillfeedServer.Reply(this, status);
                 return;
             }

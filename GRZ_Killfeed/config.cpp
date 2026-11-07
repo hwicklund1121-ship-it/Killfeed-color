@@ -5,7 +5,7 @@ class CfgPatches
         units[] = {};
         weapons[] = {};
         requiredVersion = 0.1;
-        requiredAddons[] = {"DZ_Data", "DZ_Scripts", "GRZ_Loadout"};
+        requiredAddons[] = {"GRZ_Audit","DZ_Data", "DZ_Scripts", "GRZ_Loadout"};
     };
 };
 class CfgMods
@@ -15,7 +15,7 @@ class CfgMods
         dir = "GRZ_Killfeed";
         name = "GRZ Killfeed";
         author = "GRZ";
-        version = "0.2.7";
+        version = "0.2.8";
         type = "mod";
         dependencies[] = {"Game", "World", "Mission"};
         class defs

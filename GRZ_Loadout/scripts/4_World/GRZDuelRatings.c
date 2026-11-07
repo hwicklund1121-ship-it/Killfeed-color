@@ -116,18 +116,34 @@ class GRZDuelRatingStore
  {
   Init();
   if (!Writable) return;
+  int victimDeaths;
+  int killerKills;
   if (victim && victim.GetIdentity() && victim.GetIdentity().GetPlainId() != "")
   {
    Touch(victim);
-   GRZDuelRating dead = Upsert(Data,victim.GetIdentity().GetPlainId()); dead.Deaths++;
+   GRZDuelRating dead = Upsert(Data,victim.GetIdentity().GetPlainId()); dead.Deaths++; victimDeaths = dead.Deaths;
    Dirty = true;
   }
   if (killer && killer != victim && killer.GetIdentity() && killer.GetIdentity().GetPlainId() != "")
   {
    Touch(killer);
-   GRZDuelRating won = Upsert(Data,killer.GetIdentity().GetPlainId()); won.Kills++;
+   GRZDuelRating won = Upsert(Data,killer.GetIdentity().GetPlainId()); won.Kills++; killerKills = won.Kills;
    Dirty = true;
   }
+  PlayerIdentity statsKiller;
+  PlayerIdentity statsVictim;
+  string counters = "Live counters; periodic persistence pending";
+  if (victim && victim.GetIdentity())
+  {
+   statsVictim = victim.GetIdentity();
+   counters += " | Victim deaths: " + victimDeaths.ToString();
+  }
+  if (killer && killer != victim && killer.GetIdentity())
+  {
+   statsKiller = killer.GetIdentity();
+   counters += " | Killer kills: " + killerKills.ToString();
+  }
+  GRZAudit.Record("leaderboard_stats", statsKiller, counters, statsVictim);
  }
  static bool Result(string winner, string loser, out int delta)
  {
@@ -137,9 +153,23 @@ class GRZDuelRatingStore
   GRZDuelRating win = Upsert(next, winner);
   GRZDuelRating loss = Upsert(next, loser);
   delta = GRZDuelRanks.Gain(win.Elo, loss.Elo);
+  int priorElo = win.Elo;
   win.Elo += delta; loss.Elo = Math.Max(0, loss.Elo - delta);
   win.Wins++; loss.Losses++;
-  return Commit(next);
+  if (!Commit(next)) return false;
+  GRZAuditEvent audit = new GRZAuditEvent;
+  audit.Kind = "leaderboard_update"; audit.PlayerId = winner; audit.PlayerName = win.Name;
+  audit.OtherId = loser; audit.OtherName = loss.Name;
+  audit.Details = "Rated duel saved | Winner Elo: " + win.Elo.ToString() + " (+" + delta.ToString() + ") | Loser Elo: " + loss.Elo.ToString();
+  GRZAudit.Send(audit);
+  if (GRZDuelRanks.Tier(win.Elo) > GRZDuelRanks.Tier(priorElo))
+  {
+   GRZAuditEvent promotion = new GRZAuditEvent;
+   promotion.Kind = "rank_up"; promotion.PlayerId = winner; promotion.PlayerName = win.Name;
+   promotion.Details = GRZDuelRanks.Name(priorElo) + " -> " + GRZDuelRanks.Name(win.Elo) + " | Elo: " + win.Elo.ToString();
+   GRZAudit.Send(promotion);
+  }
+  return true;
  }
  static void Flush(bool force = false)
  {

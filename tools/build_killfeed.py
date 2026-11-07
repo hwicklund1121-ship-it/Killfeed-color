@@ -21,6 +21,7 @@ def main():
     archive = output / "GRZ_Killfeed-mod.zip"
     with ZipFile(archive, "w", ZIP_DEFLATED) as z:
         z.write(pbo, "@GRZ_Killfeed/Addons/GRZ_Killfeed.pbo")
+        z.writestr("@GRZ_Killfeed/Addons/GRZ_Audit.pbo", build(root / "GRZ_Audit"))
         z.write(root / "packaging/GRZ_Killfeed/mod.cpp", "@GRZ_Killfeed/mod.cpp")
         z.write(root / "KILLFEED.md", "@GRZ_Killfeed/INSTALL.md")
         z.writestr("@GRZ_Killfeed/server-config-example.json", '{\n    "AllowedSteamIds": []\n}\n')

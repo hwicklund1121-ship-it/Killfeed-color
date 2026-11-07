@@ -537,7 +537,17 @@ class GRZLoadoutServer
    return false;
   }
   // Commit only after every new item has successfully entered the inventory.
+  string auditGear = "Gun: " + weaponType + " | Wrap: " + wrapType;
+  for (int auditOld = 0; auditOld < oldItems.Count(); auditOld++)
+   if (Weapon_Base.Cast(oldItems[auditOld])) auditGear += " | Replaced: " + oldItems[auditOld].GetType();
+  for (int auditAttachment = 0; auditAttachment < gun.GetInventory().AttachmentCount(); auditAttachment++)
+  {
+   EntityAI fitted = gun.GetInventory().GetAttachmentFromIndex(auditAttachment);
+   if (fitted) auditGear += " | Fitted: " + fitted.GetType();
+  }
   DeleteStaged(oldItems);
+  if (!remember) auditGear += " | Restored/duel grant";
+  GRZAudit.Record("weapon_change", player.GetIdentity(), auditGear, null, GRZVipLoadoutPolicy.PaidGun(weaponType) || GRZVipLoadoutPolicy.PaidWrap(wrapType));
   if (remember)
   {
    GRZSavedWeapon saved = new GRZSavedWeapon;

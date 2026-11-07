@@ -125,7 +125,11 @@ class GRZKillfeedServer
             return false;
         }
         DeleteFile(temporary);
+        GRZNameStyle previousStyle = StyleFor(identity);
         s_Styles = persisted;
+        if (previousStyle.PrefixWord != style.PrefixWord || previousStyle.PrefixIcon != style.PrefixIcon)
+            GRZAudit.Record("vip_prefix_change", identity, "Prefix: " + style.PrefixWord + " | Icon: " + style.PrefixIcon.ToString());
+        GRZAudit.Record("vip_killfeed_change", identity, "Saved killfeed style | Mode: " + style.AnimationMode.ToString() + " | Speed: " + style.Speed.ToString() + " | Colours: " + style.ColorA.ToString() + ", " + style.ColorB.ToString());
         return true;
     }
 
