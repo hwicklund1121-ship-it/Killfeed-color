@@ -11,3 +11,6 @@ __pycache__/
 /downloads/GRZ_Customs.pbo
 
 /downloads/GRZ-Customs-0.2.1.zip
+
+# Six-item clothing PBO exceeds GitHub per-file limit; distributed inside its ZIP.
+/downloads/GRZ_VanillaClothing.pbo

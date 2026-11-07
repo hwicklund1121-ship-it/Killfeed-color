@@ -8,6 +8,9 @@ from repair_hexgrid import read_pbo
 r=Path(__file__).resolve().parents[1]
 p=argparse.ArgumentParser(description=__doc__)
 for key in ['gloves','shirt','hat']:p.add_argument('--'+key,type=Path,required=True)
+for key in ['jeans','bandana','sneakers']:
+ p.add_argument('--'+key+'-colour',type=Path,required=True)
+ p.add_argument('--'+key+'-normal',type=Path,required=(key=='sneakers'))
 a=p.parse_args();source=r/'GRZ_VanillaClothing'
 m=json.loads((r/'downloads/GRZ-Vanilla-Clothing-MANIFEST.json').read_text())
 payload=(r/'downloads/GRZ_VanillaClothing.pbo').read_bytes();ext,files=read_pbo(payload)
@@ -16,7 +19,9 @@ assert hashlib.sha256(payload).hexdigest()==m['pbo_sha256']
 expected={p.relative_to(source).as_posix():p.read_bytes() for p in source.rglob('*') if p.is_file() and p.name!='$PBOPREFIX$'}
 assert files==expected
 cfg=files['config.cpp'].decode()
-assert cfg.count('descriptionShort = "made by blake";')==3
+assert cfg.count('descriptionShort = "made by blake";')==6
+assert len(m['items'])==6 and m['pending_uploads']==[]
+assert m['pending_normal_maps']==['GRZ Jeans','GRZ Bandana']
 for item in m['items']:
  assert 'class '+item['class']+': '+item['base_class'] in cfg
  assert 'displayName = "'+item['displayName']+'";' in cfg
@@ -24,7 +29,7 @@ for field in ['DamageSystem','hitpoints','itemsCargoSize','weight','heatIsolatio
  assert field not in cfg,field
 dependencies=re.search(r'requiredAddons\[\] = \{([^}]+)\}',cfg).group(1)
 assert all(x.startswith('DZ_') for x in re.findall(r'"([^\"]+)"',dependencies))
-assert not any('Sneakers' in name or 'Jeans' in name or 'Bandana' in name for name in re.findall(r'class (GRZ_\w+)',cfg))
+assert all(name in cfg for name in ['GRZ_Jeans','GRZ_Sneakers','GRZ_Bandana'])
 for resource in re.findall(r'"(GRZ_VanillaClothing\\[^\"]+)"',cfg+'\n'+'\n'.join(v.decode() for k,v in files.items() if k.endswith('.rvmat'))):
  assert resource.removeprefix('GRZ_VanillaClothing\\').replace('\\','/') in files,resource
 
@@ -46,18 +51,35 @@ def decode_top(data):
   alpha=pix[:,:,3].copy();red=pix[:,:,0].copy()
   pix[:,:,0]=255-alpha;pix[:,:,3]=255-red
  return pix
-for key,item in zip(['gloves','shirt','hat'],m['items']):
- with ZipFile(getattr(a,key)) as z:
-  for kind,ending in [('co','_Base_color.png'),('nohq','_Normal.png')]:
+for item in m['items']:
+ key=item['key'];combined=getattr(a,key,None)
+ colour=combined or getattr(a,key+'_colour')
+ normal=combined or getattr(a,key+'_normal',None)
+ body=cfg.split('class '+item['class']+': '+item['base_class'],1)[1].split('\n };',1)[0]
+ if normal is None:
+  assert item['normal_mode']=='inherited vanilla'
+  assert 'hiddenSelectionsMaterials' not in body
+  assert 'data/'+key+'_nohq.paa' not in files
+  assert 'data/'+key+'.rvmat' not in files
+ else:
+  assert item['normal_mode']=='custom' and 'hiddenSelectionsMaterials' in body
+ for kind,ending,path in [('co','_Base_color.png',colour),('nohq','_Normal.png',normal)]:
+  if path is None:continue
+  with ZipFile(path) as z:
    name=next(n for n in z.namelist() if n.endswith(ending));raw=z.read(name)
-   assert hashlib.sha256(raw).hexdigest()==item['textures'][kind]['source_sha256']
-   original=np.array(Image.open(io.BytesIO(raw)).convert('RGB'))
-   if kind=='nohq':original[:,:,1]=255-original[:,:,1]
-   pixels=decode_top(files['data/'+key+'_'+kind+'.paa'])
-   assert pixels.shape[:2]==original.shape[:2]==(4096,4096)
-   error=np.abs(pixels[:,:,:3].astype(float)-original).mean();assert error<5,(key,kind,error)
-   print(key,kind,'mean PAA error:',round(error,3))
+  assert hashlib.sha256(raw).hexdigest()==item['textures'][kind]['source_sha256']
+  texture=files['data/'+key+'_'+kind+'.paa']
+  assert hashlib.sha256(texture).hexdigest()==item['textures'][kind]['paa_sha256']
+  original=np.array(Image.open(io.BytesIO(raw)).convert('RGB'))
+  if kind=='nohq':original[:,:,1]=255-original[:,:,1]
+  pixels=decode_top(texture)
+  assert pixels.shape[:2]==original.shape[:2]==tuple(reversed(item['textures'][kind]['size']))
+  error=np.abs(pixels[:,:,:3].astype(float)-original).mean();assert error<5,(key,kind,error)
+  print(key,kind,'mean PAA error:',round(error,3))
 with ZipFile(r/'downloads/GRZ-Vanilla-Clothing.zip') as z:
  assert z.testzip() is None and z.read('GRZ_VanillaClothing.pbo')==payload
- for name,data in expected.items():assert z.read('source/GRZ_VanillaClothing/'+name)==data
-print('Three available items: exact names/descriptions, inherited vanilla stats, resource bindings, all six 4K PAA conversions and source/PBO/ZIP matching passed. Three oversized uploads remain pending; DayZ runtime untested.')
+ for name,data in expected.items():
+  if not name.endswith('.paa'):assert z.read('source/GRZ_VanillaClothing/'+name)==data
+ assert not any(name.endswith('.paa') for name in z.namelist())
+ assert (r/'downloads/GRZ-Vanilla-Clothing.zip').stat().st_size<100*1024*1024
+print('All six items: names/descriptions, inherited vanilla stats, resources, ten PAA conversions, two explicit native-normal fallbacks and ZIP matching passed. DayZ runtime untested.')

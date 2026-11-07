@@ -3,12 +3,15 @@
   "addon": "GRZ_VanillaClothing",
   "items": [
     {
+      "key": "gloves",
       "class": "GRZ_SurgicalGloves",
       "displayName": "GRZ Surgical Gloves",
       "base_class": "SurgicalGloves_White",
+      "normal_mode": "custom",
       "textures": {
         "co": {
           "source_sha256": "cd3cd92f3c9cf7a8190295f4bfc5b9eefba067457911e96786f15ff2fe60456a",
+          "source_filename": "surgical_gloves_white_co.paa_NNN41_Base_color.png",
           "paa_sha256": "b84d19565c034ae75b33d82e5ce42ded1086bc960766cd70c64e2fceabda5466",
           "size": [
             4096,
@@ -17,6 +20,7 @@
         },
         "nohq": {
           "source_sha256": "949d9ea371d329f5c559e8e5bf774aa94e3e9449e82d43e2e31cff4713fb8ca9",
+          "source_filename": "surgical_gloves_white_co.paa_NNN41_Normal.png",
           "paa_sha256": "9a6fbf65d07d2571b192351dda76cf254c345b51d844b5fa43c1f633d8c91724",
           "size": [
             4096,
@@ -26,12 +30,15 @@
       }
     },
     {
+      "key": "shirt",
       "class": "GRZ_TShirt",
       "displayName": "GRZ T-Shirt",
       "base_class": "TShirt_Grey",
+      "normal_mode": "custom",
       "textures": {
         "co": {
           "source_sha256": "f83aabde249194ffb9d732ab39f98751fd1c702c6c9e4badc258cbdf77e05652",
+          "source_filename": "tshirt_grey_co.paa_NNN24_Base_color.png",
           "paa_sha256": "5794f278271e7b73bdae6ab80b4644fa7320759209ef85b2dd7e4c684d2af066",
           "size": [
             4096,
@@ -40,6 +47,7 @@
         },
         "nohq": {
           "source_sha256": "2736670181478aad5ab69d098a67bd691148fd2fb90002482f3c8c7701d3194e",
+          "source_filename": "tshirt_grey_co.paa_NNN24_Normal.png",
           "paa_sha256": "78cc450ed3019818f9efc70241e4a4c87cd7726582e5b71ed1fe865bd9ffb3af",
           "size": [
             4096,
@@ -49,12 +57,15 @@
       }
     },
     {
+      "key": "hat",
       "class": "GRZ_CowboyHat",
       "displayName": "GRZ Cowboy Hat",
       "base_class": "CowboyHat_Brown",
+      "normal_mode": "custom",
       "textures": {
         "co": {
           "source_sha256": "33d54003abdb2519fdd2eea1f0a7ba02ae34abc76d66dccae9965ad87b3024d9",
+          "source_filename": "cowboyhat_brown_co.paa_NNN60_Base_color.png",
           "paa_sha256": "5c1e255155ba0110e85d7669f0d94f496d0d27a9a02c725107ce5632bdec25d4",
           "size": [
             4096,
@@ -63,7 +74,71 @@
         },
         "nohq": {
           "source_sha256": "d9360edaf5d305b4e4f930635e4194f92e88c0ec8c14b4303e447598ed8a0cdd",
+          "source_filename": "cowboyhat_brown_co.paa_NNN60_Normal.png",
           "paa_sha256": "6edf47f6072f5e67671e262b2c240e8f75ea73501ac27e60ca3ca4b71f1028bb",
+          "size": [
+            4096,
+            4096
+          ]
+        }
+      }
+    },
+    {
+      "key": "jeans",
+      "class": "GRZ_Jeans",
+      "displayName": "GRZ Jeans",
+      "base_class": "Jeans_Blue",
+      "normal_mode": "inherited vanilla",
+      "textures": {
+        "co": {
+          "source_sha256": "f9528bb7e8f270e78aee506294cd7ba9719d3bc5b663cce574a7fdd6c01a7342",
+          "source_filename": "jeans_f_blue_co.paa_NNN19_Base_color.png",
+          "paa_sha256": "89108749eacdaeac0fc9146cee503cda0837c03616a5d6bc9aa38d9ff122edd4",
+          "size": [
+            4096,
+            4096
+          ]
+        }
+      }
+    },
+    {
+      "key": "bandana",
+      "class": "GRZ_Bandana",
+      "displayName": "GRZ Bandana",
+      "base_class": "Bandana_BlackPattern",
+      "normal_mode": "inherited vanilla",
+      "textures": {
+        "co": {
+          "source_sha256": "820f001afca514099c3941bea49fe4f3d659950b9abee1c72975d66784c8aae6",
+          "source_filename": "bandanaf_blackpattern_co.paa_NNN78_Base_color.png",
+          "paa_sha256": "c171a055a0706f192406cabd3f78bd00c62acdf75143aeb36ed6a56c6171466a",
+          "size": [
+            4096,
+            4096
+          ]
+        }
+      }
+    },
+    {
+      "key": "sneakers",
+      "class": "GRZ_Sneakers",
+      "displayName": "GRZ Sneakers",
+      "base_class": "Sneakers_Black",
+      "normal_mode": "custom",
+      "textures": {
+        "co": {
+          "source_sha256": "85983edcfa39b340c1095c54a9d1b1fe18da3484e39af66451d0955a504b9958",
+          "source_filename": "sneakers_black_co.paa_NNN2_Base_color.png",
+          "paa_sha256": "50a251907193a6f283ae5e6deed6afe2a7b7d4999b05d3de3cf0612abf4736cf",
+          "size": [
+            4096,
+            4096
+          ]
+        },
+        "nohq": {
+          "source_sha256": "5772d78ac0f07b91a9df30e3dca09528722a2891d10d8c8871eb6642304d3b14",
+          "source_filename": "sneakers_black_co.paa_NNN2_Normal.png",
+          "paa_sha256": "d8c752055f210c6f1706e32b2b6a8f716b433ff0855f35e613c6a5b43255a9a2",
           "size": [
             4096,
             4096
@@ -72,12 +147,12 @@
       }
     }
   ],
-  "pending_uploads": [
-    "GRZ Sneakers",
-    "GRZ Bandana",
-    "GRZ Jeans"
+  "pending_uploads": [],
+  "pending_normal_maps": [
+    "GRZ Jeans",
+    "GRZ Bandana"
   ],
-  "normal_conversion": "OpenGL tangent normals converted to DirectX with inverted green; normal X packed into alpha with native NOHQ SWIZ [5,4,2,3].",
+  "normal_conversion": "Supplied OpenGL tangent normals converted to DirectX by inverting green; X packed into alpha with native NOHQ SWIZ [5,4,2,3]. Items without a custom normal inherit vanilla materials.",
   "vanilla_stats_preserved": true,
-  "pbo_sha256": "c19158332b53be66ac66ae6c60b66f15a8d5dcbb6b5fc8307e293cce515f8c12"
+  "pbo_sha256": "076b0112096abdcecd846f0242190d7254ca9f69b9788d0c2cadbeef68d35ff2"
 }
