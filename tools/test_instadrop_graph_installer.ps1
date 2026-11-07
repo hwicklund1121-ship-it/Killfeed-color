@@ -69,6 +69,18 @@ $backup = @(Get-ChildItem -LiteralPath $server -Directory -Filter 'GRZ-instadrop
 Assert-Originals
 
 Reset-Fixture
+foreach ($p in @($game,$server)) { [IO.File]::WriteAllText((Join-Path $p '@GRZ_Local/Addons/GRZ_InstaDropGraph.pbo'),'prior-version-graph') }
+Install
+$backup = @(Get-ChildItem -LiteralPath $server -Directory -Filter 'GRZ-instadrop-backup-*')[0].FullName
+& (Join-Path $package 'Restore-InstaDrop.ps1') -BackupPath $backup
+foreach ($p in @($game,$server)) {
+ $graph = Join-Path $p '@GRZ_Local/Addons/GRZ_InstaDropGraph.pbo'
+ Assert ((Get-Content -LiteralPath $graph -Raw) -eq 'prior-version-graph') 'Previous graph not restored'
+ Remove-Item -LiteralPath $graph
+}
+Assert-Originals
+
+Reset-Fixture
 $global:GRZTestFailAt=4
 $caught=$false
 try { Install } catch { $caught=$true; Assert ($_.Exception.Message -match 'Injected copy failure') 'Unexpected error' }

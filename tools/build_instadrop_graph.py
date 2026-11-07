@@ -1,6 +1,6 @@
 """Build a DayZ 1.30 gun-lift drop graph from the owner's verified native export.
 
-Does not use third-party graph data. Only the two downward edges of the
+Does not use third-party graph data. Only four drop/stand edges of the
 throw-ready stance machine are changed. Native clips remain in the game.
 """
 import argparse
@@ -48,21 +48,23 @@ def patch_locomotion(source):
     start, end = named_block(source, 'AnimSrcNodeStateMachine', 'ThrowIdleStanceSTM')
     machine = source[start:end]
     changes = []
-    for guid, origin, target in [
-        ('{6930A8DE26987051}', 'Erc', 'ErcToPne'),
-        ('{6930A8DE26987067}', 'Cro', 'CroToPne'),
+    for guid, origin, target, destination, condition, blend in [
+        ('{6930A8DE26987051}', 'Erc', 'ErcToPne', 'Pne', 'Stance == 2', '0.1'),
+        ('{6930A8DE26987067}', 'Cro', 'CroToPne', 'Pne', 'Stance == 2', '0.1'),
+        ('{6930A8DE26987073}', 'Pne', 'PneToErc', 'Erc', 'Stance == 0', '0.16'),
+        ('{6930A8DE26987090}', 'PoB', 'PoBToErc', 'Erc', 'Stance == 0', '0.16'),
     ]:
         a, b = named_block(machine, 'AnimSrcNodeTransition', guid)
         edge = machine[a:b]
-        for key, expected in [('FromState', origin), ('ToState', target), ('Duration', '0.2'), ('Condition', 'Stance == 2')]:
+        for key, expected in [('FromState', origin), ('ToState', target), ('Duration', '0.2'), ('Condition', condition)]:
             if not re.search(r'(?m)^\s*' + key + r'\s+"' + re.escape(expected) + r'"\s*$', edge):
                 raise ValueError(f'Unsupported {origin} downward transition: {key}')
         # Keep input conditions and physical native stance decisions unchanged.
-        # Enter the native prone gun-lift idle directly, avoiding the clip wait.
-        patched = change_property(edge, 'ToState', target, 'Pne')
-        patched = change_property(patched, 'Duration', '0.2', '0.03')
+        # Enter the requested native gun-lift idle directly, avoiding clip waits.
+        patched = change_property(edge, 'ToState', target, destination)
+        patched = change_property(patched, 'Duration', '0.2', blend)
         machine = machine[:a] + patched + machine[b:]
-        changes.append(dict(Transition=guid, From=origin, Before=target, After='Pne', BlendSeconds=0.03))
+        changes.append(dict(Transition=guid, From=origin, Before=target, After=destination, BlendSeconds=float(blend)))
     return source[:start] + machine + source[end:], changes
 
 
@@ -86,7 +88,7 @@ def build_graph(export, output):
     patched, changes = patch_locomotion(source)
     root = files[BASE + 'player_main.agr'].decode('utf-8')
     original_resource = '{6CA2ACDCAC1184DC}DZ/anims/workspaces/player/player_main/Locomotion.agf'
-    new_resource = '{4E5A645A1B134796}' + PREFIX + '/locomotion.agf'
+    new_resource = '{58DC0C845B1A47E2}' + PREFIX + '/locomotion.agf'
     if root.count(original_resource) != 1:
         raise ValueError('Native locomotion reference not uniquely located')
     root = root.replace(original_resource, new_resource)
@@ -117,7 +119,7 @@ class CfgVehicles
 };
 ''')
     evidence = dict(
-        Version='0.1.6', TargetDayZ=TARGET_VERSION,
+        Version='0.1.7', TargetDayZ=TARGET_VERSION,
         SourceHashes={p: hashlib.sha256(b).hexdigest() for p, b in files.items()},
         Changes=changes,
         LocomotionSHA256=hashlib.sha256(patched.encode()).hexdigest(),

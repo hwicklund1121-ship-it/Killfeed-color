@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Security.Cryptography;
 
-public static class GRZDropGraphPatchV016 {
+public static class GRZDropGraphPatchV017 {
     struct Span { public int Start; public int End; }
     static Span Block(string text, string kind, string name) {
         string expression = @"\b" + Regex.Escape(kind) + @"\s+" + Regex.Escape(name) + @"\s*\{";
@@ -34,23 +34,26 @@ public static class GRZDropGraphPatchV016 {
     public static string Locomotion(string text) {
         var scope = Block(text, "AnimSrcNodeStateMachine", "ThrowIdleStanceSTM");
         string machine = text.Substring(scope.Start, scope.End - scope.Start);
-        string[] ids = { "{6930A8DE26987051}", "{6930A8DE26987067}" };
-        string[] from = { "Erc", "Cro" };
-        string[] oldTo = { "ErcToPne", "CroToPne" };
+        string[] ids = { "{6930A8DE26987051}", "{6930A8DE26987067}", "{6930A8DE26987073}", "{6930A8DE26987090}" };
+        string[] from = { "Erc", "Cro", "Pne", "PoB" };
+        string[] oldTo = { "ErcToPne", "CroToPne", "PneToErc", "PoBToErc" };
+        string[] newTo = { "Pne", "Pne", "Erc", "Erc" };
+        string[] conditions = { "Stance == 2", "Stance == 2", "Stance == 0", "Stance == 0" };
+        string[] blends = { "0.1", "0.1", "0.16", "0.16" };
         for (int i = 0; i < ids.Length; ++i) {
             var span = Block(machine, "AnimSrcNodeTransition", "\"" + ids[i] + "\"");
             string edge = machine.Substring(span.Start, span.End - span.Start);
             edge = Property(edge, "FromState", from[i], from[i]);
-            edge = Property(edge, "Condition", "Stance == 2", "Stance == 2");
-            edge = Property(edge, "ToState", oldTo[i], "Pne");
-            edge = Property(edge, "Duration", "0.2", "0.03");
+            edge = Property(edge, "Condition", conditions[i], conditions[i]);
+            edge = Property(edge, "ToState", oldTo[i], newTo[i]);
+            edge = Property(edge, "Duration", "0.2", blends[i]);
             machine = machine.Substring(0, span.Start) + edge + machine.Substring(span.End);
         }
         return text.Substring(0, scope.Start) + machine + text.Substring(scope.End);
     }
     public static string Root(string text) {
         const string original = "{6CA2ACDCAC1184DC}DZ/anims/workspaces/player/player_main/Locomotion.agf";
-        const string replacement = "{4E5A645A1B134796}GRZ_InstaDropGraph/locomotion.agf";
+        const string replacement = "{58DC0C845B1A47E2}GRZ_InstaDropGraph/locomotion.agf";
         if (text.IndexOf(original, StringComparison.Ordinal) < 0 || text.IndexOf(original, StringComparison.Ordinal) != text.LastIndexOf(original, StringComparison.Ordinal)) throw new InvalidDataException("Unsupported native root graph reference.");
         return text.Replace(original, replacement);
     }

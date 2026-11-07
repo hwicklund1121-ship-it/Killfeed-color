@@ -60,17 +60,17 @@ class DropGraphTests(unittest.TestCase):
             cls.native = z.read('native/' + BASE + 'locomotion.agf').decode()
             cls.native_root = z.read('native/' + BASE + 'player_main.agr').decode()
 
-    def test_exactly_two_edges_change_and_roll_graphs_preserved(self):
+    def test_exactly_four_edges_change_and_roll_graphs_preserved(self):
         patched, changes = patch_locomotion(self.native)
-        self.assertEqual(len(changes), 2)
+        self.assertEqual(len(changes), 4)
         restored = patched
         for row in changes:
             a, b = named_block(restored, 'AnimSrcNodeTransition', row['Transition'])
             edge = restored[a:b]
-            self.assertIn('ToState "Pne"', edge)
-            self.assertIn('Duration "0.03"', edge)
-            self.assertIn('Condition "Stance == 2"', edge)
-            edge = edge.replace('ToState "Pne"', 'ToState "' + row['Before'] + '"').replace('Duration "0.03"', 'Duration "0.2"')
+            self.assertIn('ToState "' + row['After'] + '"', edge)
+            self.assertIn('Duration "' + str(row['BlendSeconds']) + '"', edge)
+            self.assertIn('Condition "Stance == ' + ('2' if row['After'] == 'Pne' else '0') + '"', edge)
+            edge = edge.replace('ToState "' + row['After'] + '"', 'ToState "' + row['Before'] + '"').replace('Duration "' + str(row['BlendSeconds']) + '"', 'Duration "0.2"')
             restored = restored[:a] + edge + restored[b:]
         self.assertEqual(restored, self.native)
 
@@ -122,7 +122,7 @@ class DropGraphTests(unittest.TestCase):
                 self.assertEqual(set(graph), {'config.cpp', 'locomotion.agf', 'player_main.agr'})
                 self.assertEqual(graph['locomotion.agf'].decode(), patch_locomotion(self.native)[0])
                 root = graph['player_main.agr'].decode()
-                restored = root.replace('{4E5A645A1B134796}GRZ_InstaDropGraph/locomotion.agf', '{6CA2ACDCAC1184DC}DZ/anims/workspaces/player/player_main/Locomotion.agf')
+                restored = root.replace('{58DC0C845B1A47E2}GRZ_InstaDropGraph/locomotion.agf', '{6CA2ACDCAC1184DC}DZ/anims/workspaces/player/player_main/Locomotion.agf')
                 self.assertEqual(restored, self.native_root)
                 source = all_files['GRZ_InstaDrop']['scripts/4_World/GRZInstaDropThrowReady.c']
                 self.assertEqual(hashlib.sha256(source).digest(), bytes.fromhex('997674e13dc7f42f6bea4e4405d93b052326130b3f926f4e48adb3c9311a7a01'))

@@ -1,5 +1,5 @@
 {
-  "Version": "0.1.6",
+  "Version": "0.1.7",
   "TargetDayZ": "1.30.164.289",
   "SourceHashes": {
     "dz/anims/workspaces/player/player_main/player_main.agr": "89f82f6de2461cf42367b989b2b1392814a4df9272034fbb23be8e5c2106df23",
@@ -11,16 +11,30 @@
       "From": "Erc",
       "Before": "ErcToPne",
       "After": "Pne",
-      "BlendSeconds": 0.03
+      "BlendSeconds": 0.1
     },
     {
       "Transition": "{6930A8DE26987067}",
       "From": "Cro",
       "Before": "CroToPne",
       "After": "Pne",
-      "BlendSeconds": 0.03
+      "BlendSeconds": 0.1
+    },
+    {
+      "Transition": "{6930A8DE26987073}",
+      "From": "Pne",
+      "Before": "PneToErc",
+      "After": "Erc",
+      "BlendSeconds": 0.16
+    },
+    {
+      "Transition": "{6930A8DE26987090}",
+      "From": "PoB",
+      "Before": "PoBToErc",
+      "After": "Erc",
+      "BlendSeconds": 0.16
     }
   ],
-  "LocomotionSHA256": "9f194e57919475a6cbc187b150cf729085fcc921b0525c0a1bc0ef0d08097155",
+  "LocomotionSHA256": "39c2183707da772de0e57f7ff5c077c2a0b6870b4d6bcf69cbf575cd2f3d5010",
   "Limits": "Source/package checks only; native graph loading and gameplay require DayZ testing."
 }
