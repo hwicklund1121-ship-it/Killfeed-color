@@ -1,5 +1,5 @@
 {
-  "Version": "0.1.9",
+  "Version": "0.2.0",
   "TargetDayZ": "1.30.164.289",
   "SourceHashes": {
     "dz/anims/workspaces/player/player_main/player_main.agr": "89f82f6de2461cf42367b989b2b1392814a4df9272034fbb23be8e5c2106df23",
@@ -11,14 +11,14 @@
       "From": "Erc",
       "Before": "ErcToPne",
       "After": "Pne",
-      "BlendSeconds": 0.1
+      "BlendSeconds": 0.14
     },
     {
       "Transition": "{6930A8DE26987067}",
       "From": "Cro",
       "Before": "CroToPne",
       "After": "Pne",
-      "BlendSeconds": 0.1
+      "BlendSeconds": 0.14
     },
     {
       "Transition": "{6930A8DE26987073}",
@@ -79,6 +79,18 @@
       "BlendSeconds": 0.16
     }
   ],
-  "LocomotionSHA256": "0c01187381503c7989a3bd0236f0fbc7aae323c5d89e4d396fac278a57384fe8",
+  "DirectionBlend": {
+    "Variable": "AimX",
+    "Thresholds": [
+      -180,
+      0,
+      180
+    ],
+    "BlendFn": "S",
+    "BodyNode": "GRZDropDirectionalPose",
+    "WeaponNode": "ThrowStrenghPoBB",
+    "StanceWeaponBlendSeconds": 0.14
+  },
+  "LocomotionSHA256": "92cd55440ebd1a51b37af00d77ad94a91d4f30e9978d14b33c4c287b561a6284",
   "Limits": "Source/package checks only; native graph loading and gameplay require DayZ testing."
 }

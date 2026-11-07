@@ -7,7 +7,7 @@ import sys
 import tempfile
 import unittest
 from zipfile import ZipFile
-from build_instadrop_graph import BASE, named_block, patch_locomotion, build_graph, roll_route_text, ROLL_ROUTES
+from build_instadrop_graph import BASE, named_block, patch_locomotion, build_graph, roll_route_text, ROLL_ROUTES, DIRECTION_BODY, DIRECTION_STRENGTH
 from build_instadrop_graph_release import ROOT, release
 from build_pbo import build
 
@@ -65,6 +65,18 @@ class DropGraphTests(unittest.TestCase):
         self.assertEqual(len(changes), 4)
         self.assertEqual(patched.count(roll_route_text()), 1)
         restored = patched.replace(roll_route_text(), "", 1)
+        restored = restored.replace(DIRECTION_BODY + '\n    ', '', 1)
+        a, b = named_block(self.native, 'AnimSrcNodeBlendT', 'ThrowStrenghPoBB')
+        restored = restored.replace(DIRECTION_STRENGTH, self.native[a:b], 1)
+        a, b = named_block(restored, 'AnimSrcNodeBlendT', 'ThrowStrenghB')
+        restored = restored[:a] + restored[a:b].replace('BlendTime "0.14"', 'BlendTime "0.3"') + restored[b:]
+        a,b = named_block(restored, 'AnimSrcNodeStateMachine', 'ThrowIdleStanceSTM')
+        machine = restored[a:b]
+        for state, before in [('Pne','ThrowPneIdleG'), ('PoB','PoBAimB')]:
+            c,d = named_block(machine, 'AnimSrcNodeState', state)
+            machine = machine[:c] + machine[c:d].replace('Child "GRZDropDirectionalPose"','Child "'+before+'"') + machine[d:]
+        restored = restored[:a] + machine + restored[b:]
+
         for row in changes:
             a, b = named_block(restored, 'AnimSrcNodeTransition', row['Transition'])
             edge = restored[a:b]
@@ -92,6 +104,24 @@ class DropGraphTests(unittest.TestCase):
                 self.assertIn('GetLowerTime() > 0.12', condition)
             self.assertIn('AnimSrcNodeState ' + origin + ' {', patched)
             self.assertIn('AnimSrcNodeState ' + target + ' {', patched)
+
+    def test_body_and_weapon_follow_same_native_look_angle(self):
+        patched, _ = patch_locomotion(self.native)
+        for name in ['GRZDropDirectionalPose', 'ThrowStrenghPoBB']:
+            a,b = named_block(patched, 'AnimSrcNodeBlendN', name)
+            node = patched[a:b]
+            self.assertIn('BlendWeight "AimX"', node)
+            self.assertIn('BlendFn S', node)
+            self.assertIn('-180 0 180', node)
+            self.assertIn('IsCyclic 0', node)
+        self.assertIn('"PoBAimB" "ThrowPneIdleG" "PoBAimB"', patched)
+        self.assertIn('"ThrowStrengthPoBP" "ThrowStrengthPneP" "ThrowStrengthPoBP"', patched)
+        a,b = named_block(patched, 'AnimSrcNodeBlendT', 'ThrowStrenghB')
+        self.assertIn('BlendTime "0.14"', patched[a:b])
+        # Both angle boundaries resolve to the same native back-pose child;
+        # the midpoint on either side interpolates the front/back pose pair.
+        self.assertEqual(DIRECTION_BODY.count('"PoBAimB"'),2)
+        self.assertEqual(DIRECTION_STRENGTH.count('"ThrowStrengthPoBP"'),2)
 
     def test_already_patched_or_changed_native_edges_rejected(self):
         patched, _ = patch_locomotion(self.native)
@@ -141,7 +171,7 @@ class DropGraphTests(unittest.TestCase):
                 self.assertEqual(set(graph), {'config.cpp', 'locomotion.agf', 'player_main.agr'})
                 self.assertEqual(graph['locomotion.agf'].decode(), patch_locomotion(self.native)[0])
                 root = graph['player_main.agr'].decode()
-                restored = root.replace('{FEA9190E63074AA1}GRZ_InstaDropGraph/locomotion.agf', '{6CA2ACDCAC1184DC}DZ/anims/workspaces/player/player_main/Locomotion.agf')
+                restored = root.replace('{E5500200E0494CA1}GRZ_InstaDropGraph/locomotion.agf', '{6CA2ACDCAC1184DC}DZ/anims/workspaces/player/player_main/Locomotion.agf')
                 self.assertEqual(restored, self.native_root)
                 source = all_files['GRZ_InstaDrop']['scripts/4_World/GRZInstaDropThrowReady.c']
                 self.assertEqual(source, (ROOT / 'GRZ_InstaDrop/scripts/4_World/GRZInstaDropThrowReady.c').read_bytes())

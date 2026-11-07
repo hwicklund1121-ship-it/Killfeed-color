@@ -1,7 +1,7 @@
 """Build a DayZ 1.30 gun-lift drop graph from the owner's verified native export.
 
-Does not use third-party graph data. Only four drop/stand edges of the
-throw-ready stance machine are changed. Native clips remain in the game.
+Builds authored drop/roll routes and a matched native-pose look-angle blend.
+Native graph data is supplied locally; no animation clips are packaged.
 """
 import argparse
 import difflib
@@ -66,13 +66,33 @@ def roll_route_text():
     return ''.join(result)
 
 
+DIRECTION_BODY = 'AnimSrcNodeBlendN GRZDropDirectionalPose {\n     BlendWeight "AimX"\n     BlendFn S\n     Thresholds {\n      -180 0 180\n     }\n     Children {\n      "PoBAimB" "ThrowPneIdleG" "PoBAimB"\n     }\n     IsCyclic 0\n    }'
+DIRECTION_STRENGTH = 'AnimSrcNodeBlendN ThrowStrenghPoBB {\n     BlendWeight "AimX"\n     BlendFn S\n     Thresholds {\n      -180 0 180\n     }\n     Children {\n      "ThrowStrengthPoBP" "ThrowStrengthPneP" "ThrowStrengthPoBP"\n     }\n     IsCyclic 0\n    }'
+
+def patch_direction(source):
+    a, b = named_block(source, 'AnimSrcNodeStateMachine', 'ThrowIdleStanceSTM')
+    machine = source[a:b]
+    for state, before in [('Pne', 'ThrowPneIdleG'), ('PoB', 'PoBAimB')]:
+        c, d = named_block(machine, 'AnimSrcNodeState', state)
+        block = change_property(machine[c:d], 'Child', before, 'GRZDropDirectionalPose')
+        machine = machine[:c] + block + machine[d:]
+    result = source[:a] + machine + source[b:]
+    a, b = named_block(result, 'AnimSrcNodeBlendT', 'ThrowStrenghPoBB')
+    # Both layers use the same native look angle and interpolation thresholds.
+    result = result[:a] + DIRECTION_STRENGTH + result[b:]
+    a, b = named_block(result, 'AnimSrcNodeBlendT', 'ThrowStrenghB')
+    result = result[:a] + change_property(result[a:b], 'BlendTime', '0.3', '0.14') + result[b:]
+    a, _ = named_block(result, 'AnimSrcNodeBlend', 'ThrowAimB')
+    return result[:a] + DIRECTION_BODY + '\n    ' + result[a:]
+
+
 def patch_locomotion(source):
     start, end = named_block(source, 'AnimSrcNodeStateMachine', 'ThrowIdleStanceSTM')
     machine = source[start:end]
     changes = []
     for guid, origin, target, destination, condition, blend in [
-        ('{6930A8DE26987051}', 'Erc', 'ErcToPne', 'Pne', 'Stance == 2', '0.1'),
-        ('{6930A8DE26987067}', 'Cro', 'CroToPne', 'Pne', 'Stance == 2', '0.1'),
+        ('{6930A8DE26987051}', 'Erc', 'ErcToPne', 'Pne', 'Stance == 2', '0.14'),
+        ('{6930A8DE26987067}', 'Cro', 'CroToPne', 'Pne', 'Stance == 2', '0.14'),
         ('{6930A8DE26987073}', 'Pne', 'PneToErc', 'Erc', 'Stance == 0', '0.16'),
         ('{6930A8DE26987090}', 'PoB', 'PoBToErc', 'Erc', 'Stance == 0', '0.16'),
     ]:
@@ -92,7 +112,7 @@ def patch_locomotion(source):
     master = result[a:b]
     anchor, _ = named_block(master, 'AnimSrcNodeTransition', '{6930A8DE26987785}')
     master = master[:anchor] + roll_route_text() + master[anchor:]
-    return result[:a] + master + result[b:], changes
+    return patch_direction(result[:a] + master + result[b:]), changes
 
 
 def build_graph(export, output):
@@ -115,7 +135,7 @@ def build_graph(export, output):
     patched, changes = patch_locomotion(source)
     root = files[BASE + 'player_main.agr'].decode('utf-8')
     original_resource = '{6CA2ACDCAC1184DC}DZ/anims/workspaces/player/player_main/Locomotion.agf'
-    new_resource = '{FEA9190E63074AA1}' + PREFIX + '/locomotion.agf'
+    new_resource = '{E5500200E0494CA1}' + PREFIX + '/locomotion.agf'
     if root.count(original_resource) != 1:
         raise ValueError('Native locomotion reference not uniquely located')
     root = root.replace(original_resource, new_resource)
@@ -146,10 +166,11 @@ class CfgVehicles
 };
 ''')
     evidence = dict(
-        Version='0.1.9', TargetDayZ=TARGET_VERSION,
+        Version='0.2.0', TargetDayZ=TARGET_VERSION,
         SourceHashes={p: hashlib.sha256(b).hexdigest() for p, b in files.items()},
         Changes=changes,
         RollRoutes=[dict(Transition=g, From=f, To=t, Condition=c, BlendSeconds=float(d)) for g,f,t,c,d in ROLL_ROUTES],
+        DirectionBlend=dict(Variable='AimX', Thresholds=[-180,0,180], BlendFn='S', BodyNode='GRZDropDirectionalPose', WeaponNode='ThrowStrenghPoBB', StanceWeaponBlendSeconds=0.14),
         LocomotionSHA256=hashlib.sha256(patched.encode()).hexdigest(),
         Limits='Source/package checks only; native graph loading and gameplay require DayZ testing.',
     )
