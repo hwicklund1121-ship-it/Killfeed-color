@@ -1,0 +1,49 @@
+{
+  "class": "GRZ_XIMS_CS5",
+  "displayName": "XIMS CS5",
+  "descriptionShort": "Made By Blake",
+  "base_class": "UAV_CS5_BLACK",
+  "selection_order": [
+    "color",
+    "color2",
+    "color3",
+    "color4"
+  ],
+  "textures": {
+    "cs5_receiver": {
+      "source_png_sha256": "9708d0eb658dcd61371b4428e147bb47a21276094214fe84efc2cbcfb2821215",
+      "paa_sha256": "1680738ab6e0346ed327cc0534ae05c9bd5132637b5df04b5e58d6f2a6105ce4",
+      "size": [
+        4096,
+        4096
+      ]
+    },
+    "cs5_stock": {
+      "source_png_sha256": "281f1def47e588bbc820658e25ddc417f765cae3bf6bba1de535dfb1af204fed",
+      "paa_sha256": "2ece5f34f33efd2dd7b24896e8f6feb4a09bc6a3ecdddab0e35478b151a90499",
+      "size": [
+        4096,
+        4096
+      ]
+    },
+    "cs5_barrel": {
+      "source_png_sha256": "fc6776db6beea9722a1953d6fdf69be5ac44c40df7c61aa010cb032135f39792",
+      "paa_sha256": "3453a2d852509e52f5bd629ffcf2efabbd7dd44733635c14b3f42c79975bf6f9",
+      "size": [
+        4096,
+        4096
+      ]
+    },
+    "suppressor": {
+      "source_png_sha256": "0b393a6385af31af11d872d4a70b43f5ac3d633df29194546c463579a2520ff3",
+      "paa_sha256": "647a76e83ecf8d4b71f8f1494187b49795c533c07fe8dfa7340860ab558729c0",
+      "size": [
+        4096,
+        4096
+      ]
+    }
+  },
+  "normal_maps": "Native CS5 NOHQ/SMDI and material detail retained; supplied exported normals are constant flat normal maps.",
+  "model": "Inherited original CS5 model; FBX recompilation not required.",
+  "pbo_sha256": "87aaf7b635995dfc6cf9082125a027b716bf1f83253ca9c6b58105555a650b63"
+}
