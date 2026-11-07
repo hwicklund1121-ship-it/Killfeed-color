@@ -1,0 +1,26 @@
+{
+  "Version": "0.1.6",
+  "TargetDayZ": "1.30.164.289",
+  "SourceHashes": {
+    "dz/anims/workspaces/player/player_main/player_main.agr": "89f82f6de2461cf42367b989b2b1392814a4df9272034fbb23be8e5c2106df23",
+    "dz/anims/workspaces/player/player_main/locomotion.agf": "8a7b56ff16aa36e71d15fd0b0563fcff7a2b4f672a67bab0c7011bd95ad1f63f"
+  },
+  "Changes": [
+    {
+      "Transition": "{6930A8DE26987051}",
+      "From": "Erc",
+      "Before": "ErcToPne",
+      "After": "Pne",
+      "BlendSeconds": 0.03
+    },
+    {
+      "Transition": "{6930A8DE26987067}",
+      "From": "Cro",
+      "Before": "CroToPne",
+      "After": "Pne",
+      "BlendSeconds": 0.03
+    }
+  ],
+  "LocomotionSHA256": "9f194e57919475a6cbc187b150cf729085fcc921b0525c0a1bc0ef0d08097155",
+  "Limits": "Source/package checks only; native graph loading and gameplay require DayZ testing."
+}

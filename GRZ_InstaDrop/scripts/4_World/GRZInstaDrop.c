@@ -1,5 +1,5 @@
-// Independent prototype using the public native DayZ animation API.
-// No third-party animation graphs, scripts, assets or forced player positions.
+// GRZ stance support paired with the v0.1.6 modified vanilla drop graph.
+// No LUGU scripts/graphs or forced player positions.
 class GRZInstaDropTransitions
 {
  bool OverrideTransitionSpeeds = false;
@@ -32,10 +32,17 @@ class GRZInstaDrop
    Print("[GRZ InstaDrop] Inactive: no reviewed native transition list. Export the vanilla animation index first.");
    return;
   }
-  // Only GRZ Movement applies clip rates. This module retains the working
-  // v0.1.4 gun-lift/roll stance logic and never overwrites another graph/rate.
+  // Drop timing is handled by a native graph branch, not clip-speed overrides.
+  // The companion stance source remains unchanged from the working build.
+  string graph;
+  GetGame().ConfigGetText("CfgVehicles SurvivorBase enfAnimSys graphName", graph);
+  if (!GetGame().ConfigIsExisting("CfgPatches GRZ_InstaDropGraph") || graph != "GRZ_InstaDropGraph/player_main.agr")
+  {
+   Print("[GRZ InstaDrop] v0.1.6 inactive: graph addon missing or graph overridden. Selected graph=" + graph);
+   return;
+  }
   Ready = true;
-  Print("[GRZ InstaDrop] v0.1.5 stance permissions active. Fast drop is owned by GRZ Movement; roll-to-stand logic retained.");
+  Print("[GRZ InstaDrop] v0.1.6 graph selected: GRZ_InstaDropGraph/player_main.agr. Throw-ready downward edges request direct prone, blend=0.03. Roll-to-stand logic retained; verify playback in game.");
  }
 };
 modded class DayZPlayerTypeUtils
