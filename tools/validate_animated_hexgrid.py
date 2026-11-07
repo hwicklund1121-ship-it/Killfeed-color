@@ -12,6 +12,11 @@ _,base=read_pbo((r/'downloads/HEXGRID.pbo').read_bytes())
 original=base['config.cpp'].decode();a,_,_,b=section(original,'GlobalArmor');c,_,_,d=section(cfg,'GlobalArmor')
 assert re.sub(r'\s+','',original[a:b])==re.sub(r'\s+','',cfg[c:d]),'Armour settings changed'
 assert 'hitpoints = 10000;' in cfg and cfg.count('flat_black.rvmat')==6
+script=(s/'scripts/4_World/GRZAnimatedHexgrid.c').read_text()
+assert 'frame % 8' in script and 'LoadImageFile(slot, FramePath(frame), false)' in script
+assert 'WarmCache();' in script and '!GRZHexgridAnimationTicker.Ready(frame)' in script
+assert 'cached.Unlink()' in script and 's_FrameLoaded.Clear()' in script
+assert (s/'gui/layouts/frame_cache.layout').exists()
 pbo=(r/'downloads/GRZ_AnimatedHexgrid.pbo').read_bytes();assert build(s)==pbo
 assert hashlib.sha1(pbo[:-21]).digest()==pbo[-20:]
 for archive in ['GRZ-Animated-Hexgrid.zip','GRZ-Arena-Menu-Update.zip','GRZ-SFG-Native-Muzzle-Update.zip']:

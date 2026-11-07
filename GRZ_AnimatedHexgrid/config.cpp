@@ -14,7 +14,7 @@ class CfgMods
  {
   name = "GRZ Animated Hexgrid";
   author = "Blake";
-  version = "0.1.2";
+  version = "0.1.3";
   type = "mod";
   dependencies[] = {"World"};
   class defs
