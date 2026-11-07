@@ -25,7 +25,7 @@ class GRZKillfeedClient
         if (!ActiveMenu || !ActiveMenu.GetLayoutRoot())
         {
             ActiveMenu = null;
-            Error("[GRZ Killfeed 0.2.6] Native menu factory did not return an initialized settings menu.");
+            Error("[GRZ Killfeed 0.2.7] Native menu factory did not return an initialized settings menu.");
             g_Game.Chat("GRZ Killfeed: menu creation failed. Check the client script log.", "colorStatusChannel");
             return;
         }
@@ -34,7 +34,7 @@ class GRZKillfeedClient
         else
             ActiveMenu.ApplyLocalStyle(LocalStyle);
         ActiveMenu.EnsureVisible();
-        Print("[GRZ Killfeed 0.2.6] Native menu registered and retained.");
+        Print("[GRZ Killfeed 0.2.7] Native menu registered and retained.");
     }
 
     static void ReleaseMenu()
@@ -157,7 +157,7 @@ modded class ChatInputMenu
         if (m_GRZVipSubmitted)
             return true;
         m_GRZVipSubmitted = true;
-        Print("[GRZ Killfeed 0.2.6] Intercepted local VIP command before public/VPP chat.");
+        Print("[GRZ Killfeed 0.2.7] Intercepted local VIP command before public/VPP chat.");
         Close();
         if (command == "/grzvip")
             g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZKillfeedClient.RequestMenu, 150, false);
@@ -206,6 +206,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
     protected float m_GRZPreviewYaw;
     protected float m_GRZPreviewPitch;
     protected float m_GRZPreviewZoom = 1.0;
+    protected float m_GRZAppliedPreviewZoom = 1.0;
     protected string m_GRZPreviewType;
     protected bool m_GRZPreviewDragging;
     protected int m_GRZPreviewMouseX;
@@ -215,6 +216,8 @@ class GRZKillfeedMenu extends UIScriptedMenu
     protected Widget m_PrefixPage;
     protected float m_MenuScale = 1.0;
     protected float m_AppliedScale = -1.0;
+    protected float m_GRZScreenWidth = -1;
+    protected float m_GRZScreenHeight = -1;
     protected ref array<ref GRZKillfeedMenuGeometry> m_Geometry = new array<ref GRZKillfeedMenuGeometry>;
     protected TextWidget m_PrefixPreview;
     protected ImageWidget m_PrefixPreviewIcon;
@@ -273,6 +276,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
         logo.SetFlags(WidgetFlags.SOURCEALPHA | WidgetFlags.BLEND | WidgetFlags.STRETCH);
         logo.LoadImageFile(0, "GRZ_Killfeed/gui/textures/grz_menu_logo_ca.paa");
         logo.SetSort(0);
+        GRZApplyPanelTextures(layoutRoot);
         m_GRZPreviewRoot = m_GRZGunPage.FindAnyWidget("VIPPreviewViewport");
         m_GRZGunPreview = GRZLoadoutItemPreview.Create(m_GRZPreviewRoot);
         if (!m_GRZGunPreview) Error("[GRZ VIP Preview] Could not create shared Loadout preview widget.");
@@ -282,7 +286,6 @@ class GRZKillfeedMenu extends UIScriptedMenu
             WidgetEventHandler.GetInstance().RegisterOnMouseButtonDown(m_GRZGunPreview, this, "GRZVIPPreviewMouseDown");
             WidgetEventHandler.GetInstance().RegisterOnMouseWheel(m_GRZGunPreview, this, "GRZVIPPreviewWheel");
         }
-        GRZApplyPanelTextures(layoutRoot);
         GRZLoadoutClientData.Changed.Insert(GRZReceiveVIPCatalogue);
         GRZLoadoutClientData.Result.Insert(GRZReceiveVIPResult);
         CaptureMenuGeometry(layoutRoot.FindAnyWidget("MenuPanel"));
@@ -290,7 +293,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
         if (IsOfflinePreview)
             m_Status.SetText("Local preview — server access and persistence are not tested.");
         PositionPanel();
-        Print("[GRZ Killfeed 0.2.6] Init: layout created.");
+        Print("[GRZ Killfeed 0.2.7] Init: layout created.");
         return layoutRoot;
     }
 
@@ -356,7 +359,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
             m_LoggedUpdate = true;
             float width, height;
             layoutRoot.GetScreenSize(width, height);
-            Print(string.Format("[GRZ Killfeed 0.2.6] Update: root %1 x %2; visible %3.", width, height, layoutRoot.IsVisibleHierarchy()));
+            Print(string.Format("[GRZ Killfeed 0.2.7] Update: root %1 x %2; visible %3.", width, height, layoutRoot.IsVisibleHierarchy()));
         }
     }
 
@@ -374,7 +377,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
             return;
         }
         EnsureVisible();
-        Print("[GRZ Killfeed 0.2.6] OnShow called.");
+        Print("[GRZ Killfeed 0.2.7] OnShow called.");
     }
 
     override void OnHide()
@@ -391,7 +394,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
         GRZLoadoutClientData.Result.Remove(GRZReceiveVIPResult);
         GRZKillfeedBus.AppDeactivated.Remove(GRZOnVIPAppDeactivated);
         GRZKillfeedBus.AppActivated.Remove(GRZOnVIPAppActivated);
-        Print("[GRZ Killfeed 0.2.6] OnHide called.");
+        Print("[GRZ Killfeed 0.2.7] OnHide called.");
         super.OnHide();
     }
 
@@ -450,7 +453,6 @@ class GRZKillfeedMenu extends UIScriptedMenu
         if (!layoutRoot || m_GRZDismissRequested || !g_Game.IsAppActive())
             return;
         PositionPanel();
-        layoutRoot.SetSort(100000);
         layoutRoot.Show(true);
         layoutRoot.FindAnyWidget("MenuPanel").Show(true);
     }
@@ -495,14 +497,15 @@ class GRZKillfeedMenu extends UIScriptedMenu
 
     protected void PositionPanel()
     {
-        if (!layoutRoot)
-            return;
+        if (!layoutRoot) return;
         float width, height;
         g_Game.GetWorkspace().GetScreenSize(width, height);
-        layoutRoot.SetScreenPos(0, 0);
-        layoutRoot.SetScreenSize(width, height);
-        m_MenuScale = Math.Min((width * 0.86) / 1100.0, (height * 0.87) / 760.0);
-        m_MenuScale = Math.Max(0.1, m_MenuScale);
+        if (width <= 0 || height <= 0) return;
+        // Leave the native preview's render target stable between actual resizes.
+        if (width == m_GRZScreenWidth && height == m_GRZScreenHeight) return;
+        m_GRZScreenWidth = width;
+        m_GRZScreenHeight = height;
+        m_MenuScale = Math.Max(0.1, Math.Min((width * 0.86) / 1100.0, (height * 0.87) / 760.0));
         if (Math.AbsFloat(m_MenuScale - m_AppliedScale) > 0.001)
         {
             m_AppliedScale = m_MenuScale;
@@ -511,16 +514,12 @@ class GRZKillfeedMenu extends UIScriptedMenu
                 geometry.Target.SetPos(geometry.X * m_MenuScale, geometry.Y * m_MenuScale);
                 geometry.Target.SetSize(geometry.Width * m_MenuScale, geometry.Height * m_MenuScale);
                 TextWidget label = TextWidget.Cast(geometry.Target);
-                if (label)
-                    label.SetTextExactSize(Math.Max(1, Math.Round(geometry.FontSize * m_MenuScale)));
+                if (label) label.SetTextExactSize(Math.Max(1, Math.Round(geometry.FontSize * m_MenuScale)));
             }
             RefreshPreview();
-            GRZApplyVIPPreviewTransform();
         }
         Widget panel = layoutRoot.FindAnyWidget("MenuPanel");
-        if (panel)
-            panel.SetScreenPos((width - 1100 * m_MenuScale) * 0.5, (height - 760 * m_MenuScale) * 0.5);
-        GRZApplyVIPPreviewTransform();
+        if (panel) panel.SetScreenPos((width - 1100 * m_MenuScale) * 0.5, (height - 760 * m_MenuScale) * 0.5);
     }
 
     void ApplyLocalStyle(GRZNameStyle style)
@@ -666,7 +665,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
 
     protected void GRZApplyPanelTextures(Widget root)
     {
-        if (!root) return;
+        if (!root || PreviewWidget.Cast(root)) return;
         ImageWidget image = ImageWidget.Cast(root);
         string name = root.GetName();
         if (image && name != "MenuLogo" && name != "PrefixPreviewIcon" && name != "PrefixChoicePreview")
@@ -878,8 +877,12 @@ class GRZKillfeedMenu extends UIScriptedMenu
     {
         if (!m_GRZPreviewRoot || !m_GRZGunPreview || !m_GRZPreviewGun) return;
         // Keep the same normalized coordinate system as the normal Loadout picker.
-        m_GRZGunPreview.SetSize(m_GRZPreviewZoom, m_GRZPreviewZoom);
-        m_GRZGunPreview.SetPos((1 - m_GRZPreviewZoom) * 0.5, (1 - m_GRZPreviewZoom) * 0.5);
+        if (Math.AbsFloat(m_GRZPreviewZoom - m_GRZAppliedPreviewZoom) > 0.001)
+        {
+            m_GRZAppliedPreviewZoom = m_GRZPreviewZoom;
+            m_GRZGunPreview.SetSize(m_GRZPreviewZoom, m_GRZPreviewZoom);
+            m_GRZGunPreview.SetPos((1 - m_GRZPreviewZoom) * 0.5, (1 - m_GRZPreviewZoom) * 0.5);
+        }
         m_GRZGunPreview.SetModelOrientation(Vector(m_GRZPreviewPitch, m_GRZPreviewYaw, 0));
     }
 

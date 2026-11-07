@@ -15,7 +15,7 @@ class CfgMods
         dir = "GRZ_Killfeed";
         name = "GRZ Killfeed";
         author = "GRZ";
-        version = "0.2.6";
+        version = "0.2.7";
         type = "mod";
         dependencies[] = {"Game", "World", "Mission"};
         class defs

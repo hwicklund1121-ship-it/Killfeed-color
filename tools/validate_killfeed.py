@@ -240,6 +240,15 @@ def main():
     assert 'm_GRZGunPreview.SetSize(m_GRZPreviewZoom, m_GRZPreviewZoom)' in menu
     assert 'menu_item_preview.layout' not in menu and 'SetSort(100001)' not in menu
     assert 'm_GRZGunPreview.GetItem() != m_GRZPreviewGun' in menu
+    positioner = menu.split('protected void PositionPanel()',1)[1].split('void ApplyLocalStyle(',1)[0]
+    assert positioner.index('width == m_GRZScreenWidth') < positioner.index('geometry.Target.SetSize')
+    assert 'layoutRoot.SetScreenSize' not in positioner and 'GRZApplyVIPPreviewTransform()' not in positioner
+    assert 'SetSort(100000)' not in menu
+    assert menu.index('GRZApplyPanelTextures(layoutRoot);') < menu.index('m_GRZGunPreview = GRZLoadoutItemPreview.Create')
+    assert 'if (!root || PreviewWidget.Cast(root)) return;' in menu
+    zoomer = menu.split('protected void GRZApplyVIPPreviewTransform()',1)[1].split('bool GRZVIPPreviewMouseDown',1)[0]
+    assert zoomer.index('m_GRZPreviewZoom - m_GRZAppliedPreviewZoom') < zoomer.index('m_GRZGunPreview.SetSize')
+
 
     preview_menu = (SOURCE/'scripts/5_Mission/GRZ_Killfeed/GRZKillfeedMenu.c').read_text()
     assert 'RegisterOnMouseButtonDown(m_GRZGunPreview' in preview_menu

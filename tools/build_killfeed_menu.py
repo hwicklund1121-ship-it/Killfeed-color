@@ -102,7 +102,7 @@ def main():
     # Same wide preview/arrows/name/wrap arrangement as the normal Loadout picker.
     guns += widget('TextListbox','VIPGunList',0,0,1,1,'visible 0\ncolor 1 1 1 1\nfont "gui/fonts/sdf_MetronLight16"')
     guns += panel('VIPGunPreviewBacking',50,60,936,230,'0.055 0.055 0.065 1')
-    guns += frame('VIPPreviewViewport',94,60,848,230,props='clipchildren 1')
+    guns += frame('VIPPreviewViewport',94,60,848,230)
     guns += button('VIPGunPrevious','<',0,145,42,60)
     guns += button('VIPGunNext','>',994,145,42,60)
     guns += text('VIPGunName','Loading reskins...',170,292,696,34,centered=True)
