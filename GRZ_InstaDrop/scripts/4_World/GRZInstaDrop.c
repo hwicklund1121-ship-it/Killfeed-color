@@ -10,6 +10,11 @@ class GRZInstaDropTransitions
 class GRZInstaDrop
 {
  protected static bool Applied;
+ protected static bool Ready;
+ static bool IsEnabled()
+ {
+  return Ready;
+ }
  protected static bool NativePath(string path)
  {
   string lower = path;
@@ -53,11 +58,12 @@ class GRZInstaDrop
    Print("[GRZ InstaDrop] Inactive: both drop and recovery clip lists are required.");
    return;
   }
+  Ready = true;
   // The packaged list is shared by client and server. Native stance, collision,
   // weapon input, stamina, and multiplayer movement commands remain in control.
   int drops = ApplyClips(settings.Drop, Math.Clamp(settings.DropSpeed, 1.0, 4.0));
   int recoveries = ApplyClips(settings.Recover, Math.Clamp(settings.RecoverySpeed, 1.0, 4.0));
-  Print("[GRZ InstaDrop] Prototype: accepted " + drops.ToString() + "/" + settings.Drop.Count().ToString() + " drop and " + recoveries.ToString() + "/" + settings.Recover.Count().ToString() + " recovery clips. In-game verification required.");
+  Print("[GRZ InstaDrop] v0.1.1 prototype: accepted " + drops.ToString() + "/" + settings.Drop.Count().ToString() + " drop and " + recoveries.ToString() + "/" + settings.Recover.Count().ToString() + " recovery clips. In-game verification required.");
  }
 };
 modded class DayZPlayerTypeUtils
