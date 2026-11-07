@@ -39,9 +39,19 @@ assert 'movement.IsInRoll() || movement.IsOnBack()' in s
 assert 'ForceStance(' not in s and 'SetPosition(' not in s
 for name in ['UAStand','UACrouch','UAProne','UAStance']:assert 'SyncedPress("'+name+'")' in s
 runtime=(ROOT/'GRZ_InstaDrop/scripts/4_World/GRZInstaDrop.c').read_text()
-branch=runtime.split('if (!settings.OverrideTransitionSpeeds)',1)[1].split('if (settings.Drop.Count()',1)[0]
-assert 'Ready = true;' in branch and 'return;' in branch and 'ApplyClips(' not in branch
+assert 'DebugOverrideAnimationSpeed(' not in runtime
+assert 'ApplyClips(' not in runtime
+# Keep the exact working roll/stance source from the user-confirmed release.
+previous=subprocess.check_output(['git','show','6aaac54d5c163e10a384e91002c55f1ec351bc9d:GRZ_InstaDrop/scripts/4_World/GRZInstaDropThrowReady.c'],cwd=ROOT)
+assert s.encode()==previous
 with ZipFile(ROOT/'downloads/GRZ-InstaDrop-Prototype.zip') as z:
  _,f=read_pbo(z.read('GRZ_InstaDrop.pbo'));assert f['scripts/4_World/GRZInstaDropThrowReady.c']==s.encode()
- _,f=read_pbo(z.read('GRZ_InstaDropData.pbo'));assert json.loads(f['transitions.json'])['OverrideTransitionSpeeds'] is False
-print('Actual legacy permission guard cases, preserved lift mode, guarded native stand-up request, native-super hooks, input-only default and packaged source passed. Enforce compilation, multiplayer and mid-roll graph interruption untested.')
+ _,f=read_pbo(z.read('GRZ_InstaDropData.pbo'));data=json.loads(f['transitions.json'])
+ assert data['OverrideTransitionSpeeds'] is False and data['TuneDropInMovement'] is True and data['DropSpeed']==4.0
+ _,movement=read_pbo(z.read('GRZ_Movement.pbo'))
+ boost=movement['scripts/4_World/GRZMovementDropBoost.c'].decode()
+ assert 'settings.Drop)' in boost and 'settings.Recover' not in boost
+ assert '_trans_pne_' in boost and '_transmove_pne_' in boost
+ assert 'GRZMovementDropBoost.Apply();' in movement['scripts/4_World/GRZMovement.c'].decode()
+ assert 'float Multiplier = 1.50;' in movement['scripts/4_World/GRZMovementGaitBoost.c'].decode()
+print('Actual legacy permission guard cases, preserved lift mode, guarded native stand-up request, native-super hooks, single animation-rate owner, unchanged working roll source and packaged source passed. Enforce compilation, multiplayer and mid-roll graph interruption untested.')

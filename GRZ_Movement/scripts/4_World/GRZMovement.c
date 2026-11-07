@@ -55,5 +55,6 @@ modded class DayZPlayerTypeUtils
         super.DayZPlayerTypeInitMovement(pType);
         GRZMovementPreset.ApplyTo(pType);
         GRZMovementGaitBoost.Apply();
+        GRZMovementDropBoost.Apply();
     }
 }

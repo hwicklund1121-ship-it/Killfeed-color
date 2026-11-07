@@ -16,28 +16,6 @@ class GRZInstaDrop
  {
   return Ready;
  }
- protected static bool NativePath(string path)
- {
-  string lower = path;
-  lower.ToLower();
-  return lower.IndexOf("dz/anims/anm/player/moves/") == 0 && lower.Length() > 4 && lower.Substring(lower.Length() - 4, 4) == ".anm";
- }
- protected static int ApplyClips(array<string> clips, float speed)
- {
-  int accepted;
-  foreach (string clip : clips)
-  {
-   if (!NativePath(clip))
-   {
-    Print("[GRZ InstaDrop] Rejected non-native clip path: " + clip);
-    continue;
-   }
-   bool ok = DayZPlayerUtils.DebugOverrideAnimationSpeed(clip, speed);
-   if (ok) accepted++;
-   Print("[GRZ InstaDrop] clip=" + clip + " requested=" + speed.ToString() + " accepted=" + ok.ToString());
-  }
-  return accepted;
- }
  static void Apply()
  {
   if (Applied) return;
@@ -54,23 +32,10 @@ class GRZInstaDrop
    Print("[GRZ InstaDrop] Inactive: no reviewed native transition list. Export the vanilla animation index first.");
    return;
   }
-  if (!settings.OverrideTransitionSpeeds)
-  {
-   Ready = true;
-   Print("[GRZ InstaDrop] v0.1.4 legacy gun-lift/prone/roll stance prototype; native animation speeds and graphs retained.");
-   return;
-  }
-  if (settings.Drop.Count() == 0 || settings.Recover.Count() == 0)
-  {
-   Print("[GRZ InstaDrop] Inactive: both drop and recovery clip lists are required.");
-   return;
-  }
+  // Only GRZ Movement applies clip rates. This module retains the working
+  // v0.1.4 gun-lift/roll stance logic and never overwrites another graph/rate.
   Ready = true;
-  // The packaged list is shared by client and server. Native stance, collision,
-  // weapon input, stamina, and multiplayer movement commands remain in control.
-  int drops = ApplyClips(settings.Drop, Math.Clamp(settings.DropSpeed, 1.0, 4.0));
-  int recoveries = ApplyClips(settings.Recover, Math.Clamp(settings.RecoverySpeed, 1.0, 4.0));
-  Print("[GRZ InstaDrop] v0.1.4 prototype: accepted " + drops.ToString() + "/" + settings.Drop.Count().ToString() + " drop and " + recoveries.ToString() + "/" + settings.Recover.Count().ToString() + " recovery clips. In-game verification required.");
+  Print("[GRZ InstaDrop] v0.1.5 stance permissions active. Fast drop is owned by GRZ Movement; roll-to-stand logic retained.");
  }
 };
 modded class DayZPlayerTypeUtils

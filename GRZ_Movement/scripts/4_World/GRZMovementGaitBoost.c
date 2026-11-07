@@ -1,6 +1,6 @@
 class GRZMovementGaitList
 {
- float Multiplier = 1.35;
+ float Multiplier = 1.50;
  ref array<string> Animations = new array<string>;
 };
 class GRZMovementGaitBoost

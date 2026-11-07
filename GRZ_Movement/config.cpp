@@ -14,6 +14,7 @@ class CfgMods
     {
         dir = "GRZ_Movement";
         name = "GRZ Movement";
+        version = "0.15";
         author = "GRZ";
         credits = "Ronjam - original movement; GRZ - integration. Supplied OPM reference also credits Operation Monarch / Echo.";
         type = "mod";

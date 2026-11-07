@@ -13,7 +13,7 @@ def main():
  index=json.loads(a.index.read_text(encoding='utf-8-sig'))
  preset=json.loads((ROOT/'packaging/instadrop-update/TRANSITIONS.json').read_text())
  data=reviewed_data(index,preset['Drop'],preset['Recover'],preset['DropSpeed'],preset['RecoverySpeed'])
- assert data['OverrideTransitionSpeeds'] is False
+ assert data['OverrideTransitionSpeeds'] is False and data['TuneDropInMovement'] is True and data['DropSpeed']==4.0
  assert len(data['Drop'])==6 and len(data['Recover'])==10
  assert all('/rifles/transitions/' in x and '_inj_' not in x for x in data['Drop']+data['Recover'])
  for down,up,speed in [([],data['Recover'],2),([data['Drop'][0]],[data['Drop'][0]],2),([data['Drop'][0]]*2,data['Recover'],2),(['dz/anims/anm/player/moves/missing.anm'],data['Recover'],2),(['dz/anims/anm/player/moves/../file.anm'],data['Recover'],2),(data['Drop'],data['Recover'],float('nan')),(data['Drop'],data['Recover'],4.1)]:
@@ -32,7 +32,7 @@ def main():
    d=Path(t);pkg=d/'package';z.extractall(pkg)
    for side,exe in [('server','DayZServer_x64.exe'),('game','DayZ_x64.exe')]:
     root=d/side;root.mkdir();(root/exe).touch();addons=root/'@GRZ_Local/Addons';addons.mkdir(parents=True)
-    (addons/'GRZ_Movement.pbo').write_bytes(b'KEEP MOVEMENT 1.50')
+    (addons/'GRZ_MovementSpeedData.pbo').write_bytes(b'KEEP GAIT DATA 1.50')
     (root/'saved-profile.json').write_text('KEEP PROFILE')
     for name in manifest:(addons/name).write_bytes(b'PREVIOUS '+name.encode())
    env=dict(os.environ,XDG_CACHE_HOME=str(d/'cache'),XDG_CONFIG_HOME=str(d/'config'),XDG_DATA_HOME=str(d/'data'))
@@ -42,7 +42,7 @@ def main():
    for side in ['server','game']:
     addons=d/side/'@GRZ_Local/Addons'
     for name in manifest:assert (addons/name).read_bytes()==z.read(name)
-    assert (addons/'GRZ_Movement.pbo').read_bytes()==b'KEEP MOVEMENT 1.50'
+    assert (addons/'GRZ_MovementSpeedData.pbo').read_bytes()==b'KEEP GAIT DATA 1.50'
     assert (d/side/'saved-profile.json').read_text()=='KEEP PROFILE'
    backups=list((d/'server').glob('GRZ-instadrop-backup-*'));assert len(backups)==1
    for side in ['server','client']:
@@ -58,6 +58,6 @@ def main():
    for side in ['server','game']:
     for name in manifest:assert (d/side/'@GRZ_Local/Addons'/name).read_bytes()==z.read(name)
    assert len(list((d/'server').glob('GRZ-instadrop-backup-*')))==1
- print('16 paths verified against supplied index; guards, both PBO checksums, four installs, backups, untouched movement/profile sentinels, corruption and visible-conflict rejection passed. DayZ compilation/playback untested.')
+ print('16 paths verified against supplied index; guards, three PBO checksums, six installs, backups, untouched gait-data/profile sentinels, corruption and visible-conflict rejection passed. DayZ compilation/playback untested.')
 
 if __name__=='__main__':main()

@@ -1,5 +1,5 @@
 {
-  "DropSpeed": 2.0,
+  "DropSpeed": 4.0,
   "RecoverySpeed": 1.6,
   "Drop": [
     "dz/anims/anm/player/moves/rifles/transitions/p_rfl_cro_trans_pne_low.anm",
