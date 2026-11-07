@@ -150,10 +150,68 @@ def main():
         assert re.search(r'class UAV_CS5_BLACK: Rifle_Base\s*\{\s*itemSize\[\] = \{10, 2\}',extra_config)
         assert 'UAV_Fixture' in json.loads((extra_output/'Inventory-catalog.json').read_text(encoding='utf-8-sig'))['RequiredAddons']
         assert (extra_output/'ExtraConfigs/UAVWEAPONS-config.bin').exists()
-        # Unsupported source configs still export a small diagnostic file.
+        # Windstride keeps definitions in nested configs; include binary and source,
+        # independent Clothing descendants, scalar slots and concrete overrides.
+        with tempfile.TemporaryDirectory() as ws:
+            ws=Path(ws);(ws/'$PBOPREFIX$').write_text('WindstrideClothing')
+            (ws/'config.bin').write_bytes(rap(node('',children=[node('CfgPatches',children=[node('WindstrideContainer')])])))
+            nested=ws/'Models/Layered_Shirt';nested.mkdir(parents=True)
+            (nested/'config.bin').write_bytes(rap(node('',children=[
+                node('CfgPatches',children=[node('Layered_Shirt')]),
+                node('CfgVehicles',children=[node('Layered_Shirt_Base','Clothing',properties={'inventorySlot':['Body'],'itemsCargoSize':[3,3]}),node('Layered_Shirt_Lily','Layered_Shirt_Base')])
+            ])))
+            # A source sibling next to a binary config must not be parsed twice.
+            (nested/'config.cpp').write_text('#include "not-used-because-binary-exists.hpp"')
+            custom=ws/'Models/Custom';custom.mkdir(parents=True)
+            (custom/'config.cpp').write_text("""// Source mod metadata, no external preprocessor.
+#define _ARMA_
+class CfgPatches { class XIMS_Layered_Fixture {}; };
+class CfgVehicles {
+ class Layered_Shirt_Base;
+ class XIMS_SourceTop: Layered_Shirt_Base { inventorySlot = "body"; itemsCargoSize[] = {6,4}; class DamageSystem { class Health { healthLevels[]={{1,{"path\\material.rvmat"}}}; }; }; };
+ class WindstrideBag: Clothing { inventorySlot[] = {"Back"}; itemsCargoSize[] = {8,10}; };
+};
+""")
+            windstride=extra_dir/'WindstrideClothing.pbo';windstride.write_bytes(build(ws))
+        wind_output=temp/'Windstride Built'
+        wind_command=command.copy();wind_command[wind_command.index(str(output))]=str(wind_output)
+        wind_command+=['-ExtraPboPaths',str(windstride)]
+        result=subprocess.run(wind_command,env=environment,capture_output=True,text=True)
+        assert result.returncode==0,result.stdout+result.stderr
+        wind_cfg=(wind_output/'config.cpp').read_text()
+        wind_report=json.loads((wind_output/'Inventory-catalog.json').read_text(encoding='utf-8-sig'))
+        for classname in ['Layered_Shirt_Base','Layered_Shirt_Lily','XIMS_SourceTop']:
+            assert classname in wind_report['Clothing']
+            assert re.search(r'class '+classname+r'(?:: [^{}]+)?\s*\{\s*itemsCargoSize\[\] = \{10, 10\}',wind_cfg)
+        assert 'WindstrideBag' in wind_report['NormalClothing'] and 'WindstrideBag' not in wind_report['Clothing']
+        assert re.search(r'class WindstrideBag: Clothing\s*\{\s*itemsCargoSize\[\] = \{8, 10\}',wind_cfg)
+        assert 'Layered_Shirt' in wind_report['RequiredAddons'] and 'XIMS_Layered_Fixture' in wind_report['RequiredAddons']
+        assert (wind_output/'ExtraConfigs/WindstrideClothing-Models_Layered_Shirt_config.bin').exists()
+        assert (wind_output/'ExtraConfigs/WindstrideClothing-Models_Custom_config.cpp').exists()
+        # Enumerate native animation headers only, excluding actions and prone gait.
+        animations=temp/'Native Animations';animations.mkdir()
+        (animations/'$PBOPREFIX$').write_text('DZ\\anims')
+        names=['p_rfl_erc_runF_low.anm','p_rfl_erc_walkF_low.anm','p_rfl_erc_reload.anm','p_rfl_pne_runF_low.anm','p_rfl_erc_runF_stop.anm']
+        for name in names:
+            clip=animations/'anm/player/moves/rifles'/name;clip.parent.mkdir(parents=True,exist_ok=True);clip.write_bytes(b'animation fixture')
+        animation_pbo=temp/'anims.pbo';animation_pbo.write_bytes(build(animations))
+        movement_output=temp/'Movement Built'
+        movement_script=temp/'BuildMovement.ps1'
+        def psquote(value): return "'"+str(value).replace("'","''")+"'"
+        movement_script.write_text('Add-Type -Path '+psquote(ROOT/'packaging/inventory-builder/InventoryBuilder.cs')+'\n[GRZInventoryBuilder]::BuildMovementData([string[]]@('+psquote(animation_pbo)+'),'+psquote(movement_output)+')\n')
+        result=subprocess.run([args.pwsh,'-NoProfile','-File',str(movement_script)],env=environment,capture_output=True,text=True)
+        assert result.returncode==0,result.stdout+result.stderr
+        data=json.loads((movement_output/'gaits.json').read_text())
+        assert data['Multiplier']==1.10
+        assert data['Animations']==['dz/anims/anm/player/moves/rifles/p_rfl_erc_runf_low.anm','dz/anims/anm/player/moves/rifles/p_rfl_erc_walkf_low.anm']
+        from repair_hexgrid import read_pbo
+        ext,payload=read_pbo((movement_output/'GRZ_MovementSpeedData.pbo').read_bytes())
+        assert ext['prefix']=='GRZ_MovementSpeedData' and json.loads(payload['gaits.json'])==data
+        assert set(payload)=={'config.cpp','gaits.json'}
+        # Unsupported preprocessing still exports the small diagnostic source file.
         cpp_source=temp/'Source Config';cpp_source.mkdir()
         (cpp_source/'$PBOPREFIX$').write_text('SourceFixture')
-        source_text='class CfgPatches { class SourceFixture {}; };'
+        source_text='#include "missing-original.hpp"\nclass CfgPatches { class SourceFixture {}; };'
         (cpp_source/'config.cpp').write_text(source_text)
         cpp_pbo=extra_dir/'SourceWeapon.pbo';cpp_pbo.write_bytes(build(cpp_source))
         cpp_output=temp/'Source Export'
@@ -180,7 +238,7 @@ def main():
         failed=subprocess.run(failure_command,env=environment,capture_output=True,text=True)
         assert failed.returncode!=0 and not (bad_output/'GRZ_InventorySizes.pbo').exists()
         assert 'Compressed config.bin' in failed.stdout+failed.stderr
-        print('PowerShell/C# tests passed: normal unrelated engine redefinitions, inherited variants, original parents, unrelated items, restricted clothing slots, restored excluded cargo, exact cargo/footprint fields, provider dependencies, explicit modded-gun override/export, PBO byte/checksum compatibility, and fail-closed conflict/unsupported compression handling.')
+        print('PowerShell/C# tests passed: normal unrelated engine redefinitions, inherited variants, original parents, unrelated items, restricted clothing slots, restored excluded cargo, exact cargo/footprint fields, provider dependencies, explicit modded-gun override/export, nested Windstride/source configs, native movement header filtering, PBO byte/checksum compatibility, and fail-closed conflict/unsupported compression handling.')
 
 
 if __name__=='__main__':

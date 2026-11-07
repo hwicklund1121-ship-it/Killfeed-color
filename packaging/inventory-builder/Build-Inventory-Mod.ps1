@@ -48,14 +48,15 @@ foreach ($pbo in $ExtraPboPaths) {
     $archives.Add([System.IO.Path]::GetFullPath($pbo))
 }
 if ($archives.Count -eq 0) { throw 'No PBO archives were found.' }
-Write-Host 'GRZ Inventory builder v0.1.3'
+Write-Host 'GRZ Inventory builder v0.1.4'
 Write-Host 'Reading installed clothing and gun class definitions. Game files remain unchanged...'
 if (-not ('GRZInventoryBuilder' -as [type])) {
     Add-Type -Path (Join-Path $PSScriptRoot 'InventoryBuilder.cs')
 }
 foreach ($pbo in $ExtraPboPaths) {
-    $exported = [GRZInventoryBuilder]::ExportConfig($pbo, (Join-Path $OutputPath 'ExtraConfigs'))
-    if ($exported) { Write-Host ('Extra mod config copy: ' + $exported) }
+    foreach ($exported in [GRZInventoryBuilder]::ExportConfigs($pbo, (Join-Path $OutputPath 'ExtraConfigs'))) {
+        Write-Host ('Extra mod config copy: ' + $exported)
+    }
 }
 try {
     $report = [GRZInventoryBuilder]::Build($archives.ToArray(), $OutputPath)

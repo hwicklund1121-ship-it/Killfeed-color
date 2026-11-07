@@ -20,5 +20,7 @@ pkg=r/'packaging/all-reskins-update'
 (pkg/'RESKIN-PACKS.json').write_text(json.dumps(manifest,indent=2)+'\n')
 with ZipFile(r/'downloads/GRZ-All-Reskins-Update.zip','w',ZIP_DEFLATED) as z:
  z.write(pkg/'Install-All-Reskins.ps1','Install-All-Reskins.ps1')
+ for name in ['InventoryBuilder.cs','Build-Inventory-Mod.ps1','INSTALL.txt']:
+  z.write(r/'packaging/inventory-builder'/name, 'inventory-builder/'+name)
  z.writestr('RESKIN-PACKS.json',json.dumps(manifest,indent=2)+'\n');z.writestr('INSTALL.txt',notes)
 print('Built combined verified-download installer for 18 addons; all four XIMS items included; oversized custom normals documented.')

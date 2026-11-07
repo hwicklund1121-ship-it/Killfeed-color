@@ -711,9 +711,10 @@ modded class PlayerBase
     return;
    if (!ctx.Read(lastPage) || !receivedPage)
     return;
+   bool firstClothingPage = GRZLoadoutClientData.Catalogue.Clothing.Count() == 0;
    foreach (GRZLoadoutClothing clothingEntry : receivedPage)
     GRZLoadoutClientData.Catalogue.Clothing.Insert(clothingEntry);
-   if (lastPage)
+   if (firstClothingPage || lastPage)
     GRZLoadoutClientData.Changed.Invoke();
    return;
   }

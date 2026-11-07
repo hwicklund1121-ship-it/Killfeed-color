@@ -31,6 +31,125 @@ public static class GRZInventoryBuilder
     }
     private class Entry { public string Name; public uint Method; public uint Original; public uint Size; }
     private class Node { public string Name; public string Parent; public uint Offset; }
+    private class ConfigResource { public string Name; public byte[] Data; }
+    private class SourceNode
+    {
+        public string Name, Parent = "";
+        public Metadata Metadata = new Metadata();
+        public List<SourceNode> Children = new List<SourceNode>();
+    }
+    // Only class/slot/cargo metadata is interpreted. Unsupported preprocessing
+    // fails explicitly instead of claiming complete mod coverage.
+    private class SourceConfig
+    {
+        private List<string> tokens = new List<string>();
+        private int at;
+        public SourceConfig(byte[] bytes)
+        {
+            string text = Encoding.UTF8.GetString(bytes).TrimStart('\uFEFF');
+            text = System.Text.RegularExpressions.Regex.Replace(text, @"(?m)^\s*#define\s+_ARMA_\s*$", "");
+            if (System.Text.RegularExpressions.Regex.IsMatch(text, @"(?m)^\s*#"))
+                throw new InvalidDataException("Unsupported source-config preprocessor directive; supply a binarized config.");
+            int pos = 0;
+            while (pos < text.Length)
+            {
+                char c = text[pos];
+                if (Char.IsWhiteSpace(c)) { pos++; continue; }
+                if (c == '/' && pos + 1 < text.Length && text[pos + 1] == '/')
+                { while (pos < text.Length && text[pos] != '\n') pos++; continue; }
+                if (c == '/' && pos + 1 < text.Length && text[pos + 1] == '*')
+                {
+                    int end = text.IndexOf("*/", pos + 2, StringComparison.Ordinal);
+                    if (end < 0) throw new InvalidDataException("Unterminated source-config comment.");
+                    pos = end + 2; continue;
+                }
+                int start = pos++;
+                if (c == '"')
+                {
+                    while (pos < text.Length && text[pos] != '"') pos++;
+                    if (pos == text.Length) throw new InvalidDataException("Unterminated source-config string.");
+                    pos++;
+                }
+                else if (Char.IsLetterOrDigit(c) || c == '_' || c == '-' || c == '+')
+                {
+                    while (pos < text.Length && (Char.IsLetterOrDigit(text[pos]) || text[pos] == '_' || text[pos] == '.' || text[pos] == '-' || text[pos] == '+')) pos++;
+                }
+                tokens.Add(text.Substring(start, pos - start));
+            }
+        }
+        private string Take() { if (at >= tokens.Count) throw new InvalidDataException("Truncated source config."); return tokens[at++]; }
+        private void Expect(string token) { if (Take() != token) throw new InvalidDataException("Expected source-config token: " + token); }
+        private static string StringValue(string token)
+        {
+            if (token.Length < 2 || token[0] != '"' || token[token.Length - 1] != '"') throw new InvalidDataException("Expected literal inventorySlot string.");
+            return token.Substring(1, token.Length - 2);
+        }
+        public SourceNode Read()
+        {
+            SourceNode root = new SourceNode { Name = "" };
+            Body(root, false, 0);
+            return root;
+        }
+        private void Body(SourceNode node, bool nested, int depth)
+        {
+            if (depth > 64) throw new InvalidDataException("Source config nesting is too deep.");
+            while (at < tokens.Count)
+            {
+                string name = Take();
+                if (name == "}") { if (!nested) throw new InvalidDataException("Unexpected closing config brace."); return; }
+                if (name == ";") continue;
+                if (name == "class")
+                {
+                    SourceNode child = new SourceNode { Name = Take() };
+                    string next = Take();
+                    if (next == ":") { child.Parent = Take(); next = Take(); }
+                    if (next == ";") continue; // forward declaration
+                    if (next != "{") throw new InvalidDataException("Expected source class body.");
+                    Body(child, true, depth + 1);
+                    if (at < tokens.Count && tokens[at] == ";") at++;
+                    node.Children.Add(child); continue;
+                }
+                if (name == "delete") throw new InvalidDataException("Source-config delete directives are unsupported.");
+                bool array = false, append = false;
+                if (at < tokens.Count && tokens[at] == "[") { at++; Expect("]"); array = true; }
+                string equals = Take();
+                if (equals == "+" || equals == "+=") { append = true; if (equals == "+") Expect("="); }
+                else if (equals != "=") throw new InvalidDataException("Expected source property assignment for " + name);
+                List<string> values = new List<string>();
+                int braces = 0;
+                bool terminated = false;
+                while (at < tokens.Count)
+                {
+                    string value = Take();
+                    if (value == ";" && braces == 0) { terminated = true; break; }
+                    if (value == "{") braces++;
+                    if (value == "}") { braces--; if (braces < 0) throw new InvalidDataException("Unbalanced source property."); }
+                    values.Add(value);
+                }
+                if (!terminated) throw new InvalidDataException("Unterminated source property.");
+                if (name.Equals("inventorySlot", StringComparison.OrdinalIgnoreCase))
+                {
+                    IEnumerable<string> slots = array ? values.Where(v => v != "{" && v != "}" && v != ",") : values;
+                    node.Metadata.Slots = slots.Select(StringValue).ToArray(); node.Metadata.AppendSlots = append;
+                }
+                else if (name.Equals("itemsCargoSize", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (!array || append) throw new InvalidDataException("Unsupported source cargo dimensions.");
+                    List<int> size = new List<int>();
+                    foreach (string value in values.Where(v => v != "{" && v != "}" && v != ","))
+                    {
+                        int dimension;
+                        if (!Int32.TryParse(value, out dimension) || dimension < 0) throw new InvalidDataException("Invalid source cargo dimensions.");
+                        size.Add(dimension);
+                    }
+                    if (size.Count == 0) size.AddRange(new int[] {0, 0});
+                    if (size.Count != 2) throw new InvalidDataException("Invalid source cargo dimension count.");
+                    node.Metadata.CargoSize = size.ToArray();
+                }
+            }
+            if (nested) throw new InvalidDataException("Truncated source class body.");
+        }
+    }
     private class Metadata { public string[] Slots; public bool AppendSlots; public int[] CargoSize; }
     private class Rap : IDisposable
     {
@@ -188,64 +307,72 @@ public static class GRZInventoryBuilder
         }
         throw new InvalidDataException("Invalid null-terminated string.");
     }
-    private static byte[] ReadConfig(string path, bool allowSourceText = false)
+    private static List<ConfigResource> ReadConfigs(string path)
     {
-        using (BinaryReader r = new BinaryReader(File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+        List<ConfigResource> result = new List<ConfigResource>();
+        using (BinaryReader reader = new BinaryReader(File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
         {
             List<Entry> entries = new List<Entry>();
+            bool self = false;
             for (int i = 0; i < 100000; i++)
             {
-                string name = ReadZ(r);
-                uint method = r.ReadUInt32();
-                uint original = r.ReadUInt32();
-                r.ReadUInt32(); r.ReadUInt32();
-                uint size = r.ReadUInt32();
+                string name = ReadZ(reader); uint method = reader.ReadUInt32(); uint original = reader.ReadUInt32();
+                reader.ReadUInt32(); reader.ReadUInt32(); uint size = reader.ReadUInt32();
                 if (name == "" && method == 0x56657273)
                 {
                     string key;
-                    while ((key = ReadZ(r)) != "")
+                    while ((key = ReadZ(reader)) != "")
                     {
-                        string value = ReadZ(r);
-                        if (key.Equals("prefix", StringComparison.OrdinalIgnoreCase) && value.Equals("GRZ_InventorySizes", StringComparison.OrdinalIgnoreCase))
-                            return null; // never depend on a prior generated copy of ourselves
+                        string value = ReadZ(reader);
+                        if (key.Equals("prefix", StringComparison.OrdinalIgnoreCase) && value.Equals("GRZ_InventorySizes", StringComparison.OrdinalIgnoreCase)) self = true;
                     }
                     continue;
                 }
                 if (name == "") break;
                 entries.Add(new Entry { Name = name.Replace('/', '\\'), Method = method, Original = original, Size = size });
             }
-            long offset = r.BaseStream.Position;
-            bool sourceOnly = false;
-            long sourceOffset = 0;
-            uint sourceSize = 0;
-            uint sourceMethod = 0;
+            if (self) return result;
+            // Configs nested under Models/... are independent addon definitions.
+            HashSet<string> binaryDirectories = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (Entry entry in entries)
+                if (entry.Name.Equals("config.bin", StringComparison.OrdinalIgnoreCase) || entry.Name.EndsWith("\\config.bin", StringComparison.OrdinalIgnoreCase))
+                    binaryDirectories.Add(entry.Name.Substring(0, entry.Name.Length - "config.bin".Length));
+            long offset = reader.BaseStream.Position;
             foreach (Entry entry in entries)
             {
-                if (entry.Name.Equals("config.cpp", StringComparison.OrdinalIgnoreCase))
+                bool binary = entry.Name.Equals("config.bin", StringComparison.OrdinalIgnoreCase) || entry.Name.EndsWith("\\config.bin", StringComparison.OrdinalIgnoreCase);
+                bool source = entry.Name.Equals("config.cpp", StringComparison.OrdinalIgnoreCase) || entry.Name.EndsWith("\\config.cpp", StringComparison.OrdinalIgnoreCase);
+                if (source && binaryDirectories.Contains(entry.Name.Substring(0, entry.Name.Length - "config.cpp".Length))) source = false;
+                if (binary || source)
                 {
-                    sourceOnly = true; sourceOffset = offset; sourceSize = entry.Size; sourceMethod = entry.Method;
-                }
-                if (entry.Name.Equals("config.bin", StringComparison.OrdinalIgnoreCase))
-                {
-                    if (entry.Method != 0)
-                        throw new InvalidDataException("Compressed config.bin is not supported by this builder; archive: " + Path.GetFileName(path));
-                    if (entry.Size == 0 || entry.Size > 32 * 1024 * 1024 || offset + entry.Size > r.BaseStream.Length)
-                        throw new InvalidDataException("Invalid config size in " + Path.GetFileName(path));
-                    r.BaseStream.Position = offset;
-                    return r.ReadBytes((int)entry.Size);
+                    if (entry.Method != 0) throw new InvalidDataException("Compressed " + (binary ? "config.bin" : "config.cpp") + " is not supported: " + entry.Name);
+                    if (entry.Size == 0 || entry.Size > 32 * 1024 * 1024 || offset + entry.Size > reader.BaseStream.Length) throw new InvalidDataException("Invalid config size: " + entry.Name);
+                    reader.BaseStream.Position = offset;
+                    byte[] data = reader.ReadBytes((int)entry.Size);
+                    if (data.Length != entry.Size) throw new InvalidDataException("Truncated config: " + entry.Name);
+                    result.Add(new ConfigResource { Name = entry.Name, Data = data });
                 }
                 offset += entry.Size;
             }
-            if (sourceOnly)
+        }
+        return result;
+    }
+    private static void MergeSource(Dictionary<string, Definition> table, List<SourceNode> nodes, string[] providers)
+    {
+        foreach (SourceNode node in nodes)
+        {
+            Definition def;
+            if (!table.TryGetValue(node.Name, out def)) { def = new Definition { Name = node.Name, Parent = node.Parent }; table.Add(node.Name, def); }
+            else if (node.Parent != "") def.Parent = node.Parent;
+            if (node.Parent != "") { def.ParentChoices.Add(node.Parent); if (providers.Length > 0) def.AddonParentChoices.Add(node.Parent); }
+            Metadata meta = node.Metadata;
+            if (meta.Slots != null)
             {
-                if (!allowSourceText)
-                    throw new InvalidDataException("Source-only config.cpp requires a binarized config for cataloging; archive: " + Path.GetFileName(path));
-                if (sourceMethod != 0 || sourceSize == 0 || sourceSize > 32 * 1024 * 1024 || sourceOffset + sourceSize > r.BaseStream.Length)
-                    throw new InvalidDataException("Source config cannot be exported from " + Path.GetFileName(path));
-                r.BaseStream.Position = sourceOffset;
-                return r.ReadBytes((int)sourceSize);
+                if (meta.AppendSlots && def.Slots != null) def.Slots = def.Slots.Concat(meta.Slots).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+                else { def.Slots = meta.Slots; def.AppendSlots = meta.AppendSlots; }
             }
-            return null; // resource-only archive has no class definitions
+            if (meta.CargoSize != null) def.CargoSize = meta.CargoSize;
+            foreach (string provider in providers) def.Providers.Add(provider);
         }
     }
     private static void Merge(Dictionary<string, Definition> table, List<Node> nodes, string[] providers, Rap rap)
@@ -359,17 +486,18 @@ public static class GRZInventoryBuilder
         Z(w, name); w.Write(method); w.Write(size); w.Write((uint)0); w.Write((uint)0); w.Write(size);
     }
     private static void Z(BinaryWriter w, string s) { w.Write(Encoding.UTF8.GetBytes(s)); w.Write((byte)0); }
-    private static byte[] Pack(string config)
+    public static byte[] PackFiles(string prefix, SortedDictionary<string, byte[]> files)
     {
-        byte[] payload = new UTF8Encoding(false).GetBytes(config);
         byte[] body;
         using (MemoryStream ms = new MemoryStream())
         {
-            using (BinaryWriter w = new BinaryWriter(ms, Encoding.UTF8, true))
+            using (BinaryWriter writer = new BinaryWriter(ms, Encoding.UTF8, true))
             {
-                Header(w, "", 0x56657273, 0); Z(w, "prefix"); Z(w, "GRZ_InventorySizes"); Z(w, "");
-                Header(w, "config.cpp", 0, (uint)payload.Length); Header(w, "", 0, 0); w.Write(payload); w.Flush();
-                body = ms.ToArray();
+                Header(writer, "", 0x56657273, 0); Z(writer, "prefix"); Z(writer, prefix); Z(writer, "");
+                foreach (KeyValuePair<string, byte[]> file in files) Header(writer, file.Key, 0, (uint)file.Value.Length);
+                Header(writer, "", 0, 0);
+                foreach (byte[] data in files.Values) writer.Write(data);
+                writer.Flush(); body = ms.ToArray();
             }
         }
         using (SHA1 sha = SHA1.Create())
@@ -380,15 +508,77 @@ public static class GRZInventoryBuilder
             return result.ToArray();
         }
     }
+    private static byte[] Pack(string config)
+    {
+        SortedDictionary<string, byte[]> files = new SortedDictionary<string, byte[]>(StringComparer.Ordinal);
+        files.Add("config.cpp", new UTF8Encoding(false).GetBytes(config));
+        return PackFiles("GRZ_InventorySizes", files);
+    }
+    public static bool IsGroundGait(string path)
+    {
+        string name = path.Replace('\\', '/').ToLowerInvariant();
+        if (!name.Contains("/anm/player/moves/") || !name.EndsWith(".anm", StringComparison.Ordinal)) return false;
+        string file = name.Substring(name.LastIndexOf('/') + 1);
+        foreach (string excluded in new string[] {"jump", "fall", "climb", "swim", "reload", "shoot", "melee", "evade", "stop", "start", "trans", "turn", "death", "uncon", "_pne_", "_prn_"})
+            if (file.Contains(excluded)) return false;
+        return System.Text.RegularExpressions.Regex.IsMatch(file, @"(?:^|_)(?:walk|run|sprint|spr)[a-z0-9]*(?:_|\.)");
+    }
+    public static string BuildMovementData(string[] archives, string output)
+    {
+        HashSet<string> clips = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (string archive in archives.Distinct(StringComparer.OrdinalIgnoreCase))
+        {
+            using (BinaryReader reader = new BinaryReader(File.Open(archive, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+            {
+                List<string> names = new List<string>(); string prefix = "";
+                for (int i = 0; i < 100000; i++)
+                {
+                    string name = ReadZ(reader); uint method = reader.ReadUInt32();
+                    reader.ReadUInt32(); reader.ReadUInt32(); reader.ReadUInt32(); reader.ReadUInt32();
+                    if (name == "" && method == 0x56657273)
+                    {
+                        string key; while ((key = ReadZ(reader)) != "") { string value = ReadZ(reader); if (key.Equals("prefix", StringComparison.OrdinalIgnoreCase)) prefix = value; }
+                        continue;
+                    }
+                    if (name == "") break;
+                    names.Add(name.Replace('\\', '/').TrimStart('/'));
+                }
+                prefix = prefix.Replace('\\', '/').Trim('/');
+                foreach (string entry in names)
+                {
+                    string path = entry;
+                    if (prefix != "" && !entry.StartsWith(prefix + "/", StringComparison.OrdinalIgnoreCase)) path = prefix + "/" + entry;
+                    path = path.ToLowerInvariant();
+                    if (IsGroundGait(path)) clips.Add(path);
+                }
+            }
+        }
+        if (clips.Count == 0) throw new InvalidDataException("No native walk/run/sprint animation paths found. Select the complete DayZ game installation; no speed-data PBO was produced.");
+        string json = "{\"Multiplier\":1.10,\"Animations\":[" + String.Join(",", clips.OrderBy(x => x, StringComparer.Ordinal).Select(x => "\"" + x + "\"")) + "]}\n";
+        string config = "class CfgPatches { class GRZ_MovementSpeedData { units[] = {}; weapons[] = {}; requiredVersion = 0.1; requiredAddons[] = {\"GRZ_Movement\"}; }; };\n";
+        SortedDictionary<string, byte[]> files = new SortedDictionary<string, byte[]>(StringComparer.Ordinal);
+        files.Add("config.cpp", Encoding.UTF8.GetBytes(config)); files.Add("gaits.json", Encoding.UTF8.GetBytes(json));
+        Directory.CreateDirectory(output);
+        string pathOut = Path.Combine(output, "GRZ_MovementSpeedData.pbo");
+        File.WriteAllBytes(pathOut, PackFiles("GRZ_MovementSpeedData", files));
+        File.WriteAllText(Path.Combine(output, "gaits.json"), json, new UTF8Encoding(false));
+        return pathOut;
+    }
+    public static string[] ExportConfigs(string archive, string output)
+    {
+        List<string> paths = new List<string>();
+        foreach (ConfigResource resource in ReadConfigs(archive))
+        {
+            Directory.CreateDirectory(output);
+            string suffix = System.Text.RegularExpressions.Regex.Replace(resource.Name, "[^A-Za-z0-9_.-]", "_");
+            string path = Path.Combine(output, Path.GetFileNameWithoutExtension(archive) + "-" + suffix);
+            File.WriteAllBytes(path, resource.Data); paths.Add(path);
+        }
+        return paths.ToArray();
+    }
     public static string ExportConfig(string archive, string output)
     {
-        byte[] data = ReadConfig(archive, true);
-        if (data == null) return "";
-        Directory.CreateDirectory(output);
-        bool binary = data.Length >= 4 && data[0] == 0 && data[1] == 114 && data[2] == 97 && data[3] == 80;
-        string path = Path.Combine(output, Path.GetFileNameWithoutExtension(archive) + "-config." + (binary ? "bin" : "cpp"));
-        File.WriteAllBytes(path, data);
-        return path;
+        return ExportConfigs(archive, output).FirstOrDefault() ?? "";
     }
     public static Report Build(string[] archives, string output)
     {
@@ -400,18 +590,34 @@ public static class GRZInventoryBuilder
         {
             try
             {
-                byte[] bytes = ReadConfig(archive);
+                List<ConfigResource> configs = ReadConfigs(archive);
                 read++;
-                if (bytes == null) continue;
-                using (Rap rap = new Rap(bytes))
+                foreach (ConfigResource resource in configs)
                 {
-                    List<Node> roots = rap.Children(16);
-                    Node patches = roots.FirstOrDefault(n => n.Name.Equals("CfgPatches", StringComparison.OrdinalIgnoreCase));
-                    string[] providers = patches == null ? new string[0] : rap.Children(patches.Offset).Select(n => n.Name).ToArray();
-                    foreach (Node node in roots)
+                    byte[] bytes = resource.Data;
+                    bool binary = bytes.Length >= 4 && bytes[0] == 0 && bytes[1] == 114 && bytes[2] == 97 && bytes[3] == 80;
+                    if (!binary)
                     {
-                        if (node.Name.Equals("CfgVehicles", StringComparison.OrdinalIgnoreCase)) Merge(vehicles, rap.Children(node.Offset), providers, rap);
-                        if (node.Name.Equals("CfgWeapons", StringComparison.OrdinalIgnoreCase)) Merge(weapons, rap.Children(node.Offset), providers, rap);
+                        SourceNode parsedSource = new SourceConfig(bytes).Read();
+                        SourceNode patches = parsedSource.Children.FirstOrDefault(n => n.Name.Equals("CfgPatches", StringComparison.OrdinalIgnoreCase));
+                        string[] providers = patches == null ? new string[0] : patches.Children.Select(n => n.Name).ToArray();
+                        foreach (SourceNode node in parsedSource.Children)
+                        {
+                            if (node.Name.Equals("CfgVehicles", StringComparison.OrdinalIgnoreCase)) MergeSource(vehicles, node.Children, providers);
+                            if (node.Name.Equals("CfgWeapons", StringComparison.OrdinalIgnoreCase)) MergeSource(weapons, node.Children, providers);
+                        }
+                        continue;
+                    }
+                    using (Rap rap = new Rap(bytes))
+                    {
+                        List<Node> roots = rap.Children(16);
+                        Node patches = roots.FirstOrDefault(n => n.Name.Equals("CfgPatches", StringComparison.OrdinalIgnoreCase));
+                        string[] providers = patches == null ? new string[0] : rap.Children(patches.Offset).Select(n => n.Name).ToArray();
+                        foreach (Node node in roots)
+                        {
+                            if (node.Name.Equals("CfgVehicles", StringComparison.OrdinalIgnoreCase)) Merge(vehicles, rap.Children(node.Offset), providers, rap);
+                            if (node.Name.Equals("CfgWeapons", StringComparison.OrdinalIgnoreCase)) Merge(weapons, rap.Children(node.Offset), providers, rap);
+                        }
                     }
                 }
             }

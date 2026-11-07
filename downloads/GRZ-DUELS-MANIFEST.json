@@ -1,5 +1,5 @@
 {
-  "loadout_version": "0.4.5",
+  "loadout_version": "0.4.6",
   "rotation_version": "0.1.4",
   "starting_elo": 800,
   "leaderboard_key": "O",
@@ -17,8 +17,8 @@
       "sha256": "d6f93e13bd6304c54a9646f06bf8ba057c0c0b750aa08e925ecb5f2237775237"
     },
     "GRZ_Loadout": {
-      "bytes": 1616778,
-      "sha256": "48c55825ad9f10239fc10f24e86429ddaa48d669709c48f31f0ff727da9bd611"
+      "bytes": 1619153,
+      "sha256": "c6f229b1c270a87f1a7fe0c18c737ed7c90fe9c5e76b6f8d08ba6b21e6b206e8"
     },
     "GRZ_MapRotation": {
       "bytes": 3575132,

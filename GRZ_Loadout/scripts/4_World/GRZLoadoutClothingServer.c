@@ -1,38 +1,91 @@
 class GRZLoadoutClothingServer
 {
+ // Register our kits first so they arrive in the first clothing page.
+ static ref array<string> Preferred = {"GRZ_SurgicalGloves", "GRZ_TShirt", "GRZ_CowboyHat", "GRZ_Jeans", "GRZ_Bandana", "GRZ_Sneakers", "XIMS_Sneakers", "XIMS_JeanShorts", "XIMS_LayeredShirt", "XIMS_CanvasBag"};
+ static string CanonicalSlot(string value)
+ {
+  value.TrimInPlace();
+  value.ToLower();
+  foreach (string candidate : GRZLoadoutClothingSlots.Names)
+  {
+   string lower = candidate;
+   lower.ToLower();
+   if (value == lower) return candidate;
+  }
+  return "";
+ }
+ static void ReadSlots(string type, array<string> slots)
+ {
+  string path = "CfgVehicles " + type + " inventorySlot";
+  array<string> configured = new array<string>;
+  int kind = g_Game.ConfigGetType(path);
+  if (kind == CT_ARRAY) g_Game.ConfigGetTextArray(path, configured);
+  else if (kind == CT_STRING)
+  {
+   string single;
+   g_Game.ConfigGetText(path, single);
+   configured.Insert(single);
+  }
+  foreach (string entry : configured)
+  {
+   string canonical = CanonicalSlot(entry);
+   if (canonical != "" && slots.Find(canonical) < 0) slots.Insert(canonical);
+  }
+ }
+ static bool Register(GRZLoadoutCatalogue catalogue, string type, out string reason)
+ {
+  if (!g_Game.ConfigIsExisting("CfgVehicles " + type)) { reason = "MISSING ON SERVER (check server PBO and active -mod folders)"; return false; }
+  if (g_Game.ConfigGetInt("CfgVehicles " + type + " scope") != 2) { reason = "scope is not public"; return false; }
+  if (!g_Game.IsKindOf(type, "Clothing") && !g_Game.IsKindOf(type, "Clothing_Base")) { reason = "not clothing (check original base addon dependencies)"; return false; }
+  array<string> slots = new array<string>;
+  ReadSlots(type, slots);
+  if (slots.Count() == 0) { reason = "no supported inventorySlot; check final config overrides"; return false; }
+  reason = "REGISTERED";
+  foreach (string slot : slots)
+  {
+   GRZLoadoutClothing clothing = new GRZLoadoutClothing;
+   clothing.Type = type;
+   clothing.Slot = slot;
+   g_Game.ConfigGetText("CfgVehicles " + type + " displayName", clothing.Name);
+   if (clothing.Name == "") clothing.Name = type;
+   catalogue.Clothing.Insert(clothing);
+   reason += " " + slot;
+  }
+  return true;
+ }
  static void Discover(GRZLoadoutCatalogue catalogue, bool allInstalled)
  {
+  map<string, bool> seen = new map<string, bool>;
+  string report = "GRZ clothing registration (server-side)\n";
+  foreach (string preferred : Preferred)
+  {
+   string preferredReason;
+   if (Register(catalogue, preferred, preferredReason))
+   {
+    string preferredKey = preferred;
+    preferredKey.ToLower();
+    seen.Set(preferredKey, true);
+   }
+   report += preferred + ": " + preferredReason + "\n";
+   Print("[GRZ Loadout] " + preferred + ": " + preferredReason);
+  }
   int count = g_Game.ConfigGetChildrenCount("CfgVehicles");
   for (int i = 0; i < count; i++)
   {
    string type;
    g_Game.ConfigGetChildName("CfgVehicles", i, type);
-   if (g_Game.ConfigGetInt("CfgVehicles " + type + " scope") != 2)
-    continue;
-   if (!g_Game.IsKindOf(type, "Clothing") && !g_Game.IsKindOf(type, "Clothing_Base"))
-    continue;
+   string lower = type;
+   lower.ToLower();
+   if (seen.Contains(lower)) continue;
    if (!allInstalled)
    {
-    string lower = type;
-    lower.ToLower();
-    if (lower.IndexOf("grz_") != 0 && lower.IndexOf("blake_") != 0)
-     continue;
+    if (lower.IndexOf("grz_") != 0 && lower.IndexOf("blake_") != 0 && lower.IndexOf("xims_") != 0) continue;
    }
-   array<string> slots = new array<string>;
-   g_Game.ConfigGetTextArray("CfgVehicles " + type + " inventorySlot", slots);
-   foreach (string slot : slots)
-   {
-    if (GRZLoadoutClothingSlots.Names.Find(slot) < 0)
-     continue;
-    GRZLoadoutClothing clothing = new GRZLoadoutClothing;
-    clothing.Type = type;
-    clothing.Slot = slot;
-    g_Game.ConfigGetText("CfgVehicles " + type + " displayName", clothing.Name);
-    if (clothing.Name == "")
-     clothing.Name = type;
-    catalogue.Clothing.Insert(clothing);
-   }
+   string reason;
+   if (Register(catalogue, type, reason)) seen.Set(lower, true);
   }
+  FileHandle file = OpenFile("$profile:GRZ_Loadout/clothing-registration.txt", FileMode.WRITE);
+  if (file) { FPrint(file, report); CloseFile(file); }
   Print(string.Format("[GRZ Loadout] Registered %1 clothing choices.", catalogue.Clothing.Count()));
  }
 

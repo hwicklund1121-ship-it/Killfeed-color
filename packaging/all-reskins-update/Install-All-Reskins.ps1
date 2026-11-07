@@ -7,6 +7,7 @@ param(
  [string]$PackageDirectory = '',
  [string]$WindstrideServerPbo = '',
  [string]$WindstrideClientPbo = '',
+ [string[]]$ExtraModPaths = @(),
  [switch]$SkipLayeredShirt
 )
 $ErrorActionPreference = 'Stop'
@@ -41,11 +42,14 @@ function Find-WindstridePbo([string]$root, [string]$specified) {
  }
  return ''
 }
+$windstrideInputs = @()
 if (!$SkipLayeredShirt) {
  foreach ($side in @(@($ServerPath,$WindstrideServerPbo),@($GamePath,$WindstrideClientPbo))) {
-  if (!(Find-WindstridePbo $side[0] $side[1])) {
+  $found = Find-WindstridePbo $side[0] $side[1]
+  if (!$found) {
    throw "Original Windstride Clothing PBO not found under $($side[0]). A .bisign is insufficient. Install/load Windstride on both sides; or pass -WindstrideServerPbo and -WindstrideClientPbo for external mod paths. Use -SkipLayeredShirt to install the other updates only. Nothing installed."
   }
+  $windstrideInputs += $found
  }
 }
 
@@ -81,6 +85,24 @@ try {
   }
  }
  if (!$core) { throw 'Core archive not found.' }
+ # Generate overrides from this installation, before the transactional installer writes anything.
+ $inputs = @($addonPaths | ForEach-Object { $_.Source }) + @($windstrideInputs | Select-Object -First 1)
+ $replaced = @($addonPaths | ForEach-Object { $_.Name + '.pbo' })
+ $localAddons = Join-Path $ServerPath '@GRZ_Local/Addons'
+ if (Test-Path -LiteralPath $localAddons) {
+  $inputs += @(Get-ChildItem -LiteralPath $localAddons -Filter '*.pbo' -File | Where-Object { $_.Name -notin $replaced -and $_.Name -ne 'GRZ_MovementSpeedData.pbo' } | ForEach-Object { $_.FullName })
+ }
+ $generated = Join-Path $staging 'generated'
+ & (Join-Path $PSScriptRoot 'inventory-builder/Build-Inventory-Mod.ps1') -DayZPath $GamePath -ExtraPboPaths $inputs -ExtraModPaths $ExtraModPaths -OutputPath $generated -NoExplorer
+ $nativeArchives = @()
+ foreach ($folder in @((Join-Path $GamePath 'Addons'),(Join-Path $GamePath 'dta'))) {
+  $nativeArchives += @(Get-ChildItem -LiteralPath $folder -Filter '*.pbo' -File -Recurse | ForEach-Object { $_.FullName })
+ }
+ $null = [GRZInventoryBuilder]::BuildMovementData([string[]]$nativeArchives, $generated)
+ foreach ($name in @('GRZ_InventorySizes','GRZ_MovementSpeedData')) {
+  $source = Join-Path $generated ($name + '.pbo')
+  $addonPaths += [pscustomobject]@{Name=$name;Source=$source;Hash=(Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash.ToLowerInvariant()}
+ }
  $manifestPath = Join-Path $core 'MANIFEST.json'
  $manifest = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
  foreach ($addon in $addonPaths) {

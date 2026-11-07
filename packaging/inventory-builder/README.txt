@@ -11,3 +11,5 @@ Uses built-in Windows PowerShell/.NET. No Python, DayZ Tools, admin rights,
 software downloads or network access are needed. Reads installed binarized
 config tables so individual item overrides are covered, rather than guessing
 item names or changing only the base class. See INSTALL.txt for details.
+
+Version 0.1.4 reads nested config.bin/config.cpp resources, including Windstride Models folders, and prioritizes binary configs over source siblings. Standalone source configs are supported; unsupported preprocessing and compressed config entries fail before producing an override. Slot/cargo inheritance and existing exclusions still apply.
