@@ -212,7 +212,7 @@ class CfgVehicles {
         result=subprocess.run([args.pwsh,'-NoProfile','-File',str(movement_script)],env=environment,capture_output=True,text=True)
         assert result.returncode==0,result.stdout+result.stderr
         data=json.loads((movement_output/'gaits.json').read_text())
-        assert data['Multiplier']==1.10
+        assert data['Multiplier']==1.20
         assert data['Animations']==['dz/anims/anm/player/moves/rifles/p_rfl_erc_runf_low.anm','dz/anims/anm/player/moves/rifles/p_rfl_erc_walkf_low.anm']
         from repair_hexgrid import read_pbo
         ext,payload=read_pbo((movement_output/'GRZ_MovementSpeedData.pbo').read_bytes())
