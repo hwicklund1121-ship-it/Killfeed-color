@@ -1,5 +1,5 @@
 {
-  "Version": "0.1.8",
+  "Version": "0.1.9",
   "TargetDayZ": "1.30.164.289",
   "SourceHashes": {
     "dz/anims/workspaces/player/player_main/player_main.agr": "89f82f6de2461cf42367b989b2b1392814a4df9272034fbb23be8e5c2106df23",
@@ -35,6 +35,50 @@
       "BlendSeconds": 0.16
     }
   ],
-  "LocomotionSHA256": "39c2183707da772de0e57f7ff5c077c2a0b6870b4d6bcf69cbf575cd2f3d5010",
+  "RollRoutes": [
+    {
+      "Transition": "{A619000000000001}",
+      "From": "Throwing",
+      "To": "PneOnBackRoll",
+      "Condition": "IsCommand(CMD_Roll) && Stance == 2 && ThrowingOnBack && !IsTag(\"TagThrowingIn\") && !IsTag(\"TagThrowingOut\") && !IsTag(\"TagThrowingCancel\")",
+      "BlendSeconds": 0.1
+    },
+    {
+      "Transition": "{A619000000000002}",
+      "From": "Throwing",
+      "To": "ProneRoll",
+      "Condition": "IsCommand(CMD_Roll) && Stance == 2 && !ThrowingOnBack && !IsTag(\"TagThrowingIn\") && !IsTag(\"TagThrowingOut\") && !IsTag(\"TagThrowingCancel\")",
+      "BlendSeconds": 0.1
+    },
+    {
+      "Transition": "{A619000000000003}",
+      "From": "ProneRoll",
+      "To": "IdleLow",
+      "Condition": "Stance == 0 && !Raised && GetLowerTime() > 0.12",
+      "BlendSeconds": 0.16
+    },
+    {
+      "Transition": "{A619000000000004}",
+      "From": "ProneRoll",
+      "To": "IdleRas",
+      "Condition": "Stance == 0 && Raised && GetLowerTime() > 0.12",
+      "BlendSeconds": 0.16
+    },
+    {
+      "Transition": "{A619000000000005}",
+      "From": "PneOnBackRoll",
+      "To": "IdleLow",
+      "Condition": "Stance == 0 && !Raised && GetLowerTime() > 0.12",
+      "BlendSeconds": 0.16
+    },
+    {
+      "Transition": "{A619000000000006}",
+      "From": "PneOnBackRoll",
+      "To": "IdleRas",
+      "Condition": "Stance == 0 && Raised && GetLowerTime() > 0.12",
+      "BlendSeconds": 0.16
+    }
+  ],
+  "LocomotionSHA256": "0c01187381503c7989a3bd0236f0fbc7aae323c5d89e4d396fac278a57384fe8",
   "Limits": "Source/package checks only; native graph loading and gameplay require DayZ testing."
 }

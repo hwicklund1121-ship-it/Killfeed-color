@@ -11,6 +11,10 @@ class GRZInstaDropThrowPolicy
  {
   return until >= 0 && now <= until;
  }
+ static bool ShouldForceStand(bool rolling, bool queued)
+ {
+  return rolling && queued;
+ }
  static bool AllowLegacy(bool requested, bool firearm, bool movement, bool clear, bool prepared, bool rolling, bool proneTarget, bool standingTarget, bool charging, bool releasing)
  {
   return requested && firearm && movement && clear && !charging && !releasing && ((prepared && proneTarget) || (rolling && standingTarget));
@@ -34,7 +38,7 @@ modded class PlayerBase
   if (GRZInstaDropThrowPolicy.HasStanceInput(controls.IsStanceChange(), cycle, stand, crouch, prone)) m_GRZStanceInputUntil = now + 250;
   return GRZInstaDropThrowPolicy.RecentInput(now, m_GRZStanceInputUntil);
  }
- protected bool GRZLegacyStanceAllowed(int newStance)
+ protected bool GRZLegacyStanceAllowed(int newStance, bool queuedStand = false)
  {
   if (!GRZInstaDrop.IsEnabled() || !IsAlive() || IsUnconscious() || IsRestrained()) return false;
   HumanCommandMove movement = GetCommand_Move();
@@ -59,7 +63,7 @@ modded class PlayerBase
   standingTarget = standingTarget && fromProne;
   if (proneTarget && GetCurrentWaterLevel() > GetDayZPlayerType().CommandSwimSettingsW().m_fToCrouchLevel) clear = false;
   bool prepared = throwing.IsThrowingModeEnabled() || weapons.IsThrowingMode();
-  return GRZInstaDropThrowPolicy.AllowLegacy(GRZRequestedStance(), firearm, moving, clear, prepared, movement.IsInRoll() || movement.IsOnBack(), proneTarget, standingTarget, throwing.IsThrowingInProgress(), throwing.IsThrowingAnimationPlaying());
+  return GRZInstaDropThrowPolicy.AllowLegacy(GRZRequestedStance() || (queuedStand && standingTarget), firearm, moving, clear, prepared, movement.IsInRoll() || movement.IsOnBack(), proneTarget, standingTarget, throwing.IsThrowingInProgress(), throwing.IsThrowingAnimationPlaying());
  }
  override bool ModCommandHandlerBefore(float pDt, int pCurrentCommandID, bool pCurrentCommandFinished)
  {
@@ -70,18 +74,19 @@ modded class PlayerBase
    int now = GetGame().GetTime();
    // Direct Stand can be observed even if the graph never asks the stance
    // permission callback during a roll. Other controls keep native targeting.
-   if (requested && input && input.SyncedPress("UAStand")) m_GRZStandRequestUntil = now + 250;
+   if (input && (input.SyncedPress("UAProne") || input.SyncedPress("UACrouch"))) m_GRZStandRequestUntil = -1;
+   if (requested && input && input.SyncedPress("UAStand")) m_GRZStandRequestUntil = now + 750;
    HumanCommandMove movement = GetCommand_Move();
-   if (movement && (movement.IsInRoll() || movement.IsOnBack()) && GRZInstaDropThrowPolicy.RecentInput(now, m_GRZStandRequestUntil) && GRZLegacyStanceAllowed(DayZPlayerConstants.STANCEIDX_ERECT))
+   if (movement && GRZInstaDropThrowPolicy.ShouldForceStand(movement.IsInRoll(), GRZInstaDropThrowPolicy.RecentInput(now, m_GRZStandRequestUntil)) && GRZLegacyStanceAllowed(DayZPlayerConstants.STANCEIDX_ERECT, true))
    {
     // Ask the native stance test before issuing its stand-up request.
     // No teleport, persistent ForceStance lock, or replacement animation graph.
     if (DayZPlayerUtils.PlayerCanChangeStance(this, DayZPlayerConstants.STANCEIDX_ERECT, true))
     {
      movement.ForceStanceUp(DayZPlayerConstants.STANCEIDX_ERECT);
-     Print("[GRZ InstaDrop] v0.1.4 native mid-roll stand requested; verify graph playback in game.");
+     Print("[GRZ InstaDrop] v0.1.9 actual-roll stand requested; graph recovery has a minimum 0.12-second roll segment.");
     }
-    else Print("[GRZ InstaDrop] v0.1.4 native stance test rejected mid-roll stand.");
+    else Print("[GRZ InstaDrop] v0.1.9 native stance test rejected actual-roll stand.");
     m_GRZStandRequestUntil = -1;
    }
   }
@@ -98,13 +103,13 @@ modded class PlayerBase
    if (legacy)
    {
     allowed = true;
-    if (newStance == DayZPlayerConstants.STANCEIDX_ERECT || newStance == DayZPlayerConstants.STANCEIDX_RAISEDERECT) m_GRZStandRequestUntil = now + 250;
+    if (newStance == DayZPlayerConstants.STANCEIDX_ERECT || newStance == DayZPlayerConstants.STANCEIDX_RAISEDERECT) m_GRZStandRequestUntil = now + 750;
    }
   }
   if (GRZInstaDrop.IsEnabled() && previousStance != newStance && GRZInstaDropThrowPolicy.RecentInput(now, m_GRZStanceInputUntil) && now >= m_GRZNextStanceTrace)
   {
    m_GRZNextStanceTrace = now + 300;
-   Print("[GRZ InstaDrop] v0.1.4 stance from=" + previousStance.ToString() + " to=" + newStance.ToString() + " allowed=" + allowed.ToString() + " legacyException=" + legacy.ToString() + " gun-lift mode preserved");
+   Print("[GRZ InstaDrop] v0.1.9 stance from=" + previousStance.ToString() + " to=" + newStance.ToString() + " allowed=" + allowed.ToString() + " legacyException=" + legacy.ToString() + " gun-lift mode preserved");
   }
   return allowed;
  }

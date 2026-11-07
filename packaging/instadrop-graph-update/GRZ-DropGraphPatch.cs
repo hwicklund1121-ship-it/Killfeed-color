@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Security.Cryptography;
 
-public static class GRZDropGraphPatchV018 {
+public static class GRZDropGraphPatchV019 {
     struct Span { public int Start; public int End; }
     static Span Block(string text, string kind, string name) {
         string expression = @"\b" + Regex.Escape(kind) + @"\s+" + Regex.Escape(name) + @"\s*\{";
@@ -49,11 +49,34 @@ public static class GRZDropGraphPatchV018 {
             edge = Property(edge, "Duration", "0.2", blends[i]);
             machine = machine.Substring(0, span.Start) + edge + machine.Substring(span.End);
         }
-        return text.Substring(0, scope.Start) + machine + text.Substring(scope.End);
+        string result = text.Substring(0, scope.Start) + machine + text.Substring(scope.End);
+        var masterSpan = Block(result, "AnimSrcNodeStateMachine", "StanceMaster");
+        string master = result.Substring(masterSpan.Start, masterSpan.End - masterSpan.Start);
+        var rollAnchor = Block(master, "AnimSrcNodeTransition", "\"{6930A8DE26987785}\"");
+        master = master.Substring(0, rollAnchor.Start) + RollRoutes() + master.Substring(rollAnchor.Start);
+        return result.Substring(0, masterSpan.Start) + master + result.Substring(masterSpan.End);
+    }
+    static string RollRoutes() {
+        string[] ids = { "{A619000000000001}", "{A619000000000002}", "{A619000000000003}", "{A619000000000004}", "{A619000000000005}", "{A619000000000006}" };
+        string[] origins = { "Throwing", "Throwing", "ProneRoll", "ProneRoll", "PneOnBackRoll", "PneOnBackRoll" };
+        string[] targets = { "PneOnBackRoll", "ProneRoll", "IdleLow", "IdleRas", "IdleLow", "IdleRas" };
+        string[] conditions = { "IsCommand(CMD_Roll) && Stance == 2 && ThrowingOnBack && !IsTag(\"TagThrowingIn\") && !IsTag(\"TagThrowingOut\") && !IsTag(\"TagThrowingCancel\")", "IsCommand(CMD_Roll) && Stance == 2 && !ThrowingOnBack && !IsTag(\"TagThrowingIn\") && !IsTag(\"TagThrowingOut\") && !IsTag(\"TagThrowingCancel\")", "Stance == 0 && !Raised && GetLowerTime() > 0.12", "Stance == 0 && Raised && GetLowerTime() > 0.12", "Stance == 0 && !Raised && GetLowerTime() > 0.12", "Stance == 0 && Raised && GetLowerTime() > 0.12" };
+        string[] durations = { "0.1", "0.1", "0.16", "0.16", "0.16", "0.16" };
+        var result = new StringBuilder();
+        for (int i=0; i<ids.Length; ++i) {
+            result.Append("AnimSrcNodeTransition \"").Append(ids[i]).Append("\" {\n");
+            result.Append("       FromState \"").Append(origins[i]).Append("\"\n");
+            result.Append("       ToState \"").Append(targets[i]).Append("\"\n");
+            result.Append("       Duration \"").Append(durations[i]).Append("\"\n");
+            result.Append("       StartTime \"\"\n");
+            result.Append("       Condition \"").Append(conditions[i].Replace("\"", "\\\"")).Append("\"\n");
+            result.Append("       BlendFn S\n       MotionVecBlend 0x33 0\n      }\n      ");
+        }
+        return result.ToString();
     }
     public static string Root(string text) {
         const string original = "{6CA2ACDCAC1184DC}DZ/anims/workspaces/player/player_main/Locomotion.agf";
-        const string replacement = "{58DC0C845B1A47E2}GRZ_InstaDropGraph/locomotion.agf";
+        const string replacement = "{FEA9190E63074AA1}GRZ_InstaDropGraph/locomotion.agf";
         if (text.IndexOf(original, StringComparison.Ordinal) < 0 || text.IndexOf(original, StringComparison.Ordinal) != text.LastIndexOf(original, StringComparison.Ordinal)) throw new InvalidDataException("Unsupported native root graph reference.");
         return text.Replace(original, replacement);
     }

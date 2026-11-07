@@ -47,8 +47,8 @@ try {
  }
  $operations | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath (Join-Path $backup 'RESTORE.json') -Encoding UTF8
  Write-Host "GRZ InstaDrop prototype installed on BOTH sides. Backups: $backup"
- Write-Host 'Restart both. Test G then prone, and getting back up with your normal stance keys. v0.1.8 keeps the stance-input source; the graph requests a 0.10-second drop and 0.16-second direct stand from prone/on-back. GRZ Movement is not replaced, and its old drop-speed requests are disabled by the data file.'
- Write-Host 'Check client/server script logs for [GRZ InstaDrop] v0.1.8 graph selected. Actual native graph loading and drop/roll playback need in-game verification.'
+ Write-Host 'Restart both. Test G then prone, and getting back up with your normal stance keys. v0.1.9 waits for an actual roll before forcing queued standing, and adds gun-lift roll-entry/recovery routes. Drop remains 0.10 seconds. GRZ Movement is not replaced, and its old drop-speed requests are disabled by the data file.'
+ Write-Host 'Check client/server script logs for [GRZ InstaDrop] v0.1.9 graph selected. Actual native graph loading and drop/roll playback need in-game verification.'
 } catch {
  $originalFailure = $_
  foreach ($operation in $written) {

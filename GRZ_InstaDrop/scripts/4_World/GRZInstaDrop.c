@@ -1,4 +1,4 @@
-// GRZ stance support paired with the v0.1.8 modified vanilla drop graph.
+// GRZ stance support paired with the v0.1.9 modified vanilla drop graph.
 // No LUGU scripts/graphs or forced player positions.
 class GRZInstaDropTransitions
 {
@@ -33,16 +33,16 @@ class GRZInstaDrop
    return;
   }
   // Drop timing is handled by a native graph branch, not clip-speed overrides.
-  // The companion stance source remains unchanged from the working build.
+  // The companion stance helper queues stand intent until an actual roll.
   string graph;
   GetGame().ConfigGetText("CfgVehicles SurvivorBase enfAnimSys graphName", graph);
   if (!GetGame().ConfigIsExisting("CfgPatches GRZ_InstaDropGraph") || graph != "GRZ_InstaDropGraph/player_main.agr")
   {
-   Print("[GRZ InstaDrop] v0.1.8 inactive: graph addon missing or graph overridden. Selected graph=" + graph);
+   Print("[GRZ InstaDrop] v0.1.9 inactive: graph addon missing or graph overridden. Selected graph=" + graph);
    return;
   }
   Ready = true;
-  Print("[GRZ InstaDrop] v0.1.8 graph selected: GRZ_InstaDropGraph/player_main.agr. Throw-ready drop blend=0.1; prone/on-back direct stand blend=0.16. On-back rifle gun-lift roll exception enabled; verify the native roll-start log.");
+  Print("[GRZ InstaDrop] v0.1.9 graph selected: GRZ_InstaDropGraph/player_main.agr. Throw-ready drop blend=0.1; prone/on-back direct stand blend=0.16. Gun-lift native roll routes enabled; forced stand requires an actual roll. Verify the native roll-start log.");
  }
 };
 modded class DayZPlayerTypeUtils

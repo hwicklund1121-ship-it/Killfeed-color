@@ -14,7 +14,7 @@ class CfgMods
  {
   dir = "GRZ_InstaDrop";
   name = "GRZ InstaDrop Prototype";
-  version = "0.1.8";
+  version = "0.1.9";
   author = "GRZ";
   type = "mod";
   dependencies[] = {"World"};

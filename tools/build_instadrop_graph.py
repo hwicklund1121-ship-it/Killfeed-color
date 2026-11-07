@@ -44,6 +44,28 @@ def change_property(block, key, before, after):
     return result
 
 
+ROLL_ROUTES = [
+ ('{A619000000000001}', 'Throwing', 'PneOnBackRoll', 'IsCommand(CMD_Roll) && Stance == 2 && ThrowingOnBack && !IsTag("TagThrowingIn") && !IsTag("TagThrowingOut") && !IsTag("TagThrowingCancel")', '0.1'),
+ ('{A619000000000002}', 'Throwing', 'ProneRoll', 'IsCommand(CMD_Roll) && Stance == 2 && !ThrowingOnBack && !IsTag("TagThrowingIn") && !IsTag("TagThrowingOut") && !IsTag("TagThrowingCancel")', '0.1'),
+ ('{A619000000000003}', 'ProneRoll', 'IdleLow', 'Stance == 0 && !Raised && GetLowerTime() > 0.12', '0.16'),
+ ('{A619000000000004}', 'ProneRoll', 'IdleRas', 'Stance == 0 && Raised && GetLowerTime() > 0.12', '0.16'),
+ ('{A619000000000005}', 'PneOnBackRoll', 'IdleLow', 'Stance == 0 && !Raised && GetLowerTime() > 0.12', '0.16'),
+ ('{A619000000000006}', 'PneOnBackRoll', 'IdleRas', 'Stance == 0 && Raised && GetLowerTime() > 0.12', '0.16'),
+]
+
+def roll_route_text():
+    result = []
+    for guid, origin, target, condition, duration in ROLL_ROUTES:
+        result.append('AnimSrcNodeTransition ' + json.dumps(guid) + ' {\n'
+                      '       FromState ' + json.dumps(origin) + '\n'
+                      '       ToState ' + json.dumps(target) + '\n'
+                      '       Duration ' + json.dumps(duration) + '\n'
+                      '       StartTime ""\n'
+                      '       Condition ' + json.dumps(condition) + '\n'
+                      '       BlendFn S\n       MotionVecBlend 0x33 0\n      }\n      ')
+    return ''.join(result)
+
+
 def patch_locomotion(source):
     start, end = named_block(source, 'AnimSrcNodeStateMachine', 'ThrowIdleStanceSTM')
     machine = source[start:end]
@@ -65,7 +87,12 @@ def patch_locomotion(source):
         patched = change_property(patched, 'Duration', '0.2', blend)
         machine = machine[:a] + patched + machine[b:]
         changes.append(dict(Transition=guid, From=origin, Before=target, After=destination, BlendSeconds=float(blend)))
-    return source[:start] + machine + source[end:], changes
+    result = source[:start] + machine + source[end:]
+    a, b = named_block(result, 'AnimSrcNodeStateMachine', 'StanceMaster')
+    master = result[a:b]
+    anchor, _ = named_block(master, 'AnimSrcNodeTransition', '{6930A8DE26987785}')
+    master = master[:anchor] + roll_route_text() + master[anchor:]
+    return result[:a] + master + result[b:], changes
 
 
 def build_graph(export, output):
@@ -88,7 +115,7 @@ def build_graph(export, output):
     patched, changes = patch_locomotion(source)
     root = files[BASE + 'player_main.agr'].decode('utf-8')
     original_resource = '{6CA2ACDCAC1184DC}DZ/anims/workspaces/player/player_main/Locomotion.agf'
-    new_resource = '{58DC0C845B1A47E2}' + PREFIX + '/locomotion.agf'
+    new_resource = '{FEA9190E63074AA1}' + PREFIX + '/locomotion.agf'
     if root.count(original_resource) != 1:
         raise ValueError('Native locomotion reference not uniquely located')
     root = root.replace(original_resource, new_resource)
@@ -119,9 +146,10 @@ class CfgVehicles
 };
 ''')
     evidence = dict(
-        Version='0.1.8', TargetDayZ=TARGET_VERSION,
+        Version='0.1.9', TargetDayZ=TARGET_VERSION,
         SourceHashes={p: hashlib.sha256(b).hexdigest() for p, b in files.items()},
         Changes=changes,
+        RollRoutes=[dict(Transition=g, From=f, To=t, Condition=c, BlendSeconds=float(d)) for g,f,t,c,d in ROLL_ROUTES],
         LocomotionSHA256=hashlib.sha256(patched.encode()).hexdigest(),
         Limits='Source/package checks only; native graph loading and gameplay require DayZ testing.',
     )

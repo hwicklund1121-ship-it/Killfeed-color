@@ -7,7 +7,7 @@ import sys
 import tempfile
 import unittest
 from zipfile import ZipFile
-from build_instadrop_graph import BASE, named_block, patch_locomotion, build_graph
+from build_instadrop_graph import BASE, named_block, patch_locomotion, build_graph, roll_route_text, ROLL_ROUTES
 from build_instadrop_graph_release import ROOT, release
 from build_pbo import build
 
@@ -63,7 +63,8 @@ class DropGraphTests(unittest.TestCase):
     def test_exactly_four_edges_change_and_roll_graphs_preserved(self):
         patched, changes = patch_locomotion(self.native)
         self.assertEqual(len(changes), 4)
-        restored = patched
+        self.assertEqual(patched.count(roll_route_text()), 1)
+        restored = patched.replace(roll_route_text(), "", 1)
         for row in changes:
             a, b = named_block(restored, 'AnimSrcNodeTransition', row['Transition'])
             edge = restored[a:b]
@@ -73,6 +74,24 @@ class DropGraphTests(unittest.TestCase):
             edge = edge.replace('ToState "' + row['After'] + '"', 'ToState "' + row['Before'] + '"').replace('Duration "' + str(row['BlendSeconds']) + '"', 'Duration "0.2"')
             restored = restored[:a] + edge + restored[b:]
         self.assertEqual(restored, self.native)
+
+    def test_native_roll_routes_and_recovery_requirements(self):
+        patched, _ = patch_locomotion(self.native)
+        for guid, origin, target, condition, blend in ROLL_ROUTES:
+            a, b = named_block(patched, 'AnimSrcNodeTransition', guid)
+            edge = patched[a:b]
+            self.assertIn('FromState "' + origin + '"', edge)
+            self.assertIn('ToState "' + target + '"', edge)
+            named_block(patched, 'AnimSrcNodeStateMachine', 'StanceMaster')
+            if origin == 'Throwing':
+                self.assertIn('IsCommand(CMD_Roll)', condition)
+                self.assertIn('Stance == 2', condition)
+                self.assertLess(a, named_block(patched, 'AnimSrcNodeTransition', '{6930A8DE26987785}')[0])
+            else:
+                self.assertIn('Stance == 0', condition)
+                self.assertIn('GetLowerTime() > 0.12', condition)
+            self.assertIn('AnimSrcNodeState ' + origin + ' {', patched)
+            self.assertIn('AnimSrcNodeState ' + target + ' {', patched)
 
     def test_already_patched_or_changed_native_edges_rejected(self):
         patched, _ = patch_locomotion(self.native)
@@ -122,10 +141,10 @@ class DropGraphTests(unittest.TestCase):
                 self.assertEqual(set(graph), {'config.cpp', 'locomotion.agf', 'player_main.agr'})
                 self.assertEqual(graph['locomotion.agf'].decode(), patch_locomotion(self.native)[0])
                 root = graph['player_main.agr'].decode()
-                restored = root.replace('{58DC0C845B1A47E2}GRZ_InstaDropGraph/locomotion.agf', '{6CA2ACDCAC1184DC}DZ/anims/workspaces/player/player_main/Locomotion.agf')
+                restored = root.replace('{FEA9190E63074AA1}GRZ_InstaDropGraph/locomotion.agf', '{6CA2ACDCAC1184DC}DZ/anims/workspaces/player/player_main/Locomotion.agf')
                 self.assertEqual(restored, self.native_root)
                 source = all_files['GRZ_InstaDrop']['scripts/4_World/GRZInstaDropThrowReady.c']
-                self.assertEqual(hashlib.sha256(source).digest(), bytes.fromhex('997674e13dc7f42f6bea4e4405d93b052326130b3f926f4e48adb3c9311a7a01'))
+                self.assertEqual(source, (ROOT / 'GRZ_InstaDrop/scripts/4_World/GRZInstaDropThrowReady.c').read_bytes())
                 settings = json.loads(all_files['GRZ_InstaDropData']['transitions.json'])
                 self.assertFalse(settings['TuneDropInMovement'])
                 self.assertNotIn('GRZ_Movement.pbo', z.namelist())
