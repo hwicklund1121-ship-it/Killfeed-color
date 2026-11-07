@@ -52,7 +52,7 @@ def layout():
         children += button(name,label,x,.29,.14,.06)
         children += panel(name+'Line',x,.355,.14,.003,'1 1 1 1')
     children += panel('PreviewBackground',.075,.39,.85,.315,'0.055 0.055 0.065 1')
-    children += widget('ItemPreviewWidgetClass','GunPreview',.115,.39,.77,.315,'ignorepointer 1\n mode blend\n color 1 1 1 1')
+    children += widget('ItemPreviewWidgetClass','GunPreview',.115,.39,.77,.315,'ignorepointer 1\n color 1 1 1 1')
     children += button('GunPrevious','<',.027,.51,.043,.075)
     children += button('GunNext','>',.93,.51,.043,.075)
     children += text('GunName','SELECT A GUN',.15,.715,.7,.05,24,center=True)

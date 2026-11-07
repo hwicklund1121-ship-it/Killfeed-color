@@ -101,6 +101,12 @@ def main():
             text = payload.decode()
             assert text.count("{") == text.count("}"), name
             scripts.append(text)
+    # Client GUI parser rejected `mode blend` on ItemPreviewWidget, although it
+    # is valid on ImageWidget. Keep native model widgets free of image-only properties.
+    for folder in [SOURCE/'gui/layouts', ROOT/'GRZ_Loadout/gui/layouts']:
+        for layout in folder.glob('*.layout'):
+            for block in re.findall(r'ItemPreviewWidgetClass\s+\w+\s*\{([^{}]*)\}',layout.read_text()):
+                assert not re.search(r'^\s*(mode|stretch|image0|font|text)\s',block,re.M),layout
     text = "\n".join(scripts)
     # InputEditBoxWidget belongs to vanilla's ChatInputMenu layout.
     referenced = set(re.findall(r'FindAnyWidget\("(\w+)"\)', text)) - {"InputEditBoxWidget"}

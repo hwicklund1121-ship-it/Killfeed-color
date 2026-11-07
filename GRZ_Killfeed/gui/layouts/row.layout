@@ -142,7 +142,6 @@ ItemPreviewWidgetClass GunPreview
  vexactpos 1
  hexactsize 1
  vexactsize 1
- mode blend
  color 1 1 1 1
 }
 ImageWidgetClass KillerPrefixIcon
