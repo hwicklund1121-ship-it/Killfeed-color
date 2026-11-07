@@ -307,6 +307,46 @@ public static class GRZInventoryBuilder
         }
         throw new InvalidDataException("Invalid null-terminated string.");
     }
+    // Bohemia PBO Cprs/LZSS: low-bit-first flags, 12-bit relative distance,
+    // length nibble + 3, initial space dictionary, trailing additive checksum.
+    public static byte[] DecompressConfig(byte[] input, int expected)
+    {
+        if (expected <= 0 || expected > 32 * 1024 * 1024 || input.Length < 5)
+            throw new InvalidDataException("Invalid compressed config size.");
+        byte[] output = new byte[expected];
+        int at = 0, written = 0, end = input.Length - 4;
+        uint sum = 0;
+        while (written < expected)
+        {
+            if (at >= end) throw new InvalidDataException("Truncated compressed config flags.");
+            int flags = input[at++];
+            for (int bit = 0; bit < 8 && written < expected; bit++)
+            {
+                if ((flags & (1 << bit)) != 0)
+                {
+                    if (at >= end) throw new InvalidDataException("Truncated compressed config literal.");
+                    byte value = input[at++]; output[written++] = value; sum = unchecked(sum + value);
+                }
+                else
+                {
+                    if (at + 2 > end) throw new InvalidDataException("Truncated compressed config match.");
+                    int low = input[at++], high = input[at++];
+                    int distance = low | ((high & 0xf0) << 4), count = (high & 0x0f) + 3;
+                    if (distance == 0 || count > expected - written) throw new InvalidDataException("Invalid compressed config match.");
+                    for (int i = 0; i < count; i++)
+                    {
+                        int from = written - distance;
+                        byte value = from < 0 ? (byte)0x20 : output[from];
+                        output[written++] = value; sum = unchecked(sum + value);
+                    }
+                }
+            }
+        }
+        if (at != end) throw new InvalidDataException("Unexpected trailing compressed config bytes.");
+        uint checksum = (uint)input[end] | ((uint)input[end + 1] << 8) | ((uint)input[end + 2] << 16) | ((uint)input[end + 3] << 24);
+        if (sum != checksum) throw new InvalidDataException("Compressed config checksum mismatch.");
+        return output;
+    }
     private static List<ConfigResource> ReadConfigs(string path)
     {
         List<ConfigResource> result = new List<ConfigResource>();
@@ -345,11 +385,16 @@ public static class GRZInventoryBuilder
                 if (source && binaryDirectories.Contains(entry.Name.Substring(0, entry.Name.Length - "config.cpp".Length))) source = false;
                 if (binary || source)
                 {
-                    if (entry.Method != 0) throw new InvalidDataException("Compressed " + (binary ? "config.bin" : "config.cpp") + " is not supported: " + entry.Name);
+                    if (entry.Method != 0 && entry.Method != 0x43707273) throw new InvalidDataException("Unsupported config packing method in " + Path.GetFileName(path) + ": " + entry.Name);
                     if (entry.Size == 0 || entry.Size > 32 * 1024 * 1024 || offset + entry.Size > reader.BaseStream.Length) throw new InvalidDataException("Invalid config size: " + entry.Name);
                     reader.BaseStream.Position = offset;
                     byte[] data = reader.ReadBytes((int)entry.Size);
                     if (data.Length != entry.Size) throw new InvalidDataException("Truncated config: " + entry.Name);
+                    if (entry.Method == 0x43707273)
+                    {
+                        try { data = DecompressConfig(data, checked((int)entry.Original)); }
+                        catch (Exception error) { throw new InvalidDataException("Cannot decompress " + Path.GetFileName(path) + ": " + entry.Name + " — " + error.Message, error); }
+                    }
                     result.Add(new ConfigResource { Name = entry.Name, Data = data });
                 }
                 offset += entry.Size;

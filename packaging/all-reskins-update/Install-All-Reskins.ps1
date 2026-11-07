@@ -118,6 +118,17 @@ try {
  if ($SkipLayeredShirt) { Write-Host 'Layered Shirt skipped as requested; other reskins installed.' }
  else { Write-Host 'All four XIMS clothes installed. Keep original Windstride Clothing loaded on both sides.' }
  Write-Host 'Canvas Bag uses vanilla normal detail pending a smaller custom normal upload.'
+} catch {
+ $extraConfigs = Join-Path $staging 'generated/ExtraConfigs'
+ if (Test-Path -LiteralPath $extraConfigs -PathType Container) {
+  try {
+   $diagnostics = Join-Path $PSScriptRoot ('GRZ-Install-Diagnostics-' + [guid]::NewGuid().ToString('N'))
+   New-Item -ItemType Directory -Path $diagnostics | Out-Null
+   Copy-Item -LiteralPath $extraConfigs -Destination $diagnostics -Recurse
+   Write-Host "Installation stopped. Small config diagnostics retained at $diagnostics"
+  } catch { Write-Warning 'Could not retain diagnostic config copies.' }
+ }
+ throw
 } finally {
  if (Test-Path -LiteralPath $staging) { Remove-Item -LiteralPath $staging -Recurse -Force }
 }

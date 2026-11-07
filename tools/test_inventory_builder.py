@@ -71,6 +71,16 @@ def archive(path, root, prefix='Fixture'):
         path.write_bytes(build(source))
 
 
+def compressed_archive(path, raw, filename='config.cpp', payload=None):
+    # Independent literal-only encoder for the standard PBO Cprs bitstream.
+    if payload is None:
+        payload=b''.join(bytes([(1 << len(raw[i:i+8]))-1])+raw[i:i+8] for i in range(0,len(raw),8))+struct.pack('<I',sum(raw)&0xffffffff)
+    data=z('')+struct.pack('<5I',0x56657273,0,0,0,0)+z('prefix')+z('Compressed_Fixture')+z('')
+    data+=z(filename)+struct.pack('<5I',0x43707273,len(raw),0,0,len(payload))
+    data+=z('')+bytes(20)+payload
+    path.write_bytes(data+b'\0'+hashlib.sha1(data).digest())
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--pwsh', required=True)
@@ -230,15 +240,33 @@ class CfgVehicles {
         error_text = ' '.join(re.sub(r'(?m)^\s*\|\s*', '', failed.stdout+failed.stderr).split())
         assert 'Conflicting base classes' in error_text,error_text
         (game/'Addons/conflict.pbo').unlink()
-        archive(game/'Addons/compressed.pbo',node('',children=[node('CfgPatches',children=[node('Compressed_Fixture')])]))
-        compressed=bytearray((game/'Addons/compressed.pbo').read_bytes())
-        method=compressed.index(b'config.bin\0')+len(b'config.bin\0')
-        struct.pack_into('<I',compressed,method,0x43707273)
-        (game/'Addons/compressed.pbo').write_bytes(compressed)
+        # Compressed source and binary configs must produce the same size overrides.
+        for filename,raw,classname in [
+            ('config.cpp',b'class CfgPatches { class Compressed_Fixture {}; }; class CfgVehicles { class Clothing; class CompressedTop: Clothing { inventorySlot[]={"Body"}; itemsCargoSize[]={3,3}; }; };','CompressedTop'),
+            ('config.bin',rap(node('',children=[node('CfgPatches',children=[node('Compressed_Fixture')]),node('CfgVehicles',children=[node('CompressedPants','Clothing',properties={'inventorySlot':['Legs'],'itemsCargoSize':[4,4]})])])),'CompressedPants')]:
+            compressed_archive(game/'Addons/compressed.pbo',raw,filename)
+            compressed_output=temp/('Compressed '+classname)
+            compressed_command=command.copy();compressed_command[compressed_command.index(str(output))]=str(compressed_output)
+            passed=subprocess.run(compressed_command,env=environment,capture_output=True,text=True)
+            assert passed.returncode==0,passed.stdout+passed.stderr
+            report=json.loads((compressed_output/'Inventory-catalog.json').read_text(encoding='utf-8-sig'))
+            assert classname in report['Clothing']
+            assert re.search(r'class '+classname+r': Clothing\s*\{\s*itemsCargoSize\[\] = \{10, 10\}',(compressed_output/'config.cpp').read_text())
+        # Checksum corruption must fail closed and name the faulty archive.
+        corrupt=bytearray((game/'Addons/compressed.pbo').read_bytes());corrupt[-22]^=1
+        (game/'Addons/compressed.pbo').write_bytes(corrupt)
         failed=subprocess.run(failure_command,env=environment,capture_output=True,text=True)
         assert failed.returncode!=0 and not (bad_output/'GRZ_InventorySizes.pbo').exists()
-        assert 'Compressed config.bin' in failed.stdout+failed.stderr
-        print('PowerShell/C# tests passed: normal unrelated engine redefinitions, inherited variants, original parents, unrelated items, restricted clothing slots, restored excluded cargo, exact cargo/footprint fields, provider dependencies, explicit modded-gun override/export, nested Windstride/source configs, native movement header filtering, PBO byte/checksum compatibility, and fail-closed conflict/unsupported compression handling.')
+        assert 'checksum mismatch' in failed.stdout+failed.stderr and 'compressed.pbo' in failed.stdout+failed.stderr
+        # Fixed match vectors cover overlap, initial dictionary spaces, and truncation.
+        decoder_script=temp/'CheckDecoder.ps1'
+        decoder_script.write_text('Add-Type -Path '+psquote(ROOT/'packaging/inventory-builder/InventoryBuilder.cs')+\
+            "\n$a=[GRZInventoryBuilder]::DecompressConfig([byte[]]@(1,65,1,2,134,1,0,0),6); if ([Text.Encoding]::ASCII.GetString($a) -ne 'AAAAAA') {throw 'Overlap failed'}\n"+\
+            "$b=[GRZInventoryBuilder]::DecompressConfig([byte[]]@(0,3,0,96,0,0,0),3); if ([Text.Encoding]::ASCII.GetString($b) -ne '   ') {throw 'Initial dictionary failed'}\n"+\
+            "try {[GRZInventoryBuilder]::DecompressConfig([byte[]]@(0,1,0,0,0),3);throw 'Should reject'} catch {if ($_.Exception.Message -eq 'Should reject') {throw}}\n")
+        decoded=subprocess.run([args.pwsh,'-NoProfile','-File',str(decoder_script)],env=environment,capture_output=True,text=True)
+        assert decoded.returncode==0,decoded.stdout+decoded.stderr
+        print('PowerShell/C# tests passed: normal unrelated engine redefinitions, inherited variants, original parents, unrelated items, restricted clothing slots, restored excluded cargo, exact cargo/footprint fields, provider dependencies, explicit modded-gun override/export, nested Windstride/source configs, native movement header filtering, PBO byte/checksum compatibility, and compressed source/binary configs, overlapping matches, checksums, and fail-closed corruption/conflict handling.')
 
 
 if __name__=='__main__':
