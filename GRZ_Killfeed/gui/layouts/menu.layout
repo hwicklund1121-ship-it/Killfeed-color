@@ -6,7 +6,7 @@ hexactpos 0
 vexactpos 0
 hexactsize 0
 vexactsize 0
-color 0 0 0 0
+color 1 1 1 1
 position 0 0
 size 1 1
 {
@@ -97,6 +97,60 @@ ignorepointer 1
 color 1 1 1 1
 mode blend
 stretch 1
+}
+ButtonWidgetClass CloseX
+{
+position 1018 16
+size 50 44
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+{
+ImageWidgetClass CloseXBorder
+{
+position 0 0
+size 50 44
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+mode blend
+stretch 1
+color 0.22 0.22 0.22 1
+}
+ImageWidgetClass CloseXFill
+{
+position 1 1
+size 48 42
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+mode blend
+stretch 1
+color 0.065 0.065 0.065 1
+}
+TextWidgetClass CloseXLabel
+{
+position 12 0
+size 26 44
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "X"
+"text halign" center
+}
+}
 }
 TextWidgetClass Title
 {
@@ -311,7 +365,7 @@ hexactpos 1
 vexactpos 1
 hexactsize 1
 vexactsize 1
-color 0 0 0 0
+color 1 1 1 1
 
 }
 TextWidgetClass Status

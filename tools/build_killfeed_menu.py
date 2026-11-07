@@ -17,7 +17,8 @@ def panel(name, x, y, w, h, color, children=''):
 
 
 def frame(name, x, y, w, h, children='', props=''):
-    return widget('Frame', name, x, y, w, h, 'color 0 0 0 0\n' + props, children)
+    color = '1 1 1 1' if name in ('PageHost','GRZGunPage','VIPPreviewViewport') else '0 0 0 0'
+    return widget('Frame', name, x, y, w, h, 'color '+color+'\n' + props, children)
 
 
 def text(name, label, x, y, w, h, color='1 1 1 1', centered=False):
@@ -57,6 +58,7 @@ def main():
     shell += panel('MenuLeft', 0, 3, 1, 756, '0.35 0.35 0.38 1')
     shell += panel('MenuRight', 1099, 3, 1, 756, '0.35 0.35 0.38 1')
     shell += image('MenuLogo', 32, 12, 300, 100)
+    shell += button('CloseX', 'X', 1018, 16, 50, 44)
     shell += text('Title', 'GRZ VIP', 370, 28, 698, 42, '1 1 1 1')
     shell += text('Hint', 'Your prefix, animated killfeed and custom gun reskins.', 370, 78, 698, 24, '0.7 0.7 0.7 1')
     shell += button('NameTab', 'KILLFEED', 256, 128, 208, 48)
@@ -71,7 +73,7 @@ def main():
     shell += button('Save', 'SAVE CHANGES', 812, 686, 256, 48, True)
     # The shell owns the navigation and page host, so all move with the background.
     shell = widget('Frame', 'MenuPanel', 0, 0, 1100, 760, 'color 1 1 1 1', shell)
-    (OUT/'menu.layout').write_text('FrameWidgetClass GRZKillfeedMenuRoot\n{\nvisible 1\nclipchildren 0\nhexactpos 0\nvexactpos 0\nhexactsize 0\nvexactsize 0\ncolor 0 0 0 0\nposition 0 0\nsize 1 1\n{\n'+shell+'}\n}\n')
+    (OUT/'menu.layout').write_text('FrameWidgetClass GRZKillfeedMenuRoot\n{\nvisible 1\nclipchildren 0\nhexactpos 0\nvexactpos 0\nhexactsize 0\nvexactsize 0\ncolor 1 1 1 1\nposition 0 0\nsize 1 1\n{\n'+shell+'}\n}\n')
 
     common = panel('PageDivider', 464, 0, 1, 360, '0.16 0.16 0.16 1')
     common += frame('AnimationHost', 496, 0, 540, 360)
@@ -99,7 +101,6 @@ def main():
         guns += button(name,label,x,0,244,42)
     guns += panel('VIPGunListBacking',0,60,300,300,'0.06 0.06 0.07 1')
     guns += widget('TextListbox','VIPGunList',0,60,300,300,'color 1 1 1 1\nfont "gui/fonts/sdf_MetronLight16"')
-    guns += panel('VIPGunPreviewBacking',324,60,712,210,'0.05 0.05 0.06 1')
     item_view = widget('ItemPreview','VIPGunPreview',0,0,712,210,'ignorepointer 0\ncolor 1 1 1 1\nmode blend')
     guns += frame('VIPPreviewViewport',324,60,712,210,item_view,'clipchildren 1')
     guns += button('VIPResetView','RESET VIEW',920,64,108,30)

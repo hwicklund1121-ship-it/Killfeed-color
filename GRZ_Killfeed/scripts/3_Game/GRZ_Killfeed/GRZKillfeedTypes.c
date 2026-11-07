@@ -268,6 +268,7 @@ class GRZKillfeedBus
     static ref ScriptInvoker Menu = new ScriptInvoker;
     static ref ScriptInvoker Streak = new ScriptInvoker;
     static ref ScriptInvoker AppDeactivated = new ScriptInvoker;
+    static ref ScriptInvoker AppActivated = new ScriptInvoker;
 }
 
 class GRZKillfeedConfig

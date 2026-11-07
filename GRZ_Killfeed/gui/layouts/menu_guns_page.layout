@@ -6,7 +6,7 @@ hexactpos 1
 vexactpos 1
 hexactsize 1
 vexactsize 1
-color 0 0 0 0
+color 1 1 1 1
 visible 0
 {
 ButtonWidgetClass VIPGun20
@@ -249,19 +249,6 @@ vexactsize 1
 color 1 1 1 1
 font "gui/fonts/sdf_MetronLight16"
 }
-ImageWidgetClass VIPGunPreviewBacking
-{
-position 324 60
-size 712 210
-hexactpos 1
-vexactpos 1
-hexactsize 1
-vexactsize 1
-ignorepointer 1
-mode blend
-stretch 1
-color 0.05 0.05 0.06 1
-}
 FrameWidgetClass VIPPreviewViewport
 {
 position 324 60
@@ -270,7 +257,7 @@ hexactpos 1
 vexactpos 1
 hexactsize 1
 vexactsize 1
-color 0 0 0 0
+color 1 1 1 1
 clipchildren 1
 {
 ItemPreviewWidgetClass VIPGunPreview

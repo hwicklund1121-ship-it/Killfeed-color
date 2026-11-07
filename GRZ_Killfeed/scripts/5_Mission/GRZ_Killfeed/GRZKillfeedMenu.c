@@ -25,7 +25,7 @@ class GRZKillfeedClient
         if (!ActiveMenu || !ActiveMenu.GetLayoutRoot())
         {
             ActiveMenu = null;
-            Error("[GRZ Killfeed 0.2.2] Native menu factory did not return an initialized settings menu.");
+            Error("[GRZ Killfeed 0.2.3] Native menu factory did not return an initialized settings menu.");
             g_Game.Chat("GRZ Killfeed: menu creation failed. Check the client script log.", "colorStatusChannel");
             return;
         }
@@ -34,12 +34,12 @@ class GRZKillfeedClient
         else
             ActiveMenu.ApplyLocalStyle(LocalStyle);
         ActiveMenu.EnsureVisible();
-        Print("[GRZ Killfeed 0.2.2] Native menu registered and retained.");
+        Print("[GRZ Killfeed 0.2.3] Native menu registered and retained.");
     }
 
     static void ReleaseMenu()
     {
-        if (ActiveMenu && ActiveMenu.IsVisible())
+        if (ActiveMenu)
             ActiveMenu.CloseSafely();
         ActiveMenu = null;
     }
@@ -157,7 +157,7 @@ modded class ChatInputMenu
         if (m_GRZVipSubmitted)
             return true;
         m_GRZVipSubmitted = true;
-        Print("[GRZ Killfeed 0.2.2] Intercepted local VIP command before public/VPP chat.");
+        Print("[GRZ Killfeed 0.2.3] Intercepted local VIP command before public/VPP chat.");
         Close();
         if (command == "/grzvip")
             g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZKillfeedClient.RequestMenu, 150, false);
@@ -226,6 +226,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
     protected bool m_GRZControlsLocked;
     protected bool m_GRZDismissRequested;
     protected bool m_GRZCursorWasVisible;
+    protected bool m_GRZWasInactive;
 
     void GRZKillfeedMenu()
     {
@@ -286,7 +287,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
         if (IsOfflinePreview)
             m_Status.SetText("Local preview — server access and persistence are not tested.");
         PositionPanel();
-        Print("[GRZ Killfeed 0.2.2] Init: layout created.");
+        Print("[GRZ Killfeed 0.2.3] Init: layout created.");
         return layoutRoot;
     }
 
@@ -324,9 +325,10 @@ class GRZKillfeedMenu extends UIScriptedMenu
             return;
         if (!g_Game.IsAppActive())
         {
-            CloseSafely();
+            GRZOnVIPAppDeactivated();
             return;
         }
+        if (m_GRZWasInactive) GRZRestoreVIPFocus();
         super.Update(timeslice);
         m_Time += timeslice;
         GRZUpdateVIPPreviewRotation();
@@ -350,7 +352,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
             m_LoggedUpdate = true;
             float width, height;
             layoutRoot.GetScreenSize(width, height);
-            Print(string.Format("[GRZ Killfeed 0.2.2] Update: root %1 x %2; visible %3.", width, height, layoutRoot.IsVisibleHierarchy()));
+            Print(string.Format("[GRZ Killfeed 0.2.3] Update: root %1 x %2; visible %3.", width, height, layoutRoot.IsVisibleHierarchy()));
         }
     }
 
@@ -358,33 +360,41 @@ class GRZKillfeedMenu extends UIScriptedMenu
     {
         m_GRZDismissRequested = false;
         super.OnShow();
-        GRZKillfeedBus.AppDeactivated.Remove(CloseSafely);
-        GRZKillfeedBus.AppDeactivated.Insert(CloseSafely);
+        GRZKillfeedBus.AppDeactivated.Remove(GRZOnVIPAppDeactivated);
+        GRZKillfeedBus.AppActivated.Remove(GRZOnVIPAppActivated);
+        GRZKillfeedBus.AppDeactivated.Insert(GRZOnVIPAppDeactivated);
+        GRZKillfeedBus.AppActivated.Insert(GRZOnVIPAppActivated);
         if (!g_Game.IsAppActive())
         {
-            CloseSafely();
+            GRZOnVIPAppDeactivated();
             return;
         }
         EnsureVisible();
-        Print("[GRZ Killfeed 0.2.2] OnShow called.");
+        Print("[GRZ Killfeed 0.2.3] OnShow called.");
     }
 
     override void OnHide()
     {
+        if (!m_GRZDismissRequested && (m_GRZWasInactive || !g_Game.IsAppActive()))
+        {
+            GRZOnVIPAppDeactivated();
+            super.OnHide();
+            return;
+        }
         m_GRZDismissRequested = true;
         GRZDisposeVIPGun();
         GRZLoadoutClientData.Changed.Remove(GRZReceiveVIPCatalogue);
         GRZLoadoutClientData.Result.Remove(GRZReceiveVIPResult);
-        GRZKillfeedBus.AppDeactivated.Remove(CloseSafely);
-        Print("[GRZ Killfeed 0.2.2] OnHide called.");
+        GRZKillfeedBus.AppDeactivated.Remove(GRZOnVIPAppDeactivated);
+        GRZKillfeedBus.AppActivated.Remove(GRZOnVIPAppActivated);
+        Print("[GRZ Killfeed 0.2.3] OnHide called.");
         super.OnHide();
     }
 
     override void OnVisibilityChanged(bool isVisible)
     {
         super.OnVisibilityChanged(isVisible);
-        if (!isVisible)
-            CloseSafely();
+        if (!isVisible) m_GRZPreviewDragging = false;
     }
 
     void CloseSafely()
@@ -392,7 +402,9 @@ class GRZKillfeedMenu extends UIScriptedMenu
         if (m_GRZDismissRequested)
             return;
         m_GRZDismissRequested = true;
-        GRZKillfeedBus.AppDeactivated.Remove(CloseSafely);
+        GRZKillfeedBus.AppDeactivated.Remove(GRZOnVIPAppDeactivated);
+        GRZKillfeedBus.AppActivated.Remove(GRZOnVIPAppActivated);
+        g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(GRZRestoreVIPFocus);
         g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(GRZKillfeedClient.OpenLocalPreview);
         g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(GRZKillfeedClient.RequestMenu);
         if (layoutRoot)
@@ -401,6 +413,30 @@ class GRZKillfeedMenu extends UIScriptedMenu
         // guard above preventing the later OnHide from decrementing twice.
         UnlockControls();
         Close();
+    }
+
+    void GRZOnVIPAppDeactivated()
+    {
+        if (m_GRZDismissRequested) return;
+        m_GRZWasInactive = true;
+        m_GRZPreviewDragging = false;
+    }
+
+    void GRZOnVIPAppActivated()
+    {
+        if (m_GRZDismissRequested || !g_Game) return;
+        g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(GRZRestoreVIPFocus);
+        g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZRestoreVIPFocus, 1, false);
+    }
+
+    void GRZRestoreVIPFocus()
+    {
+        if (m_GRZDismissRequested || !g_Game.IsAppActive() || g_Game.GetUIManager().GetMenu() != this) return;
+        m_GRZWasInactive = false;
+        LockControls(); // Guarded: never adds a second native focus lock.
+        EnsureVisible();
+        g_Game.GetUIManager().ShowUICursor(true);
+        if (m_GRZGunTab && m_GRZPreviewGun) GRZBindVIPPreview();
     }
 
     void EnsureVisible()
@@ -489,7 +525,8 @@ class GRZKillfeedMenu extends UIScriptedMenu
 
     override bool OnKeyDown(Widget w, int x, int y, int key)
     {
-        if (key == KeyCode.KC_ESCAPE || key == KeyCode.KC_TAB)
+        if (key == KeyCode.KC_TAB) return true;
+        if (key == KeyCode.KC_ESCAPE)
         {
             CloseSafely();
             return true;
@@ -552,6 +589,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
                 return true;
             case "Effect": animation.AnimationMode = (animation.AnimationMode + 1) % GRZNameStyle.EFFECT_COUNT; break;
             case "Speed": animation.Speed = (animation.Speed + 1) % 3; break;
+            case "CloseX":
             case "Close": CloseSafely(); return true;
             case "Test":
                 GRZKillfeedClient.Demo(Chosen);
@@ -754,8 +792,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
             m_Status.SetText("Preview animated clothing, then press EQUIP & SAVE.");
             if (!selectedGear) return;
             gearLabel.SetText(selectedGear.Name);
-            int gearFlags = ECE_LOCAL | ECE_NOLIFETIME | ECE_KEEPHEIGHT | ECE_NOSURFACEALIGN | ECE_NOPERSISTENCY_WORLD | ECE_NOPERSISTENCY_CHAR;
-            m_GRZPreviewGun = EntityAI.Cast(g_Game.CreateObjectEx(selectedGear.Type, "0 -1000 0", gearFlags));
+            m_GRZPreviewGun = GRZCreateVIPPreviewObject(selectedGear.Type);
             if (!m_GRZPreviewGun) { m_Status.SetText("Clothing preview could not be created."); return; }
             GRZPrepareVIPPreview(selectedGear.Type, true);
             g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZBindVIPPreview, 1, false);
@@ -778,8 +815,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
             if (wrapName == "") wrapName = wrap;
         }
         TextWidget.Cast(m_GRZGunPage.FindAnyWidget("VIPWrapName")).SetText(wrapName);
-        int flags = ECE_LOCAL | ECE_NOLIFETIME | ECE_KEEPHEIGHT | ECE_NOSURFACEALIGN | ECE_NOPERSISTENCY_WORLD | ECE_NOPERSISTENCY_CHAR;
-        m_GRZPreviewGun = EntityAI.Cast(g_Game.CreateObjectEx(gun.Type, "0 -1000 0", flags));
+        m_GRZPreviewGun = GRZCreateVIPPreviewObject(gun.Type);
         if (!m_GRZPreviewGun) { m_Status.SetText("Weapon preview model could not be created."); return; }
         bool ready = GRZLoadoutAttachments.EnsurePermanentSFGSuppressor(m_GRZPreviewGun, false);
         if (!GRZLoadoutAttachments.AttachScope(m_GRZPreviewGun, gun.ScopeType)) ready = false;
@@ -798,6 +834,18 @@ class GRZKillfeedMenu extends UIScriptedMenu
         g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZBindVIPPreview, 1, false);
     }
 
+    protected EntityAI GRZCreateVIPPreviewObject(string type)
+    {
+        EntityAI item = EntityAI.Cast(g_Game.CreateObjectEx(type, "0 0 0", ECE_LOCAL | ECE_CREATEPHYSICS | ECE_TRACE | ECE_NOLIFETIME));
+        if (item)
+        {
+            dBodyDestroy(item);
+            item.DisableSimulation(true);
+            item.SetAllowDamage(false);
+        }
+        return item;
+    }
+
     protected void GRZPrepareVIPPreview(string type, bool clothing)
     {
         if (m_GRZPreviewType != type)
@@ -813,6 +861,10 @@ class GRZKillfeedMenu extends UIScriptedMenu
     void GRZBindVIPPreview()
     {
         if (!m_GRZGunTab || !m_GRZGunPreview || !m_GRZPreviewGun || m_GRZDismissRequested) return;
+        Widget viewport = m_GRZGunPage.FindAnyWidget("VIPPreviewViewport");
+        if (viewport) { viewport.SetColor(0xFFFFFFFF); viewport.SetSort(10); viewport.Show(true); }
+        m_GRZGunPreview.SetSort(10);
+        m_GRZGunPage.FindAnyWidget("VIPResetView").SetSort(20);
         m_GRZGunPreview.Show(true);
         m_GRZGunPreview.SetColor(0xFFFFFFFF);
         m_GRZGunPreview.SetForceFlipEnable(false);
@@ -821,6 +873,9 @@ class GRZKillfeedMenu extends UIScriptedMenu
         m_GRZGunPreview.SetView(m_GRZPreviewGun.GetViewIndex());
         m_GRZGunPreview.SetModelPosition("0 0 1");
         GRZApplyVIPPreviewTransform();
+        float previewWidth, previewHeight;
+        m_GRZGunPreview.GetScreenSize(previewWidth, previewHeight);
+        Print(string.Format("[GRZ VIP Preview] Bound %1; visible=%2 size=%3x%4 attachments=%5", m_GRZPreviewGun.GetType(), m_GRZGunPreview.IsVisibleHierarchy(), previewWidth, previewHeight, m_GRZPreviewGun.GetInventory().AttachmentCount()));
     }
 
     protected void GRZApplyVIPPreviewTransform()

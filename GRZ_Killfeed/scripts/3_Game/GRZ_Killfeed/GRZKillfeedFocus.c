@@ -2,9 +2,13 @@ modded class DayZGame
 {
     override void OnDeactivateMessage()
     {
-        // Release this menu's focus before vanilla refreshes cursor visibility.
-        // This event still fires when background GUI updates are paused.
+        // Preserve menu state; native focus/cursor handling still runs normally.
         GRZKillfeedBus.AppDeactivated.Invoke();
         super.OnDeactivateMessage();
+    }
+    override void OnActivateMessage()
+    {
+        super.OnActivateMessage();
+        GRZKillfeedBus.AppActivated.Invoke();
     }
 }

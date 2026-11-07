@@ -197,7 +197,14 @@ def main():
     assert "override void OnDeactivateMessage()" in focus
     assert "GRZKillfeedBus.AppDeactivated.Invoke();" in focus
     assert "override void OnVisibilityChanged(bool isVisible)" in menu
-    assert "key == KeyCode.KC_ESCAPE || key == KeyCode.KC_TAB" in menu
+    assert "if (key == KeyCode.KC_TAB) return true;" in menu
+    assert "if (key == KeyCode.KC_ESCAPE)" in menu
+    assert 'case "CloseX":' in menu and 'CloseX' in declared
+    assert "GRZKillfeedBus.AppActivated.Invoke();" in focus
+    inactive = menu.split("void GRZOnVIPAppDeactivated()",1)[1].split("void GRZOnVIPAppActivated()",1)[0]
+    assert "CloseSafely" not in inactive and "m_GRZWasInactive = true" in inactive
+    visibility = menu.split("override void OnVisibilityChanged",1)[1].split("void CloseSafely",1)[0]
+    assert "CloseSafely();" not in visibility
     lock = menu.split("override void LockControls()", 1)[1].split("override void UnlockControls()", 1)[0]
     unlock = menu.split("override void UnlockControls()", 1)[1].split("override void Update", 1)[0]
     assert "if (m_GRZControlsLocked)" in lock
@@ -207,19 +214,26 @@ def main():
     closer = menu.split("void CloseSafely()", 1)[1].split("void EnsureVisible()", 1)[0]
     assert "if (m_GRZDismissRequested)" in closer
     assert closer.index("UnlockControls();") < closer.index("Close();")
-    assert "GRZKillfeedBus.AppDeactivated.Remove(CloseSafely);" in closer
+    assert "GRZKillfeedBus.AppDeactivated.Remove(GRZOnVIPAppDeactivated);" in closer
+    assert "Remove(GRZRestoreVIPFocus)" in closer
     assert "ResetGameFocus" not in menu
     menu_layout = files["gui/layouts/menu.layout"].decode()
     verify_menu_bounds(menu_layout)
     assert 'text "GRZ VIP"' in menu_layout
     assert 'VIPPreviewViewport' in declared and 'VIPResetView' in declared
+    assert 'VIPGunPreviewBacking' not in declared
+    render_creation = menu.split('protected EntityAI GRZCreateVIPPreviewObject',1)[1].split('protected void GRZPrepareVIPPreview',1)[0]
+    assert '"0 -1000 0"' not in render_creation and 'ECE_CREATEPHYSICS | ECE_TRACE' in render_creation
+    assert 'dBodyDestroy(item)' in render_creation and 'DisableSimulation(true)' in render_creation
+    assert 'viewport.SetSort(10)' in menu and '[GRZ VIP Preview] Bound' in menu
+
     preview_menu = (SOURCE/'scripts/5_Mission/GRZ_Killfeed/GRZKillfeedMenu.c').read_text()
     assert 'RegisterOnMouseButtonDown(m_GRZGunPreview' in preview_menu
     assert 'RegisterOnMouseWheel(m_GRZGunPreview' in preview_menu
     assert 'm_GRZPreviewZoom + wheel * 0.1, 0.5, 2.5' in preview_menu
     assert 'Remove(GRZBindVIPPreview)' in preview_menu and 'UnregisterWidget(m_GRZGunPreview)' in preview_menu
     assert 'previewWeapon.SpawnAmmo(previewAmmo)' in preview_menu
-    gun_preview = preview_menu.split('int flags = ECE_LOCAL',1)[1].split('protected void GRZPrepareVIPPreview',1)[0]
+    gun_preview = preview_menu.split('m_GRZPreviewGun = GRZCreateVIPPreviewObject(gun.Type)',1)[1].split('protected EntityAI GRZCreateVIPPreviewObject',1)[0]
     assert gun_preview.index('CreateAttachment(wrap)') < gun_preview.index('CallLater(GRZBindVIPPreview')
     assert gun_preview.index('AttachScope') < gun_preview.index('CallLater(GRZBindVIPPreview')
     assert gun_preview.index('EnsureSuppressor') < gun_preview.index('CallLater(GRZBindVIPPreview')
