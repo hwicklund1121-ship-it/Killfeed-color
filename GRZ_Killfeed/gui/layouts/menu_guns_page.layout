@@ -258,26 +258,12 @@ vexactpos 1
 hexactsize 1
 vexactsize 1
 color 1 1 1 1
-clipchildren 1
-{
-ItemPreviewWidgetClass VIPGunPreview
-{
-position 0 0
-size 712 210
-hexactpos 1
-vexactpos 1
-hexactsize 1
-vexactsize 1
-ignorepointer 0
-color 1 1 1 1
-mode blend
-}
-}
+ignorepointer 1
 }
 ButtonWidgetClass VIPResetView
 {
-position 920 64
-size 108 30
+position 382 280
+size 108 42
 hexactpos 1
 vexactpos 1
 hexactsize 1
@@ -287,7 +273,7 @@ color 0 0 0 0
 ImageWidgetClass VIPResetViewBorder
 {
 position 0 0
-size 108 30
+size 108 42
 hexactpos 1
 vexactpos 1
 hexactsize 1
@@ -300,7 +286,7 @@ color 0.22 0.22 0.22 1
 ImageWidgetClass VIPResetViewFill
 {
 position 1 1
-size 106 28
+size 106 40
 hexactpos 1
 vexactpos 1
 hexactsize 1
@@ -313,7 +299,7 @@ color 0.065 0.065 0.065 1
 TextWidgetClass VIPResetViewLabel
 {
 position 12 0
-size 84 30
+size 84 42
 hexactpos 1
 vexactpos 1
 hexactsize 1
@@ -384,8 +370,8 @@ text "<"
 }
 TextWidgetClass VIPGunName
 {
-position 382 280
-size 596 42
+position 500 280
+size 478 42
 hexactpos 1
 vexactpos 1
 hexactsize 1

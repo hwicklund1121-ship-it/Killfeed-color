@@ -3,12 +3,7 @@
   "displayName": "XIMS CS5",
   "descriptionShort": "Made By Blake",
   "base_class": "UAV_CS5_BLACK",
-  "selection_order": [
-    "color",
-    "color2",
-    "color3",
-    "color4"
-  ],
+  "model_texture_binding": "Direct per-part texture path remap in a private byte-preserving compiled model; broken parent hidden selections cleared.",
   "textures": {
     "cs5_receiver": {
       "source_png_sha256": "9708d0eb658dcd61371b4428e147bb47a21276094214fe84efc2cbcfb2821215",
@@ -44,6 +39,16 @@
     }
   },
   "normal_maps": "Native CS5 NOHQ/SMDI and material detail retained; supplied exported normals are constant flat normal maps.",
-  "model": "Inherited original CS5 model; FBX recompilation not required.",
-  "pbo_sha256": "87aaf7b635995dfc6cf9082125a027b716bf1f83253ca9c6b58105555a650b63"
+  "model": "Private compiled CS5 model with equal-length colour-map path edits only; existing geometry, proxies, UVs, skeleton and native material references retained.",
+  "model_source_sha256": "d641baba1d7d5ae580954c2703256309f16e175dcb6e284109e33d6be988d9d4",
+  "model_painted_sha256": "5a0e622edf119250b8d3d55ca6f78cfb0ab9880b536b47237a38f1c77174ea1a",
+  "model_texture_replacements": {
+    "cs5_receiver": 5,
+    "cs5_stock": 5,
+    "cs5_barrel": 5,
+    "suppressor": 5
+  },
+  "geometry_preserved_byte_for_byte": true,
+  "pbo_sha256": "3dd09f8a200dd7193b71501291ea9420aab43099760ddacb75ea248d40390710",
+  "revision": "direct_model_bindings"
 }

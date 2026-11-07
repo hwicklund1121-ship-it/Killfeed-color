@@ -17,11 +17,11 @@ class CfgWeapons
   displayName = "XIMS CS5";
   descriptionShort = "Made By Blake";
   GRZVipOnly = 1;
-  hiddenSelectionsTextures[] = {
-   "GRZ_XimsCS5\data\cs5_receiver_co.paa",
-   "GRZ_XimsCS5\data\cs5_stock_co.paa",
-   "GRZ_XimsCS5\data\cs5_barrel_co.paa",
-   "GRZ_XimsCS5\data\suppressor_co.paa"
-  };
+  // This model's compiled skin sections do not match the parent config.
+  // The private model binds each painted texture directly on every visual LOD.
+  model = "GRZ_XimsCS5\data\cs5_xims.p3d";
+  hiddenSelections[] = {};
+  hiddenSelectionsTextures[] = {};
+  hiddenSelectionsMaterials[] = {};
  };
 };

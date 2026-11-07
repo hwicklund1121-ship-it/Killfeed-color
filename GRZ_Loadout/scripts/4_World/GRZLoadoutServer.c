@@ -271,7 +271,9 @@ class GRZLoadoutServer
    g_Game.ConfigGetChildName("CfgVehicles", j, wrap);
    if (g_Game.ConfigGetInt("CfgVehicles " + wrap + " scope") != 2)
     continue;
-   if (g_Game.IsKindOf(wrap, "GhillieAtt_ColorBase"))
+   array<string> wrapSlots = new array<string>;
+   g_Game.ConfigGetTextArray("CfgVehicles " + wrap + " inventorySlot", wrapSlots);
+   if (g_Game.IsKindOf(wrap, "GhillieAtt_ColorBase") || wrapSlots.Find("weaponWrap") >= 0)
     Catalogue.Wraps.Insert(wrap);
   }
   Print(string.Format("[GRZ Loadout] Registered %1 guns and %2 wrap options.", Catalogue.Guns.Count(), Catalogue.Wraps.Count()));
@@ -578,11 +580,15 @@ modded class PlayerBase
     foreach (GRZLoadoutGun available : GRZLoadoutServer.Catalogue.Guns)
      if (!GRZVipLoadoutPolicy.PaidGun(available.Type)) personal.Guns.Insert(available);
     if (personal.VipAuthorized) personal.VipGuns = GRZLoadoutServer.Catalogue.VipGuns;
+    // Put the actual animated/paid choices immediately after No wrap in VIP.
+    if (personal.VipAuthorized) personal.VipWraps.Insert("");
     foreach (string availableWrap : GRZLoadoutServer.Catalogue.Wraps)
     {
      if (!GRZVipLoadoutPolicy.PaidWrap(availableWrap)) personal.Wraps.Insert(availableWrap);
-     if (personal.VipAuthorized) personal.VipWraps.Insert(availableWrap);
+     else if (personal.VipAuthorized) personal.VipWraps.Insert(availableWrap);
     }
+    foreach (string regularWrap : GRZLoadoutServer.Catalogue.Wraps)
+     if (personal.VipAuthorized && regularWrap != "" && !GRZVipLoadoutPolicy.PaidWrap(regularWrap)) personal.VipWraps.Insert(regularWrap);
     array<ref GRZLoadoutClothing> freeClothes = new array<ref GRZLoadoutClothing>;
     foreach (GRZLoadoutClothing candidateClothing : GRZLoadoutServer.Catalogue.Clothing)
     {

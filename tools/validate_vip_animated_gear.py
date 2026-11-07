@@ -14,7 +14,8 @@ assert server.index('if (m_GRZDuelMatch != "")')<server.index('if (rpc_type == G
 assert 'gearChoices[selectedSlot] = gearType' in branch and 'gearChoices.Insert("")' in branch
 assert 'GRZOutfitStore.Snapshot' in branch and 'priorOutfit.Character' in branch
 assert 'if (!GRZVipLoadoutPolicy.PaidWrap(availableWrap)) personal.Wraps.Insert' in server
-assert 'if (personal.VipAuthorized) personal.VipWraps.Insert' in server
+assert 'else if (personal.VipAuthorized) personal.VipWraps.Insert(availableWrap)' in server
+assert 'wrapSlots.Find("weaponWrap") >= 0' in server
 assert 'if (personal.VipAuthorized) personal.VipClothing.Insert' in server
 assert 'page.Insert(freeClothes[clothingIndex])' in server
 policy=(r/'GRZ_Loadout/scripts/4_World/GRZVipLoadoutPolicy.c').read_text()

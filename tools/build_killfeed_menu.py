@@ -17,7 +17,7 @@ def panel(name, x, y, w, h, color, children=''):
 
 
 def frame(name, x, y, w, h, children='', props=''):
-    color = '1 1 1 1' if name in ('PageHost','GRZGunPage','VIPPreviewViewport') else '0 0 0 0'
+    color = '1 1 1 1' if name in ('PageHost','GRZGunPage','VIPPreviewViewport','GRZVIPNativePreviewRoot') else '0 0 0 0'
     return widget('Frame', name, x, y, w, h, 'color '+color+'\n' + props, children)
 
 
@@ -101,11 +101,12 @@ def main():
         guns += button(name,label,x,0,244,42)
     guns += panel('VIPGunListBacking',0,60,300,300,'0.06 0.06 0.07 1')
     guns += widget('TextListbox','VIPGunList',0,60,300,300,'color 1 1 1 1\nfont "gui/fonts/sdf_MetronLight16"')
+    guns += frame('VIPPreviewViewport',324,60,712,210,props='ignorepointer 1')
     item_view = widget('ItemPreview','VIPGunPreview',0,0,712,210,'ignorepointer 0\ncolor 1 1 1 1\nmode blend')
-    guns += frame('VIPPreviewViewport',324,60,712,210,item_view,'clipchildren 1')
-    guns += button('VIPResetView','RESET VIEW',920,64,108,30)
+    (OUT/'menu_item_preview.layout').write_text(frame('GRZVIPNativePreviewRoot',0,0,712,210,item_view,'visible 0\nclipchildren 1'))
+    guns += button('VIPResetView','RESET VIEW',382,280,108,42)
     guns += button('VIPGunPrevious','<',324,280,48,42)
-    guns += text('VIPGunName','Loading reskins...',382,280,596,42,centered=True)
+    guns += text('VIPGunName','Loading reskins...',500,280,478,42,centered=True)
     guns += button('VIPGunNext','>',988,280,48,42)
     guns += text('VIPWrapHeading','GHILLIE WRAP',324,332,156,42)
     guns += button('VIPWrapPrevious','<',486,332,48,42)

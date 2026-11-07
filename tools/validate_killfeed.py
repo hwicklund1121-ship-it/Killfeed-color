@@ -225,7 +225,10 @@ def main():
     render_creation = menu.split('protected EntityAI GRZCreateVIPPreviewObject',1)[1].split('protected void GRZPrepareVIPPreview',1)[0]
     assert '"0 -1000 0"' not in render_creation and 'ECE_CREATEPHYSICS | ECE_TRACE' in render_creation
     assert 'dBodyDestroy(item)' in render_creation and 'DisableSimulation(true)' in render_creation
-    assert 'viewport.SetSort(10)' in menu and '[GRZ VIP Preview] Bound' in menu
+    assert 'm_GRZPreviewRoot.SetSort(100001)' in menu and '[GRZ VIP Preview] Bound' in menu
+    assert 'menu_item_preview.layout' in menu and 'm_GRZPreviewRoot.Unlink()' in menu
+    assert 'm_GRZGunPreview.SetView(0)' in menu
+    assert 'm_GRZGunPreview.GetItem() != m_GRZPreviewGun' in menu
 
     preview_menu = (SOURCE/'scripts/5_Mission/GRZ_Killfeed/GRZKillfeedMenu.c').read_text()
     assert 'RegisterOnMouseButtonDown(m_GRZGunPreview' in preview_menu
@@ -234,9 +237,9 @@ def main():
     assert 'Remove(GRZBindVIPPreview)' in preview_menu and 'UnregisterWidget(m_GRZGunPreview)' in preview_menu
     assert 'previewWeapon.SpawnAmmo(previewAmmo)' in preview_menu
     gun_preview = preview_menu.split('m_GRZPreviewGun = GRZCreateVIPPreviewObject(gun.Type)',1)[1].split('protected EntityAI GRZCreateVIPPreviewObject',1)[0]
-    assert gun_preview.index('CreateAttachment(wrap)') < gun_preview.index('CallLater(GRZBindVIPPreview')
-    assert gun_preview.index('AttachScope') < gun_preview.index('CallLater(GRZBindVIPPreview')
-    assert gun_preview.index('EnsureSuppressor') < gun_preview.index('CallLater(GRZBindVIPPreview')
+    assert gun_preview.index('CreateAttachment(wrap)') < gun_preview.index('GRZBindVIPPreview();')
+    assert gun_preview.index('AttachScope') < gun_preview.index('GRZBindVIPPreview();')
+    assert gun_preview.index('EnsureSuppressor') < gun_preview.index('GRZBindVIPPreview();')
     assert 'GunTab' in declared and 'VIPGunList' in declared and 'VIPWrapName' in declared
     assert "ImageWidgetClass MenuLogo" in menu_layout
     assert "MenuOutline" not in menu_layout
