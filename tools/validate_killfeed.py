@@ -240,6 +240,10 @@ def main():
     assert 'm_GRZGunPreview.SetSize(m_GRZPreviewZoom, m_GRZPreviewZoom)' in menu
     assert 'menu_item_preview.layout' not in menu and 'SetSort(100001)' not in menu
     assert 'm_GRZGunPreview.GetItem() != m_GRZPreviewGun' in menu
+    binding = menu.split('void GRZBindVIPPreview()',1)[1].split('protected void GRZApplyVIPPreviewTransform()',1)[0]
+    assert binding.index('m_GRZPreviewRoot.Show(true)') < binding.index('GRZLoadoutItemPreview.Create(')
+    assert binding.index('IsVisibleHierarchy()') < binding.index('GRZLoadoutItemPreview.Create(')
+
     positioner = menu.split('protected void PositionPanel()',1)[1].split('void ApplyLocalStyle(',1)[0]
     assert positioner.index('width == m_GRZScreenWidth') < positioner.index('geometry.Target.SetSize')
     assert 'layoutRoot.SetScreenSize' not in positioner and 'GRZApplyVIPPreviewTransform()' not in positioner

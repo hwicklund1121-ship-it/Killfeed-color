@@ -278,14 +278,8 @@ class GRZKillfeedMenu extends UIScriptedMenu
         logo.SetSort(0);
         GRZApplyPanelTextures(layoutRoot);
         m_GRZPreviewRoot = m_GRZGunPage.FindAnyWidget("VIPPreviewViewport");
-        m_GRZGunPreview = GRZLoadoutItemPreview.Create(m_GRZPreviewRoot);
-        if (!m_GRZGunPreview) Error("[GRZ VIP Preview] Could not create shared Loadout preview widget.");
         m_GRZGunList = TextListboxWidget.Cast(m_GRZGunPage.FindAnyWidget("VIPGunList"));
-        if (m_GRZGunPreview && WidgetEventHandler.GetInstance())
-        {
-            WidgetEventHandler.GetInstance().RegisterOnMouseButtonDown(m_GRZGunPreview, this, "GRZVIPPreviewMouseDown");
-            WidgetEventHandler.GetInstance().RegisterOnMouseWheel(m_GRZGunPreview, this, "GRZVIPPreviewWheel");
-        }
+        // Create the native model widget when this page is shown, after layout sizing.
         GRZLoadoutClientData.Changed.Insert(GRZReceiveVIPCatalogue);
         GRZLoadoutClientData.Result.Insert(GRZReceiveVIPResult);
         CaptureMenuGeometry(layoutRoot.FindAnyWidget("MenuPanel"));
@@ -337,7 +331,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
         if (m_GRZWasInactive) GRZRestoreVIPFocus();
         super.Update(timeslice);
         m_Time += timeslice;
-        if (m_GRZGunTab && m_GRZPreviewGun && m_GRZGunPreview && m_GRZGunPreview.GetItem() != m_GRZPreviewGun) GRZBindVIPPreview();
+        if (m_GRZGunTab && m_GRZPreviewGun && (!m_GRZGunPreview || m_GRZGunPreview.GetItem() != m_GRZPreviewGun)) GRZBindVIPPreview();
         GRZUpdateVIPPreviewRotation();
         if (m_GRZGunTab && m_GRZGunList)
         {
@@ -862,9 +856,19 @@ class GRZKillfeedMenu extends UIScriptedMenu
 
     void GRZBindVIPPreview()
     {
-        if (!m_GRZGunTab || !m_GRZGunPreview || !m_GRZPreviewGun || m_GRZDismissRequested) return;
-        if (!m_GRZPreviewRoot) return;
+        if (!m_GRZGunTab || !m_GRZPreviewGun || m_GRZDismissRequested || !m_GRZPreviewRoot) return;
         m_GRZPreviewRoot.Show(true);
+        if (!m_GRZPreviewRoot.IsVisibleHierarchy()) return;
+        if (!m_GRZGunPreview)
+        {
+            m_GRZGunPreview = GRZLoadoutItemPreview.Create(m_GRZPreviewRoot);
+            if (!m_GRZGunPreview) { m_Status.SetText("Native item preview could not be created."); return; }
+            if (WidgetEventHandler.GetInstance())
+            {
+                WidgetEventHandler.GetInstance().RegisterOnMouseButtonDown(m_GRZGunPreview, this, "GRZVIPPreviewMouseDown");
+                WidgetEventHandler.GetInstance().RegisterOnMouseWheel(m_GRZGunPreview, this, "GRZVIPPreviewWheel");
+            }
+        }
         m_GRZGunPreview.Show(true);
         GRZLoadoutItemPreview.Bind(m_GRZGunPreview, m_GRZPreviewGun);
         GRZApplyVIPPreviewTransform();
