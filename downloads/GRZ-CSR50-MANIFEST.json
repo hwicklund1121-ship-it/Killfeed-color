@@ -1,0 +1,38 @@
+{
+  "class": "GRZ_CSR50",
+  "displayName": "GRZ CSR50",
+  "descriptionShort": "Made By Blake",
+  "base_class": "UAV_CSR50",
+  "required_patch": "CSR50_Base",
+  "VIP_only": true,
+  "normal_conversion": "Supplied OpenGL normal (matches kit Blender preview) converted to DirectX by inverting green. Native SWIZ [5,4,2,3] retained with inverted X packed into alpha.",
+  "textures": {
+    "colour": {
+      "source_png_sha256": "cf389019182fdc50b831ba2e9153e2bf61aa7a43b7f315cf8fdc1bdefbb27061",
+      "size": [
+        4096,
+        4096
+      ],
+      "paa_sha256": "e5149dae777964996c46667126af2a6a64ba40827d13457679028729aa0570d8"
+    },
+    "normal": {
+      "source_png_sha256": "7ab02fb5c9daf266c71eed5b14aa36585ff71e51706179fc20024087e47b9fce",
+      "size": [
+        4096,
+        4096
+      ],
+      "paa_sha256": "2a1842085843ee3aaebc8710f162f8367a4e8c82ea0dd4fbf4a79efb4f6428cc"
+    }
+  },
+  "model_path_replacements": {
+    "part1_co.paa": 5,
+    "part1_nohq.paa": 5,
+    "part1_smdi.paa": 5,
+    "part1.rvmat": 5
+  },
+  "model_source_sha256": "379fc870c1ca56f4b1adf35aac6307a17b8e89a72b528d84121e12ddb9cf25c5",
+  "model_reskin_sha256": "77b65c1a2ea7a0e8e717e6c4e32ce78348a32875aaf51a3c46ec94755febd20a",
+  "geometry_uv_skeleton_proxies_preserved": true,
+  "normal_specular_materials": "Supplied baked normal bound in native model and own RVMAT; native CSR50 SMDI retained unchanged.",
+  "pbo_sha256": "e5f8049393572711cc944962e9b6730c551375c62ea9cefb8997f730debc92b6"
+}

@@ -36,7 +36,7 @@ assert result.index('if (!Commit(next)) return false;') < result.index('audit.Ki
 assert result.index('if (!Commit(next)) return false;') < result.index('promotion.Kind = "rank_up"')
 with ZipFile(r/'downloads/GRZ-Arena-Menu-Update.zip') as z:
  manifest=json.loads(z.read('MANIFEST.json'))
- assert len(manifest['pbo'])==14
+ assert len(manifest['pbo'])==15
  for addon in modules:
   assert z.read(addon+'.pbo')==build(r/addon),addon
  assert z.read('DISCORD-LOGGING.md')==(r/'DISCORD-LOGGING.md').read_bytes()
@@ -47,4 +47,4 @@ with ZipFile(r/'downloads/GRZ-Discord-Logging-Bot.zip') as z:
   assert '.env' not in rel.parts and 'logging_data' not in rel.parts and '.venv' not in rel.parts
   assert not name.endswith(('.sqlite3','.db','.lock'))
   assert z.read(name)==(r/'discord-logging-bot'/rel).read_bytes()
-print('All 32 audit event kinds map to the 20 channels; server authority, post-commit hooks, 14-addon package and credential-free bot ZIP verified. DayZ runtime untested.')
+print('All 32 audit event kinds map to the 20 channels; server authority, post-commit hooks, 15-addon package and credential-free bot ZIP verified. DayZ runtime untested.')
