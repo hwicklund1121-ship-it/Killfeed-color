@@ -1,5 +1,5 @@
 {
-  "Version": "0.2.1",
+  "Version": "0.3.0",
   "TargetDayZ": "1.30.164.289",
   "SourceHashes": {
     "dz/anims/workspaces/player/player_main/player_main.agr": "89f82f6de2461cf42367b989b2b1392814a4df9272034fbb23be8e5c2106df23",
@@ -24,15 +24,15 @@
       "Transition": "{6930A8DE26987073}",
       "From": "Pne",
       "Before": "PneToErc",
-      "After": "Erc",
-      "BlendSeconds": 0.16
+      "After": "PneToErc",
+      "BlendSeconds": 0.1
     },
     {
       "Transition": "{6930A8DE26987090}",
       "From": "PoB",
       "Before": "PoBToErc",
-      "After": "Erc",
-      "BlendSeconds": 0.16
+      "After": "PoBToErc",
+      "BlendSeconds": 0.1
     }
   ],
   "RollRoutes": [
@@ -53,32 +53,98 @@
     {
       "Transition": "{A619000000000003}",
       "From": "ProneRoll",
-      "To": "IdleLow",
-      "Condition": "Stance == 0 && !Raised && GetLowerTime() > 0.12",
-      "BlendSeconds": 0.16
-    },
-    {
-      "Transition": "{A619000000000004}",
-      "From": "ProneRoll",
-      "To": "IdleRas",
-      "Condition": "Stance == 0 && Raised && GetLowerTime() > 0.12",
-      "BlendSeconds": 0.16
+      "To": "GRZRecoverFront",
+      "Condition": "Stance == 0 && GetLowerTime() > 0.12",
+      "BlendSeconds": 0.08
     },
     {
       "Transition": "{A619000000000005}",
       "From": "PneOnBackRoll",
-      "To": "IdleLow",
-      "Condition": "Stance == 0 && !Raised && GetLowerTime() > 0.12",
-      "BlendSeconds": 0.16
+      "To": "GRZRecoverBack",
+      "Condition": "Stance == 0 && GetLowerTime() > 0.12",
+      "BlendSeconds": 0.08
     },
     {
-      "Transition": "{A619000000000006}",
-      "From": "PneOnBackRoll",
+      "Transition": "{A630000000000001}",
+      "From": "GRZRecoverFront",
+      "To": "IdleLow",
+      "Condition": "RemainingTimeLess(0.08) && Stance == 0 && !Raised && MovementSpeed == 0",
+      "BlendSeconds": 0.08
+    },
+    {
+      "Transition": "{A630000000000002}",
+      "From": "GRZRecoverFront",
+      "To": "MovementLow",
+      "Condition": "RemainingTimeLess(0.08) && Stance == 0 && !Raised && MovementSpeed > 0",
+      "BlendSeconds": 0.08
+    },
+    {
+      "Transition": "{A630000000000003}",
+      "From": "GRZRecoverFront",
       "To": "IdleRas",
-      "Condition": "Stance == 0 && Raised && GetLowerTime() > 0.12",
-      "BlendSeconds": 0.16
+      "Condition": "RemainingTimeLess(0.08) && Stance == 0 && Raised && MovementSpeed == 0",
+      "BlendSeconds": 0.08
+    },
+    {
+      "Transition": "{A630000000000004}",
+      "From": "GRZRecoverFront",
+      "To": "MovementRas",
+      "Condition": "RemainingTimeLess(0.08) && Stance == 0 && Raised && MovementSpeed > 0",
+      "BlendSeconds": 0.08
+    },
+    {
+      "Transition": "{A630000000000005}",
+      "From": "GRZRecoverFront",
+      "To": "StanceChange",
+      "Condition": "Stance != 0",
+      "BlendSeconds": 0.08
+    },
+    {
+      "Transition": "{A630000000000006}",
+      "From": "GRZRecoverBack",
+      "To": "IdleLow",
+      "Condition": "RemainingTimeLess(0.08) && Stance == 0 && !Raised && MovementSpeed == 0",
+      "BlendSeconds": 0.08
+    },
+    {
+      "Transition": "{A630000000000007}",
+      "From": "GRZRecoverBack",
+      "To": "MovementLow",
+      "Condition": "RemainingTimeLess(0.08) && Stance == 0 && !Raised && MovementSpeed > 0",
+      "BlendSeconds": 0.08
+    },
+    {
+      "Transition": "{A630000000000008}",
+      "From": "GRZRecoverBack",
+      "To": "IdleRas",
+      "Condition": "RemainingTimeLess(0.08) && Stance == 0 && Raised && MovementSpeed == 0",
+      "BlendSeconds": 0.08
+    },
+    {
+      "Transition": "{A630000000000009}",
+      "From": "GRZRecoverBack",
+      "To": "MovementRas",
+      "Condition": "RemainingTimeLess(0.08) && Stance == 0 && Raised && MovementSpeed > 0",
+      "BlendSeconds": 0.08
+    },
+    {
+      "Transition": "{A63000000000000A}",
+      "From": "GRZRecoverBack",
+      "To": "StanceChange",
+      "Condition": "Stance != 0",
+      "BlendSeconds": 0.08
     }
   ],
+  "Recovery": {
+    "Clips": [
+      "dz/anims/anm/player/moves/rifles/transitions/p_rfl_pne_trans_erc_low.anm",
+      "dz/anims/anm/player/moves/rifles/transitions/p_rfl_pne_trans_erc_ras.anm",
+      "dz/anims/anm/player/moves/rifles/transitions/p_rfl_pne_onback_trans_erc_low.anm",
+      "dz/anims/anm/player/moves/rifles/transitions/p_rfl_pne_onback_trans_erc_ras.anm"
+    ],
+    "SpeedRequest": 2.2,
+    "PreparedStrengthWeight": "clamp(ActionProgress * 1000, 0, 1)"
+  },
   "DirectionBlend": {
     "BodySource": "Locomotion.PneRas.AimToBack",
     "BodyValueX": "AimX",
@@ -88,6 +154,6 @@
     "StanceWeaponBlendSeconds": 0.14,
     "TargetMapping": "look right -> left ground side; look left -> right ground side; anatomy requires native verification"
   },
-  "LocomotionSHA256": "dc5ef86a20cae57914a8701dcea802b055ee4de4c2276be3b2bb880cee6f4fe7",
+  "LocomotionSHA256": "54fed6ba4c7b55ca3813c3b862b727c06c609a363f9d83407e6fce91df120434",
   "Limits": "Source/package checks only; native graph loading and gameplay require DayZ testing."
 }

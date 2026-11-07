@@ -1,8 +1,9 @@
-// GRZ stance support paired with the v0.2.1 modified vanilla drop graph.
+// GRZ stance support paired with the v0.3.0 modified vanilla drop graph.
 // No LUGU scripts/graphs or forced player positions.
 class GRZInstaDropTransitions
 {
  bool OverrideTransitionSpeeds = false;
+ bool TuneRecoveryInInstaDrop = false;
  float DropSpeed = 2.0;
  float RecoverySpeed = 1.6;
  ref array<string> Drop = new array<string>;
@@ -38,11 +39,12 @@ class GRZInstaDrop
   GetGame().ConfigGetText("CfgVehicles SurvivorBase enfAnimSys graphName", graph);
   if (!GetGame().ConfigIsExisting("CfgPatches GRZ_InstaDropGraph") || graph != "GRZ_InstaDropGraph/player_main.agr")
   {
-   Print("[GRZ InstaDrop] v0.2.1 inactive: graph addon missing or graph overridden. Selected graph=" + graph);
+   Print("[GRZ InstaDrop] v0.3.0 inactive: graph addon missing or graph overridden. Selected graph=" + graph);
    return;
   }
+  GRZInstaDropRecovery.Apply(settings.TuneRecoveryInInstaDrop, settings.RecoverySpeed);
   Ready = true;
-  Print("[GRZ InstaDrop] v0.2.1 graph selected: GRZ_InstaDropGraph/player_main.agr. Native directional prone-pose sampling enabled; opposite-side landing target. Drop blend=0.14; direct stand blend=0.16. Gun-lift native roll routes enabled; forced stand requires an actual roll. Verify the native roll-start log.");
+  Print("[GRZ InstaDrop] v0.3.0 graph selected: GRZ_InstaDropGraph/player_main.agr. Native directional prone-pose sampling enabled; opposite-side landing target. Drop blend=0.14; native animated get-up recovery enabled. Gun-lift native roll routes enabled; forced stand requires an actual roll. Verify the native roll-start log.");
  }
 };
 modded class DayZPlayerTypeUtils

@@ -44,14 +44,9 @@ def change_property(block, key, before, after):
     return result
 
 
-ROLL_ROUTES = [
- ('{A619000000000001}', 'Throwing', 'PneOnBackRoll', 'IsCommand(CMD_Roll) && Stance == 2 && ThrowingOnBack && !IsTag("TagThrowingIn") && !IsTag("TagThrowingOut") && !IsTag("TagThrowingCancel")', '0.1'),
- ('{A619000000000002}', 'Throwing', 'ProneRoll', 'IsCommand(CMD_Roll) && Stance == 2 && !ThrowingOnBack && !IsTag("TagThrowingIn") && !IsTag("TagThrowingOut") && !IsTag("TagThrowingCancel")', '0.1'),
- ('{A619000000000003}', 'ProneRoll', 'IdleLow', 'Stance == 0 && !Raised && GetLowerTime() > 0.12', '0.16'),
- ('{A619000000000004}', 'ProneRoll', 'IdleRas', 'Stance == 0 && Raised && GetLowerTime() > 0.12', '0.16'),
- ('{A619000000000005}', 'PneOnBackRoll', 'IdleLow', 'Stance == 0 && !Raised && GetLowerTime() > 0.12', '0.16'),
- ('{A619000000000006}', 'PneOnBackRoll', 'IdleRas', 'Stance == 0 && Raised && GetLowerTime() > 0.12', '0.16'),
-]
+ROLL_ROUTES = [('{A619000000000001}', 'Throwing', 'PneOnBackRoll', 'IsCommand(CMD_Roll) && Stance == 2 && ThrowingOnBack && !IsTag("TagThrowingIn") && !IsTag("TagThrowingOut") && !IsTag("TagThrowingCancel")', '0.1'), ('{A619000000000002}', 'Throwing', 'ProneRoll', 'IsCommand(CMD_Roll) && Stance == 2 && !ThrowingOnBack && !IsTag("TagThrowingIn") && !IsTag("TagThrowingOut") && !IsTag("TagThrowingCancel")', '0.1'), ('{A619000000000003}', 'ProneRoll', 'GRZRecoverFront', 'Stance == 0 && GetLowerTime() > 0.12', '0.08'), ('{A619000000000005}', 'PneOnBackRoll', 'GRZRecoverBack', 'Stance == 0 && GetLowerTime() > 0.12', '0.08'), ('{A630000000000001}', 'GRZRecoverFront', 'IdleLow', 'RemainingTimeLess(0.08) && Stance == 0 && !Raised && MovementSpeed == 0', '0.08'), ('{A630000000000002}', 'GRZRecoverFront', 'MovementLow', 'RemainingTimeLess(0.08) && Stance == 0 && !Raised && MovementSpeed > 0', '0.08'), ('{A630000000000003}', 'GRZRecoverFront', 'IdleRas', 'RemainingTimeLess(0.08) && Stance == 0 && Raised && MovementSpeed == 0', '0.08'), ('{A630000000000004}', 'GRZRecoverFront', 'MovementRas', 'RemainingTimeLess(0.08) && Stance == 0 && Raised && MovementSpeed > 0', '0.08'), ('{A630000000000005}', 'GRZRecoverFront', 'StanceChange', 'Stance != 0', '0.08'), ('{A630000000000006}', 'GRZRecoverBack', 'IdleLow', 'RemainingTimeLess(0.08) && Stance == 0 && !Raised && MovementSpeed == 0', '0.08'), ('{A630000000000007}', 'GRZRecoverBack', 'MovementLow', 'RemainingTimeLess(0.08) && Stance == 0 && !Raised && MovementSpeed > 0', '0.08'), ('{A630000000000008}', 'GRZRecoverBack', 'IdleRas', 'RemainingTimeLess(0.08) && Stance == 0 && Raised && MovementSpeed == 0', '0.08'), ('{A630000000000009}', 'GRZRecoverBack', 'MovementRas', 'RemainingTimeLess(0.08) && Stance == 0 && Raised && MovementSpeed > 0', '0.08'), ('{A63000000000000A}', 'GRZRecoverBack', 'StanceChange', 'Stance != 0', '0.08')]
+RECOVERY_STATES = 'AnimSrcNodeState GRZRecoverFront {\n       Tags {\n        "TagStanceChange"\n       }\n       Child "PneToErcT"\n       StartCondition "false"\n       TimeStorage "Real Time"\n       IsExit 0\n      }\n      AnimSrcNodeState GRZRecoverBack {\n       Tags {\n        "TagStanceChange" "TagProneBack" "TagProneBackExit"\n       }\n       Child "POBToErcRaisedT"\n       StartCondition "false"\n       TimeStorage "Real Time"\n       IsExit 0\n      }\n      '
+RECOVERY_CLIPS = ['dz/anims/anm/player/moves/rifles/transitions/p_rfl_pne_trans_erc_low.anm', 'dz/anims/anm/player/moves/rifles/transitions/p_rfl_pne_trans_erc_ras.anm', 'dz/anims/anm/player/moves/rifles/transitions/p_rfl_pne_onback_trans_erc_low.anm', 'dz/anims/anm/player/moves/rifles/transitions/p_rfl_pne_onback_trans_erc_ras.anm']
 
 def roll_route_text():
     result = []
@@ -86,6 +81,23 @@ def patch_direction(source):
     return result[:a] + DIRECTION_BODY + '\n    ' + result[a:]
 
 
+def patch_recovery(source):
+    a,b=named_block(source,'AnimSrcNodeBlend','ThrowStrengthIdleB')
+    source=source[:a]+change_property(source[a:b],'BlendWeight','1.0','clamp(ActionProgress * 1000, 0, 1)')+source[b:]
+    a,b=named_block(source,'AnimSrcNodeStateMachine','ThrowIdleStanceSTM')
+    machine=source[a:b]
+    for guid,before in [('{6930A8DE2698708A}','GetLowerTime() > 0.8'),('{6930A8DE269870AD}','GetLowerTime() > 0.7')]:
+        c,d=named_block(machine,'AnimSrcNodeTransition',guid)
+        edge=change_property(machine[c:d],'Condition',before,'RemainingTimeLess(0.08)')
+        edge=change_property(edge,'Duration','0.2','0.08')
+        machine=machine[:c]+edge+machine[d:]
+    source=source[:a]+machine+source[b:]
+    a,b=named_block(source,'AnimSrcNodeStateMachine','StanceMaster')
+    master=source[a:b]
+    c,_=named_block(master,'AnimSrcNodeState','Throwing')
+    return source[:a]+master[:c]+RECOVERY_STATES+master[c:]+source[b:]
+
+
 def patch_locomotion(source):
     start, end = named_block(source, 'AnimSrcNodeStateMachine', 'ThrowIdleStanceSTM')
     machine = source[start:end]
@@ -93,8 +105,8 @@ def patch_locomotion(source):
     for guid, origin, target, destination, condition, blend in [
         ('{6930A8DE26987051}', 'Erc', 'ErcToPne', 'Pne', 'Stance == 2', '0.14'),
         ('{6930A8DE26987067}', 'Cro', 'CroToPne', 'Pne', 'Stance == 2', '0.14'),
-        ('{6930A8DE26987073}', 'Pne', 'PneToErc', 'Erc', 'Stance == 0', '0.16'),
-        ('{6930A8DE26987090}', 'PoB', 'PoBToErc', 'Erc', 'Stance == 0', '0.16'),
+        ('{6930A8DE26987073}', 'Pne', 'PneToErc', 'PneToErc', 'Stance == 0', '0.1'),
+        ('{6930A8DE26987090}', 'PoB', 'PoBToErc', 'PoBToErc', 'Stance == 0', '0.1'),
     ]:
         a, b = named_block(machine, 'AnimSrcNodeTransition', guid)
         edge = machine[a:b]
@@ -112,7 +124,7 @@ def patch_locomotion(source):
     master = result[a:b]
     anchor, _ = named_block(master, 'AnimSrcNodeTransition', '{6930A8DE26987785}')
     master = master[:anchor] + roll_route_text() + master[anchor:]
-    return patch_direction(result[:a] + master + result[b:]), changes
+    return patch_recovery(patch_direction(result[:a] + master + result[b:])), changes
 
 
 def build_graph(export, output):
@@ -123,6 +135,9 @@ def build_graph(export, output):
         if report.get('Schema') != 1 or report.get('GameVersion') != TARGET_VERSION:
             raise ValueError('This patch targets the supplied DayZ ' + TARGET_VERSION + ' export only')
         files = {}
+        available={row['Path'] for row in report['Animations']}
+        if not set(RECOVERY_CLIPS).issubset(available):
+            raise ValueError('Reviewed rifle get-up clips absent from native index')
         for path in [BASE + 'player_main.agr', BASE + 'locomotion.agf']:
             rows = [r for r in report['Graphs'] if r['Path'] == path]
             if len(rows) != 1:
@@ -135,7 +150,7 @@ def build_graph(export, output):
     patched, changes = patch_locomotion(source)
     root = files[BASE + 'player_main.agr'].decode('utf-8')
     original_resource = '{6CA2ACDCAC1184DC}DZ/anims/workspaces/player/player_main/Locomotion.agf'
-    new_resource = '{E5500210E0494CA1}' + PREFIX + '/locomotion.agf'
+    new_resource = '{E5500300E0494CA1}' + PREFIX + '/locomotion.agf'
     if root.count(original_resource) != 1:
         raise ValueError('Native locomotion reference not uniquely located')
     root = root.replace(original_resource, new_resource)
@@ -166,10 +181,11 @@ class CfgVehicles
 };
 ''')
     evidence = dict(
-        Version='0.2.1', TargetDayZ=TARGET_VERSION,
+        Version='0.3.0', TargetDayZ=TARGET_VERSION,
         SourceHashes={p: hashlib.sha256(b).hexdigest() for p, b in files.items()},
         Changes=changes,
         RollRoutes=[dict(Transition=g, From=f, To=t, Condition=c, BlendSeconds=float(d)) for g,f,t,c,d in ROLL_ROUTES],
+        Recovery=dict(Clips=RECOVERY_CLIPS, SpeedRequest=2.2, PreparedStrengthWeight='clamp(ActionProgress * 1000, 0, 1)'),
         DirectionBlend=dict(BodySource='Locomotion.PneRas.AimToBack', BodyValueX='AimX', BodyValueY='AimY', BodyNode='GRZDropDirectionalPose', WeaponNode='ThrowStrenghPoBB', StanceWeaponBlendSeconds=0.14, TargetMapping='look right -> left ground side; look left -> right ground side; anatomy requires native verification'),
         LocomotionSHA256=hashlib.sha256(patched.encode()).hexdigest(),
         Limits='Source/package checks only; native graph loading and gameplay require DayZ testing.',

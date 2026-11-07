@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Security.Cryptography;
 
-public static class GRZDropGraphPatchV021 {
+public static class GRZDropGraphPatchV030 {
     struct Span { public int Start; public int End; }
     static Span Block(string text, string kind, string name) {
         string expression = @"\b" + Regex.Escape(kind) + @"\s+" + Regex.Escape(name) + @"\s*\{";
@@ -37,9 +37,9 @@ public static class GRZDropGraphPatchV021 {
         string[] ids = { "{6930A8DE26987051}", "{6930A8DE26987067}", "{6930A8DE26987073}", "{6930A8DE26987090}" };
         string[] from = { "Erc", "Cro", "Pne", "PoB" };
         string[] oldTo = { "ErcToPne", "CroToPne", "PneToErc", "PoBToErc" };
-        string[] newTo = { "Pne", "Pne", "Erc", "Erc" };
+        string[] newTo = { "Pne", "Pne", "PneToErc", "PoBToErc" };
         string[] conditions = { "Stance == 2", "Stance == 2", "Stance == 0", "Stance == 0" };
-        string[] blends = { "0.14", "0.14", "0.16", "0.16" };
+        string[] blends = { "0.14", "0.14", "0.1", "0.1" };
         for (int i = 0; i < ids.Length; ++i) {
             var span = Block(machine, "AnimSrcNodeTransition", "\"" + ids[i] + "\"");
             string edge = machine.Substring(span.Start, span.End - span.Start);
@@ -54,7 +54,27 @@ public static class GRZDropGraphPatchV021 {
         string master = result.Substring(masterSpan.Start, masterSpan.End - masterSpan.Start);
         var rollAnchor = Block(master, "AnimSrcNodeTransition", "\"{6930A8DE26987785}\"");
         master = master.Substring(0, rollAnchor.Start) + RollRoutes() + master.Substring(rollAnchor.Start);
-        return Directional(result.Substring(0, masterSpan.Start) + master + result.Substring(masterSpan.End));
+        return Recovery(Directional(result.Substring(0, masterSpan.Start) + master + result.Substring(masterSpan.End)));
+    }
+    static string Recovery(string text) {
+        var span=Block(text,"AnimSrcNodeBlend","ThrowStrengthIdleB");
+        text=text.Substring(0,span.Start)+Property(text.Substring(span.Start,span.End-span.Start),"BlendWeight","1.0","clamp(ActionProgress * 1000, 0, 1)")+text.Substring(span.End);
+        span=Block(text,"AnimSrcNodeStateMachine","ThrowIdleStanceSTM");
+        string machine=text.Substring(span.Start,span.End-span.Start);
+        string[] ids={ "{6930A8DE2698708A}","{6930A8DE269870AD}" };
+        string[] before={ "GetLowerTime() > 0.8","GetLowerTime() > 0.7" };
+        for(int i=0;i<ids.Length;++i) {
+            var edge=Block(machine,"AnimSrcNodeTransition","\""+ids[i]+"\"");
+            string block=Property(machine.Substring(edge.Start,edge.End-edge.Start),"Condition",before[i],"RemainingTimeLess(0.08)");
+            block=Property(block,"Duration","0.2","0.08");
+            machine=machine.Substring(0,edge.Start)+block+machine.Substring(edge.End);
+        }
+        text=text.Substring(0,span.Start)+machine+text.Substring(span.End);
+        span=Block(text,"AnimSrcNodeStateMachine","StanceMaster");
+        string master=text.Substring(span.Start,span.End-span.Start);
+        var anchor=Block(master,"AnimSrcNodeState","Throwing");
+        master=master.Substring(0,anchor.Start)+"AnimSrcNodeState GRZRecoverFront {\n       Tags {\n        \"TagStanceChange\"\n       }\n       Child \"PneToErcT\"\n       StartCondition \"false\"\n       TimeStorage \"Real Time\"\n       IsExit 0\n      }\n      AnimSrcNodeState GRZRecoverBack {\n       Tags {\n        \"TagStanceChange\" \"TagProneBack\" \"TagProneBackExit\"\n       }\n       Child \"POBToErcRaisedT\"\n       StartCondition \"false\"\n       TimeStorage \"Real Time\"\n       IsExit 0\n      }\n      "+master.Substring(anchor.Start);
+        return text.Substring(0,span.Start)+master+text.Substring(span.End);
     }
     static string Directional(string text) {
         var scope = Block(text, "AnimSrcNodeStateMachine", "ThrowIdleStanceSTM");
@@ -75,11 +95,11 @@ public static class GRZDropGraphPatchV021 {
         return result.Substring(0,aim.Start)+"AnimSrcNodePose2 GRZDropDirectionalPose {\n     Source \"Locomotion.PneRas.AimToBack\"\n     ValueX \"AimX\"\n     ValueY \"AimY\"\n     Table \"Y(-45): X(-180) = 0, X(-90) = 10, X(0) = 20, X(90) = 30, X(180) = 40\"\\\n     \"Y(0): X(-180) = 41, X(-90) = 51, X(0) = 61, X(90) = 71, X(180) = 81\"\\\n     \"Y(90): X(-180) = 82, X(-90) = 92, X(0) = 102, X(90) = 112, X(180) = 122\"\n    }\n    "+result.Substring(aim.Start);
     }
     static string RollRoutes() {
-        string[] ids = { "{A619000000000001}", "{A619000000000002}", "{A619000000000003}", "{A619000000000004}", "{A619000000000005}", "{A619000000000006}" };
-        string[] origins = { "Throwing", "Throwing", "ProneRoll", "ProneRoll", "PneOnBackRoll", "PneOnBackRoll" };
-        string[] targets = { "PneOnBackRoll", "ProneRoll", "IdleLow", "IdleRas", "IdleLow", "IdleRas" };
-        string[] conditions = { "IsCommand(CMD_Roll) && Stance == 2 && ThrowingOnBack && !IsTag(\"TagThrowingIn\") && !IsTag(\"TagThrowingOut\") && !IsTag(\"TagThrowingCancel\")", "IsCommand(CMD_Roll) && Stance == 2 && !ThrowingOnBack && !IsTag(\"TagThrowingIn\") && !IsTag(\"TagThrowingOut\") && !IsTag(\"TagThrowingCancel\")", "Stance == 0 && !Raised && GetLowerTime() > 0.12", "Stance == 0 && Raised && GetLowerTime() > 0.12", "Stance == 0 && !Raised && GetLowerTime() > 0.12", "Stance == 0 && Raised && GetLowerTime() > 0.12" };
-        string[] durations = { "0.1", "0.1", "0.16", "0.16", "0.16", "0.16" };
+        string[] ids = { "{A619000000000001}", "{A619000000000002}", "{A619000000000003}", "{A619000000000005}", "{A630000000000001}", "{A630000000000002}", "{A630000000000003}", "{A630000000000004}", "{A630000000000005}", "{A630000000000006}", "{A630000000000007}", "{A630000000000008}", "{A630000000000009}", "{A63000000000000A}" };
+        string[] origins = { "Throwing", "Throwing", "ProneRoll", "PneOnBackRoll", "GRZRecoverFront", "GRZRecoverFront", "GRZRecoverFront", "GRZRecoverFront", "GRZRecoverFront", "GRZRecoverBack", "GRZRecoverBack", "GRZRecoverBack", "GRZRecoverBack", "GRZRecoverBack" };
+        string[] targets = { "PneOnBackRoll", "ProneRoll", "GRZRecoverFront", "GRZRecoverBack", "IdleLow", "MovementLow", "IdleRas", "MovementRas", "StanceChange", "IdleLow", "MovementLow", "IdleRas", "MovementRas", "StanceChange" };
+        string[] conditions = { "IsCommand(CMD_Roll) && Stance == 2 && ThrowingOnBack && !IsTag(\"TagThrowingIn\") && !IsTag(\"TagThrowingOut\") && !IsTag(\"TagThrowingCancel\")", "IsCommand(CMD_Roll) && Stance == 2 && !ThrowingOnBack && !IsTag(\"TagThrowingIn\") && !IsTag(\"TagThrowingOut\") && !IsTag(\"TagThrowingCancel\")", "Stance == 0 && GetLowerTime() > 0.12", "Stance == 0 && GetLowerTime() > 0.12", "RemainingTimeLess(0.08) && Stance == 0 && !Raised && MovementSpeed == 0", "RemainingTimeLess(0.08) && Stance == 0 && !Raised && MovementSpeed > 0", "RemainingTimeLess(0.08) && Stance == 0 && Raised && MovementSpeed == 0", "RemainingTimeLess(0.08) && Stance == 0 && Raised && MovementSpeed > 0", "Stance != 0", "RemainingTimeLess(0.08) && Stance == 0 && !Raised && MovementSpeed == 0", "RemainingTimeLess(0.08) && Stance == 0 && !Raised && MovementSpeed > 0", "RemainingTimeLess(0.08) && Stance == 0 && Raised && MovementSpeed == 0", "RemainingTimeLess(0.08) && Stance == 0 && Raised && MovementSpeed > 0", "Stance != 0" };
+        string[] durations = { "0.1", "0.1", "0.08", "0.08", "0.08", "0.08", "0.08", "0.08", "0.08", "0.08", "0.08", "0.08", "0.08", "0.08" };
         var result = new StringBuilder();
         for (int i=0; i<ids.Length; ++i) {
             result.Append("AnimSrcNodeTransition \"").Append(ids[i]).Append("\" {\n");
@@ -94,7 +114,7 @@ public static class GRZDropGraphPatchV021 {
     }
     public static string Root(string text) {
         const string original = "{6CA2ACDCAC1184DC}DZ/anims/workspaces/player/player_main/Locomotion.agf";
-        const string replacement = "{E5500210E0494CA1}GRZ_InstaDropGraph/locomotion.agf";
+        const string replacement = "{E5500300E0494CA1}GRZ_InstaDropGraph/locomotion.agf";
         if (text.IndexOf(original, StringComparison.Ordinal) < 0 || text.IndexOf(original, StringComparison.Ordinal) != text.LastIndexOf(original, StringComparison.Ordinal)) throw new InvalidDataException("Unsupported native root graph reference.");
         return text.Replace(original, replacement);
     }

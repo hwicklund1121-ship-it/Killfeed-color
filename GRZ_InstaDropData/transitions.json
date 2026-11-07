@@ -2,7 +2,7 @@
   "OverrideTransitionSpeeds": false,
   "TuneDropInMovement": false,
   "DropSpeed": 4.0,
-  "RecoverySpeed": 1.6,
+  "RecoverySpeed": 2.2,
   "Drop": [
     "dz/anims/anm/player/moves/rifles/transitions/p_rfl_cro_trans_pne_low.anm",
     "dz/anims/anm/player/moves/rifles/transitions/p_rfl_cro_trans_pne_ras.anm",
@@ -12,15 +12,10 @@
     "dz/anims/anm/player/moves/rifles/transitions/p_rfl_erc_transmove_pne_low.anm"
   ],
   "Recover": [
-    "dz/anims/anm/player/moves/rifles/transitions/p_rfl_pne_trans_cro_low.anm",
-    "dz/anims/anm/player/moves/rifles/transitions/p_rfl_pne_trans_cro_ras.anm",
     "dz/anims/anm/player/moves/rifles/transitions/p_rfl_pne_trans_erc_low.anm",
     "dz/anims/anm/player/moves/rifles/transitions/p_rfl_pne_trans_erc_ras.anm",
-    "dz/anims/anm/player/moves/rifles/transitions/p_rfl_pne_transmove_cro_low.anm",
-    "dz/anims/anm/player/moves/rifles/transitions/p_rfl_pne_transmove_erc_low.anm",
-    "dz/anims/anm/player/moves/rifles/transitions/p_rfl_pne_onback_trans_cro_low.anm",
-    "dz/anims/anm/player/moves/rifles/transitions/p_rfl_pne_onback_trans_cro_ras.anm",
     "dz/anims/anm/player/moves/rifles/transitions/p_rfl_pne_onback_trans_erc_low.anm",
     "dz/anims/anm/player/moves/rifles/transitions/p_rfl_pne_onback_trans_erc_ras.anm"
-  ]
+  ],
+  "TuneRecoveryInInstaDrop": true
 }

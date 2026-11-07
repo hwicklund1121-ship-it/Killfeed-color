@@ -7,7 +7,7 @@ import sys
 import tempfile
 import unittest
 from zipfile import ZipFile
-from build_instadrop_graph import BASE, named_block, patch_locomotion, build_graph, roll_route_text, ROLL_ROUTES, DIRECTION_BODY, DIRECTION_STRENGTH
+from build_instadrop_graph import BASE, named_block, patch_locomotion, build_graph, roll_route_text, ROLL_ROUTES, DIRECTION_BODY, DIRECTION_STRENGTH, RECOVERY_STATES, RECOVERY_CLIPS
 from build_instadrop_graph_release import ROOT, release
 from build_pbo import build
 
@@ -65,6 +65,14 @@ class DropGraphTests(unittest.TestCase):
         self.assertEqual(len(changes), 4)
         self.assertEqual(patched.count(roll_route_text()), 1)
         restored = patched.replace(roll_route_text(), "", 1)
+        restored = restored.replace(RECOVERY_STATES, '', 1)
+        a,b=named_block(restored,'AnimSrcNodeBlend','ThrowStrengthIdleB')
+        restored=restored[:a]+restored[a:b].replace('BlendWeight "clamp(ActionProgress * 1000, 0, 1)"','BlendWeight "1.0"')+restored[b:]
+        for guid,before in [('{6930A8DE2698708A}','GetLowerTime() > 0.8'),('{6930A8DE269870AD}','GetLowerTime() > 0.7')]:
+            a,b=named_block(restored,'AnimSrcNodeTransition',guid)
+            edge=restored[a:b].replace('Condition "RemainingTimeLess(0.08)"','Condition "'+before+'"').replace('Duration "0.08"','Duration "0.2"')
+            restored=restored[:a]+edge+restored[b:]
+
         restored = restored.replace(DIRECTION_BODY + '\n    ', '', 1)
         a, b = named_block(self.native, 'AnimSrcNodeBlendT', 'ThrowStrenghPoBB')
         restored = restored.replace(DIRECTION_STRENGTH, self.native[a:b], 1)
@@ -99,9 +107,14 @@ class DropGraphTests(unittest.TestCase):
                 self.assertIn('IsCommand(CMD_Roll)', condition)
                 self.assertIn('Stance == 2', condition)
                 self.assertLess(a, named_block(patched, 'AnimSrcNodeTransition', '{6930A8DE26987785}')[0])
-            else:
+            elif origin in ['ProneRoll','PneOnBackRoll']:
                 self.assertIn('Stance == 0', condition)
                 self.assertIn('GetLowerTime() > 0.12', condition)
+                self.assertIn(target,['GRZRecoverFront','GRZRecoverBack'])
+            elif target == 'StanceChange':
+                self.assertEqual(condition,'Stance != 0')
+            else:
+                self.assertIn('RemainingTimeLess(0.08)',condition)
             self.assertIn('AnimSrcNodeState ' + origin + ' {', patched)
             self.assertIn('AnimSrcNodeState ' + target + ' {', patched)
 
@@ -128,6 +141,20 @@ class DropGraphTests(unittest.TestCase):
         self.assertIn('BlendWeight "AimX"',patched[a:b])
         a,b = named_block(patched,'AnimSrcNodeBlendT','ThrowStrenghB')
         self.assertIn('BlendTime "0.14"',patched[a:b])
+
+    def test_recovery_uses_animated_clips_and_unmasks_prepared_landing(self):
+        patched,_=patch_locomotion(self.native)
+        for state,child in [('GRZRecoverFront','PneToErcT'),('GRZRecoverBack','POBToErcRaisedT')]:
+            a,b=named_block(patched,'AnimSrcNodeState',state)
+            self.assertIn('Child "'+child+'"',patched[a:b])
+        for guid,target in [('{6930A8DE26987073}','PneToErc'),('{6930A8DE26987090}','PoBToErc')]:
+            a,b=named_block(patched,'AnimSrcNodeTransition',guid)
+            self.assertIn('ToState "'+target+'"',patched[a:b])
+        for guid in ['{6930A8DE2698708A}','{6930A8DE269870AD}']:
+            a,b=named_block(patched,'AnimSrcNodeTransition',guid)
+            self.assertIn('Condition "RemainingTimeLess(0.08)"',patched[a:b])
+        a,b=named_block(patched,'AnimSrcNodeBlend','ThrowStrengthIdleB')
+        self.assertIn('BlendWeight "clamp(ActionProgress * 1000, 0, 1)"',patched[a:b])
 
     def test_already_patched_or_changed_native_edges_rejected(self):
         patched, _ = patch_locomotion(self.native)
@@ -177,12 +204,15 @@ class DropGraphTests(unittest.TestCase):
                 self.assertEqual(set(graph), {'config.cpp', 'locomotion.agf', 'player_main.agr'})
                 self.assertEqual(graph['locomotion.agf'].decode(), patch_locomotion(self.native)[0])
                 root = graph['player_main.agr'].decode()
-                restored = root.replace('{E5500210E0494CA1}GRZ_InstaDropGraph/locomotion.agf', '{6CA2ACDCAC1184DC}DZ/anims/workspaces/player/player_main/Locomotion.agf')
+                restored = root.replace('{E5500300E0494CA1}GRZ_InstaDropGraph/locomotion.agf', '{6CA2ACDCAC1184DC}DZ/anims/workspaces/player/player_main/Locomotion.agf')
                 self.assertEqual(restored, self.native_root)
                 source = all_files['GRZ_InstaDrop']['scripts/4_World/GRZInstaDropThrowReady.c']
                 self.assertEqual(source, (ROOT / 'GRZ_InstaDrop/scripts/4_World/GRZInstaDropThrowReady.c').read_bytes())
                 settings = json.loads(all_files['GRZ_InstaDropData']['transitions.json'])
                 self.assertFalse(settings['TuneDropInMovement'])
+                self.assertTrue(settings['TuneRecoveryInInstaDrop'])
+                self.assertEqual(settings['RecoverySpeed'],2.2)
+                self.assertEqual(settings['Recover'],RECOVERY_CLIPS)
                 self.assertNotIn('GRZ_Movement.pbo', z.namelist())
                 self.assertNotIn('GRZ_InstaDropGraph.pbo', z.namelist())
                 self.assertIn('Build-InstaDropGraph.ps1', z.namelist())
