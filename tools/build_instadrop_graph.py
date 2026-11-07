@@ -119,7 +119,7 @@ class CfgVehicles
 };
 ''')
     evidence = dict(
-        Version='0.1.7', TargetDayZ=TARGET_VERSION,
+        Version='0.1.8', TargetDayZ=TARGET_VERSION,
         SourceHashes={p: hashlib.sha256(b).hexdigest() for p, b in files.items()},
         Changes=changes,
         LocomotionSHA256=hashlib.sha256(patched.encode()).hexdigest(),

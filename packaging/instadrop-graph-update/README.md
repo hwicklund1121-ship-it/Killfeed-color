@@ -1,17 +1,24 @@
-# GRZ InstaDrop v0.1.7 motion test
+# GRZ InstaDrop v0.1.8 on-back roll test
 
 Target: the supplied vanilla DayZ 1.30.164.289 player graph.
 
-Changes from v0.1.6:
+Changes from v0.1.7:
 
-- Lengthens the direct gun-lift drop blend from 0.03 to 0.10 seconds.
-- Routes gun-lift prone-to-standing and on-back-to-standing directly into the
-  native standing gun-lift pose with a requested 0.16-second blend. This avoids
-  the intermediate recovery clips that can produce a belly-down movement
-  before rising, and keeps the weapon on the destination pose with the body.
-- Preserves the existing stance-input and mid-roll stand-request source exactly.
-  Its old v0.1.4 diagnostic labels remain; startup identifies v0.1.7.
-
++- Adds a narrow `CanRoll()` exception for the living, unrestrained rifle player
++  in prone/on-back gun-lift preparation. Stock `CanRoll()` explicitly rejects
++  `IsOnBack()`, which can block the right-look Q/A/D sequence before a graph
++  blend is considered. Stock positive decisions remain positive.
++- Keeps stamina, emote, action, weapon-operation, actual throw charge/release,
++  item-drop, life and movement-command guards on this new exception. Other
++  mods' independent negative roll policies may still conflict.
++- Keeps v0.1.7's entire generated graph unchanged: drop remains 0.10 seconds
++  and the prior direct-standing blend request remains 0.16 seconds. There is
++  no new pose timing experiment in this build.
++- Keeps the existing stance-input and stand-request source unchanged. No key
++  combinations are synthesized and rolling does not request standing by itself.
++- Logs the on-back roll permission decision and native roll-start/finish events
++  so the next test distinguishes a rejected request from graph playback.
++
 Four existing edges in `ThrowIdleStanceSTM` are changed: standing/crouching to
 prone and prone/on-back to standing. Input conditions are unchanged. Turn,
 on-back selection, roll, throw charging/release, crouch recovery and normal
@@ -52,12 +59,13 @@ Keep your normal dependency mod list plus `@GRZ_Local` enabled on both sides.
 Restart both sides. Startup should report:
 
 ```
-[GRZ InstaDrop] v0.1.7 graph selected: GRZ_InstaDropGraph/player_main.agr.
+[GRZ InstaDrop] v0.1.8 graph selected: GRZ_InstaDropGraph/player_main.agr.
 ```
 
 This verifies config selection; also inspect the RPT/error log for graph loading
-errors. Test G -> prone -> turn/on-back -> stand quickly, including a standing
-request during the roll. Check weapon/arm placement throughout, ordinary prone
+errors. Test your G -> prone -> look right -> Q with A/D sequence, then your normal
+stand input. Look for `v0.1.8 on-back roll` and `v0.1.8 native roll started` in
+the script log. Check weapon/arm placement throughout, ordinary prone
 and crouch movement, and ordinary throw charging/release. Native clearance and
 physical stance checks remain active. Send a new clip and client/server logs
 if playback or quick-input response still differs from the intended sequence.

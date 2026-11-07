@@ -5,7 +5,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 if (!('GRZDropGraphPboV1' -as [type])) { Add-Type -Path (Join-Path $PSScriptRoot 'GRZ-DropGraphTools.cs') }
-if (!('GRZDropGraphPatchV017' -as [type])) { Add-Type -Path (Join-Path $PSScriptRoot 'GRZ-DropGraphPatch.cs') }
+if (!('GRZDropGraphPatchV018' -as [type])) { Add-Type -Path (Join-Path $PSScriptRoot 'GRZ-DropGraphPatch.cs') }
 $archive = Join-Path $GamePath 'Addons/anims_workspaces.pbo'
 if (!(Test-Path -LiteralPath $archive -PathType Leaf)) { throw "Native animation archive missing: $archive" }
 $wanted = @{
@@ -17,18 +17,18 @@ foreach ($entry in [GRZDropGraphPboV1]::Index($archive)) {
  if (!$wanted.ContainsKey($entry.Path)) { continue }
  if ($files.ContainsKey($entry.Path)) { throw 'Duplicate native graph path. Nothing built.' }
  [byte[]]$bytes = [GRZDropGraphPboV1]::Read($archive,$entry)
- if ([GRZDropGraphPatchV017]::Hash($bytes) -ne $wanted[$entry.Path]) { throw "Native graph differs from the supported DayZ 1.30.164.289 build: $($entry.Path). Nothing installed." }
+ if ([GRZDropGraphPatchV018]::Hash($bytes) -ne $wanted[$entry.Path]) { throw "Native graph differs from the supported DayZ 1.30.164.289 build: $($entry.Path). Nothing installed." }
  $files[$entry.Path] = $bytes
 }
 if ($files.Count -ne 2) { throw 'Required native player graphs not found. Nothing built.' }
 $encoding = New-Object Text.UTF8Encoding($false,$true)
 $base = 'dz/anims/workspaces/player/player_main/'
-$root = [GRZDropGraphPatchV017]::Root($encoding.GetString($files[$base+'player_main.agr']))
-$locomotion = [GRZDropGraphPatchV017]::Locomotion($encoding.GetString($files[$base+'locomotion.agf']))
+$root = [GRZDropGraphPatchV018]::Root($encoding.GetString($files[$base+'player_main.agr']))
+$locomotion = [GRZDropGraphPatchV018]::Locomotion($encoding.GetString($files[$base+'locomotion.agf']))
 [byte[]]$config = [IO.File]::ReadAllBytes((Join-Path $PSScriptRoot 'graph-config.cpp'))
-[byte[]]$pbo = [GRZDropGraphPatchV017]::Pbo($config,$encoding.GetBytes($locomotion),$encoding.GetBytes($root))
-if ([GRZDropGraphPatchV017]::Hash($pbo) -ne '76834860a5b19a957196d9192eed7c8f66424f44c91574cbc79251fb1301f991') {
- throw 'Generated graph does not match the checked v0.1.7 build. Nothing installed.'
+[byte[]]$pbo = [GRZDropGraphPatchV018]::Pbo($config,$encoding.GetBytes($locomotion),$encoding.GetBytes($root))
+if ([GRZDropGraphPatchV018]::Hash($pbo) -ne '76834860a5b19a957196d9192eed7c8f66424f44c91574cbc79251fb1301f991') {
+ throw 'Generated graph does not match the checked v0.1.8 build. Nothing installed.'
 }
 [IO.File]::WriteAllBytes([IO.Path]::GetFullPath($OutputPath),$pbo)
-Write-Host 'Built the checked v0.1.7 drop graph locally from your vanilla game files.'
+Write-Host 'Built the checked v0.1.8 drop graph locally from your vanilla game files.'
