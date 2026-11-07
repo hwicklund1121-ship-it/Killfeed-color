@@ -1,11 +1,11 @@
 {
   "schema": 1,
-  "asset_revision": "786f7fa1fe26a6840e2f2737ba80c63e956224d5",
+  "asset_revision": "b1ac8023ce68635361a1f33969a2bce68bee2659",
   "packages": [
     {
       "file": "GRZ-Arena-Menu-Update.zip",
       "role": "core",
-      "url": "https://github.com/hwicklund1121-ship-it/Killfeed-color/raw/786f7fa1fe26a6840e2f2737ba80c63e956224d5/downloads/GRZ-Arena-Menu-Update.zip",
+      "url": "https://github.com/hwicklund1121-ship-it/Killfeed-color/raw/b1ac8023ce68635361a1f33969a2bce68bee2659/downloads/GRZ-Arena-Menu-Update.zip",
       "sha256": "62fab34c9e4f0791b42b82fc5c382bb6a1b3abd8993093a106171f4a271f8ccf",
       "addons": {
         "GRZ_Audit": "d6f93e13bd6304c54a9646f06bf8ba057c0c0b750aa08e925ecb5f2237775237",
@@ -28,7 +28,7 @@
     {
       "file": "GRZ-Vanilla-Clothing.zip",
       "role": "clothing",
-      "url": "https://github.com/hwicklund1121-ship-it/Killfeed-color/raw/786f7fa1fe26a6840e2f2737ba80c63e956224d5/downloads/GRZ-Vanilla-Clothing.zip",
+      "url": "https://github.com/hwicklund1121-ship-it/Killfeed-color/raw/b1ac8023ce68635361a1f33969a2bce68bee2659/downloads/GRZ-Vanilla-Clothing.zip",
       "sha256": "10e9097f74ee51a53687ae07b6346fda4ddb4afffaca6b5e643fa9744cc77b7d",
       "addons": {
         "GRZ_VanillaClothing": "076b0112096abdcecd846f0242190d7254ca9f69b9788d0c2cadbeef68d35ff2"
@@ -37,15 +37,18 @@
     {
       "file": "XIMS-Clothing.zip",
       "role": "xims",
-      "url": "https://github.com/hwicklund1121-ship-it/Killfeed-color/raw/786f7fa1fe26a6840e2f2737ba80c63e956224d5/downloads/XIMS-Clothing.zip",
-      "sha256": "b9cdde39a914e491d0e2972360f71a31b6aca0657274044ec44cbdd043131369",
+      "url": "https://github.com/hwicklund1121-ship-it/Killfeed-color/raw/b1ac8023ce68635361a1f33969a2bce68bee2659/downloads/XIMS-Clothing.zip",
+      "sha256": "e4b06012444ebb75fb20dedd4f9579ab709f6f1622322e0fcb6d343f616ffa7b",
       "addons": {
-        "GRZ_XimsClothing": "8d6aea83e7d5a2483e7115eb7f236e29aab0b961f851f046a0082df850bfcb0d"
+        "GRZ_XimsClothing": "60da4fd8ffe4252acd2f8c92b943ab3bdace2f4b15edb96d45902dbca6ecb31b",
+        "GRZ_XimsLayeredShirt": "fc9143a69510a139a338c38ffa6308c6a476917045594d05dd457387af31c81f"
       }
     }
   ],
-  "pending": [
-    "XIMS Layered Shirt: original Windstride config required.",
-    "XIMS Canvas Bag: smaller texture uploads required."
+  "pending": [],
+  "pending_custom_normals": [
+    "XIMS Canvas Bag",
+    "GRZ Jeans",
+    "GRZ Bandana"
   ]
 }
