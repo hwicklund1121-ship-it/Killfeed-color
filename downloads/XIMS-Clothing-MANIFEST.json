@@ -1,0 +1,66 @@
+{
+  "items": [
+    {
+      "class": "XIMS_Sneakers",
+      "displayName": "XIMS Sneakers",
+      "descriptionShort": "Made By Blake",
+      "base_class": "Sneakers_Black",
+      "key": "sneakers",
+      "textures": {
+        "co": {
+          "source_sha256": "1cd7e95bed6bdeaab972a3ba7eb157432b4937b83679870272c4fdf3740850af",
+          "size": [
+            4096,
+            4096
+          ],
+          "source_filename": "sneakers_black_co.paa_NNN14_Base_color.png",
+          "paa_sha256": "45b501b5bf8f0b986a70f7e0e27011fe3c3ba5ca7d610cce9fc939db90ec3503",
+          "mode": "supplied painted colour"
+        },
+        "nohq": {
+          "source_sha256": "4d17b83ac366d161aa410c4165de4f9a8b5f525fd4baa8c9b5348c4c20799e87",
+          "size": [
+            4096,
+            4096
+          ],
+          "source_filename": "sneakers_black_co.paa_NNN14_Normal.png",
+          "mode": "flat export; vanilla normal/material inherited"
+        }
+      }
+    },
+    {
+      "class": "XIMS_JeanShorts",
+      "displayName": "XIMS Jean Shorts",
+      "descriptionShort": "Made By Blake",
+      "base_class": "ShortJeans_Blue",
+      "key": "shorts",
+      "textures": {
+        "co": {
+          "source_sha256": "33d54003abdb2519fdd2eea1f0a7ba02ae34abc76d66dccae9965ad87b3024d9",
+          "size": [
+            4096,
+            4096
+          ],
+          "source_filename": "shortjeans_blue_co.paa_NNN2_Base_color.png",
+          "paa_sha256": "5c1e255155ba0110e85d7669f0d94f496d0d27a9a02c725107ce5632bdec25d4",
+          "mode": "supplied painted colour"
+        },
+        "nohq": {
+          "source_sha256": "ce477f9b837dc6e2206f52cc7d0c5e12d28e16b1601b33cffd388cb785abc359",
+          "size": [
+            4096,
+            4096
+          ],
+          "source_filename": "shortjeans_blue_co.paa_NNN2_Normal.png",
+          "paa_sha256": "c7738a8f5b9bc67c5c9020d76ed27df2762479fbc31f40bf83ac9b719c6d8081",
+          "mode": "OpenGL to DirectX green conversion; native SWIZ normal packing"
+        }
+      }
+    }
+  ],
+  "pending": [
+    "XIMS Layered Shirt: Windstride CfgPatches/config and texture selection order required.",
+    "XIMS Canvas Bag: uploaded archive exceeds 32 MiB transfer limit."
+  ],
+  "pbo_sha256": "8d6aea83e7d5a2483e7115eb7f236e29aab0b961f851f046a0082df850bfcb0d"
+}
