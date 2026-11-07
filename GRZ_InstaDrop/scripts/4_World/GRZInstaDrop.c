@@ -57,7 +57,7 @@ class GRZInstaDrop
   if (!settings.OverrideTransitionSpeeds)
   {
    Ready = true;
-   Print("[GRZ InstaDrop] v0.1.3 input-only compatibility mode. Other movement mods retain all animation speeds and graphs.");
+   Print("[GRZ InstaDrop] v0.1.4 legacy gun-lift/prone/roll stance prototype; native animation speeds and graphs retained.");
    return;
   }
   if (settings.Drop.Count() == 0 || settings.Recover.Count() == 0)
@@ -70,7 +70,7 @@ class GRZInstaDrop
   // weapon input, stamina, and multiplayer movement commands remain in control.
   int drops = ApplyClips(settings.Drop, Math.Clamp(settings.DropSpeed, 1.0, 4.0));
   int recoveries = ApplyClips(settings.Recover, Math.Clamp(settings.RecoverySpeed, 1.0, 4.0));
-  Print("[GRZ InstaDrop] v0.1.3 prototype: accepted " + drops.ToString() + "/" + settings.Drop.Count().ToString() + " drop and " + recoveries.ToString() + "/" + settings.Recover.Count().ToString() + " recovery clips. In-game verification required.");
+  Print("[GRZ InstaDrop] v0.1.4 prototype: accepted " + drops.ToString() + "/" + settings.Drop.Count().ToString() + " drop and " + recoveries.ToString() + "/" + settings.Recover.Count().ToString() + " recovery clips. In-game verification required.");
  }
 };
 modded class DayZPlayerTypeUtils
