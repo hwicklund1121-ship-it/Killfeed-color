@@ -212,6 +212,17 @@ def main():
     menu_layout = files["gui/layouts/menu.layout"].decode()
     verify_menu_bounds(menu_layout)
     assert 'text "GRZ VIP"' in menu_layout
+    assert 'VIPPreviewViewport' in declared and 'VIPResetView' in declared
+    preview_menu = (SOURCE/'scripts/5_Mission/GRZ_Killfeed/GRZKillfeedMenu.c').read_text()
+    assert 'RegisterOnMouseButtonDown(m_GRZGunPreview' in preview_menu
+    assert 'RegisterOnMouseWheel(m_GRZGunPreview' in preview_menu
+    assert 'm_GRZPreviewZoom + wheel * 0.1, 0.5, 2.5' in preview_menu
+    assert 'Remove(GRZBindVIPPreview)' in preview_menu and 'UnregisterWidget(m_GRZGunPreview)' in preview_menu
+    assert 'previewWeapon.SpawnAmmo(previewAmmo)' in preview_menu
+    gun_preview = preview_menu.split('int flags = ECE_LOCAL',1)[1].split('protected void GRZPrepareVIPPreview',1)[0]
+    assert gun_preview.index('CreateAttachment(wrap)') < gun_preview.index('CallLater(GRZBindVIPPreview')
+    assert gun_preview.index('AttachScope') < gun_preview.index('CallLater(GRZBindVIPPreview')
+    assert gun_preview.index('EnsureSuppressor') < gun_preview.index('CallLater(GRZBindVIPPreview')
     assert 'GunTab' in declared and 'VIPGunList' in declared and 'VIPWrapName' in declared
     assert "ImageWidgetClass MenuLogo" in menu_layout
     assert "MenuOutline" not in menu_layout

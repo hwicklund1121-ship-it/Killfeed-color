@@ -25,7 +25,7 @@ class GRZKillfeedClient
         if (!ActiveMenu || !ActiveMenu.GetLayoutRoot())
         {
             ActiveMenu = null;
-            Error("[GRZ Killfeed 0.2.0] Native menu factory did not return an initialized settings menu.");
+            Error("[GRZ Killfeed 0.2.2] Native menu factory did not return an initialized settings menu.");
             g_Game.Chat("GRZ Killfeed: menu creation failed. Check the client script log.", "colorStatusChannel");
             return;
         }
@@ -34,7 +34,7 @@ class GRZKillfeedClient
         else
             ActiveMenu.ApplyLocalStyle(LocalStyle);
         ActiveMenu.EnsureVisible();
-        Print("[GRZ Killfeed 0.2.0] Native menu registered and retained.");
+        Print("[GRZ Killfeed 0.2.2] Native menu registered and retained.");
     }
 
     static void ReleaseMenu()
@@ -157,7 +157,7 @@ modded class ChatInputMenu
         if (m_GRZVipSubmitted)
             return true;
         m_GRZVipSubmitted = true;
-        Print("[GRZ Killfeed 0.2.0] Intercepted local VIP command before public/VPP chat.");
+        Print("[GRZ Killfeed 0.2.2] Intercepted local VIP command before public/VPP chat.");
         Close();
         if (command == "/grzvip")
             g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZKillfeedClient.RequestMenu, 150, false);
@@ -202,6 +202,13 @@ class GRZKillfeedMenu extends UIScriptedMenu
     protected int m_GRZGunCategory;
     protected int m_GRZGunIndex = -1;
     protected int m_GRZWrapIndex;
+    protected float m_GRZPreviewYaw;
+    protected float m_GRZPreviewPitch;
+    protected float m_GRZPreviewZoom = 1.0;
+    protected string m_GRZPreviewType;
+    protected bool m_GRZPreviewDragging;
+    protected int m_GRZPreviewMouseX;
+    protected int m_GRZPreviewMouseY;
     protected ref array<int> m_GRZGunChoices = new array<int>;
     protected Widget m_NamePage;
     protected Widget m_PrefixPage;
@@ -266,6 +273,11 @@ class GRZKillfeedMenu extends UIScriptedMenu
         logo.SetSort(0);
         m_GRZGunPreview = ItemPreviewWidget.Cast(m_GRZGunPage.FindAnyWidget("VIPGunPreview"));
         m_GRZGunList = TextListboxWidget.Cast(m_GRZGunPage.FindAnyWidget("VIPGunList"));
+        if (m_GRZGunPreview && WidgetEventHandler.GetInstance())
+        {
+            WidgetEventHandler.GetInstance().RegisterOnMouseButtonDown(m_GRZGunPreview, this, "GRZVIPPreviewMouseDown");
+            WidgetEventHandler.GetInstance().RegisterOnMouseWheel(m_GRZGunPreview, this, "GRZVIPPreviewWheel");
+        }
         GRZApplyPanelTextures(layoutRoot);
         GRZLoadoutClientData.Changed.Insert(GRZReceiveVIPCatalogue);
         GRZLoadoutClientData.Result.Insert(GRZReceiveVIPResult);
@@ -274,7 +286,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
         if (IsOfflinePreview)
             m_Status.SetText("Local preview — server access and persistence are not tested.");
         PositionPanel();
-        Print("[GRZ Killfeed 0.2.0] Init: layout created.");
+        Print("[GRZ Killfeed 0.2.2] Init: layout created.");
         return layoutRoot;
     }
 
@@ -317,6 +329,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
         }
         super.Update(timeslice);
         m_Time += timeslice;
+        GRZUpdateVIPPreviewRotation();
         if (m_GRZGunTab && m_GRZGunList)
         {
             int selectedGun = m_GRZGunList.GetSelectedRow();
@@ -337,7 +350,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
             m_LoggedUpdate = true;
             float width, height;
             layoutRoot.GetScreenSize(width, height);
-            Print(string.Format("[GRZ Killfeed 0.2.0] Update: root %1 x %2; visible %3.", width, height, layoutRoot.IsVisibleHierarchy()));
+            Print(string.Format("[GRZ Killfeed 0.2.2] Update: root %1 x %2; visible %3.", width, height, layoutRoot.IsVisibleHierarchy()));
         }
     }
 
@@ -353,7 +366,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
             return;
         }
         EnsureVisible();
-        Print("[GRZ Killfeed 0.2.0] OnShow called.");
+        Print("[GRZ Killfeed 0.2.2] OnShow called.");
     }
 
     override void OnHide()
@@ -363,7 +376,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
         GRZLoadoutClientData.Changed.Remove(GRZReceiveVIPCatalogue);
         GRZLoadoutClientData.Result.Remove(GRZReceiveVIPResult);
         GRZKillfeedBus.AppDeactivated.Remove(CloseSafely);
-        Print("[GRZ Killfeed 0.2.0] OnHide called.");
+        Print("[GRZ Killfeed 0.2.2] OnHide called.");
         super.OnHide();
     }
 
@@ -458,6 +471,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
                     label.SetTextExactSize(Math.Max(1, Math.Round(geometry.FontSize * m_MenuScale)));
             }
             RefreshPreview();
+            GRZApplyVIPPreviewTransform();
         }
         Widget panel = layoutRoot.FindAnyWidget("MenuPanel");
         if (panel)
@@ -707,6 +721,8 @@ class GRZKillfeedMenu extends UIScriptedMenu
 
     protected void GRZDisposeVIPGun()
     {
+        m_GRZPreviewDragging = false;
+        if (g_Game) g_Game.GetCallQueue(CALL_CATEGORY_GUI).Remove(GRZBindVIPPreview);
         if (m_GRZGunPreview) m_GRZGunPreview.SetItem(null);
         if (m_GRZPreviewGun && g_Game) g_Game.ObjectDelete(m_GRZPreviewGun);
         m_GRZPreviewGun = null;
@@ -727,24 +743,22 @@ class GRZKillfeedMenu extends UIScriptedMenu
         bool gearMode = GRZCurrentVIPGear() != null;
         string wrapWidgets[4] = {"VIPWrapHeading", "VIPWrapPrevious", "VIPWrapName", "VIPWrapNext"};
         for (int wrapWidget = 0; wrapWidget < 4; wrapWidget++) m_GRZGunPage.FindAnyWidget(wrapWidgets[wrapWidget]).Show(!gearMode);
-        TextWidget.Cast(m_GRZGunPage.FindAnyWidget("VIPGearNote")).SetText("Compatible VIP suppressors are attached automatically.");
+        TextWidget.Cast(m_GRZGunPage.FindAnyWidget("VIPGearNote")).SetText("Drag to rotate / scroll to zoom. VIP suppressors attach automatically.");
         if (gearMode)
         {
             GRZLoadoutClothing selectedGear = GRZCurrentVIPGear();
             layoutRoot.FindAnyWidget("Save").Enable(selectedGear && !IsOfflinePreview);
             TextWidget gearLabel = TextWidget.Cast(m_GRZGunPage.FindAnyWidget("VIPGunName"));
             gearLabel.SetText("No animated clothing installed");
-            TextWidget.Cast(m_GRZGunPage.FindAnyWidget("VIPGearNote")).SetText("Contents transfer to new clothing; changes cancel if they do not fit.");
+            TextWidget.Cast(m_GRZGunPage.FindAnyWidget("VIPGearNote")).SetText("Drag to inspect the animated back / scroll to zoom.");
             m_Status.SetText("Preview animated clothing, then press EQUIP & SAVE.");
             if (!selectedGear) return;
             gearLabel.SetText(selectedGear.Name);
             int gearFlags = ECE_LOCAL | ECE_NOLIFETIME | ECE_KEEPHEIGHT | ECE_NOSURFACEALIGN | ECE_NOPERSISTENCY_WORLD | ECE_NOPERSISTENCY_CHAR;
             m_GRZPreviewGun = EntityAI.Cast(g_Game.CreateObjectEx(selectedGear.Type, "0 -1000 0", gearFlags));
             if (!m_GRZPreviewGun) { m_Status.SetText("Clothing preview could not be created."); return; }
-            m_GRZGunPreview.SetItem(m_GRZPreviewGun);
-            m_GRZGunPreview.SetView(m_GRZPreviewGun.GetViewIndex());
-            m_GRZGunPreview.SetModelPosition("0 0 0.8");
-            m_GRZGunPreview.SetModelOrientation("0 180 0");
+            GRZPrepareVIPPreview(selectedGear.Type, true);
+            g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZBindVIPPreview, 1, false);
             return;
         }
         GRZLoadoutGun gun = GRZCurrentVIPGun();
@@ -772,10 +786,89 @@ class GRZKillfeedMenu extends UIScriptedMenu
         if (!GRZVipLoadoutPolicy.EnsureSuppressor(m_GRZPreviewGun)) ready = false;
         if (wrap != "" && !m_GRZPreviewGun.GetInventory().CreateAttachment(wrap)) ready = false;
         if (!ready) m_Status.SetText("An attachment could not be previewed. The server checks compatibility before equipping.");
+        Weapon_Base previewWeapon = Weapon_Base.Cast(m_GRZPreviewGun);
+        if (previewWeapon)
+        {
+            string previewAmmo = gun.Ammo;
+            if (gun.MagazineType != "") previewAmmo = gun.MagazineType;
+            if (previewAmmo != "") previewWeapon.SpawnAmmo(previewAmmo);
+        }
+        // Bind the whole weapon hierarchy only after all preview attachments are fitted.
+        GRZPrepareVIPPreview(gun.Type, false);
+        g_Game.GetCallQueue(CALL_CATEGORY_GUI).CallLater(GRZBindVIPPreview, 1, false);
+    }
+
+    protected void GRZPrepareVIPPreview(string type, bool clothing)
+    {
+        if (m_GRZPreviewType != type)
+        {
+            m_GRZPreviewType = type;
+            m_GRZPreviewZoom = 1.0;
+            m_GRZPreviewPitch = 0;
+            m_GRZPreviewYaw = 0;
+            if (clothing) m_GRZPreviewYaw = 180;
+        }
+    }
+
+    void GRZBindVIPPreview()
+    {
+        if (!m_GRZGunTab || !m_GRZGunPreview || !m_GRZPreviewGun || m_GRZDismissRequested) return;
+        m_GRZGunPreview.Show(true);
+        m_GRZGunPreview.SetColor(0xFFFFFFFF);
+        m_GRZGunPreview.SetForceFlipEnable(false);
+        m_GRZGunPreview.SetForceFlip(false);
         m_GRZGunPreview.SetItem(m_GRZPreviewGun);
         m_GRZGunPreview.SetView(m_GRZPreviewGun.GetViewIndex());
-        m_GRZGunPreview.SetModelPosition("0 0 0.8");
-        m_GRZGunPreview.SetModelOrientation("0 0 0");
+        m_GRZGunPreview.SetModelPosition("0 0 1");
+        GRZApplyVIPPreviewTransform();
+    }
+
+    protected void GRZApplyVIPPreviewTransform()
+    {
+        if (!m_GRZGunPreview || !m_GRZPreviewGun) return;
+        Widget viewport = m_GRZGunPage.FindAnyWidget("VIPPreviewViewport");
+        if (!viewport) return;
+        float width, height;
+        viewport.GetSize(width, height);
+        float zoomWidth = width * m_GRZPreviewZoom;
+        float zoomHeight = height * m_GRZPreviewZoom;
+        m_GRZGunPreview.SetSize(zoomWidth, zoomHeight);
+        m_GRZGunPreview.SetPos((width - zoomWidth) * 0.5, (height - zoomHeight) * 0.5);
+        m_GRZGunPreview.SetModelOrientation(Vector(m_GRZPreviewPitch, m_GRZPreviewYaw, 0));
+    }
+
+    bool GRZVIPPreviewMouseDown(Widget w, int x, int y, int button)
+    {
+        if (w != m_GRZGunPreview || button != MouseState.LEFT || !m_GRZGunTab || !m_GRZPreviewGun) return false;
+        GetMousePos(m_GRZPreviewMouseX, m_GRZPreviewMouseY);
+        m_GRZPreviewDragging = true;
+        return true;
+    }
+
+    bool GRZVIPPreviewWheel(Widget w, int x, int y, int wheel)
+    {
+        if (w != m_GRZGunPreview || !m_GRZGunTab || !m_GRZPreviewGun) return false;
+        m_GRZPreviewZoom = Math.Clamp(m_GRZPreviewZoom + wheel * 0.1, 0.5, 2.5);
+        GRZApplyVIPPreviewTransform();
+        return true;
+    }
+
+    protected void GRZUpdateVIPPreviewRotation()
+    {
+        if (!m_GRZPreviewDragging) return;
+        if (!m_GRZGunTab || !m_GRZPreviewGun || m_GRZDismissRequested)
+        {
+            m_GRZPreviewDragging = false;
+            return;
+        }
+        int mouseX, mouseY;
+        GetMousePos(mouseX, mouseY);
+        m_GRZPreviewYaw = m_GRZPreviewYaw + Math.Clamp(mouseX - m_GRZPreviewMouseX, -80, 80) * 0.5;
+        m_GRZPreviewPitch = Math.Clamp(m_GRZPreviewPitch + Math.Clamp(mouseY - m_GRZPreviewMouseY, -80, 80) * 0.5, -75, 75);
+        m_GRZPreviewMouseX = mouseX;
+        m_GRZPreviewMouseY = mouseY;
+        GRZApplyVIPPreviewTransform();
+        if (!(GetMouseState(MouseState.LEFT) & 0x80000000)) m_GRZPreviewDragging = false;
     }
 
     protected bool GRZVIPGunClick(string name)
@@ -789,6 +882,15 @@ class GRZKillfeedMenu extends UIScriptedMenu
             return true;
         }
         if (!m_GRZGunTab) return false;
+        if (name == "VIPResetView")
+        {
+            m_GRZPreviewZoom = 1.0;
+            m_GRZPreviewPitch = 0;
+            m_GRZPreviewYaw = 0;
+            if (GRZCurrentVIPGear()) m_GRZPreviewYaw = 180;
+            GRZApplyVIPPreviewTransform();
+            return true;
+        }
         if (name == "VIPGun20" || name == "VIPGun50" || name == "VIPGun408" || name == "VIPGunOther")
         {
             m_GRZGunCategory = 0;
@@ -854,6 +956,7 @@ class GRZKillfeedMenu extends UIScriptedMenu
 
     void ~GRZKillfeedMenu()
     {
+        if (m_GRZGunPreview && WidgetEventHandler.GetInstance()) WidgetEventHandler.GetInstance().UnregisterWidget(m_GRZGunPreview);
         GRZLoadoutClientData.Changed.Remove(GRZReceiveVIPCatalogue);
         GRZLoadoutClientData.Result.Remove(GRZReceiveVIPResult);
         GRZDisposeVIPGun();
