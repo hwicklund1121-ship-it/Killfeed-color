@@ -13,16 +13,16 @@
   "maps_configured": false,
   "pbo": {
     "GRZ_Audit": {
-      "bytes": 2636,
-      "sha256": "e451bf451c8f366b45627ac0583104a7c1834023b10162e8db3436d1611d1e7d"
+      "bytes": 14368,
+      "sha256": "d6f93e13bd6304c54a9646f06bf8ba057c0c0b750aa08e925ecb5f2237775237"
     },
     "GRZ_Loadout": {
-      "bytes": 1616701,
-      "sha256": "3a81783115992d50105aa395d3479ec927caac73f835c6345268af81494cdd7e"
+      "bytes": 1616778,
+      "sha256": "48c55825ad9f10239fc10f24e86429ddaa48d669709c48f31f0ff727da9bd611"
     },
     "GRZ_MapRotation": {
-      "bytes": 3575089,
-      "sha256": "f3fcdbcec063ac85b634d75085bba728288ea72c2eac45249675cdfd005d2394"
+      "bytes": 3575132,
+      "sha256": "609773b78abb3f677dbfd183fda03b20d098fc719e07833729eeeb2a3fef85dd"
     }
   }
 }

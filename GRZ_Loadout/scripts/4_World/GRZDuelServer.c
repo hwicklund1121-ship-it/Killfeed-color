@@ -332,6 +332,7 @@ class GRZDuelServer
   }
   else if (match.Map.GroundSpawns)
    position[1] = g_Game.SurfaceY(position[0], position[2]) + 0.2;
+  GRZGameplayAlerts.AllowTeleport(p);
   p.SetPosition(position);
   p.SetOrientation(Vector(facing, 0, 0));
  }
@@ -344,6 +345,7 @@ class GRZDuelServer
    if (back.Uid != Uid(p)) continue;
    p.m_GRZDuelMatch = "";
    Heal(p);
+   GRZGameplayAlerts.AllowTeleport(p);
    p.SetPosition(back.Position);
    Returns.Remove(i);
    GRZDuelHooks.ReturnToArena.Invoke(p);

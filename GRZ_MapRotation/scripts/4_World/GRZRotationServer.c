@@ -370,6 +370,7 @@ class GRZRotationServer
     bestDistance = nearest;
    }
   }
+  GRZGameplayAlerts.AllowTeleport(player);
   player.SetPosition(bestPosition);
   player.SetOrientation("0 0 0");
   player.m_GRZOutsideStart = -1;

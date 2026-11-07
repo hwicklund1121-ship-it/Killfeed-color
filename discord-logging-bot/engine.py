@@ -11,9 +11,14 @@ CHANNELS = (
     'duel-logs', 'duel-invites', 'duel-accepts', 'duel-rejects', 'duel-wins',
     'duel-loses', 'weapon-changes', 'clothing-changes', 'killfeed', 'vip-logs',
     'vip-prefixs', 'vip-killfeed', 'vip-weapon-changes', 'vip-clothing-changes',
-    'map-rotation-logs', 'map-votes', 'map-skips', 'leaderboard-logs', 'rank-ups',
+    'map-rotation-logs', 'map-votes', 'map-skips', 'leaderboard-logs', 'rank-ups', 'anticheat-logs',
 )
 ROUTES = {
+    'gameplay_alert_status': ('anticheat-logs',),
+    'gameplay_speed': ('anticheat-logs',),
+    'gameplay_position_jump': ('anticheat-logs',),
+    'gameplay_fire_rate': ('anticheat-logs',),
+    'gameplay_damage': ('anticheat-logs',),
     'duel_invite': ('duel-logs', 'duel-invites'),
     'duel_accept': ('duel-logs', 'duel-accepts'),
     'duel_reject': ('duel-logs', 'duel-rejects'),

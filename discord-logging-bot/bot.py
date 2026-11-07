@@ -20,7 +20,8 @@ def safe(value, length=1000):
     return discord.utils.escape_markdown(discord.utils.escape_mentions(str(value)))[:length] or '—'
 
 def embed_for(event):
-    embed = discord.Embed(title=safe(event['Kind'].replace('_', ' ').title(), 200), description=safe(event.get('Details', ''), 3000), color=0xEEEEEE)
+    colour = 0xE6A23C if event['Kind'].startswith('gameplay_') else 0xEEEEEE
+    embed = discord.Embed(title=safe(event['Kind'].replace('_', ' ').title(), 200), description=safe(event.get('Details', ''), 3000), color=colour)
     for prefix, label in (('Player', 'Player'), ('Other', 'Other player')):
         name = event.get(prefix + 'Name')
         uid = event.get(prefix + 'Id')
@@ -79,7 +80,7 @@ class LoggingBot(discord.Client):
         summary = self.store.stats()
         await interaction.response.send_message(
             f"Pending: {summary['pending']} | Delivered: {summary['delivered']} | Rejected records: {summary['rejected']}\n"
-            + ('Missing/ambiguous channels: ' + ', '.join(missing) if missing else 'All 19 channels matched.')
+            + ('Missing/ambiguous channels: ' + ', '.join(missing) if missing else f'All {len(CHANNELS)} channels matched.')
             + '\nAudit directory: ' + ('available' if self.directory.is_dir() else 'NOT FOUND'), ephemeral=True)
 
     async def on_ready(self):

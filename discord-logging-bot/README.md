@@ -1,6 +1,6 @@
 # GRZ Discord logging bot
 
-Run this on your PC now; move the complete folder to the server box later. The bot reads the **DayZ server's** `GRZ_Logs` files and posts to the existing 19 channels. It never deletes, creates or renames Discord channels or roles. This is separate from the recovery bot.
+Run this on your PC now; move the complete folder to the server box later. The bot reads the **DayZ server's** `GRZ_Logs` files and posts to the existing channels and `anticheat-logs`. It never deletes, creates or renames Discord channels or roles. This is separate from the recovery bot.
 
 ## Set up on your PC
 
@@ -16,7 +16,7 @@ Run this on your PC now; move the complete folder to the server box later. The b
 
    From PowerShell: `cmd /c .\Start-Logging-Bot.cmd`. The first run creates `.env` and opens Notepad if missing; save it, then run the command again. Keep the window open. Ctrl+C stops the bot. Check `/grz_logs_status` in Discord (Manage Server permission required).
 
-The bot matches these names, including decorative separators/emoji before the name:
+The bot matches these 20 names, including decorative separators/emoji before the name:
 
 | Events | Channel(s) |
 |---|---|
@@ -37,6 +37,7 @@ The bot matches these names, including decorative separators/emoji before the na
 | Admin skips and rejected skip attempts | map-skips, map-rotation-logs |
 | Kill/death counter changes, saved duel Elo and leaderboard views | leaderboard-logs |
 | Elo tier promotion | rank-ups, leaderboard-logs |
+| Server gameplay review flags and startup status | anticheat-logs |
 
 `duel-loses` and `vip-prefixs` intentionally match your channel spelling. Stats events distinguish live counters from saved duel ratings. Weapon grants during respawn/duels are marked as restores. Inventory previews and failed inventory transactions do not produce successful change logs. Kill attribution uses the existing death hook and the held weapon/source available there; delayed projectile/environmental kills may have an unknown source. Changes made directly by unrelated admin mods are outside these GRZ menu hooks.
 
@@ -65,3 +66,22 @@ To migrate: stop the PC bot with Ctrl+C, copy this folder **including `.env` and
 - Run offline tests without Discord or a token: `python -m unittest discover -s tests -v` (the formatting tests require installed requirements).
 
 Validation covers local file ingestion, durable queue/restarts, routing, and mocked Discord delivery. The actual Windows DayZ/Discord integration still needs an in-game event test after installation.
+
+## Gameplay alert update
+
+Create **#anticheat-logs** and let the bot view it, send messages and embed links. To use a differently named channel, put its numeric ID under `"anticheat-logs"` in `channel-overrides.json`. The bot never creates or changes channels. Staff-only access is recommended because alerts include player Steam IDs and positions.
+
+Stop the bot with Ctrl+C. Replace `bot.py` and `engine.py` with this update (or copy the updated source files over your current bot folder), preserving `.env`, `channel-overrides.json` and the whole `logging_data` folder. Run `.\Start-Logging-Bot.cmd` again in PowerShell. Install the paired DayZ update and restart server and client. Check `/grz_logs_status`; server startup posts a gameplay alert status message.
+
+The visible **GRZ Audit Logs and Gameplay Alerts** addon uses server gameplay events only. There is no keyboard capture, Insert detection or hidden no-grass modification. These are staff review flags, never a verdict, kick or ban:
+
+- On-foot speed: over 16 m/s for 3 consecutive samples, sampled once per second. Skips vehicles, falls, climbing, swimming, dead/unconscious players, short samples, and server stalls over 2.5 seconds.
+- Position jumps: a horizontal move exceeding 120 metres in one valid sample without a GRZ teleport exemption. Admin tools or replication correction can explain these; review context.
+- Firing cadence: at least 6 observed shots spanning at least 2 seconds per window, with average spacing below 55% of that weapon's runtime shot interval, repeated over 2 windows. Skips burst/multi-muzzle weapons and resets on weapon owner/mode/timing changes and long pauses. Server callbacks and network buffering cannot establish every client shot time.
+- Projectile damage: at least 2 calculated zone-health damage outliers within 10 seconds, each exceeding 8 times the ammo's configured base health damage. Other damage/zone mods can explain these. Unknown ammo configurations are skipped.
+
+Each check has a 60-second per-player cooldown. New player entities receive 20 seconds of spawn grace. GRZ arena rotation, boundary returns, duel side resets and duel returns explicitly exempt their teleports for 10 seconds. Other admin/teleport mods can call `GRZGameplayAlerts.AllowTeleport(player, seconds)` before moving a player, or you can add staff Steam IDs to `ExemptSteamIds`.
+
+Settings are created on the server at `profiles/GRZ_Logs/gameplay-alerts.json`. Set `Enabled` or individual `MovementEnabled`, `FireRateEnabled`, `DamageEnabled` to false to disable checks; tune thresholds for your installed movement/weapon/damage mods, then restart. Existing no-grass files, VIP permissions, saved gear, Discord credentials and queue state are unchanged.
+
+These heuristics can flag replication/lag and legitimate mod/admin actions, and cannot detect all cheats. Validate thresholds with normal gameplay before acting on alerts. The pure numerical rules and Discord routing have automated tests; live DayZ multiplayer behavior still requires an in-game check.

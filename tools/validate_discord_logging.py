@@ -14,10 +14,10 @@ for addon in modules:
  for p in (r/addon/'scripts/4_World').rglob('*.c'):
   text=p.read_text()
   assert text.count('{')==text.count('}'),p
-  kinds.update(re.findall(r'GRZAudit.Record\("([a-z_]+)"',text))
+  kinds.update(re.findall(r'(?:GRZAudit.Record|Report)\("([a-z_]+)"',text))
   kinds.update(re.findall(r'\.Kind = "([a-z_]+)"',text))
 assert kinds == set(ROUTES),(kinds-set(ROUTES),set(ROUTES)-kinds)
-assert len(CHANNELS)==19
+assert len(CHANNELS)==20
 for addon in modules[1:]:
  assert '"GRZ_Audit"' in (r/addon/'config.cpp').read_text()
 audit=(r/'GRZ_Audit/scripts/4_World/GRZAudit.c').read_text()
@@ -47,4 +47,4 @@ with ZipFile(r/'downloads/GRZ-Discord-Logging-Bot.zip') as z:
   assert '.env' not in rel.parts and 'logging_data' not in rel.parts and '.venv' not in rel.parts
   assert not name.endswith(('.sqlite3','.db','.lock'))
   assert z.read(name)==(r/'discord-logging-bot'/rel).read_bytes()
-print('All 27 audit event kinds map to the 19 channels; server authority, post-commit hooks, 14-addon package and credential-free bot ZIP verified. DayZ runtime untested.')
+print('All 32 audit event kinds map to the 20 channels; server authority, post-commit hooks, 14-addon package and credential-free bot ZIP verified. DayZ runtime untested.')
