@@ -425,7 +425,7 @@ ImageWidgetClass PreviewBackground
  stretch 1
  color 0.055 0.055 0.065 1
 }
-ItemPreviewWidgetClass GunPreview
+FrameWidgetClass GunPreviewHost
 {
  position 0.115 0.39
  size 0.77 0.315

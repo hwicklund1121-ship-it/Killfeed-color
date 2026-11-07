@@ -5,7 +5,7 @@ import hashlib,json,subprocess,sys
 from build_pbo import build
 root=Path(__file__).resolve().parents[1]
 out=root/'downloads'
-manifest={'loadout_version':'0.4.3','rotation_version':'0.1.3','starting_elo':800,'leaderboard_key':'O','challenge_seconds':60,'countdown_seconds':5,'best_of':[1,3,5],'maps_configured':False,'pbo':{}}
+manifest={'loadout_version':'0.4.4','rotation_version':'0.1.3','starting_elo':800,'leaderboard_key':'O','challenge_seconds':60,'countdown_seconds':5,'best_of':[1,3,5],'maps_configured':False,'pbo':{}}
 for addon in ['GRZ_Loadout','GRZ_MapRotation']:
  data=build(root/addon)
  (out/(addon+'.pbo')).write_bytes(data)

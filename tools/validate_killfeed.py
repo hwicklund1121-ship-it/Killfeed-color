@@ -227,13 +227,18 @@ def main():
     verify_menu_bounds(menu_layout)
     assert 'text "GRZ VIP"' in menu_layout
     assert 'VIPPreviewViewport' in declared and 'VIPResetView' in declared
-    assert 'VIPGunPreviewBacking' not in declared
-    render_creation = menu.split('protected EntityAI GRZCreateVIPPreviewObject',1)[1].split('protected void GRZPrepareVIPPreview',1)[0]
-    assert '"0 -1000 0"' not in render_creation and 'ECE_CREATEPHYSICS | ECE_TRACE' in render_creation
-    assert 'dBodyDestroy(item)' in render_creation and 'DisableSimulation(true)' in render_creation
-    assert 'm_GRZPreviewRoot.SetSort(100001)' in menu and '[GRZ VIP Preview] Bound' in menu
-    assert 'menu_item_preview.layout' in menu and 'm_GRZPreviewRoot.Unlink()' in menu
-    assert 'm_GRZGunPreview.SetView(0)' in menu
+    assert 'VIPGunPreviewBacking' in declared
+    shared_layout = (ROOT/'GRZ_Loadout/gui/layouts/item_preview.layout').read_text()
+    shared_code = (ROOT/'GRZ_Loadout/scripts/5_Mission/GRZLoadoutItemPreview.c').read_text()
+    normal_menu = (ROOT/'GRZ_Loadout/scripts/5_Mission/GRZLoadoutMenu.c').read_text()
+    assert 'size 1 1' in shared_layout and 'hexactsize 0' in shared_layout and 'vexactsize 0' in shared_layout
+    assert 'GRZLoadoutItemPreview.Create(' in menu and 'GRZLoadoutItemPreview.Create(' in normal_menu
+    assert 'GRZLoadoutItemPreview.CreateItem(' in menu and 'GRZLoadoutItemPreview.CreateItem(' in normal_menu
+    assert 'GRZLoadoutItemPreview.Bind(' in menu and 'GRZLoadoutItemPreview.Bind(' in normal_menu
+    assert 'SetModelPosition("0 0 0.8")' in shared_code and 'SetView(item.GetViewIndex())' in shared_code
+    assert 'if (target == m_GRZGunPreview) return;' in menu
+    assert 'm_GRZGunPreview.SetSize(m_GRZPreviewZoom, m_GRZPreviewZoom)' in menu
+    assert 'menu_item_preview.layout' not in menu and 'SetSort(100001)' not in menu
     assert 'm_GRZGunPreview.GetItem() != m_GRZPreviewGun' in menu
 
     preview_menu = (SOURCE/'scripts/5_Mission/GRZ_Killfeed/GRZKillfeedMenu.c').read_text()

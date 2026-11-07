@@ -49,7 +49,7 @@ class GRZLoadoutMenu : UIScriptedMenu
    WidgetEventHandler.GetInstance().RegisterOnMouseWheel(m_ClothingList, this, "GRZListWheel");
    WidgetEventHandler.GetInstance().RegisterOnDoubleClick(m_ClothingList, this, "OnDoubleClick");
   }
-  m_Preview = ItemPreviewWidget.Cast(layoutRoot.FindAnyWidget("GunPreview"));
+  m_Preview = GRZLoadoutItemPreview.Create(layoutRoot.FindAnyWidget("GunPreviewHost"));
   ImageWidget logo = ImageWidget.Cast(layoutRoot.FindAnyWidget("Logo"));
   logo.LoadImageFile(0, "GRZ_Loadout/data/logo.paa");
   logo.SetImage(0);
@@ -225,8 +225,7 @@ class GRZLoadoutMenu : UIScriptedMenu
   GRZLoadoutGun gun = CurrentGun();
   if (!gun || !m_Preview)
    return;
-  int flags = ECE_LOCAL | ECE_NOLIFETIME | ECE_KEEPHEIGHT | ECE_NOSURFACEALIGN | ECE_NOPERSISTENCY_WORLD | ECE_NOPERSISTENCY_CHAR;
-  m_PreviewGun = EntityAI.Cast(g_Game.CreateObjectEx(gun.Type, "0 -1000 0", flags));
+  m_PreviewGun = GRZLoadoutItemPreview.CreateItem(gun.Type);
   if (!m_PreviewGun)
   {
    Text("Status", "This gun's preview model could not be loaded.");
@@ -239,10 +238,7 @@ class GRZLoadoutMenu : UIScriptedMenu
   string wrap = CurrentWrap();
   if (wrap != "" && !m_PreviewGun.GetInventory().CreateAttachment(wrap))
    Text("Status", "This gun does not accept the selected wrap. Choose another wrap.");
-  m_Preview.SetItem(m_PreviewGun);
-  m_Preview.SetView(m_PreviewGun.GetViewIndex());
-  m_Preview.SetModelPosition("0 0 0.8");
-  m_Preview.SetModelOrientation("0 0 0");
+  GRZLoadoutItemPreview.Bind(m_Preview, m_PreviewGun);
  }
 
  protected void SelectPage(bool clothing)

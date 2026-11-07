@@ -225,10 +225,22 @@ text "OTHER"
 }
 }
 }
-ImageWidgetClass VIPGunListBacking
+TextListboxWidgetClass VIPGunList
 {
-position 0 60
-size 300 300
+position 0 0
+size 1 1
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+visible 0
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+}
+ImageWidgetClass VIPGunPreviewBacking
+{
+position 50 60
+size 936 230
 hexactpos 1
 vexactpos 1
 hexactsize 1
@@ -236,88 +248,23 @@ vexactsize 1
 ignorepointer 1
 mode blend
 stretch 1
-color 0.06 0.06 0.07 1
-}
-TextListboxWidgetClass VIPGunList
-{
-position 0 60
-size 300 300
-hexactpos 1
-vexactpos 1
-hexactsize 1
-vexactsize 1
-color 1 1 1 1
-font "gui/fonts/sdf_MetronLight16"
+color 0.055 0.055 0.065 1
 }
 FrameWidgetClass VIPPreviewViewport
 {
-position 324 60
-size 712 210
+position 94 60
+size 848 230
 hexactpos 1
 vexactpos 1
 hexactsize 1
 vexactsize 1
 color 1 1 1 1
-ignorepointer 1
-}
-ButtonWidgetClass VIPResetView
-{
-position 382 280
-size 108 42
-hexactpos 1
-vexactpos 1
-hexactsize 1
-vexactsize 1
-color 0 0 0 0
-{
-ImageWidgetClass VIPResetViewBorder
-{
-position 0 0
-size 108 42
-hexactpos 1
-vexactpos 1
-hexactsize 1
-vexactsize 1
-ignorepointer 1
-mode blend
-stretch 1
-color 0.22 0.22 0.22 1
-}
-ImageWidgetClass VIPResetViewFill
-{
-position 1 1
-size 106 40
-hexactpos 1
-vexactpos 1
-hexactsize 1
-vexactsize 1
-ignorepointer 1
-mode blend
-stretch 1
-color 0.065 0.065 0.065 1
-}
-TextWidgetClass VIPResetViewLabel
-{
-position 12 0
-size 84 42
-hexactpos 1
-vexactpos 1
-hexactsize 1
-vexactsize 1
-ignorepointer 1
-color 1 1 1 1
-font "gui/fonts/sdf_MetronLight16"
-"exact text" 1
-"text valign" center
-text "RESET VIEW"
-"text halign" center
-}
-}
+clipchildren 1
 }
 ButtonWidgetClass VIPGunPrevious
 {
-position 324 280
-size 48 42
+position 0 145
+size 42 60
 hexactpos 1
 vexactpos 1
 hexactsize 1
@@ -327,7 +274,7 @@ color 0 0 0 0
 ImageWidgetClass VIPGunPreviousBorder
 {
 position 0 0
-size 48 42
+size 42 60
 hexactpos 1
 vexactpos 1
 hexactsize 1
@@ -340,7 +287,7 @@ color 0.22 0.22 0.22 1
 ImageWidgetClass VIPGunPreviousFill
 {
 position 1 1
-size 46 40
+size 40 58
 hexactpos 1
 vexactpos 1
 hexactsize 1
@@ -353,7 +300,7 @@ color 0.065 0.065 0.065 1
 TextWidgetClass VIPGunPreviousLabel
 {
 position 12 0
-size 24 42
+size 18 60
 hexactpos 1
 vexactpos 1
 hexactsize 1
@@ -368,26 +315,10 @@ text "<"
 }
 }
 }
-TextWidgetClass VIPGunName
-{
-position 500 280
-size 478 42
-hexactpos 1
-vexactpos 1
-hexactsize 1
-vexactsize 1
-ignorepointer 1
-color 1 1 1 1
-font "gui/fonts/sdf_MetronLight16"
-"exact text" 1
-"text valign" center
-text "Loading reskins..."
-"text halign" center
-}
 ButtonWidgetClass VIPGunNext
 {
-position 988 280
-size 48 42
+position 994 145
+size 42 60
 hexactpos 1
 vexactpos 1
 hexactsize 1
@@ -397,7 +328,7 @@ color 0 0 0 0
 ImageWidgetClass VIPGunNextBorder
 {
 position 0 0
-size 48 42
+size 42 60
 hexactpos 1
 vexactpos 1
 hexactsize 1
@@ -410,7 +341,7 @@ color 0.22 0.22 0.22 1
 ImageWidgetClass VIPGunNextFill
 {
 position 1 1
-size 46 40
+size 40 58
 hexactpos 1
 vexactpos 1
 hexactsize 1
@@ -423,7 +354,7 @@ color 0.065 0.065 0.065 1
 TextWidgetClass VIPGunNextLabel
 {
 position 12 0
-size 24 42
+size 18 60
 hexactpos 1
 vexactpos 1
 hexactsize 1
@@ -438,9 +369,79 @@ text ">"
 }
 }
 }
+TextWidgetClass VIPGunName
+{
+position 170 292
+size 696 34
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "Loading reskins..."
+"text halign" center
+}
+ButtonWidgetClass VIPResetView
+{
+position 904 292
+size 132 34
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+color 0 0 0 0
+{
+ImageWidgetClass VIPResetViewBorder
+{
+position 0 0
+size 132 34
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+mode blend
+stretch 1
+color 0.22 0.22 0.22 1
+}
+ImageWidgetClass VIPResetViewFill
+{
+position 1 1
+size 130 32
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+mode blend
+stretch 1
+color 0.065 0.065 0.065 1
+}
+TextWidgetClass VIPResetViewLabel
+{
+position 12 0
+size 108 34
+hexactpos 1
+vexactpos 1
+hexactsize 1
+vexactsize 1
+ignorepointer 1
+color 1 1 1 1
+font "gui/fonts/sdf_MetronLight16"
+"exact text" 1
+"text valign" center
+text "RESET VIEW"
+"text halign" center
+}
+}
+}
 TextWidgetClass VIPWrapHeading
 {
-position 324 332
+position 120 332
 size 156 42
 hexactpos 1
 vexactpos 1
@@ -455,7 +456,7 @@ text "GHILLIE WRAP"
 }
 ButtonWidgetClass VIPWrapPrevious
 {
-position 486 332
+position 290 332
 size 48 42
 hexactpos 1
 vexactpos 1
@@ -509,8 +510,8 @@ text "<"
 }
 TextWidgetClass VIPWrapName
 {
-position 544 332
-size 434 42
+position 350 332
+size 572 42
 hexactpos 1
 vexactpos 1
 hexactsize 1
@@ -525,7 +526,7 @@ text "No wrap"
 }
 ButtonWidgetClass VIPWrapNext
 {
-position 988 332
+position 934 332
 size 48 42
 hexactpos 1
 vexactpos 1
@@ -579,8 +580,8 @@ text ">"
 }
 TextWidgetClass VIPGearNote
 {
-position 324 378
-size 712 18
+position 0 378
+size 1036 18
 hexactpos 1
 vexactpos 1
 hexactsize 1
@@ -590,7 +591,7 @@ color 0.65 0.65 0.68 1
 font "gui/fonts/sdf_MetronLight16"
 "exact text" 1
 "text valign" center
-text "Compatible VIP suppressors are attached automatically."
+text "Drag to rotate / scroll to zoom."
 "text halign" center
 }
 }
