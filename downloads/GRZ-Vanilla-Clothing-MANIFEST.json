@@ -1,0 +1,83 @@
+{
+  "descriptionShort": "made by blake",
+  "addon": "GRZ_VanillaClothing",
+  "items": [
+    {
+      "class": "GRZ_SurgicalGloves",
+      "displayName": "GRZ Surgical Gloves",
+      "base_class": "SurgicalGloves_White",
+      "textures": {
+        "co": {
+          "source_sha256": "cd3cd92f3c9cf7a8190295f4bfc5b9eefba067457911e96786f15ff2fe60456a",
+          "paa_sha256": "b84d19565c034ae75b33d82e5ce42ded1086bc960766cd70c64e2fceabda5466",
+          "size": [
+            4096,
+            4096
+          ]
+        },
+        "nohq": {
+          "source_sha256": "949d9ea371d329f5c559e8e5bf774aa94e3e9449e82d43e2e31cff4713fb8ca9",
+          "paa_sha256": "9a6fbf65d07d2571b192351dda76cf254c345b51d844b5fa43c1f633d8c91724",
+          "size": [
+            4096,
+            4096
+          ]
+        }
+      }
+    },
+    {
+      "class": "GRZ_TShirt",
+      "displayName": "GRZ T-Shirt",
+      "base_class": "TShirt_Grey",
+      "textures": {
+        "co": {
+          "source_sha256": "f83aabde249194ffb9d732ab39f98751fd1c702c6c9e4badc258cbdf77e05652",
+          "paa_sha256": "5794f278271e7b73bdae6ab80b4644fa7320759209ef85b2dd7e4c684d2af066",
+          "size": [
+            4096,
+            4096
+          ]
+        },
+        "nohq": {
+          "source_sha256": "2736670181478aad5ab69d098a67bd691148fd2fb90002482f3c8c7701d3194e",
+          "paa_sha256": "78cc450ed3019818f9efc70241e4a4c87cd7726582e5b71ed1fe865bd9ffb3af",
+          "size": [
+            4096,
+            4096
+          ]
+        }
+      }
+    },
+    {
+      "class": "GRZ_CowboyHat",
+      "displayName": "GRZ Cowboy Hat",
+      "base_class": "CowboyHat_Brown",
+      "textures": {
+        "co": {
+          "source_sha256": "33d54003abdb2519fdd2eea1f0a7ba02ae34abc76d66dccae9965ad87b3024d9",
+          "paa_sha256": "5c1e255155ba0110e85d7669f0d94f496d0d27a9a02c725107ce5632bdec25d4",
+          "size": [
+            4096,
+            4096
+          ]
+        },
+        "nohq": {
+          "source_sha256": "d9360edaf5d305b4e4f930635e4194f92e88c0ec8c14b4303e447598ed8a0cdd",
+          "paa_sha256": "6edf47f6072f5e67671e262b2c240e8f75ea73501ac27e60ca3ca4b71f1028bb",
+          "size": [
+            4096,
+            4096
+          ]
+        }
+      }
+    }
+  ],
+  "pending_uploads": [
+    "GRZ Sneakers",
+    "GRZ Bandana",
+    "GRZ Jeans"
+  ],
+  "normal_conversion": "OpenGL tangent normals converted to DirectX with inverted green; normal X packed into alpha with native NOHQ SWIZ [5,4,2,3].",
+  "vanilla_stats_preserved": true,
+  "pbo_sha256": "c19158332b53be66ac66ae6c60b66f15a8d5dcbb6b5fc8307e293cce515f8c12"
+}
