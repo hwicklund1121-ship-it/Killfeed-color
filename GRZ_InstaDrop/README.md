@@ -1,59 +1,60 @@
-# GRZ InstaDrop v0.3.1 pose-conflict test
+# GRZ InstaDrop v0.3.2 roll-continuity test
 
-This build uses the v0.2.1 movement shown in the user's clip as the approved
-baseline. The requested fix is the weapon/body hitch before the stand-up;
-the stand-up itself is to stay unchanged.
+The requested change is a smoother continuous roll, preserving the foot motion
+and stand-up that the user likes. This builds on v0.3.1.
 
-The only locomotion-graph difference from that baseline is the weight of
-`ThrowStrengthIdleB`: uncharged preparation uses the underlying native landing
-pose, and actual charging enables the existing strength-pose layer. This targets
-the full-strength pose masking/conflicting with the prepared landing. The
-0.14-second drop, directional pose source, roll routes, direct stand routes,
-blend durations, cancellation guards and stance-input policy match v0.2.1.
+Changes:
 
-The v0.3.0 animated recovery and clip-speed requests are not used. If v0.3.0
-was tested, fully close both game processes before installing/restarting so
-its runtime animation-rate requests are cleared. This ZIP's data matches the
-v0.2.1 configuration and contains no new recovery-rate module.
+- Prevents new rifle roll requests during an already active native roll. The
+  callback latch clears on native roll finish and has a 1.5-second fallback;
+  native `IsInRoll()` is also checked. Stance and ordinary movement inputs are
+  unchanged, including standing during the roll.
+- Adds an active-state tag to the native on-back roll and prevents the general
+  front-roll entry from being selected while either roll state is active. This
+  targets an on-back-to-front route switch or restart during the Q/A/D sequence.
+- Keeps existing roll animation children, foot clips, directional landing,
+  drop blend, standing routes and all existing motion durations unchanged.
+  No recovery-speed tuning or v0.3.0 animated-get-up changes are included.
 
-This is a test build targeting DayZ 1.30.164.289. Source checks prove that
-restoring the single pose-weight property reproduces the approved baseline
-graph exactly. They do not establish native visual playback or prove that
-the hitch is fixed. Check the whole sequence and real throw charging/release.
+This is a test build for DayZ 1.30.164.289. The supplied log confirmed v0.3.1
+loaded and recorded allowed stance requests but only one native roll start.
+The guards address a possible roll restart/route switch; they do not prove
+the cause of every visible head/chest dip. Whether the reported backward/forward
+hitch is removed requires a fresh in-game comparison.
 
 ## Install
 
-Close DayZ and stop the server. Extract to a new folder in Downloads, open
-PowerShell in that folder, and run:
+Close DayZ and stop the server. Extract the ZIP to a new Downloads folder,
+open PowerShell in that folder, and run:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\Install-InstaDrop.ps1
 ```
 
-Custom `-GamePath` and `-ServerPath` are supported. Existing GRZ Movement in
-`@GRZ_Local/Addons` is required on both sides. The installer verifies source
-graphs and builds the patched graph locally, checks hashes/versions/signatures,
-backs up three InstaDrop PBOs, verifies replacement copies and attempts rollback
-on failure. No native graph or animation payloads are bundled/downloaded.
-Startup commands, other mods, gait data, cameras, profiles and outfits remain.
-Use the usual dependency list plus `@GRZ_Local` on client and server.
+Custom `-GamePath` and `-ServerPath` are supported. Both existing
+`@GRZ_Local/Addons` folders must contain GRZ Movement. Native graphs are read,
+checked and patched locally; the output hash is verified before installation.
+No native graph or animation payloads are distributed. The installer checks
+versions, hashes and signatures, backs up three PBOs, verifies copies, and
+attempts rollback on failure. Other mods, gait/camera settings, profiles,
+outfits, signing keys and startup commands are unchanged.
 
 ## Check
 
-Startup should identify `v0.3.1 graph selected` and `Stand/roll routes match
-v0.2.1`. Check RPT/error logs for graph errors. Repeat the exact sequence from
-the clip and check whether the gun/body still rocks backward then forward
-before the accepted stand-up. Test normal charging/release too. Send a short
-new clip and client/server script logs if the hitch remains. Drop and stand
-timing are intentionally unchanged from the approved baseline.
+Startup should identify `v0.3.2 graph selected` and the roll continuity guard.
+Check the RPT/error log for graph errors. Repeat the same G -> drop/look right
+-> Q/A/D -> stand sequence. Check for one continuous foot/body motion rather
+than a back/front restart, and verify the accepted stand-up remains the same.
+Native roll start/finish and suppressed repeated-request logs are available.
+If the hitch remains, send a new short clip and client/server script logs.
 
 ## Revert
 
-Close both sides and use the exact printed backup folder:
+Close both sides and use the exact backup directory printed by the installer:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\Restore-InstaDrop.ps1 -BackupPath "FULL BACKUP FOLDER"
 ```
 
-Previous InstaDrop PBOs are restored on both sides. This is unsigned for the
-existing development setup; signing keys/signature settings are unchanged.
+This restores the prior InstaDrop PBOs on both sides. Restart both afterwards.
+This is an unsigned development build for the existing local-mod setup.

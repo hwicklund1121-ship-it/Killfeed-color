@@ -1,5 +1,5 @@
 {
-  "Version": "0.3.1",
+  "Version": "0.3.2",
   "TargetDayZ": "1.30.164.289",
   "SourceHashes": {
     "dz/anims/workspaces/player/player_main/player_main.agr": "89f82f6de2461cf42367b989b2b1392814a4df9272034fbb23be8e5c2106df23",
@@ -95,6 +95,15 @@
     "StandRollTiming": "unchanged",
     "ClipRates": "unchanged"
   },
-  "LocomotionSHA256": "821809f15e8828878a9dedc65d38198e86f01c81248a5ca595496c9a2477228c",
+  "RollContinuity": {
+    "GeneralEntryExcludes": [
+      "TagMoveRolling",
+      "GRZBackRollActive"
+    ],
+    "BackRollTag": "GRZBackRollActive",
+    "ClipChildren": "unchanged",
+    "Timing": "unchanged"
+  },
+  "LocomotionSHA256": "f1745f9434703024ee31cada50f4f62738bf7791db83e78606f66207e82b26af",
   "Limits": "Source/package checks only; native graph loading and gameplay require DayZ testing."
 }

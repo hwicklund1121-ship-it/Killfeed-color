@@ -1,4 +1,4 @@
-"""Reproducible v0.3.1 graph-test packaging from an explicitly supplied export."""
+"""Reproducible v0.3.2 graph-test packaging from an explicitly supplied export."""
 import argparse
 import hashlib
 import json

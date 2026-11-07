@@ -37,8 +37,8 @@ def named_block(text, kind, name):
 
 
 def change_property(block, key, before, after):
-    pattern = re.compile(r'(?m)^(\s*' + re.escape(key) + r'\s+)"' + re.escape(before) + r'"(?=\s*$)')
-    result, count = pattern.subn(lambda m: m[1] + '"' + after + '"', block)
+    pattern = re.compile(r'(?m)^(\s*' + re.escape(key) + r'\s+)' + re.escape(json.dumps(before)) + r'(?=\s*$)')
+    result, count = pattern.subn(lambda m: m[1] + json.dumps(after), block)
     if count != 1:
         raise ValueError(f'Expected exactly one {key}={before!r}, found {count}')
     return result
@@ -86,6 +86,23 @@ def patch_direction(source):
     return result[:a] + DIRECTION_BODY + '\n    ' + result[a:]
 
 
+ROLL_ENTRY_BEFORE = 'IsCommand(CMD_Roll) && (!Raised || (Raised && AimX >= -50 && AimX <= 50))'
+ROLL_ENTRY_AFTER = ROLL_ENTRY_BEFORE + ' && !IsTag("TagMoveRolling") && !IsTag("GRZBackRollActive")'
+
+def guard_roll_continuity(source):
+    a,b=named_block(source,'AnimSrcNodeStateMachine','StanceMaster')
+    master=source[a:b]
+    c,d=named_block(master,'AnimSrcNodeTransition','{6930A8DE26987785}')
+    edge=change_property(master[c:d],'Condition',ROLL_ENTRY_BEFORE,ROLL_ENTRY_AFTER)
+    master=master[:c]+edge+master[d:]
+    c,d=named_block(master,'AnimSrcNodeState','PneOnBackRoll')
+    state=master[c:d]
+    if state.count('"TagProneBack"') != 1: raise ValueError('Unsupported native back-roll tag block')
+    state=state.replace('"TagProneBack"','"TagProneBack" "GRZBackRollActive"')
+    master=master[:c]+state+master[d:]
+    return source[:a]+master+source[b:]
+
+
 def patch_locomotion(source):
     start, end = named_block(source, 'AnimSrcNodeStateMachine', 'ThrowIdleStanceSTM')
     machine = source[start:end]
@@ -115,7 +132,7 @@ def patch_locomotion(source):
     result = patch_direction(result[:a] + master + result[b:])
     a,b = named_block(result, 'AnimSrcNodeBlend', 'ThrowStrengthIdleB')
     result = result[:a] + change_property(result[a:b], 'BlendWeight', '1.0', 'clamp(ActionProgress * 1000, 0, 1)') + result[b:]
-    return result, changes
+    return guard_roll_continuity(result), changes
 
 
 def build_graph(export, output):
@@ -138,7 +155,7 @@ def build_graph(export, output):
     patched, changes = patch_locomotion(source)
     root = files[BASE + 'player_main.agr'].decode('utf-8')
     original_resource = '{6CA2ACDCAC1184DC}DZ/anims/workspaces/player/player_main/Locomotion.agf'
-    new_resource = '{E5500310E0494CA1}' + PREFIX + '/locomotion.agf'
+    new_resource = '{E5500320E0494CA1}' + PREFIX + '/locomotion.agf'
     if root.count(original_resource) != 1:
         raise ValueError('Native locomotion reference not uniquely located')
     root = root.replace(original_resource, new_resource)
@@ -169,12 +186,13 @@ class CfgVehicles
 };
 ''')
     evidence = dict(
-        Version='0.3.1', TargetDayZ=TARGET_VERSION,
+        Version='0.3.2', TargetDayZ=TARGET_VERSION,
         SourceHashes={p: hashlib.sha256(b).hexdigest() for p, b in files.items()},
         Changes=changes,
         RollRoutes=[dict(Transition=g, From=f, To=t, Condition=c, BlendSeconds=float(d)) for g,f,t,c,d in ROLL_ROUTES],
         DirectionBlend=dict(BodySource='Locomotion.PneRas.AimToBack', BodyValueX='AimX', BodyValueY='AimY', BodyNode='GRZDropDirectionalPose', WeaponNode='ThrowStrenghPoBB', StanceWeaponBlendSeconds=0.14, TargetMapping='look right -> left ground side; look left -> right ground side; anatomy requires native verification'),
         PoseFix=dict(Baseline='0.2.1', ChangedNode='ThrowStrengthIdleB', PreparedWeight=0, StandRollTiming='unchanged', ClipRates='unchanged'),
+        RollContinuity=dict(GeneralEntryExcludes=['TagMoveRolling','GRZBackRollActive'], BackRollTag='GRZBackRollActive', ClipChildren='unchanged', Timing='unchanged'),
         LocomotionSHA256=hashlib.sha256(patched.encode()).hexdigest(),
         Limits='Source/package checks only; native graph loading and gameplay require DayZ testing.',
     )

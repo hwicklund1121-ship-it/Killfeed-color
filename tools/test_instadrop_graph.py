@@ -7,7 +7,7 @@ import sys
 import tempfile
 import unittest
 from zipfile import ZipFile
-from build_instadrop_graph import BASE, named_block, patch_locomotion, build_graph, roll_route_text, ROLL_ROUTES, DIRECTION_BODY, DIRECTION_STRENGTH
+from build_instadrop_graph import BASE, named_block, patch_locomotion, build_graph, roll_route_text, ROLL_ROUTES, DIRECTION_BODY, DIRECTION_STRENGTH, ROLL_ENTRY_BEFORE, ROLL_ENTRY_AFTER, change_property
 from build_instadrop_graph_release import ROOT, release
 from build_pbo import build
 
@@ -64,7 +64,10 @@ class DropGraphTests(unittest.TestCase):
         patched, changes = patch_locomotion(self.native)
         self.assertEqual(len(changes), 4)
         self.assertEqual(patched.count(roll_route_text()), 1)
-        restored = patched.replace(roll_route_text(), "", 1)
+        restored = patched.replace('"TagProneBack" "GRZBackRollActive"','"TagProneBack"',1)
+        a,b=named_block(restored,'AnimSrcNodeTransition','{6930A8DE26987785}')
+        restored=restored[:a]+change_property(restored[a:b],'Condition',ROLL_ENTRY_AFTER,ROLL_ENTRY_BEFORE)+restored[b:]
+        restored = restored.replace(roll_route_text(), "", 1)
         a,b=named_block(restored,'AnimSrcNodeBlend','ThrowStrengthIdleB')
         restored=restored[:a]+restored[a:b].replace('BlendWeight "clamp(ActionProgress * 1000, 0, 1)"','BlendWeight "1.0"')+restored[b:]
         restored = restored.replace(DIRECTION_BODY + '\n    ', '', 1)
@@ -139,7 +142,25 @@ class DropGraphTests(unittest.TestCase):
         patched,_=patch_locomotion(self.native)
         a,b=named_block(patched,'AnimSrcNodeBlend','ThrowStrengthIdleB')
         restored=patched[:a]+patched[a:b].replace('BlendWeight "clamp(ActionProgress * 1000, 0, 1)"','BlendWeight "1.0"')+patched[b:]
-        self.assertEqual(restored,baseline,'Stand/roll/drop routing and timing must exactly match approved baseline')
+        restored=restored.replace('"TagProneBack" "GRZBackRollActive"','"TagProneBack"',1)
+        a,b=named_block(restored,'AnimSrcNodeTransition','{6930A8DE26987785}')
+        restored=restored[:a]+change_property(restored[a:b],'Condition',ROLL_ENTRY_AFTER,ROLL_ENTRY_BEFORE)+restored[b:]
+
+        self.assertEqual(restored,baseline,'After removing the pose fix and roll-entry guards, foot clips, stand/drop routes and timings must match the approved baseline')
+
+    def test_active_back_roll_cannot_enter_the_general_roll_route(self):
+        patched,_=patch_locomotion(self.native)
+        a,b=named_block(patched,'AnimSrcNodeTransition','{6930A8DE26987785}')
+        edge=patched[a:b]
+        import re,json
+        condition=json.loads(re.search(r'Condition ("(?:\\.|[^"\\])*")',edge).group(1))
+        self.assertEqual(condition,ROLL_ENTRY_AFTER)
+        self.assertIn('!IsTag("TagMoveRolling")',condition)
+        self.assertIn('!IsTag("GRZBackRollActive")',condition)
+        a,b=named_block(patched,'AnimSrcNodeState','PneOnBackRoll')
+        state=patched[a:b]
+        self.assertIn('"TagProneBack" "GRZBackRollActive"',state)
+        self.assertIn('Child "PneOnBackRaisedT"',state)
 
     def test_already_patched_or_changed_native_edges_rejected(self):
         patched, _ = patch_locomotion(self.native)
@@ -189,7 +210,7 @@ class DropGraphTests(unittest.TestCase):
                 self.assertEqual(set(graph), {'config.cpp', 'locomotion.agf', 'player_main.agr'})
                 self.assertEqual(graph['locomotion.agf'].decode(), patch_locomotion(self.native)[0])
                 root = graph['player_main.agr'].decode()
-                restored = root.replace('{E5500310E0494CA1}GRZ_InstaDropGraph/locomotion.agf', '{6CA2ACDCAC1184DC}DZ/anims/workspaces/player/player_main/Locomotion.agf')
+                restored = root.replace('{E5500320E0494CA1}GRZ_InstaDropGraph/locomotion.agf', '{6CA2ACDCAC1184DC}DZ/anims/workspaces/player/player_main/Locomotion.agf')
                 self.assertEqual(restored, self.native_root)
                 source = all_files['GRZ_InstaDrop']['scripts/4_World/GRZInstaDropThrowReady.c']
                 self.assertEqual(source, (ROOT / 'GRZ_InstaDrop/scripts/4_World/GRZInstaDropThrowReady.c').read_bytes())

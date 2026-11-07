@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Security.Cryptography;
 
-public static class GRZDropGraphPatchV031 {
+public static class GRZDropGraphPatchV032 {
     struct Span { public int Start; public int End; }
     static Span Block(string text, string kind, string name) {
         string expression = @"\b" + Regex.Escape(kind) + @"\s+" + Regex.Escape(name) + @"\s*\{";
@@ -26,10 +26,13 @@ public static class GRZDropGraphPatchV031 {
         }
         throw new InvalidDataException("Unclosed graph block: " + name);
     }
+    static string Literal(string value) {
+        return "\""+value.Replace("\\","\\\\").Replace("\"","\\\"")+"\"";
+    }
     static string Property(string block, string name, string before, string after) {
-        string expression = @"(?m)^(\s*" + Regex.Escape(name) + @"\s+)" + Regex.Escape("\"" + before + "\"") + @"(?=\s*$)";
+        string expression = @"(?m)^(\s*" + Regex.Escape(name) + @"\s+)" + Regex.Escape(Literal(before)) + @"(?=\s*$)";
         if (Regex.Matches(block, expression).Count != 1) throw new InvalidDataException("Unsupported graph property: " + name);
-        return Regex.Replace(block, expression, delegate(Match m) { return m.Groups[1].Value + "\"" + after + "\""; });
+        return Regex.Replace(block, expression, delegate(Match m) { return m.Groups[1].Value + Literal(after); });
     }
     public static string Locomotion(string text) {
         var scope = Block(text, "AnimSrcNodeStateMachine", "ThrowIdleStanceSTM");
@@ -56,7 +59,22 @@ public static class GRZDropGraphPatchV031 {
         master = master.Substring(0, rollAnchor.Start) + RollRoutes() + master.Substring(rollAnchor.Start);
         result = Directional(result.Substring(0, masterSpan.Start) + master + result.Substring(masterSpan.End));
         var pose = Block(result,"AnimSrcNodeBlend","ThrowStrengthIdleB");
-        return result.Substring(0,pose.Start)+Property(result.Substring(pose.Start,pose.End-pose.Start),"BlendWeight","1.0","clamp(ActionProgress * 1000, 0, 1)")+result.Substring(pose.End);
+        result=result.Substring(0,pose.Start)+Property(result.Substring(pose.Start,pose.End-pose.Start),"BlendWeight","1.0","clamp(ActionProgress * 1000, 0, 1)")+result.Substring(pose.End);
+        return Continuity(result);
+    }
+    static string Continuity(string text) {
+        var scope=Block(text,"AnimSrcNodeStateMachine","StanceMaster");
+        string master=text.Substring(scope.Start,scope.End-scope.Start);
+        var edge=Block(master,"AnimSrcNodeTransition","\"{6930A8DE26987785}\"");
+        string before="IsCommand(CMD_Roll) && (!Raised || (Raised && AimX >= -50 && AimX <= 50))";
+        string after=before+" && !IsTag(\"TagMoveRolling\") && !IsTag(\"GRZBackRollActive\")";
+        master=master.Substring(0,edge.Start)+Property(master.Substring(edge.Start,edge.End-edge.Start),"Condition",before,after)+master.Substring(edge.End);
+        var state=Block(master,"AnimSrcNodeState","PneOnBackRoll");
+        string block=master.Substring(state.Start,state.End-state.Start);
+        if(block.IndexOf("\"TagProneBack\"",StringComparison.Ordinal)<0) throw new InvalidDataException("Unsupported native back-roll tag block");
+        block=block.Replace("\"TagProneBack\"","\"TagProneBack\" \"GRZBackRollActive\"");
+        master=master.Substring(0,state.Start)+block+master.Substring(state.End);
+        return text.Substring(0,scope.Start)+master+text.Substring(scope.End);
     }
     static string Directional(string text) {
         var scope = Block(text, "AnimSrcNodeStateMachine", "ThrowIdleStanceSTM");
@@ -96,7 +114,7 @@ public static class GRZDropGraphPatchV031 {
     }
     public static string Root(string text) {
         const string original = "{6CA2ACDCAC1184DC}DZ/anims/workspaces/player/player_main/Locomotion.agf";
-        const string replacement = "{E5500310E0494CA1}GRZ_InstaDropGraph/locomotion.agf";
+        const string replacement = "{E5500320E0494CA1}GRZ_InstaDropGraph/locomotion.agf";
         if (text.IndexOf(original, StringComparison.Ordinal) < 0 || text.IndexOf(original, StringComparison.Ordinal) != text.LastIndexOf(original, StringComparison.Ordinal)) throw new InvalidDataException("Unsupported native root graph reference.");
         return text.Replace(original, replacement);
     }

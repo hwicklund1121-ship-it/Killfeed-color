@@ -23,6 +23,12 @@ int main() {
  assert(GRZInstaDropThrowPolicy::ShouldForceStand(true,true));
  assert(GRZInstaDropThrowPolicy::RecentInput(100,750));
  assert(!GRZInstaDropThrowPolicy::RecentInput(751,750));
+ assert(GRZInstaDropRollPolicy::AllowNewRequest(true,true,false,false));
+ assert(!GRZInstaDropRollPolicy::AllowNewRequest(true,true,true,false));
+ assert(!GRZInstaDropRollPolicy::AllowNewRequest(true,true,false,true));
+ assert(!GRZInstaDropRollPolicy::AllowNewRequest(true,true,true,true));
+ assert(GRZInstaDropRollPolicy::AllowNewRequest(false,true,true,true));
+ assert(GRZInstaDropRollPolicy::AllowNewRequest(true,false,true,true));
  const std::array<bool,12> eligible = {true,true,true,true,true,true,true,true,true,false,false,false};
  assert(evaluate(eligible));
  // Every eligibility prerequisite must independently reject the exception.
