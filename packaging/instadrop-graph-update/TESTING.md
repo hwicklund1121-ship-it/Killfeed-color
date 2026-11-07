@@ -1,4 +1,4 @@
-# v0.3.0 validation
+# v0.3.1 validation
 
 Validated against the supplied vanilla graph export for DayZ 1.30.164.289.
 
@@ -13,7 +13,7 @@ resource references, no `.anm` payloads, disabled old rate settings and the
 unchanged working roll-to-stand source hash.
 
 ```powershell
-pwsh -NoProfile -File tools/test_instadrop_graph_installer.ps1 -PackageZip /path/to/GRZ-InstaDrop-v0.3.0.zip -NativeArchive /path/to/fixture/anims_workspaces.pbo
+pwsh -NoProfile -File tools/test_instadrop_graph_installer.ps1 -PackageZip /path/to/GRZ-InstaDrop-v0.3.1.zip -NativeArchive /path/to/fixture/anims_workspaces.pbo
 ```
 
 Passed real fixture file operations for installation and hash checks on both
@@ -26,7 +26,7 @@ syntax, but this is not a Windows integration test.
 Build:
 
 ```sh
-python tools/build_instadrop_graph_release.py --export /path/to/GRZ-DropGraph-export.zip --output downloads/GRZ-InstaDrop-v0.3.0.zip
+python tools/build_instadrop_graph_release.py --export /path/to/GRZ-DropGraph-export.zip --output downloads/GRZ-InstaDrop-v0.3.1.zip
 ```
 
 The export is not committed. Source graph hashes and the change description are in GRAPH-CHANGES.json;
@@ -40,7 +40,7 @@ No Enforce compilation, native graph parsing or DayZ gameplay test is available
 in this Linux environment. Actual drop timing, throw behavior, roll-to-stand
 playback and network agreement still need the owner's in-game test.
 
-Additional v0.3.0 check:
+Additional v0.3.1 check:
 
 ```sh
 python tools/test_instadrop_roll_policy.py
@@ -59,8 +59,7 @@ do not establish anatomical ground-side contact or native rendering.
 Reversing the authored landing/roll edits reproduces the supplied graph. The
 local C# generator must match the Python reference graph PBO byte-for-byte.
 
-Recovery checks assert native front/back recovery children, restored stand-clip
-routes, remaining-time exits, stance cancellation routes and the prepared-pose
-weight expression. The package metadata enables only four native indexed rifle
-standing recovery clips at a 2.2 request. Native playback, Enforce compilation
-and actual throw/weapon behavior remain unverified in DayZ.
+The baseline-invariance test compares the generated graph to the authored
+v0.2.1 motion baseline: restoring one ThrowStrengthIdleB weight property must
+produce exactly the same graph. The v0.3.0 recovery-rate module is absent.
+Native appearance and the reported weapon/body hitch still need gameplay tests.

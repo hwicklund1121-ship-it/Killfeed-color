@@ -40,7 +40,7 @@ modded class PlayerBase
   if (GRZInstaDrop.IsEnabled() && firearm && onBack && prepared && now >= m_GRZNextRollTrace)
   {
    m_GRZNextRollTrace = now + 500;
-   Print("[GRZ InstaDrop] v0.3.0 on-back roll: native=false exception=" + allowed.ToString() + " living=" + living.ToString() + " move=" + moveCommand.ToString() + " prone=" + prone.ToString() + " clear=" + clear.ToString() + " stamina=" + stamina.ToString() + " emote=" + emote.ToString() + " charging=" + charging.ToString() + " releasing=" + releasing.ToString());
+   Print("[GRZ InstaDrop] v0.3.1 on-back roll: native=false exception=" + allowed.ToString() + " living=" + living.ToString() + " move=" + moveCommand.ToString() + " prone=" + prone.ToString() + " clear=" + clear.ToString() + " stamina=" + stamina.ToString() + " emote=" + emote.ToString() + " charging=" + charging.ToString() + " releasing=" + releasing.ToString());
   }
   return allowed;
  }
@@ -48,12 +48,12 @@ modded class PlayerBase
  override void OnRollStart(bool isToTheRight)
  {
   super.OnRollStart(isToTheRight);
-  if (GRZInstaDrop.IsEnabled()) Print("[GRZ InstaDrop] v0.3.0 native roll started; right=" + isToTheRight.ToString());
+  if (GRZInstaDrop.IsEnabled()) Print("[GRZ InstaDrop] v0.3.1 native roll started; right=" + isToTheRight.ToString());
  }
 
  override void OnRollFinish()
  {
   super.OnRollFinish();
-  if (GRZInstaDrop.IsEnabled()) Print("[GRZ InstaDrop] v0.3.0 native roll finished.");
+  if (GRZInstaDrop.IsEnabled()) Print("[GRZ InstaDrop] v0.3.1 native roll finished.");
  }
 };
