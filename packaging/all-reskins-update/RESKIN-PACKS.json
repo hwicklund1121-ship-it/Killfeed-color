@@ -1,12 +1,12 @@
 {
   "schema": 1,
-  "asset_revision": "bec3485c4dde80e95b64a646ada119963f060136",
+  "asset_revision": "6d4f43334c48e31cdf88701c68568410eb7e9d63",
   "packages": [
     {
       "file": "GRZ-Arena-Menu-Update.zip",
       "role": "core",
-      "url": "https://github.com/hwicklund1121-ship-it/Killfeed-color/raw/bec3485c4dde80e95b64a646ada119963f060136/downloads/GRZ-Arena-Menu-Update.zip",
-      "sha256": "3ed1c5a93aadab09f163c1870f7a6e2943ba7bef581645b21c52bb052fb68894",
+      "url": "https://github.com/hwicklund1121-ship-it/Killfeed-color/raw/6d4f43334c48e31cdf88701c68568410eb7e9d63/downloads/GRZ-Arena-Menu-Update.zip",
+      "sha256": "477c59635f29feaaeece2d3c1613296bb25614460c0dfcc286f10611becd1c9a",
       "addons": {
         "GRZ_Audit": "d6f93e13bd6304c54a9646f06bf8ba057c0c0b750aa08e925ecb5f2237775237",
         "GRZ_Loadout": "c6f229b1c270a87f1a7fe0c18c737ed7c90fe9c5e76b6f8d08ba6b21e6b206e8",
@@ -15,7 +15,7 @@
         "GRZ_CustomHud": "d1bcb35f87eb371aadfd6b2489d7c7705d40c9e78d0ce16882c296ab1b70dd6f",
         "GRZ_SFGPermanent": "5dd17c1b9b3d847fefcdf7ed6cc738e9c85e064abfac207eacd669e0bde22e0c",
         "GRZ_AR50Sounds": "08f2235ed410f08f18248b2299c639da2db512293ea6ef711d7555d40fe48dc3",
-        "GRZ_Movement": "25ded5b413cf3f714a22e38635669e2406f0364ac63054da102acf5a27b1fb6b",
+        "GRZ_Movement": "1a93984459ed322a4d11ea5df9fb24148037e6ce7a718d1eb4a7da5873bbddd1",
         "GRZ_Killfeed": "363d340398a3120a6de7ecd5627d590d859ba9cc8d56a62bb24404fd7afeee96",
         "GRZ_AnimatedGhillie": "601af32ddfc8666738f799f4fef48aa1d7ab51939162920277396bdc84a9bd75",
         "GRZ_AnimatedHexgrid": "3c5f043465785cf92bdcd7f12f0961defbd4c25a356a89623a4e41b0c1cd7e36",
@@ -28,7 +28,7 @@
     {
       "file": "GRZ-Vanilla-Clothing.zip",
       "role": "clothing",
-      "url": "https://github.com/hwicklund1121-ship-it/Killfeed-color/raw/bec3485c4dde80e95b64a646ada119963f060136/downloads/GRZ-Vanilla-Clothing.zip",
+      "url": "https://github.com/hwicklund1121-ship-it/Killfeed-color/raw/6d4f43334c48e31cdf88701c68568410eb7e9d63/downloads/GRZ-Vanilla-Clothing.zip",
       "sha256": "10e9097f74ee51a53687ae07b6346fda4ddb4afffaca6b5e643fa9744cc77b7d",
       "addons": {
         "GRZ_VanillaClothing": "076b0112096abdcecd846f0242190d7254ca9f69b9788d0c2cadbeef68d35ff2"
@@ -37,7 +37,7 @@
     {
       "file": "XIMS-Clothing.zip",
       "role": "xims",
-      "url": "https://github.com/hwicklund1121-ship-it/Killfeed-color/raw/bec3485c4dde80e95b64a646ada119963f060136/downloads/XIMS-Clothing.zip",
+      "url": "https://github.com/hwicklund1121-ship-it/Killfeed-color/raw/6d4f43334c48e31cdf88701c68568410eb7e9d63/downloads/XIMS-Clothing.zip",
       "sha256": "e4b06012444ebb75fb20dedd4f9579ab709f6f1622322e0fcb6d343f616ffa7b",
       "addons": {
         "GRZ_XimsClothing": "60da4fd8ffe4252acd2f8c92b943ab3bdace2f4b15edb96d45902dbca6ecb31b",
