@@ -127,6 +127,15 @@ class GRZLoadoutClothingServer
   }
   if (!choices || choices.Count() != GRZLoadoutClothingSlots.Names.Count())
    return false;
+  // Check the complete selection before staging or moving any inventory.
+  foreach (string requested : choices)
+  {
+   if (requested != "" && requested != "__REMOVE__" && GRZVipLoadoutPolicy.PaidClothing(requested) && !GRZVipLoadoutPolicy.Allowed(player.GetIdentity()))
+   {
+    GRZLoadoutServer.Reply(player, "Animated clothing requires VIP access.");
+    return false;
+   }
+  }
   array<EntityAI> fresh = new array<EntityAI>;
   array<EntityAI> old = new array<EntityAI>;
   array<ref InventoryLocation> original = new array<ref InventoryLocation>;

@@ -71,6 +71,12 @@ class GRZVipLoadoutPolicy
   string lower = type; lower.ToLower();
   return s_Settings.ExtraPaidWraps.Find(type) >= 0 || g_Game.ConfigGetInt("CfgVehicles " + type + " GRZVipOnly") == 1 || lower.Contains("animated");
  }
+ static bool PaidClothing(string type)
+ {
+  if (type == "") return false;
+  string lower = type; lower.ToLower();
+  return g_Game.ConfigGetInt("CfgVehicles " + type + " GRZVipOnly") == 1 || lower.Contains("animated");
+ }
  static bool CanUseWeapon(PlayerBase owner, EntityAI gun)
  {
   if (!owner || !owner.GetIdentity() || !gun) return true;
@@ -120,6 +126,11 @@ class GRZVipLoadoutPolicy
 };
 modded class PlayerBase
 {
+ override bool CanReceiveAttachment(EntityAI attachment, int slotId)
+ {
+  if (g_Game.IsServer() && GetIdentity() && attachment && attachment.IsClothing() && GRZVipLoadoutPolicy.PaidClothing(attachment.GetType()) && !GRZVipLoadoutPolicy.Allowed(GetIdentity())) return false;
+  return super.CanReceiveAttachment(attachment, slotId);
+ }
  override bool CanReceiveItemIntoHands(EntityAI item_to_hands)
  {
   if (g_Game.IsServer() && item_to_hands && Weapon_Base.Cast(item_to_hands) && !GRZVipLoadoutPolicy.CanUseWeapon(this, item_to_hands)) return false;

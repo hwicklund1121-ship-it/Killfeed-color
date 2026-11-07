@@ -7,6 +7,7 @@ class GRZLoadoutRPC
  static const int MENU = 763284;
  static const int SAVE_CLOTHING = 763285;
  static const int CLOTHING_PAGE = 763286;
+ static const int VIP_GEAR_APPLY = 763287;
 };
 
 class GRZLoadoutGun
@@ -41,6 +42,8 @@ class GRZSavedOutfit
 class GRZLoadoutCatalogue
 {
  bool VipAuthorized;
+ ref array<ref GRZLoadoutClothing> VipClothing = new array<ref GRZLoadoutClothing>;
+ ref array<string> VipWraps = new array<string>;
  ref array<ref GRZLoadoutGun> VipGuns = new array<ref GRZLoadoutGun>;
  ref array<ref GRZLoadoutGun> Guns = new array<ref GRZLoadoutGun>;
  ref array<string> Wraps = new array<string>;

@@ -119,6 +119,12 @@ modded class MissionServer
   if (!saved)
    return;
   GRZLoadoutServer.Init();
+  // A lapsed VIP must not prevent their remaining saved outfit from restoring.
+  if (!GRZVipLoadoutPolicy.Allowed(player.GetIdentity()))
+  {
+   for (int paidIndex = 0; paidIndex < saved.Choices.Count(); paidIndex++)
+    if (GRZVipLoadoutPolicy.PaidClothing(saved.Choices[paidIndex])) saved.Choices[paidIndex] = "";
+  }
   // Missing/unloaded clothing mods never cause an inventory clear on respawn.
   if (!GRZLoadoutClothingServer.Equip(player, saved.Choices))
    Print("[GRZ Clothing] Saved outfit could not be equipped; spawn gear preserved.");

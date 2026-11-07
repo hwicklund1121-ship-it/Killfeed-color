@@ -33,6 +33,7 @@ class CfgVehicles
  class GRZ_Hexgrid_Animated_Anime: HEXGRID_Base
  {
   scope = 2;
+  GRZVipOnly = 1;
   displayName = "GRZ Animated Hexgrid";
   descriptionShort = "Made By Blake";
   hiddenSelectionsMaterials[] = {"GRZ_AnimatedHexgrid\data\flat_black.rvmat"};

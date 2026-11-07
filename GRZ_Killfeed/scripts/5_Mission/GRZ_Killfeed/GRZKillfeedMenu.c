@@ -640,21 +640,36 @@ class GRZKillfeedMenu extends UIScriptedMenu
     {
         GRZLoadoutCatalogue catalogue = GRZLoadoutClientData.Catalogue;
         if (!catalogue || m_GRZGunIndex < 0 || m_GRZGunIndex >= m_GRZGunChoices.Count()) return null;
-        return catalogue.VipGuns[m_GRZGunChoices[m_GRZGunIndex]];
+        int gunCatalogueIndex = m_GRZGunChoices[m_GRZGunIndex];
+        if (gunCatalogueIndex < 0 || gunCatalogueIndex >= catalogue.VipGuns.Count()) return null;
+        return catalogue.VipGuns[gunCatalogueIndex];
+    }
+
+    protected GRZLoadoutClothing GRZCurrentVIPGear()
+    {
+        GRZLoadoutCatalogue catalogue = GRZLoadoutClientData.Catalogue;
+        if (!catalogue || m_GRZGunIndex < 0 || m_GRZGunIndex >= m_GRZGunChoices.Count()) return null;
+        int choice = m_GRZGunChoices[m_GRZGunIndex];
+        if (choice >= 0) return null;
+        int index = -choice - 1;
+        if (index < 0 || index >= catalogue.VipClothing.Count()) return null;
+        return catalogue.VipClothing[index];
     }
 
     protected string GRZCurrentVIPWrap()
     {
         GRZLoadoutCatalogue catalogue = GRZLoadoutClientData.Catalogue;
-        if (!catalogue || m_GRZWrapIndex < 0 || m_GRZWrapIndex >= catalogue.Wraps.Count()) return "";
-        return catalogue.Wraps[m_GRZWrapIndex];
+        if (!catalogue || m_GRZWrapIndex < 0 || m_GRZWrapIndex >= catalogue.VipWraps.Count()) return "";
+        return catalogue.VipWraps[m_GRZWrapIndex];
     }
 
     protected void GRZFilterVIPGuns()
     {
         GRZLoadoutGun previous = GRZCurrentVIPGun();
+        GRZLoadoutClothing previousGear = GRZCurrentVIPGear();
         string previousType;
         if (previous) previousType = previous.Type;
+        if (previousGear) previousType = previousGear.Type;
         m_GRZGunChoices.Clear();
         m_GRZGunIndex = -1;
         m_GRZGunList.ClearItems();
@@ -669,13 +684,24 @@ class GRZKillfeedMenu extends UIScriptedMenu
                 m_GRZGunChoices.Insert(i);
                 if (gun.Type == previousType) m_GRZGunIndex = m_GRZGunChoices.Count() - 1;
             }
+            if (m_GRZGunCategory == 3)
+            {
+                for (int gearIndex = 0; gearIndex < catalogue.VipClothing.Count(); gearIndex++)
+                {
+                    GRZLoadoutClothing gear = catalogue.VipClothing[gearIndex];
+                    m_GRZGunList.AddItem(gear.Name, null, 0);
+                    // Negative indices distinguish clothing from gun catalogue indices.
+                    m_GRZGunChoices.Insert(-gearIndex - 1);
+                    if (gear.Type == previousType) m_GRZGunIndex = m_GRZGunChoices.Count() - 1;
+                }
+            }
         }
         if (m_GRZGunChoices.Count() > 0)
         {
             if (m_GRZGunIndex < 0) m_GRZGunIndex = 0;
             m_GRZGunList.SelectRow(m_GRZGunIndex);
         }
-        if (!catalogue || m_GRZWrapIndex >= catalogue.Wraps.Count()) m_GRZWrapIndex = 0;
+        if (!catalogue || m_GRZWrapIndex >= catalogue.VipWraps.Count()) m_GRZWrapIndex = 0;
         GRZRefreshVIPGun();
     }
 
@@ -697,6 +723,29 @@ class GRZKillfeedMenu extends UIScriptedMenu
             int fill = 0xFF19191C;
             if (i == m_GRZGunCategory) fill = 0xFF55555A;
             m_GRZGunPage.FindAnyWidget(buttons[i] + "Fill").SetColor(fill);
+        }
+        bool gearMode = GRZCurrentVIPGear() != null;
+        string wrapWidgets[4] = {"VIPWrapHeading", "VIPWrapPrevious", "VIPWrapName", "VIPWrapNext"};
+        for (int wrapWidget = 0; wrapWidget < 4; wrapWidget++) m_GRZGunPage.FindAnyWidget(wrapWidgets[wrapWidget]).Show(!gearMode);
+        TextWidget.Cast(m_GRZGunPage.FindAnyWidget("VIPGearNote")).SetText("Compatible VIP suppressors are attached automatically.");
+        if (gearMode)
+        {
+            GRZLoadoutClothing selectedGear = GRZCurrentVIPGear();
+            layoutRoot.FindAnyWidget("Save").Enable(selectedGear && !IsOfflinePreview);
+            TextWidget gearLabel = TextWidget.Cast(m_GRZGunPage.FindAnyWidget("VIPGunName"));
+            gearLabel.SetText("No animated clothing installed");
+            TextWidget.Cast(m_GRZGunPage.FindAnyWidget("VIPGearNote")).SetText("Contents transfer to new clothing; changes cancel if they do not fit.");
+            m_Status.SetText("Preview animated clothing, then press EQUIP & SAVE.");
+            if (!selectedGear) return;
+            gearLabel.SetText(selectedGear.Name);
+            int gearFlags = ECE_LOCAL | ECE_NOLIFETIME | ECE_KEEPHEIGHT | ECE_NOSURFACEALIGN | ECE_NOPERSISTENCY_WORLD | ECE_NOPERSISTENCY_CHAR;
+            m_GRZPreviewGun = EntityAI.Cast(g_Game.CreateObjectEx(selectedGear.Type, "0 -1000 0", gearFlags));
+            if (!m_GRZPreviewGun) { m_Status.SetText("Clothing preview could not be created."); return; }
+            m_GRZGunPreview.SetItem(m_GRZPreviewGun);
+            m_GRZGunPreview.SetView(m_GRZPreviewGun.GetViewIndex());
+            m_GRZGunPreview.SetModelPosition("0 0 0.8");
+            m_GRZGunPreview.SetModelOrientation("0 180 0");
+            return;
         }
         GRZLoadoutGun gun = GRZCurrentVIPGun();
         layoutRoot.FindAnyWidget("Save").Enable(gun && !IsOfflinePreview);
@@ -764,17 +813,30 @@ class GRZKillfeedMenu extends UIScriptedMenu
         if (name == "VIPWrapPrevious" || name == "VIPWrapNext")
         {
             GRZLoadoutCatalogue catalogue = GRZLoadoutClientData.Catalogue;
-            if (catalogue && catalogue.Wraps.Count() > 0)
+            if (catalogue && catalogue.VipWraps.Count() > 0)
             {
                 int wrapStep = 1;
                 if (name == "VIPWrapPrevious") wrapStep = -1;
-                m_GRZWrapIndex = (m_GRZWrapIndex + wrapStep + catalogue.Wraps.Count()) % catalogue.Wraps.Count();
+                m_GRZWrapIndex = (m_GRZWrapIndex + wrapStep + catalogue.VipWraps.Count()) % catalogue.VipWraps.Count();
                 GRZRefreshVIPGun();
             }
             return true;
         }
         if (name == "Save")
         {
+            if (GRZCurrentVIPGear())
+            {
+                GRZLoadoutClothing gearSelection = GRZCurrentVIPGear();
+                PlayerBase gearPlayer = PlayerBase.Cast(g_Game.GetPlayer());
+                if (gearSelection && gearPlayer && !IsOfflinePreview)
+                {
+                    ScriptRPC gearRPC = new ScriptRPC;
+                    gearRPC.Write(gearSelection.Type);
+                    gearRPC.Send(gearPlayer, GRZLoadoutRPC.VIP_GEAR_APPLY, true, null);
+                    m_Status.SetText("Applying and saving animated gear...");
+                }
+                return true;
+            }
             GRZLoadoutGun gun = GRZCurrentVIPGun();
             PlayerBase player = PlayerBase.Cast(g_Game.GetPlayer());
             if (gun && player && !IsOfflinePreview)

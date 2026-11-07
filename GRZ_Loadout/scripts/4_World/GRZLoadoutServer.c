@@ -559,7 +559,7 @@ modded class PlayerBase
 
  override void OnRPC(PlayerIdentity sender, int rpc_type, ParamsReadContext ctx)
  {
-  if (rpc_type == GRZLoadoutRPC.REQUEST || rpc_type == GRZLoadoutRPC.SAVE || rpc_type == GRZLoadoutRPC.SAVE_CLOTHING)
+  if (rpc_type == GRZLoadoutRPC.REQUEST || rpc_type == GRZLoadoutRPC.SAVE || rpc_type == GRZLoadoutRPC.SAVE_CLOTHING || rpc_type == GRZLoadoutRPC.VIP_GEAR_APPLY)
   {
    if (!g_Game.IsServer() || !sender || !GetIdentity())
     return;
@@ -579,17 +579,29 @@ modded class PlayerBase
      if (!GRZVipLoadoutPolicy.PaidGun(available.Type)) personal.Guns.Insert(available);
     if (personal.VipAuthorized) personal.VipGuns = GRZLoadoutServer.Catalogue.VipGuns;
     foreach (string availableWrap : GRZLoadoutServer.Catalogue.Wraps)
-     if (!GRZVipLoadoutPolicy.PaidWrap(availableWrap) || personal.VipAuthorized) personal.Wraps.Insert(availableWrap);
+    {
+     if (!GRZVipLoadoutPolicy.PaidWrap(availableWrap)) personal.Wraps.Insert(availableWrap);
+     if (personal.VipAuthorized) personal.VipWraps.Insert(availableWrap);
+    }
+    array<ref GRZLoadoutClothing> freeClothes = new array<ref GRZLoadoutClothing>;
+    foreach (GRZLoadoutClothing candidateClothing : GRZLoadoutServer.Catalogue.Clothing)
+    {
+     if (GRZVipLoadoutPolicy.PaidClothing(candidateClothing.Type))
+     {
+      if (personal.VipAuthorized) personal.VipClothing.Insert(candidateClothing);
+     }
+     else freeClothes.Insert(candidateClothing);
+    }
     personal.Characters = GRZLoadoutServer.Catalogue.Characters;
     personal.AmmoStacks = GRZLoadoutServer.Catalogue.AmmoStacks;
     personal.SavedOutfit = GRZOutfitStore.Load(sender);
     catalogueReply.Write(personal);
     catalogueReply.Send(this, GRZLoadoutRPC.CATALOGUE, true, sender);
     array<ref GRZLoadoutClothing> page = new array<ref GRZLoadoutClothing>;
-    int clothesCount = GRZLoadoutServer.Catalogue.Clothing.Count();
+    int clothesCount = freeClothes.Count();
     for (int clothingIndex = 0; clothingIndex < clothesCount; clothingIndex++)
     {
-     page.Insert(GRZLoadoutServer.Catalogue.Clothing[clothingIndex]);
+     page.Insert(freeClothes[clothingIndex]);
      if (page.Count() == 40 || clothingIndex == clothesCount - 1)
      {
       ScriptRPC clothingReply = new ScriptRPC;
@@ -610,6 +622,36 @@ modded class PlayerBase
    if (m_GRZDuelMatch != "")
    {
     GRZLoadoutServer.Reply(this, "Loadout changes are locked during a duel.");
+    return;
+   }
+   if (rpc_type == GRZLoadoutRPC.VIP_GEAR_APPLY)
+   {
+    if (!GRZVipLoadoutPolicy.Allowed(sender))
+    {
+     GRZLoadoutServer.Reply(this, "Animated gear requires VIP access.");
+     return;
+    }
+    string gearType;
+    if (!ctx.Read(gearType) || !GRZVipLoadoutPolicy.PaidClothing(gearType)) return;
+    GRZLoadoutClothing selectedGear;
+    foreach (GRZLoadoutClothing possibleGear : GRZLoadoutServer.Catalogue.Clothing)
+     if (possibleGear.Type == gearType) { selectedGear = possibleGear; break; }
+    if (!selectedGear) return;
+    int selectedSlot = GRZLoadoutClothingSlots.Names.Find(selectedGear.Slot);
+    if (selectedSlot < 0) return;
+    array<string> gearChoices = new array<string>;
+    for (int gearIndex = 0; gearIndex < GRZLoadoutClothingSlots.Names.Count(); gearIndex++) gearChoices.Insert("");
+    gearChoices[selectedSlot] = gearType;
+    m_GRZLoadoutLastSave = now;
+    if (GRZLoadoutClothingServer.Equip(this, gearChoices))
+    {
+     GRZSavedOutfit priorOutfit = GRZOutfitStore.Load(sender);
+     string savedCharacter = GetType();
+     if (priorOutfit) savedCharacter = priorOutfit.Character;
+     GRZSavedOutfit gearOutfit = GRZOutfitStore.Snapshot(this, savedCharacter);
+     if (GRZOutfitStore.Save(sender, gearOutfit)) GRZLoadoutServer.Reply(this, "Animated gear applied and saved.");
+     else GRZLoadoutServer.Reply(this, "Gear applied, but saving failed. Check server profile storage.");
+    }
     return;
    }
    if (rpc_type == GRZLoadoutRPC.SAVE_CLOTHING)
