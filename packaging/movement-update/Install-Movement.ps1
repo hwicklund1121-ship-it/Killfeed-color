@@ -41,7 +41,7 @@ try {
   Copy-Item -LiteralPath $operation.Source -Destination $operation.Target -Force
   if ((Get-FileHash -LiteralPath $operation.Target).Hash -ne (Get-FileHash -LiteralPath $operation.Source).Hash) {throw 'Installed PBO verification failed.'}
  }
- Write-Host 'Updated existing GRZ movement on client and server: native gait speed request 1.20. Restart both.'
+ Write-Host 'Updated existing GRZ movement on client and server: native gait speed request 1.35. Restart both.'
  Write-Host "Backups: $backup"
  Write-Host 'Verify movement in game. The script log reports accepted/total native animation clips; this is not a measured speed guarantee.'
 } catch {

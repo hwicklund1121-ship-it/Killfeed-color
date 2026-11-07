@@ -1,6 +1,6 @@
 class GRZMovementGaitList
 {
- float Multiplier = 1.20;
+ float Multiplier = 1.35;
  ref array<string> Animations = new array<string>;
 };
 class GRZMovementGaitBoost
@@ -17,7 +17,7 @@ class GRZMovementGaitBoost
    Print("[GRZ Movement] No generated native gait list; speed boost inactive. Run the combined installer.");
    return;
   }
-  float multiplier = Math.Clamp(settings.Multiplier, 1.0, 1.20);
+  float multiplier = Math.Clamp(settings.Multiplier, 1.0, 1.50);
   int accepted;
   foreach (string clip : settings.Animations)
   {

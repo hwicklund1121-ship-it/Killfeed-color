@@ -599,7 +599,7 @@ public static class GRZInventoryBuilder
             }
         }
         if (clips.Count == 0) throw new InvalidDataException("No native walk/run/sprint animation paths found. Select the complete DayZ game installation; no speed-data PBO was produced.");
-        string json = "{\"Multiplier\":1.20,\"Animations\":[" + String.Join(",", clips.OrderBy(x => x, StringComparer.Ordinal).Select(x => "\"" + x + "\"")) + "]}\n";
+        string json = "{\"Multiplier\":1.35,\"Animations\":[" + String.Join(",", clips.OrderBy(x => x, StringComparer.Ordinal).Select(x => "\"" + x + "\"")) + "]}\n";
         string config = "class CfgPatches { class GRZ_MovementSpeedData { units[] = {}; weapons[] = {}; requiredVersion = 0.1; requiredAddons[] = {\"GRZ_Movement\"}; }; };\n";
         SortedDictionary<string, byte[]> files = new SortedDictionary<string, byte[]>(StringComparer.Ordinal);
         files.Add("config.cpp", Encoding.UTF8.GetBytes(config)); files.Add("gaits.json", Encoding.UTF8.GetBytes(json));
